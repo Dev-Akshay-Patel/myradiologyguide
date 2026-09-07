@@ -1,0 +1,825 @@
+/* ==========================================================================
+   GLOBAL CSS - Base Styles, Outfit Font, Tokens, Material Subtle Palettes & Focus Rings
+   ========================================================================== */
+
+/* Outfit font is loaded with preconnect in index.html to eliminate CLS */
+
+/* Suppress all transitions and animations during initial page load to prevent lag and paint flash */
+.preload,
+.preload *,
+.preload *::before,
+.preload *::after {
+  transition: none !important;
+  animation: none !important;
+}
+
+/* --------------------------------------------------------------------------
+   Default CSS Variables (Default: Beige Subtle Palette)
+   -------------------------------------------------------------------------- */
+:root {
+  /* Typography with robust system fallback metrics to eliminate CLS */
+  --font-family-base: 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-size-base: 16px;
+  --line-height-base: 1.5;
+
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 240ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 320ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Specific Radii */
+  --radius-btn-subtle: 5px; /* 5px subtle pill effect */
+  --radius-modal: 12px;     /* 12px for modals */
+  --radius-input: 12px;     /* 12px for input field */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  /* Header Height */
+  --header-height: 60px;
+  --header-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+
+  /* Fluid edge-to-edge layout with uniform margin and component gap */
+  --page-gutter: 12px;
+  --page-max-width: 100%;
+
+  /* Swatch Dot Colors for UI Selector */
+  --dot-beige: #8d7053;
+  --dot-green: #3d805c;
+  --dot-orange: #c4682c;
+  --dot-blue: #3b76bb;
+  --dot-teal: #2c857f;
+  --dot-brown: #846045;
+  --dot-pink: #b84a7a;
+  --dot-purple: #754ba1;
+  --dot-magenta: #a33880;
+  --dot-red: #ba4040;
+
+  /* SVG & Icon Fill token */
+  --fillg: currentColor;
+
+  /* Text Colors (Neutral) */
+  --color-text-primary: #191816;
+  --color-text-secondary: #57534e;
+  --color-text-tertiary: #958f88;
+  --btn-icon-color: #44403c;
+  --btn-icon-hover-color: #1c1917;
+
+  /* Dynamic Header Action Buttons subtle theme backgrounds */
+  --header-btn-bg: color-mix(in srgb, var(--accent-color) 14%, transparent);
+  --header-btn-border: color-mix(in srgb, var(--accent-color) 22%, transparent);
+  --header-btn-hover-bg: color-mix(in srgb, var(--accent-color) 22%, transparent);
+  --header-btn-hover-border: color-mix(in srgb, var(--accent-color) 32%, transparent);
+  --header-btn-active-bg: color-mix(in srgb, var(--accent-color) 28%, transparent);
+
+  /* Tree Navigation Connector Lines & Items */
+  --tree-line-color: color-mix(in srgb, var(--accent-color) 20%, var(--color-border));
+  --tree-line-hover: color-mix(in srgb, var(--accent-color) 55%, var(--color-border));
+  --tree-item-hover-bg: color-mix(in srgb, var(--accent-color) 8%, transparent);
+  --tree-item-active-bg: color-mix(in srgb, var(--accent-color) 14%, transparent);
+  --tree-item-active-text: var(--accent-color);
+
+  /* Modal Backdrop & Overlays */
+  --modal-backdrop-bg: rgba(25, 23, 20, 0.45);
+  --overlay-bg: rgba(0, 0, 0, 0.2);
+  --modal-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.16), 0 1px 3px rgba(0, 0, 0, 0.05);
+  --drawer-shadow: none;
+
+  /* ========================================================================
+     DEFAULT PALETTE: BEIGE (LIGHT)
+     Subtle warm sand / linen tonal background inspired by Material Design
+     ======================================================================== */
+  --color-bg-body: #f7f4ee;
+  --color-bg-surface: #ffffff;
+  --color-bg-elevated: #fbf8f3;
+  --color-border: #e6dfd4;
+  --color-border-subtle: #efe9df;
+  --header-bg: rgba(247, 244, 238, 0.88);
+  --header-border: #e5dfd4;
+  --accent-color: #7d6350;
+  --accent-hover: #695240;
+  --accent-ring: rgba(125, 99, 80, 0.3);
+  --btn-subtle-bg: rgba(125, 99, 80, 0.08);
+  --btn-subtle-border: rgba(125, 99, 80, 0.12);
+  --btn-subtle-hover-bg: rgba(125, 99, 80, 0.14);
+  --btn-subtle-hover-border: rgba(125, 99, 80, 0.2);
+  --btn-subtle-active-bg: rgba(125, 99, 80, 0.18);
+  --modal-bg: #fcfaf6;
+  --modal-border: #e6dfd4;
+  --drawer-bg: #fcfaf6;
+  --drawer-border: #e6dfd4;
+}
+
+/* ==========================================================================
+   DARK THEME BASE OVERRIDES
+   ========================================================================== */
+[data-theme="dark"] {
+  --color-text-primary: #f5f2eb;
+  --color-text-secondary: #a8a29e;
+  --color-text-tertiary: #78716c;
+  --btn-icon-color: #d6d3d1;
+  --btn-icon-hover-color: #fafaf9;
+  --modal-backdrop-bg: rgba(0, 0, 0, 0.65);
+  --overlay-bg: rgba(0, 0, 0, 0.35);
+  --modal-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.7);
+  --drawer-shadow: none;
+
+  /* Dynamic Header Action Buttons subtle theme backgrounds (Dark) */
+  --header-btn-bg: color-mix(in srgb, var(--accent-color) 16%, transparent);
+  --header-btn-border: color-mix(in srgb, var(--accent-color) 24%, transparent);
+  --header-btn-hover-bg: color-mix(in srgb, var(--accent-color) 24%, transparent);
+  --header-btn-hover-border: color-mix(in srgb, var(--accent-color) 36%, transparent);
+  --header-btn-active-bg: color-mix(in srgb, var(--accent-color) 30%, transparent);
+
+  /* Tree Navigation Connector Lines & Items (Dark) */
+  --tree-line-color: color-mix(in srgb, var(--accent-color) 24%, var(--color-border));
+  --tree-line-hover: color-mix(in srgb, var(--accent-color) 60%, var(--color-border));
+  --tree-item-hover-bg: color-mix(in srgb, var(--accent-color) 12%, transparent);
+  --tree-item-active-bg: color-mix(in srgb, var(--accent-color) 18%, transparent);
+  --tree-item-active-text: var(--accent-color);
+
+  /* BEIGE DARK (Default Dark) */
+  --color-bg-body: #181613;
+  --color-bg-surface: #201e19;
+  --color-bg-elevated: #28251f;
+  --color-border: #332d25;
+  --color-border-subtle: #29241d;
+  --header-bg: rgba(24, 22, 19, 0.88);
+  --header-border: #2f2a22;
+  --accent-color: #d8c3b0;
+  --accent-hover: #eddcd0;
+  --accent-ring: rgba(216, 195, 176, 0.35);
+  --btn-subtle-bg: rgba(216, 195, 176, 0.1);
+  --btn-subtle-border: rgba(216, 195, 176, 0.16);
+  --btn-subtle-hover-bg: rgba(216, 195, 176, 0.16);
+  --btn-subtle-hover-border: rgba(216, 195, 176, 0.22);
+  --btn-subtle-active-bg: rgba(216, 195, 176, 0.22);
+  --modal-bg: #201e19;
+  --modal-border: #332d25;
+  --drawer-bg: #201e19;
+  --drawer-border: #332d25;
+}
+
+/* ==========================================================================
+   PALETTE 1: BEIGE (EXPLICIT)
+   ========================================================================== */
+[data-palette="beige"] {
+  --color-bg-body: #f7f4ee;
+  --color-bg-surface: #ffffff;
+  --color-bg-elevated: #fbf8f3;
+  --color-border: #e6dfd4;
+  --color-border-subtle: #efe9df;
+  --header-bg: rgba(247, 244, 238, 0.88);
+  --header-border: #e5dfd4;
+  --accent-color: #7d6350;
+  --accent-hover: #695240;
+  --accent-ring: rgba(125, 99, 80, 0.3);
+  --btn-subtle-bg: rgba(125, 99, 80, 0.06);
+  --btn-subtle-border: rgba(125, 99, 80, 0.1);
+  --btn-subtle-hover-bg: rgba(125, 99, 80, 0.11);
+  --btn-subtle-hover-border: rgba(125, 99, 80, 0.16);
+  --btn-subtle-active-bg: rgba(125, 99, 80, 0.15);
+  --modal-bg: #fcfaf6;
+  --modal-border: #e6dfd4;
+  --drawer-bg: #fcfaf6;
+  --drawer-border: #e6dfd4;
+}
+
+[data-palette="beige"][data-theme="dark"],
+[data-theme="dark"] [data-palette="beige"] {
+  --color-bg-body: #181613;
+  --color-bg-surface: #201e19;
+  --color-bg-elevated: #28251f;
+  --color-border: #332d25;
+  --color-border-subtle: #29241d;
+  --header-bg: rgba(24, 22, 19, 0.88);
+  --header-border: #2f2a22;
+  --accent-color: #d8c3b0;
+  --accent-hover: #eddcd0;
+  --accent-ring: rgba(216, 195, 176, 0.35);
+  --btn-subtle-bg: rgba(216, 195, 176, 0.08);
+  --btn-subtle-border: rgba(216, 195, 176, 0.12);
+  --btn-subtle-hover-bg: rgba(216, 195, 176, 0.13);
+  --btn-subtle-hover-border: rgba(216, 195, 176, 0.18);
+  --btn-subtle-active-bg: rgba(216, 195, 176, 0.18);
+  --modal-bg: #201e19;
+  --modal-border: #332d25;
+  --drawer-bg: #201e19;
+  --drawer-border: #332d25;
+}
+
+/* Responsive Page Gutters: snug edge-to-edge layout with balanced margins */
+@media (min-width: 640px) {
+  :root {
+    --page-gutter: 12px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --page-gutter: 14px;
+  }
+}
+
+@media (min-width: 1440px) {
+  :root {
+    --page-gutter: 16px;
+  }
+}
+
+/* ==========================================================================
+   PALETTE 2: GREEN (Subtle Sage / Eucalyptus)
+   ========================================================================== */
+[data-palette="green"] {
+  --color-bg-body: #f2f6f3;
+  --color-bg-surface: #ffffff;
+  --color-bg-elevated: #f7fbf8;
+  --color-border: #dae6df;
+  --color-border-subtle: #e6f0ea;
+  --header-bg: rgba(242, 246, 243, 0.88);
+  --header-border: #d6e3db;
+  --accent-color: #2c7250;
+  --accent-hover: #225c40;
+  --accent-ring: rgba(44, 114, 80, 0.3);
+  --btn-subtle-bg: rgba(44, 114, 80, 0.06);
+  --btn-subtle-border: rgba(44, 114, 80, 0.1);
+  --btn-subtle-hover-bg: rgba(44, 114, 80, 0.11);
+  --btn-subtle-hover-border: rgba(44, 114, 80, 0.16);
+  --btn-subtle-active-bg: rgba(44, 114, 80, 0.15);
+  --modal-bg: #f8faf8;
+  --modal-border: #dae6df;
+  --drawer-bg: #f8faf8;
+  --drawer-border: #dae6df;
+}
+
+[data-palette="green"][data-theme="dark"],
+[data-theme="dark"] [data-palette="green"] {
+  --color-bg-body: #121915;
+  --color-bg-surface: #1a231e;
+  --color-bg-elevated: #212d26;
+  --color-border: #27372e;
+  --color-border-subtle: #1e2c24;
+  --header-bg: rgba(18, 25, 21, 0.88);
+  --header-border: #25342b;
+  --accent-color: #9cd2b4;
+  --accent-hover: #bde4ce;
+  --accent-ring: rgba(156, 210, 180, 0.35);
+  --btn-subtle-bg: rgba(156, 210, 180, 0.08);
+  --btn-subtle-border: rgba(156, 210, 180, 0.12);
+  --btn-subtle-hover-bg: rgba(156, 210, 180, 0.13);
+  --btn-subtle-hover-border: rgba(156, 210, 180, 0.18);
+  --btn-subtle-active-bg: rgba(156, 210, 180, 0.18);
+  --modal-bg: #1a231e;
+  --modal-border: #27372e;
+  --drawer-bg: #1a231e;
+  --drawer-border: #27372e;
+}
+
+/* ==========================================================================
+   PALETTE 3: ORANGE (Subtle Peach / Apricot)
+   ========================================================================== */
+[data-palette="orange"] {
+  --color-bg-body: #f9f4ee;
+  --color-bg-surface: #ffffff;
+  --color-bg-elevated: #fdf8f3;
+  --color-border: #eadfcf;
+  --color-border-subtle: #f3eae0;
+  --header-bg: rgba(249, 244, 238, 0.88);
+  --header-border: #e6dac8;
+  --accent-color: #b85b20;
+  --accent-hover: #9c4c19;
+  --accent-ring: rgba(184, 91, 32, 0.3);
+  --btn-subtle-bg: rgba(184, 91, 32, 0.06);
+  --btn-subtle-border: rgba(184, 91, 32, 0.1);
+  --btn-subtle-hover-bg: rgba(184, 91, 32, 0.11);
+  --btn-subtle-hover-border: rgba(184, 91, 32, 0.16);
+  --btn-subtle-active-bg: rgba(184, 91, 32, 0.15);
+  --modal-bg: #fdfaf6;
+  --modal-border: #eadfcf;
+  --drawer-bg: #fdfaf6;
+  --drawer-border: #eadfcf;
+}
+
+[data-palette="orange"][data-theme="dark"],
+[data-theme="dark"] [data-palette="orange"] {
+  --color-bg-body: #1a1612;
+  --color-bg-surface: #231e19;
+  --color-bg-elevated: #2b251e;
+  --color-border: #382e24;
+  --color-border-subtle: #2d241c;
+  --header-bg: rgba(26, 22, 18, 0.88);
+  --header-border: #332a20;
+  --accent-color: #f0ab80;
+  --accent-hover: #f7cbaf;
+  --accent-ring: rgba(240, 171, 128, 0.35);
+  --btn-subtle-bg: rgba(240, 171, 128, 0.08);
+  --btn-subtle-border: rgba(240, 171, 128, 0.12);
+  --btn-subtle-hover-bg: rgba(240, 171, 128, 0.13);
+  --btn-subtle-hover-border: rgba(240, 171, 128, 0.18);
+  --btn-subtle-active-bg: rgba(240, 171, 128, 0.18);
+  --modal-bg: #231e19;
+  --modal-border: #382e24;
+  --drawer-bg: #231e19;
+  --drawer-border: #382e24;
+}
+
+/* ==========================================================================
+   PALETTE 4: BLUE (Subtle Slate Blue)
+   ========================================================================== */
+[data-palette="blue"] {
+  --color-bg-body: #f2f6fa;
+  --color-bg-surface: #ffffff;
+  --color-bg-elevated: #f7faff;
+  --color-border: #dbe4f1;
+  --color-border-subtle: #e6eef8;
+  --header-bg: rgba(242, 246, 250, 0.88);
+  --header-border: #d5e0ee;
+  --accent-color: #2866c2;
+  --accent-hover: #1e52a0;
+  --accent-ring: rgba(40, 102, 194, 0.3);
+  --btn-subtle-bg: rgba(40, 102, 194, 0.06);
+  --btn-subtle-border: rgba(40, 102, 194, 0.1);
+  --btn-subtle-hover-bg: rgba(40, 102, 194, 0.11);
+  --btn-subtle-hover-border: rgba(40, 102, 194, 0.16);
+  --btn-subtle-active-bg: rgba(40, 102, 194, 0.15);
+  --modal-bg: #f8faff;
+  --modal-border: #dbe4f1;
+  --drawer-bg: #f8faff;
+  --drawer-border: #dbe4f1;
+}
+
+[data-palette="blue"][data-theme="dark"],
+[data-theme="dark"] [data-palette="blue"] {
+  --color-bg-body: #12171e;
+  --color-bg-surface: #19202a;
+  --color-bg-elevated: #202a38;
+  --color-border: #263345;
+  --color-border-subtle: #1e2837;
+  --header-bg: rgba(18, 23, 30, 0.88);
+  --header-border: #232f41;
+  --accent-color: #8ec0fa;
+  --accent-hover: #b9dafc;
+  --accent-ring: rgba(142, 192, 250, 0.35);
+  --btn-subtle-bg: rgba(142, 192, 250, 0.08);
+  --btn-subtle-border: rgba(142, 192, 250, 0.12);
+  --btn-subtle-hover-bg: rgba(142, 192, 250, 0.13);
+  --btn-subtle-hover-border: rgba(142, 192, 250, 0.18);
+  --btn-subtle-active-bg: rgba(142, 192, 250, 0.18);
+  --modal-bg: #19202a;
+  --modal-border: #263345;
+  --drawer-bg: #19202a;
+  --drawer-border: #263345;
+}
+
+/* ==========================================================================
+   PALETTE 5: TEAL (Subtle Seafoam / Mint)
+   ========================================================================== */
+[data-palette="teal"] {
+  --color-bg-body: #f1f7f6;
+  --color-bg-surface: #ffffff;
+  --color-bg-elevated: #f7fbfb;
+  --color-border: #dae8e6;
+  --color-border-subtle: #e6f1f0;
+  --header-bg: rgba(241, 247, 246, 0.88);
+  --header-border: #d4e5e3;
+  --accent-color: #1b7570;
+  --accent-hover: #145e5a;
+  --accent-ring: rgba(27, 117, 112, 0.3);
+  --btn-subtle-bg: rgba(27, 117, 112, 0.06);
+  --btn-subtle-border: rgba(27, 117, 112, 0.1);
+  --btn-subtle-hover-bg: rgba(27, 117, 112, 0.11);
+  --btn-subtle-hover-border: rgba(27, 117, 112, 0.16);
+  --btn-subtle-active-bg: rgba(27, 117, 112, 0.15);
+  --modal-bg: #f8fbfb;
+  --modal-border: #dae8e6;
+  --drawer-bg: #f8fbfb;
+  --drawer-border: #dae8e6;
+}
+
+[data-palette="teal"][data-theme="dark"],
+[data-theme="dark"] [data-palette="teal"] {
+  --color-bg-body: #111919;
+  --color-bg-surface: #182323;
+  --color-bg-elevated: #1f2d2d;
+  --color-border: #253737;
+  --color-border-subtle: #1c2a2a;
+  --header-bg: rgba(17, 25, 25, 0.88);
+  --header-border: #223232;
+  --accent-color: #85d2cc;
+  --accent-hover: #b4e6e2;
+  --accent-ring: rgba(133, 210, 204, 0.35);
+  --btn-subtle-bg: rgba(133, 210, 204, 0.08);
+  --btn-subtle-border: rgba(133, 210, 204, 0.12);
+  --btn-subtle-hover-bg: rgba(133, 210, 204, 0.13);
+  --btn-subtle-hover-border: rgba(133, 210, 204, 0.18);
+  --btn-subtle-active-bg: rgba(133, 210, 204, 0.18);
+  --modal-bg: #182323;
+  --modal-border: #253737;
+  --drawer-bg: #182323;
+  --drawer-border: #253737;
+}
+
+/* ==========================================================================
+   PALETTE 6: BROWN (Subtle Sepia / Taupe)
+   ========================================================================== */
+[data-palette="brown"] {
+  --color-bg-body: #f6f3ef;
+  --color-bg-surface: #ffffff;
+  --color-bg-elevated: #faf7f4;
+  --color-border: #e5ded5;
+  --color-border-subtle: #eee7de;
+  --header-bg: rgba(246, 243, 239, 0.88);
+  --header-border: #e1d9ce;
+  --accent-color: #79573e;
+  --accent-hover: #634631;
+  --accent-ring: rgba(121, 87, 62, 0.3);
+  --btn-subtle-bg: rgba(121, 87, 62, 0.06);
+  --btn-subtle-border: rgba(121, 87, 62, 0.1);
+  --btn-subtle-hover-bg: rgba(121, 87, 62, 0.11);
+  --btn-subtle-hover-border: rgba(121, 87, 62, 0.16);
+  --btn-subtle-active-bg: rgba(121, 87, 62, 0.15);
+  --modal-bg: #fbf9f6;
+  --modal-border: #e5ded5;
+  --drawer-bg: #fbf9f6;
+  --drawer-border: #e5ded5;
+}
+
+[data-palette="brown"][data-theme="dark"],
+[data-theme="dark"] [data-palette="brown"] {
+  --color-bg-body: #181513;
+  --color-bg-surface: #221d19;
+  --color-bg-elevated: #2a2420;
+  --color-border: #362e27;
+  --color-border-subtle: #2b241e;
+  --header-bg: rgba(24, 21, 19, 0.88);
+  --header-border: #312923;
+  --accent-color: #d6baa5;
+  --accent-hover: #ebd5c5;
+  --accent-ring: rgba(214, 186, 165, 0.35);
+  --btn-subtle-bg: rgba(214, 186, 165, 0.08);
+  --btn-subtle-border: rgba(214, 186, 165, 0.12);
+  --btn-subtle-hover-bg: rgba(214, 186, 165, 0.13);
+  --btn-subtle-hover-border: rgba(214, 186, 165, 0.18);
+  --btn-subtle-active-bg: rgba(214, 186, 165, 0.18);
+  --modal-bg: #221d19;
+  --modal-border: #362e27;
+  --drawer-bg: #221d19;
+  --drawer-border: #362e27;
+}
+
+/* ==========================================================================
+   PALETTE 7: PINK (Subtle Blush / Petal)
+   ========================================================================== */
+[data-palette="pink"] {
+  --color-bg-body: #f9f3f6;
+  --color-bg-surface: #ffffff;
+  --color-bg-elevated: #fcf8fa;
+  --color-border: #ebdde3;
+  --color-border-subtle: #f4e9ed;
+  --header-bg: rgba(249, 243, 246, 0.88);
+  --header-border: #e7d6dd;
+  --accent-color: #af4172;
+  --accent-hover: #91345d;
+  --accent-ring: rgba(175, 65, 114, 0.3);
+  --btn-subtle-bg: rgba(175, 65, 114, 0.06);
+  --btn-subtle-border: rgba(175, 65, 114, 0.1);
+  --btn-subtle-hover-bg: rgba(175, 65, 114, 0.11);
+  --btn-subtle-hover-border: rgba(175, 65, 114, 0.16);
+  --btn-subtle-active-bg: rgba(175, 65, 114, 0.15);
+  --modal-bg: #fdfafb;
+  --modal-border: #ebdde3;
+  --drawer-bg: #fdfafb;
+  --drawer-border: #ebdde3;
+}
+
+[data-palette="pink"][data-theme="dark"],
+[data-theme="dark"] [data-palette="pink"] {
+  --color-bg-body: #1a1317;
+  --color-bg-surface: #241a20;
+  --color-bg-elevated: #2d2028;
+  --color-border: #372631;
+  --color-border-subtle: #2d1d27;
+  --header-bg: rgba(26, 19, 23, 0.88);
+  --header-border: #32212c;
+  --accent-color: #f0a3c2;
+  --accent-hover: #f7c5d8;
+  --accent-ring: rgba(240, 163, 194, 0.35);
+  --btn-subtle-bg: rgba(240, 163, 194, 0.08);
+  --btn-subtle-border: rgba(240, 163, 194, 0.12);
+  --btn-subtle-hover-bg: rgba(240, 163, 194, 0.13);
+  --btn-subtle-hover-border: rgba(240, 163, 194, 0.18);
+  --btn-subtle-active-bg: rgba(240, 163, 194, 0.18);
+  --modal-bg: #241a20;
+  --modal-border: #372631;
+  --drawer-bg: #241a20;
+  --drawer-border: #372631;
+}
+
+/* ==========================================================================
+   PALETTE 8: PURPLE (Subtle Lavender / Lilac)
+   ========================================================================== */
+[data-palette="purple"] {
+  --color-bg-body: #f6f3f9;
+  --color-bg-surface: #ffffff;
+  --color-bg-elevated: #faf7fc;
+  --color-border: #e4dcf0;
+  --color-border-subtle: #eee8f7;
+  --header-bg: rgba(246, 243, 249, 0.88);
+  --header-border: #ded4eb;
+  --accent-color: #6d449b;
+  --accent-hover: #58357f;
+  --accent-ring: rgba(109, 68, 155, 0.3);
+  --btn-subtle-bg: rgba(109, 68, 155, 0.06);
+  --btn-subtle-border: rgba(109, 68, 155, 0.1);
+  --btn-subtle-hover-bg: rgba(109, 68, 155, 0.11);
+  --btn-subtle-hover-border: rgba(109, 68, 155, 0.16);
+  --btn-subtle-active-bg: rgba(109, 68, 155, 0.15);
+  --modal-bg: #fbf9fc;
+  --modal-border: #e4dcf0;
+  --drawer-bg: #fbf9fc;
+  --drawer-border: #e4dcf0;
+}
+
+[data-palette="purple"][data-theme="dark"],
+[data-theme="dark"] [data-palette="purple"] {
+  --color-bg-body: #16131c;
+  --color-bg-surface: #201928;
+  --color-bg-elevated: #282032;
+  --color-border: #33263f;
+  --color-border-subtle: #291d34;
+  --header-bg: rgba(22, 19, 28, 0.88);
+  --header-border: #2d2038;
+  --accent-color: #c7a5f2;
+  --accent-hover: #dfc8fb;
+  --accent-ring: rgba(199, 165, 242, 0.35);
+  --btn-subtle-bg: rgba(199, 165, 242, 0.08);
+  --btn-subtle-border: rgba(199, 165, 242, 0.12);
+  --btn-subtle-hover-bg: rgba(199, 165, 242, 0.13);
+  --btn-subtle-hover-border: rgba(199, 165, 242, 0.18);
+  --btn-subtle-active-bg: rgba(199, 165, 242, 0.18);
+  --modal-bg: #201928;
+  --modal-border: #33263f;
+  --drawer-bg: #201928;
+  --drawer-border: #33263f;
+}
+
+/* ==========================================================================
+   PALETTE 9: MAGENTA (Subtle Berry / Orchid)
+   ========================================================================== */
+[data-palette="magenta"] {
+  --color-bg-body: #f8f2f7;
+  --color-bg-surface: #ffffff;
+  --color-bg-elevated: #fbf7fa;
+  --color-border: #ebdbe8;
+  --color-border-subtle: #f4e7f1;
+  --header-bg: rgba(248, 242, 247, 0.88);
+  --header-border: #e6d3e3;
+  --accent-color: #9a3279;
+  --accent-hover: #7f2762;
+  --accent-ring: rgba(154, 50, 121, 0.3);
+  --btn-subtle-bg: rgba(154, 50, 121, 0.06);
+  --btn-subtle-border: rgba(154, 50, 121, 0.1);
+  --btn-subtle-hover-bg: rgba(154, 50, 121, 0.11);
+  --btn-subtle-hover-border: rgba(154, 50, 121, 0.16);
+  --btn-subtle-active-bg: rgba(154, 50, 121, 0.15);
+  --modal-bg: #fcf9fb;
+  --modal-border: #ebdbe8;
+  --drawer-bg: #fcf9fb;
+  --drawer-border: #ebdbe8;
+}
+
+[data-palette="magenta"][data-theme="dark"],
+[data-theme="dark"] [data-palette="magenta"] {
+  --color-bg-body: #1a1318;
+  --color-bg-surface: #241822;
+  --color-bg-elevated: #2d1e2b;
+  --color-border: #382435;
+  --color-border-subtle: #2d1c2a;
+  --header-bg: rgba(26, 19, 24, 0.88);
+  --header-border: #321e2f;
+  --accent-color: #e497c8;
+  --accent-hover: #f3beee;
+  --accent-ring: rgba(228, 151, 200, 0.35);
+  --btn-subtle-bg: rgba(228, 151, 200, 0.08);
+  --btn-subtle-border: rgba(228, 151, 200, 0.12);
+  --btn-subtle-hover-bg: rgba(228, 151, 200, 0.13);
+  --btn-subtle-hover-border: rgba(228, 151, 200, 0.18);
+  --btn-subtle-active-bg: rgba(228, 151, 200, 0.18);
+  --modal-bg: #241822;
+  --modal-border: #382435;
+  --drawer-bg: #241822;
+  --drawer-border: #382435;
+}
+
+/* ==========================================================================
+   PALETTE 10: RED (Subtle Terracotta / Coral Rose)
+   ========================================================================== */
+[data-palette="red"] {
+  --color-bg-body: #f9f3f3;
+  --color-bg-surface: #ffffff;
+  --color-bg-elevated: #fcf8f8;
+  --color-border: #ecdcde;
+  --color-border-subtle: #f5e8e9;
+  --header-bg: rgba(249, 243, 243, 0.88);
+  --header-border: #e7d5d7;
+  --accent-color: #b33939;
+  --accent-hover: #962d2d;
+  --accent-ring: rgba(179, 57, 57, 0.3);
+  --btn-subtle-bg: rgba(179, 57, 57, 0.06);
+  --btn-subtle-border: rgba(179, 57, 57, 0.1);
+  --btn-subtle-hover-bg: rgba(179, 57, 57, 0.11);
+  --btn-subtle-hover-border: rgba(179, 57, 57, 0.16);
+  --btn-subtle-active-bg: rgba(179, 57, 57, 0.15);
+  --modal-bg: #fdf9f9;
+  --modal-border: #ecdcde;
+  --drawer-bg: #fdf9f9;
+  --drawer-border: #ecdcde;
+}
+
+[data-palette="red"][data-theme="dark"],
+[data-theme="dark"] [data-palette="red"] {
+  --color-bg-body: #1a1313;
+  --color-bg-surface: #241818;
+  --color-bg-elevated: #2e1e1e;
+  --color-border: #392525;
+  --color-border-subtle: #2d1c1c;
+  --header-bg: rgba(26, 19, 19, 0.88);
+  --header-border: #331f1f;
+  --accent-color: #f19696;
+  --accent-hover: #f9bebe;
+  --accent-ring: rgba(241, 150, 150, 0.35);
+  --btn-subtle-bg: rgba(241, 150, 150, 0.08);
+  --btn-subtle-border: rgba(241, 150, 150, 0.12);
+  --btn-subtle-hover-bg: rgba(241, 150, 150, 0.13);
+  --btn-subtle-hover-border: rgba(241, 150, 150, 0.18);
+  --btn-subtle-active-bg: rgba(241, 150, 150, 0.18);
+  --modal-bg: #241818;
+  --modal-border: #392525;
+  --drawer-bg: #241818;
+  --drawer-border: #392525;
+}
+
+/* --------------------------------------------------------------------------
+   Global Reset
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+  color-scheme: light dark;
+}
+
+/* --------------------------------------------------------------------------
+   Minimal, Theme-Consistent Custom Scrollbar
+   - Thin, visually unobtrusive track
+   - Soft, rounded thumb matching the light theme palette
+   - Smooth, subtle hover and active feedback
+   -------------------------------------------------------------------------- */
+html,
+body,
+* {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--color-text-secondary) 22%, transparent) transparent;
+}
+
+/* WebKit & Chromium Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: color-mix(in srgb, var(--color-text-secondary) 22%, transparent);
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  transition: background-color var(--transition-fast);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: color-mix(in srgb, var(--color-text-secondary) 38%, transparent);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background-color: color-mix(in srgb, var(--accent-color) 40%, transparent);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+body {
+  font-family: var(--font-family-base);
+  background-color: var(--color-bg-body);
+  color: var(--color-text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Prevent background scrolling without causing layout shifts */
+body.modal-open,
+body.nav-drawer-open {
+  overflow-y: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* --------------------------------------------------------------------------
+   Focus Outline Reset & Custom Focus Rings
+   -------------------------------------------------------------------------- */
+*:focus {
+  outline: none !important;
+}
+
+button:focus,
+input:focus,
+a:focus,
+[tabindex]:focus {
+  outline: none !important;
+}
+
+/* Subtle, site-accent-consistent custom focus ring for keyboard accessibility */
+*:focus-visible {
+  outline: none !important;
+  box-shadow: 0 0 0 2px var(--color-bg-body), 0 0 0 4px var(--accent-ring) !important;
+}
+
+/* Suppress browser native search cancel and decoration buttons */
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
+}
+
+/* Exclude search inputs and fields from any focus rings or focus borders */
+input[type="search"]:focus,
+input[type="search"]:focus-visible,
+.search-modal-input,
+.search-modal-input:focus,
+.search-modal-input:focus-visible,
+.search-modal-field,
+.search-modal-field:focus,
+.search-modal-field:focus-within,
+.search-modal-field:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+}
+
+input {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* --------------------------------------------------------------------------
+   Global Helper Utilities
+   -------------------------------------------------------------------------- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
