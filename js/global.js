@@ -11,6 +11,8 @@
   const STORAGE_KEY_THEME = 'app-theme-preference';
   const STORAGE_KEY_PALETTE = 'app-palette-preference';
 
+  const VALID_THEMES = ['light', 'dark', 'extra-dark'];
+
   const VALID_PALETTES = [
     'beige',
     'green',
@@ -31,11 +33,11 @@
    * Priority: 1. Stored user preference in localStorage
    *           2. System media query prefers-color-scheme
    *           3. Default fallback to 'light'
-   * @returns {'light' | 'dark'}
+   * @returns {'light' | 'dark' | 'extra-dark'}
    */
   function getPreferredTheme() {
     const savedTheme = localStorage.getItem(STORAGE_KEY_THEME);
-    if (savedTheme === 'light' || savedTheme === 'dark') {
+    if (savedTheme && VALID_THEMES.includes(savedTheme)) {
       return savedTheme;
     }
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -170,12 +172,19 @@
   }
 
   /**
-   * Toggle between light and dark themes
-   * @returns {'light' | 'dark'} The new active theme
+   * Toggle between light, dark, and extra-dark themes
+   * @returns {'light' | 'dark' | 'extra-dark'} The new active theme
    */
   function toggleTheme() {
     const currentTheme = document.documentElement.getAttribute('data-theme') || getPreferredTheme();
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    let newTheme = 'light';
+    if (currentTheme === 'light') {
+      newTheme = 'dark';
+    } else if (currentTheme === 'dark') {
+      newTheme = 'extra-dark';
+    } else {
+      newTheme = 'light';
+    }
     applyTheme(newTheme, true);
     return newTheme;
   }
@@ -187,6 +196,7 @@
     toggleTheme: toggleTheme,
     getPalette: () => document.documentElement.getAttribute('data-palette') || getPreferredPalette(),
     setPalette: applyPalette,
+    THEMES: VALID_THEMES,
     PALETTES: VALID_PALETTES,
   };
 

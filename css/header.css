@@ -187,7 +187,8 @@
   box-shadow: 0 0 0 2px var(--color-bg-surface), 0 0 0 4px var(--accent-ring) !important;
 }
 
-[data-theme="dark"] .header-logo {
+[data-theme="dark"] .header-logo,
+[data-theme="extra-dark"] .header-logo {
   background-color: var(--header-btn-bg);
   border-color: var(--header-btn-border);
 }
@@ -279,12 +280,14 @@
   stroke: currentColor !important;
 }
 
-[data-theme="dark"] .sun-icon {
+[data-theme="dark"] .sun-icon,
+[data-theme="extra-dark"] .sun-icon {
   opacity: 1;
   transform: rotate(0deg) scale(1);
 }
 
-[data-theme="dark"] .moon-icon {
+[data-theme="dark"] .moon-icon,
+[data-theme="extra-dark"] .moon-icon {
   opacity: 0;
   transform: rotate(90deg) scale(0.5);
 }
@@ -1333,11 +1336,11 @@
   color: var(--accent-color);
 }
 
-/* Mode Selection (Light / Dark) */
+/* Mode Selection (Light / Dark / Extra Dark) */
 .mode-toggle-group {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
   width: 100%;
   box-sizing: border-box;
 }
@@ -1395,6 +1398,15 @@
 
 .mode-select-moon path {
   stroke: currentColor !important;
+}
+
+.mode-select-extra-dark {
+  --fillg: currentColor;
+  fill: currentColor;
+}
+
+.mode-select-extra-dark path {
+  fill: currentColor;
 }
 
 /* Color Palette Swatches */
@@ -1471,7 +1483,8 @@
   transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-[data-theme="dark"] .palette-dot {
+[data-theme="dark"] .palette-dot,
+[data-theme="extra-dark"] .palette-dot {
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.22);
 }
 

@@ -169,6 +169,56 @@
 }
 
 /* ==========================================================================
+   EXTRA DARK THEME BASE OVERRIDES (#1e1e1e)
+   ========================================================================== */
+[data-theme="extra-dark"] {
+  --color-text-primary: #f5f5f5;
+  --color-text-secondary: #a3a3a3;
+  --color-text-tertiary: #737373;
+  --btn-icon-color: #e5e5e5;
+  --btn-icon-hover-color: #ffffff;
+  --modal-backdrop-bg: rgba(0, 0, 0, 0.78);
+  --overlay-bg: rgba(0, 0, 0, 0.45);
+  --modal-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.85);
+  --drawer-shadow: none;
+
+  /* Dynamic Header Action Buttons subtle theme backgrounds */
+  --header-btn-bg: color-mix(in srgb, var(--accent-color) 18%, transparent);
+  --header-btn-border: color-mix(in srgb, var(--accent-color) 26%, transparent);
+  --header-btn-hover-bg: color-mix(in srgb, var(--accent-color) 28%, transparent);
+  --header-btn-hover-border: color-mix(in srgb, var(--accent-color) 40%, transparent);
+  --header-btn-active-bg: color-mix(in srgb, var(--accent-color) 34%, transparent);
+
+  /* Tree Navigation Connector Lines & Items */
+  --tree-line-color: color-mix(in srgb, var(--accent-color) 26%, var(--color-border));
+  --tree-line-hover: color-mix(in srgb, var(--accent-color) 65%, var(--color-border));
+  --tree-item-hover-bg: color-mix(in srgb, var(--accent-color) 12%, transparent);
+  --tree-item-active-bg: color-mix(in srgb, var(--accent-color) 20%, transparent);
+  --tree-item-active-text: var(--accent-color);
+
+  /* DEFAULT EXTRA DARK (#1e1e1e with Beige Accent) */
+  --color-bg-body: #1e1e1e;
+  --color-bg-surface: #252525;
+  --color-bg-elevated: #2c2c2c;
+  --color-border: #383838;
+  --color-border-subtle: #2c2c2c;
+  --header-bg: rgba(30, 30, 30, 0.92);
+  --header-border: #333333;
+  --accent-color: #e0cfc0;
+  --accent-hover: #f0e2d5;
+  --accent-ring: rgba(224, 207, 192, 0.35);
+  --btn-subtle-bg: rgba(224, 207, 192, 0.08);
+  --btn-subtle-border: rgba(224, 207, 192, 0.14);
+  --btn-subtle-hover-bg: rgba(224, 207, 192, 0.14);
+  --btn-subtle-hover-border: rgba(224, 207, 192, 0.2);
+  --btn-subtle-active-bg: rgba(224, 207, 192, 0.2);
+  --modal-bg: #252525;
+  --modal-border: #383838;
+  --drawer-bg: #222222;
+  --drawer-border: #333333;
+}
+
+/* ==========================================================================
    PALETTE 1: BEIGE (EXPLICIT)
    ========================================================================== */
 [data-palette="beige"] {
@@ -214,6 +264,29 @@
   --modal-border: #332d25;
   --drawer-bg: #201e19;
   --drawer-border: #332d25;
+}
+
+[data-palette="beige"][data-theme="extra-dark"],
+[data-theme="extra-dark"] [data-palette="beige"] {
+  --color-bg-body: #1e1e1e;
+  --color-bg-surface: #252422;
+  --color-bg-elevated: #2d2b29;
+  --color-border: #3d3730;
+  --color-border-subtle: #2e2a25;
+  --header-bg: rgba(30, 30, 30, 0.92);
+  --header-border: #38322a;
+  --accent-color: #e0cfc0;
+  --accent-hover: #f0e2d5;
+  --accent-ring: rgba(224, 207, 192, 0.35);
+  --btn-subtle-bg: rgba(224, 207, 192, 0.08);
+  --btn-subtle-border: rgba(224, 207, 192, 0.14);
+  --btn-subtle-hover-bg: rgba(224, 207, 192, 0.14);
+  --btn-subtle-hover-border: rgba(224, 207, 192, 0.2);
+  --btn-subtle-active-bg: rgba(224, 207, 192, 0.2);
+  --modal-bg: #252422;
+  --modal-border: #3d3730;
+  --drawer-bg: #22211f;
+  --drawer-border: #38322a;
 }
 
 /* Responsive Page Gutters: snug edge-to-edge layout with balanced margins */
@@ -283,6 +356,29 @@
   --drawer-border: #27372e;
 }
 
+[data-palette="green"][data-theme="extra-dark"],
+[data-theme="extra-dark"] [data-palette="green"] {
+  --color-bg-body: #1e1e1e;
+  --color-bg-surface: #222623;
+  --color-bg-elevated: #282e2a;
+  --color-border: #333d36;
+  --color-border-subtle: #27302a;
+  --header-bg: rgba(30, 30, 30, 0.92);
+  --header-border: #2f3a33;
+  --accent-color: #9cd2b4;
+  --accent-hover: #bde4ce;
+  --accent-ring: rgba(156, 210, 180, 0.35);
+  --btn-subtle-bg: rgba(156, 210, 180, 0.08);
+  --btn-subtle-border: rgba(156, 210, 180, 0.14);
+  --btn-subtle-hover-bg: rgba(156, 210, 180, 0.14);
+  --btn-subtle-hover-border: rgba(156, 210, 180, 0.2);
+  --btn-subtle-active-bg: rgba(156, 210, 180, 0.2);
+  --modal-bg: #222623;
+  --modal-border: #333d36;
+  --drawer-bg: #202321;
+  --drawer-border: #2f3a33;
+}
+
 /* ==========================================================================
    PALETTE 3: ORANGE (Subtle Peach / Apricot)
    ========================================================================== */
@@ -329,6 +425,29 @@
   --modal-border: #382e24;
   --drawer-bg: #231e19;
   --drawer-border: #382e24;
+}
+
+[data-palette="orange"][data-theme="extra-dark"],
+[data-theme="extra-dark"] [data-palette="orange"] {
+  --color-bg-body: #1e1e1e;
+  --color-bg-surface: #272320;
+  --color-bg-elevated: #2f2a25;
+  --color-border: #40342b;
+  --color-border-subtle: #302821;
+  --header-bg: rgba(30, 30, 30, 0.92);
+  --header-border: #3b3027;
+  --accent-color: #f0ab80;
+  --accent-hover: #f7cbaf;
+  --accent-ring: rgba(240, 171, 128, 0.35);
+  --btn-subtle-bg: rgba(240, 171, 128, 0.08);
+  --btn-subtle-border: rgba(240, 171, 128, 0.14);
+  --btn-subtle-hover-bg: rgba(240, 171, 128, 0.14);
+  --btn-subtle-hover-border: rgba(240, 171, 128, 0.2);
+  --btn-subtle-active-bg: rgba(240, 171, 128, 0.2);
+  --modal-bg: #272320;
+  --modal-border: #40342b;
+  --drawer-bg: #23201e;
+  --drawer-border: #3b3027;
 }
 
 /* ==========================================================================
@@ -379,6 +498,29 @@
   --drawer-border: #263345;
 }
 
+[data-palette="blue"][data-theme="extra-dark"],
+[data-theme="extra-dark"] [data-palette="blue"] {
+  --color-bg-body: #1e1e1e;
+  --color-bg-surface: #212428;
+  --color-bg-elevated: #282c32;
+  --color-border: #323944;
+  --color-border-subtle: #272d36;
+  --header-bg: rgba(30, 30, 30, 0.92);
+  --header-border: #2e3540;
+  --accent-color: #8ec0fa;
+  --accent-hover: #b9dafc;
+  --accent-ring: rgba(142, 192, 250, 0.35);
+  --btn-subtle-bg: rgba(142, 192, 250, 0.08);
+  --btn-subtle-border: rgba(142, 192, 250, 0.14);
+  --btn-subtle-hover-bg: rgba(142, 192, 250, 0.14);
+  --btn-subtle-hover-border: rgba(142, 192, 250, 0.2);
+  --btn-subtle-active-bg: rgba(142, 192, 250, 0.2);
+  --modal-bg: #212428;
+  --modal-border: #323944;
+  --drawer-bg: #1f2125;
+  --drawer-border: #2e3540;
+}
+
 /* ==========================================================================
    PALETTE 5: TEAL (Subtle Seafoam / Mint)
    ========================================================================== */
@@ -425,6 +567,29 @@
   --modal-border: #253737;
   --drawer-bg: #182323;
   --drawer-border: #253737;
+}
+
+[data-palette="teal"][data-theme="extra-dark"],
+[data-theme="extra-dark"] [data-palette="teal"] {
+  --color-bg-body: #1e1e1e;
+  --color-bg-surface: #202626;
+  --color-bg-elevated: #272f2f;
+  --color-border: #303d3d;
+  --color-border-subtle: #263131;
+  --header-bg: rgba(30, 30, 30, 0.92);
+  --header-border: #2d3939;
+  --accent-color: #85d2cc;
+  --accent-hover: #b4e6e2;
+  --accent-ring: rgba(133, 210, 204, 0.35);
+  --btn-subtle-bg: rgba(133, 210, 204, 0.08);
+  --btn-subtle-border: rgba(133, 210, 204, 0.14);
+  --btn-subtle-hover-bg: rgba(133, 210, 204, 0.14);
+  --btn-subtle-hover-border: rgba(133, 210, 204, 0.2);
+  --btn-subtle-active-bg: rgba(133, 210, 204, 0.2);
+  --modal-bg: #202626;
+  --modal-border: #303d3d;
+  --drawer-bg: #1e2323;
+  --drawer-border: #2d3939;
 }
 
 /* ==========================================================================
@@ -475,6 +640,29 @@
   --drawer-border: #362e27;
 }
 
+[data-palette="brown"][data-theme="extra-dark"],
+[data-theme="extra-dark"] [data-palette="brown"] {
+  --color-bg-body: #1e1e1e;
+  --color-bg-surface: #262320;
+  --color-bg-elevated: #2e2a26;
+  --color-border: #3f3933;
+  --color-border-subtle: #302b26;
+  --header-bg: rgba(30, 30, 30, 0.92);
+  --header-border: #3a342e;
+  --accent-color: #d6baa5;
+  --accent-hover: #ebd5c5;
+  --accent-ring: rgba(214, 186, 165, 0.35);
+  --btn-subtle-bg: rgba(214, 186, 165, 0.08);
+  --btn-subtle-border: rgba(214, 186, 165, 0.14);
+  --btn-subtle-hover-bg: rgba(214, 186, 165, 0.14);
+  --btn-subtle-hover-border: rgba(214, 186, 165, 0.2);
+  --btn-subtle-active-bg: rgba(214, 186, 165, 0.2);
+  --modal-bg: #262320;
+  --modal-border: #3f3933;
+  --drawer-bg: #22201e;
+  --drawer-border: #3a342e;
+}
+
 /* ==========================================================================
    PALETTE 7: PINK (Subtle Blush / Petal)
    ========================================================================== */
@@ -521,6 +709,29 @@
   --modal-border: #372631;
   --drawer-bg: #241a20;
   --drawer-border: #372631;
+}
+
+[data-palette="pink"][data-theme="extra-dark"],
+[data-theme="extra-dark"] [data-palette="pink"] {
+  --color-bg-body: #1e1e1e;
+  --color-bg-surface: #272224;
+  --color-bg-elevated: #2f282c;
+  --color-border: #403238;
+  --color-border-subtle: #31262c;
+  --header-bg: rgba(30, 30, 30, 0.92);
+  --header-border: #3b2d33;
+  --accent-color: #f0a3c2;
+  --accent-hover: #f7c5d8;
+  --accent-ring: rgba(240, 163, 194, 0.35);
+  --btn-subtle-bg: rgba(240, 163, 194, 0.08);
+  --btn-subtle-border: rgba(240, 163, 194, 0.14);
+  --btn-subtle-hover-bg: rgba(240, 163, 194, 0.14);
+  --btn-subtle-hover-border: rgba(240, 163, 194, 0.2);
+  --btn-subtle-active-bg: rgba(240, 163, 194, 0.2);
+  --modal-bg: #272224;
+  --modal-border: #403238;
+  --drawer-bg: #231f21;
+  --drawer-border: #3b2d33;
 }
 
 /* ==========================================================================
@@ -571,6 +782,29 @@
   --drawer-border: #33263f;
 }
 
+[data-palette="purple"][data-theme="extra-dark"],
+[data-theme="extra-dark"] [data-palette="purple"] {
+  --color-bg-body: #1e1e1e;
+  --color-bg-surface: #242228;
+  --color-bg-elevated: #2c2832;
+  --color-border: #3a3444;
+  --color-border-subtle: #2c2736;
+  --header-bg: rgba(30, 30, 30, 0.92);
+  --header-border: #342f3f;
+  --accent-color: #c7a5f2;
+  --accent-hover: #dfc8fb;
+  --accent-ring: rgba(199, 165, 242, 0.35);
+  --btn-subtle-bg: rgba(199, 165, 242, 0.08);
+  --btn-subtle-border: rgba(199, 165, 242, 0.14);
+  --btn-subtle-hover-bg: rgba(199, 165, 242, 0.14);
+  --btn-subtle-hover-border: rgba(199, 165, 242, 0.2);
+  --btn-subtle-active-bg: rgba(199, 165, 242, 0.2);
+  --modal-bg: #242228;
+  --modal-border: #3a3444;
+  --drawer-bg: #211f24;
+  --drawer-border: #342f3f;
+}
+
 /* ==========================================================================
    PALETTE 9: MAGENTA (Subtle Berry / Orchid)
    ========================================================================== */
@@ -619,6 +853,29 @@
   --drawer-border: #382435;
 }
 
+[data-palette="magenta"][data-theme="extra-dark"],
+[data-theme="extra-dark"] [data-palette="magenta"] {
+  --color-bg-body: #1e1e1e;
+  --color-bg-surface: #272126;
+  --color-bg-elevated: #30272f;
+  --color-border: #423140;
+  --color-border-subtle: #332531;
+  --header-bg: rgba(30, 30, 30, 0.92);
+  --header-border: #3c2b3a;
+  --accent-color: #e497c8;
+  --accent-hover: #f3beee;
+  --accent-ring: rgba(228, 151, 200, 0.35);
+  --btn-subtle-bg: rgba(228, 151, 200, 0.08);
+  --btn-subtle-border: rgba(228, 151, 200, 0.14);
+  --btn-subtle-hover-bg: rgba(228, 151, 200, 0.14);
+  --btn-subtle-hover-border: rgba(228, 151, 200, 0.2);
+  --btn-subtle-active-bg: rgba(228, 151, 200, 0.2);
+  --modal-bg: #272126;
+  --modal-border: #423140;
+  --drawer-bg: #231e22;
+  --drawer-border: #3c2b3a;
+}
+
 /* ==========================================================================
    PALETTE 10: RED (Subtle Terracotta / Coral Rose)
    ========================================================================== */
@@ -665,6 +922,29 @@
   --modal-border: #392525;
   --drawer-bg: #241818;
   --drawer-border: #392525;
+}
+
+[data-palette="red"][data-theme="extra-dark"],
+[data-theme="extra-dark"] [data-palette="red"] {
+  --color-bg-body: #1e1e1e;
+  --color-bg-surface: #272121;
+  --color-bg-elevated: #302727;
+  --color-border: #423131;
+  --color-border-subtle: #332525;
+  --header-bg: rgba(30, 30, 30, 0.92);
+  --header-border: #3c2c2c;
+  --accent-color: #f19696;
+  --accent-hover: #f9bebe;
+  --accent-ring: rgba(241, 150, 150, 0.35);
+  --btn-subtle-bg: rgba(241, 150, 150, 0.08);
+  --btn-subtle-border: rgba(241, 150, 150, 0.14);
+  --btn-subtle-hover-bg: rgba(241, 150, 150, 0.14);
+  --btn-subtle-hover-border: rgba(241, 150, 150, 0.2);
+  --btn-subtle-active-bg: rgba(241, 150, 150, 0.2);
+  --modal-bg: #272121;
+  --modal-border: #423131;
+  --drawer-bg: #231e1e;
+  --drawer-border: #3c2c2c;
 }
 
 /* --------------------------------------------------------------------------
