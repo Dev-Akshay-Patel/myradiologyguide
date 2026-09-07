@@ -778,6 +778,22 @@
   padding: 0;
 }
 
+/* Subtle Company Categories Separator (Touches left and right edges of the sidebar seamlessly) */
+.tree-divider {
+  display: block;
+  list-style: none;
+  height: 1px;
+  background-color: var(--color-border-subtle);
+  margin-top: 6px;
+  margin-bottom: 6px;
+  margin-left: -10px;
+  margin-right: -10px;
+  width: calc(100% + 20px);
+  border: none;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
 .tree-item.is-hidden {
   display: none !important;
 }
