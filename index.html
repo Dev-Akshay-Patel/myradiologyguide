@@ -674,57 +674,105 @@
           </section>
         </div>
 
-        <!-- Space on the Side for Other Components -->
-        <aside class="layout-aside" id="layout-aside" aria-label="Quick Modality Access">
-          <div class="side-panel">
-            <div class="side-panel-header">
-              <h3 class="side-panel-title">Quick Modality Access</h3>
-              <span class="side-panel-badge">Protocols</span>
+        <!-- Right Side Companion: Popular Posts (No outer container, Post 1 with image overlayed by text, Posts 2-5 sequential) -->
+        <aside class="layout-aside" id="layout-aside" aria-label="Popular Posts">
+          <div class="popular-column">
+            <div class="popular-header">
+              <h3 class="popular-section-title">Popular Posts</h3>
+              <span class="popular-badge">Trending</span>
             </div>
-            <div class="quick-links-list">
-              <a href="#ct-protocol" class="quick-link-item">
-                <div class="quick-link-icon" aria-hidden="true">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/></svg>
-                </div>
-                <div class="quick-link-content">
-                  <span class="quick-link-title">Computed Tomography (CT)</span>
-                  <span class="quick-link-desc">Contrast phases &amp; radiation dosing</span>
-                </div>
-                <svg class="quick-link-arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
-              </a>
 
-              <a href="#mri-protocol" class="quick-link-item">
-                <div class="quick-link-icon" aria-hidden="true">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 7h10"/><path d="M7 12h10"/><path d="M7 17h10"/></svg>
-                </div>
-                <div class="quick-link-content">
-                  <span class="quick-link-title">Magnetic Resonance (MRI)</span>
-                  <span class="quick-link-desc">T1, T2, FLAIR &amp; Diffusion sequences</span>
-                </div>
-                <svg class="quick-link-arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
-              </a>
+            <div class="popular-content">
+              <!-- Post 1: Hero-style Card with Image Overlayed by Text -->
+              <article class="popular-featured-post">
+                <a href="#post-acute-stroke" class="popular-overlay-card" aria-label="Popular Post # 1: Brain MRI Acute Stroke Protocol">
+                  <img
+                    src="https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=800&q=80"
+                    alt="Brain MRI acute stroke protocol imaging"
+                    class="popular-overlay-img"
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div class="popular-overlay-scrim" aria-hidden="true"></div>
+                  
+                  <div class="popular-overlay-body">
+                    <div class="popular-overlay-top">
+                      <span class="popular-rank-pill rank-top"># 1</span>
+                      <span class="popular-overlay-tag">#Neuroradiology</span>
+                    </div>
+                    <h4 class="popular-overlay-title">Brain MRI Acute Stroke Protocol &amp; DWI-FLAIR Mismatch</h4>
+                    <p class="popular-overlay-desc">Comprehensive emergency neuro-imaging algorithm for identifying salvageable penumbra, assessing core infarct ratios, and evaluating mechanical thrombectomy triage...</p>
+                    <div class="popular-overlay-meta">
+                      <span>5 min read</span>
+                      <span class="meta-dot" aria-hidden="true">•</span>
+                      <span>Clinical Protocol</span>
+                    </div>
+                  </div>
+                </a>
+              </article>
 
-              <a href="#us-protocol" class="quick-link-item">
-                <div class="quick-link-icon" aria-hidden="true">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h5"/><path d="M17 12h5"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="2"/></svg>
-                </div>
-                <div class="quick-link-content">
-                  <span class="quick-link-title">Diagnostic Ultrasound (US)</span>
-                  <span class="quick-link-desc">Doppler velocities &amp; acoustic shadowing</span>
-                </div>
-                <svg class="quick-link-arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
-              </a>
+              <!-- Posts 2 to 5: Without Thumbnail, Arranged with # 2, # 3, # 4, # 5 -->
+              <div class="popular-text-list">
+                <!-- Post 2 -->
+                <article class="popular-text-item">
+                  <a href="#post-chest-ct-ild" class="popular-text-link" aria-label="Popular Post # 2: High-Resolution Chest CT">
+                    <span class="popular-rank-pill"># 2</span>
+                    <div class="popular-text-content">
+                      <h4 class="popular-text-title">High-Resolution Chest CT: Interstitial Lung Disease Patterns</h4>
+                      <div class="popular-meta-row">
+                        <span class="popular-meta-tag">Thoracic</span>
+                        <span class="popular-meta-dot" aria-hidden="true">•</span>
+                        <span class="popular-meta-time">4 min read</span>
+                      </div>
+                    </div>
+                  </a>
+                </article>
 
-              <a href="#pet-protocol" class="quick-link-item">
-                <div class="quick-link-icon" aria-hidden="true">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="m4.93 4.93 14.14 14.14"/><path d="M2 12h20"/><path d="m19.07 4.93-14.14 14.14"/></svg>
-                </div>
-                <div class="quick-link-content">
-                  <span class="quick-link-title">Hybrid PET/CT &amp; Molecular</span>
-                  <span class="quick-link-desc">Radiotracer uptake, SUV metric &amp; fusion</span>
-                </div>
-                <svg class="quick-link-arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
-              </a>
+                <!-- Post 3 -->
+                <article class="popular-text-item">
+                  <a href="#post-msk-ultrasound" class="popular-text-link" aria-label="Popular Post # 3: Dynamic Musculoskeletal Ultrasound">
+                    <span class="popular-rank-pill"># 3</span>
+                    <div class="popular-text-content">
+                      <h4 class="popular-text-title">Dynamic Musculoskeletal US: Rotator Cuff &amp; Joint Atlas</h4>
+                      <div class="popular-meta-row">
+                        <span class="popular-meta-tag">MSK / Ultrasound</span>
+                        <span class="popular-meta-dot" aria-hidden="true">•</span>
+                        <span class="popular-meta-time">6 min read</span>
+                      </div>
+                    </div>
+                  </a>
+                </article>
+
+                <!-- Post 4 -->
+                <article class="popular-text-item">
+                  <a href="#post-pet-ct-suv" class="popular-text-link" aria-label="Popular Post # 4: Hybrid PET-CT Oncology">
+                    <span class="popular-rank-pill"># 4</span>
+                    <div class="popular-text-content">
+                      <h4 class="popular-text-title">Hybrid PET-CT Oncology: Standardized SUVmax Quantification</h4>
+                      <div class="popular-meta-row">
+                        <span class="popular-meta-tag">Nuclear Med</span>
+                        <span class="popular-meta-dot" aria-hidden="true">•</span>
+                        <span class="popular-meta-time">8 min read</span>
+                      </div>
+                    </div>
+                  </a>
+                </article>
+
+                <!-- Post 5 -->
+                <article class="popular-text-item">
+                  <a href="#post-radiation-safety" class="popular-text-link" aria-label="Popular Post # 5: ALARA Radiation Protection">
+                    <span class="popular-rank-pill"># 5</span>
+                    <div class="popular-text-content">
+                      <h4 class="popular-text-title">ALARA Radiation Protection &amp; CT Dosimetry Calibration</h4>
+                      <div class="popular-meta-row">
+                        <span class="popular-meta-tag">Safety / QA</span>
+                        <span class="popular-meta-dot" aria-hidden="true">•</span>
+                        <span class="popular-meta-time">3 min read</span>
+                      </div>
+                    </div>
+                  </a>
+                </article>
+              </div>
             </div>
           </div>
         </aside>
