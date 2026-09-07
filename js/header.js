@@ -38,6 +38,121 @@
     const modeSelectButtons = document.querySelectorAll('.mode-select-btn');
     const paletteButtons = document.querySelectorAll('.palette-btn');
 
+    // DOM Elements - Desktop Navigation
+    const desktopNav = document.getElementById('header-desktop-nav');
+    const allDesktopNavItems = document.querySelectorAll('.desktop-nav-item');
+    const desktopDropdownItems = document.querySelectorAll('.desktop-nav-item.has-dropdown');
+
+    /* ------------------------------------------------------------------------
+       0. Desktop Navigation (Dropdowns & Mega Menu - Strictly Single Active)
+       ------------------------------------------------------------------------ */
+    let navHoverTimer = null;
+
+    function closeAllDesktopDropdowns() {
+      if (navHoverTimer) {
+        clearTimeout(navHoverTimer);
+        navHoverTimer = null;
+      }
+      desktopDropdownItems.forEach((item) => {
+        item.classList.remove('is-open');
+        const btn = item.querySelector('.desktop-nav-btn');
+        if (btn) btn.setAttribute('aria-expanded', 'false');
+      });
+    }
+
+    if (desktopNav) {
+      // Direct link items (no dropdown) also close dropdowns immediately when hovered
+      allDesktopNavItems.forEach((item) => {
+        if (!item.classList.contains('has-dropdown')) {
+          item.addEventListener('mouseenter', () => {
+            closeAllDesktopDropdowns();
+          });
+        }
+      });
+
+      desktopDropdownItems.forEach((item) => {
+        const btn = item.querySelector('.desktop-nav-btn');
+        const panel = item.querySelector('.desktop-dropdown-panel');
+
+        if (btn) {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const wasOpen = item.classList.contains('is-open');
+            closeAllDesktopDropdowns();
+            if (!wasOpen) {
+              item.classList.add('is-open');
+              btn.setAttribute('aria-expanded', 'true');
+            }
+          });
+
+          // Keyboard navigation: Space/Enter opens, ArrowDown moves into panel
+          btn.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown') {
+              e.preventDefault();
+              closeAllDesktopDropdowns();
+              item.classList.add('is-open');
+              btn.setAttribute('aria-expanded', 'true');
+              if (panel) {
+                const firstLink = panel.querySelector('a');
+                if (firstLink) firstLink.focus();
+              }
+            }
+          });
+        }
+
+        // Hover handling with instant previous-menu clearing
+        item.addEventListener('mouseenter', () => {
+          if (navHoverTimer) {
+            clearTimeout(navHoverTimer);
+            navHoverTimer = null;
+          }
+          // Close all other dropdowns immediately
+          desktopDropdownItems.forEach((other) => {
+            if (other !== item) {
+              other.classList.remove('is-open');
+              const otherBtn = other.querySelector('.desktop-nav-btn');
+              if (otherBtn) otherBtn.setAttribute('aria-expanded', 'false');
+            }
+          });
+          item.classList.add('is-open');
+          if (btn) btn.setAttribute('aria-expanded', 'true');
+        });
+
+        item.addEventListener('mouseleave', () => {
+          if (navHoverTimer) clearTimeout(navHoverTimer);
+          navHoverTimer = setTimeout(() => {
+            item.classList.remove('is-open');
+            if (btn) btn.setAttribute('aria-expanded', 'false');
+          }, 140);
+        });
+
+        // Close when focus leaves the item completely
+        item.addEventListener('focusout', (e) => {
+          if (!item.contains(e.relatedTarget)) {
+            item.classList.remove('is-open');
+            if (btn) btn.setAttribute('aria-expanded', 'false');
+          }
+        });
+
+        // Clicking links inside panel closes the dropdown smoothly
+        if (panel) {
+          const links = panel.querySelectorAll('a');
+          links.forEach((link) => {
+            link.addEventListener('click', () => {
+              closeAllDesktopDropdowns();
+            });
+          });
+        }
+      });
+
+      // Global click outside to close desktop dropdowns
+      document.addEventListener('click', (e) => {
+        if (desktopNav && !desktopNav.contains(e.target)) {
+          closeAllDesktopDropdowns();
+        }
+      });
+    }
+
     /* ------------------------------------------------------------------------
        1. Hamburger Menu & Navigation Drawer
        ------------------------------------------------------------------------ */
@@ -197,8 +312,9 @@
        ------------------------------------------------------------------------ */
     function openSearchModal() {
       if (!searchModalOverlay || !searchBtn) return;
-      // Close theme modal if open
+      // Close theme modal and desktop dropdowns if open
       closeThemeModal();
+      closeAllDesktopDropdowns();
       searchModalOverlay.classList.add('is-active');
       searchBtn.setAttribute('aria-expanded', 'true');
       document.body.classList.add('modal-open');
@@ -330,8 +446,9 @@
        ------------------------------------------------------------------------ */
     function openThemeModal() {
       if (!themeModalOverlay || !modeBtn) return;
-      // Close search modal if open
+      // Close search modal and desktop dropdowns if open
       closeSearchModal();
+      closeAllDesktopDropdowns();
       themeModalOverlay.classList.add('is-active');
       modeBtn.setAttribute('aria-expanded', 'true');
       document.body.classList.add('modal-open');
@@ -442,10 +559,11 @@
     }
 
     /* ------------------------------------------------------------------------
-       4. Keyboard Shortcuts (Escape to close Modal & Drawer)
+       4. Keyboard Shortcuts (Escape to close Modal & Drawer & Dropdowns)
        ------------------------------------------------------------------------ */
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
+        closeAllDesktopDropdowns();
         if (themeModalOverlay && themeModalOverlay.classList.contains('is-active')) {
           closeThemeModal();
           return;

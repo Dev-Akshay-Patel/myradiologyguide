@@ -1,6 +1,6 @@
 {
   "name": "Responsive Header",
-  "description": "A clean, fullscreen responsive header with crisp high-zoom vectors, dynamic theme-colored SVG radiation logo, expandable tree-view sidebar, minimal search and theme modal, and a prominent hero carousel with 8px rounded hash tags, minimalist compact centered dots, consistent site-wide gutters and margins, pure text overlay, and companion layout space.",
+  "description": "A clean, fullscreen responsive header with desktop navigation featuring rich multi-column mega menus and standard dropdowns, crisp high-zoom vectors, dynamic theme-colored SVG radiation logo, expandable tree-view sidebar, minimal search and theme modal, and a prominent hero carousel.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

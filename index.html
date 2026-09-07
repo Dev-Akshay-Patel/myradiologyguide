@@ -84,6 +84,388 @@
           </a>
         </div>
 
+        <!-- Desktop Navigation Menu (Desktop Only: Displays at >=1024px) -->
+        <nav class="header-desktop-nav" id="header-desktop-nav" aria-label="Primary Desktop Navigation">
+          <ul class="desktop-nav-list" role="menubar">
+
+            <!-- 1. Mega Menu: Resources (Full-Width from Left to Right) -->
+            <li class="desktop-nav-item has-dropdown has-megamenu" data-dropdown="curriculum">
+              <button
+                type="button"
+                class="desktop-nav-btn"
+                id="nav-btn-curriculum"
+                aria-haspopup="true"
+                aria-expanded="false"
+                aria-controls="megamenu-curriculum"
+              >
+                <span class="desktop-nav-text">Resources</span>
+                <svg class="nav-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M19.9201 8.9502L13.4001 15.4702C12.6301 16.2402 11.3701 16.2402 10.6001 15.4702L4.08008 8.9502" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+
+              <!-- Full-Width Mega Menu Panel (Spans 100% width across the screen below header) -->
+              <div
+                class="desktop-dropdown-panel megamenu-panel"
+                id="megamenu-curriculum"
+                role="menu"
+                aria-labelledby="nav-btn-curriculum"
+              >
+                <div class="megamenu-inner">
+                  <!-- Top Bar inside Mega Menu -->
+                  <div class="megamenu-topbar">
+                    <div class="megamenu-title-group">
+                      <span class="megamenu-badge">Curriculum</span>
+                      <h3 class="megamenu-main-title">Core Radiologic Sciences &amp; Clinical Modules</h3>
+                    </div>
+                    <div class="megamenu-topbar-meta">
+                      <span class="megamenu-count-pill">6 Core Modules</span>
+                      <span class="megamenu-guide-hint">Standardized ARRT &amp; ACR Clinical Guidelines</span>
+                    </div>
+                  </div>
+
+                  <!-- 6-Module Bento Grid -->
+                  <div class="megamenu-grid-6">
+
+                    <!-- Module 1: Anatomy & Physiology -->
+                    <a href="#anatomy-physiology" class="megamenu-card" role="menuitem">
+                      <div class="megamenu-card-header">
+                        <div class="megamenu-card-icon" aria-hidden="true">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-5.04z"/>
+                            <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-5.04z"/>
+                          </svg>
+                        </div>
+                        <span class="megamenu-card-tag">01 · Structural</span>
+                      </div>
+                      <h4 class="megamenu-card-title">Anatomy &amp; Physiology</h4>
+                      <p class="megamenu-card-desc">Systemic organ anatomy, cross-sectional landmarks &amp; normal radiographic variants.</p>
+                      <div class="megamenu-tags-row">
+                        <span class="megamenu-chip">Neurovascular</span>
+                        <span class="megamenu-chip">Skeletal</span>
+                        <span class="megamenu-chip">Visceral</span>
+                      </div>
+                    </a>
+
+                    <!-- Module 2: Basic Physics -->
+                    <a href="#basic-physics" class="megamenu-card" role="menuitem">
+                      <div class="megamenu-card-header">
+                        <div class="megamenu-card-icon" aria-hidden="true">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <g clip-path="url(#clip0_4418_9918)">
+                              <path d="M8.29999 18.0402V16.8802C5.99999 15.4902 4.10999 12.7802 4.10999 9.90018C4.10999 4.95018 8.65999 1.07018 13.8 2.19018C16.06 2.69018 18.04 4.19018 19.07 6.26018C21.16 10.4602 18.96 14.9202 15.73 16.8702V18.0302C15.73 18.3202 15.84 18.9902 14.77 18.9902H9.25999C8.15999 19.0002 8.29999 18.5702 8.29999 18.0402Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                              <path d="M8.5 21.9992C10.79 21.3492 13.21 21.3492 15.5 21.9992" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </g>
+                            <defs>
+                              <clipPath id="clip0_4418_9918">
+                                <rect width="24" height="24" fill="white"/>
+                              </clipPath>
+                            </defs>
+                          </svg>
+                        </div>
+                        <span class="megamenu-card-tag">02 · Fundamentals</span>
+                      </div>
+                      <h4 class="megamenu-card-title">Basic Physics</h4>
+                      <p class="megamenu-card-desc">Electromagnetic spectrum, atomic structure, photon interactions &amp; energy transfer.</p>
+                      <div class="megamenu-tags-row">
+                        <span class="megamenu-chip">Photoelectric</span>
+                        <span class="megamenu-chip">Compton</span>
+                        <span class="megamenu-chip">Photons</span>
+                      </div>
+                    </a>
+
+                    <!-- Module 3: Radiological Physics -->
+                    <a href="#radiological-physics" class="megamenu-card" role="menuitem">
+                      <div class="megamenu-card-header">
+                        <div class="megamenu-card-icon" aria-hidden="true">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <g clip-path="url(#clip0_4418_9824)">
+                              <path d="M12 9V14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                              <path d="M12.0001 21.4093H5.94005C2.47005 21.4093 1.02005 18.9293 2.70005 15.8993L5.82006 10.2793L8.76006 4.9993C10.5401 1.7893 13.4601 1.7893 15.2401 4.9993L18.1801 10.2893L21.3001 15.9093C22.9801 18.9393 21.5201 21.4193 18.0601 21.4193H12.0001V21.4093Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                              <path d="M11.9945 17H12.0035" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </g>
+                            <defs>
+                              <clipPath id="clip0_4418_9824">
+                                <rect width="24" height="24" fill="white"/>
+                              </clipPath>
+                            </defs>
+                          </svg>
+                        </div>
+                        <span class="megamenu-card-tag">03 · Instrumentation</span>
+                      </div>
+                      <h4 class="megamenu-card-title">Radiological Physics</h4>
+                      <p class="megamenu-card-desc">X-ray tube generation, beam filtration, attenuation coefficients &amp; scatter grid dynamics.</p>
+                      <div class="megamenu-tags-row">
+                        <span class="megamenu-chip">Tube Rating</span>
+                        <span class="megamenu-chip">HVL Factor</span>
+                        <span class="megamenu-chip">Grid Ratios</span>
+                      </div>
+                    </a>
+
+                    <!-- Module 4: Radiography -->
+                    <a href="#radiography" class="megamenu-card" role="menuitem">
+                      <div class="megamenu-card-header">
+                        <div class="megamenu-card-icon" aria-hidden="true">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <g clip-path="url(#clip0_4418_5964)">
+                              <path d="M7.5 5H16.5C17.12 5 17.67 5.02 18.16 5.09C20.79 5.38 21.5 6.62 21.5 10V14C21.5 17.38 20.79 18.62 18.16 18.91C17.67 18.98 17.12 19 16.5 19H7.5C6.88 19 6.33 18.98 5.84 18.91C3.21 18.62 2.5 17.38 2.5 14V10C2.5 6.62 3.21 5.38 5.84 5.09C6.33 5.02 6.88 5 7.5 5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                              <path opacity="0.4" d="M4.5 2H19.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                              <path opacity="0.4" d="M5 22H20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </g>
+                            <defs>
+                              <clipPath id="clip0_4418_5964">
+                                <rect width="24" height="24" fill="white"/>
+                              </clipPath>
+                            </defs>
+                          </svg>
+                        </div>
+                        <span class="megamenu-card-tag">04 · Clinical</span>
+                      </div>
+                      <h4 class="megamenu-card-title">Radiography</h4>
+                      <p class="megamenu-card-desc">Positioning protocols, exposure factors (kVp/mAs), digital detectors &amp; image processing.</p>
+                      <div class="megamenu-tags-row">
+                        <span class="megamenu-chip">Digital DR/CR</span>
+                        <span class="megamenu-chip">Positioning</span>
+                        <span class="megamenu-chip">Exposure</span>
+                      </div>
+                    </a>
+
+                    <!-- Module 5: Quality Control & Patient Safety -->
+                    <a href="#quality-control" class="megamenu-card" role="menuitem">
+                      <div class="megamenu-card-header">
+                        <div class="megamenu-card-icon" aria-hidden="true">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <g clip-path="url(#clip0_4418_9525)">
+                              <path d="M20.91 11.1203C20.91 16.0103 17.36 20.5903 12.51 21.9303C12.18 22.0203 11.82 22.0203 11.49 21.9303C6.63996 20.5903 3.08997 16.0103 3.08997 11.1203V6.73028C3.08997 5.91028 3.70998 4.98028 4.47998 4.67028L10.05 2.39031C11.3 1.88031 12.71 1.88031 13.96 2.39031L19.53 4.67028C20.29 4.98028 20.92 5.91028 20.92 6.73028L20.91 11.1203Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </g>
+                            <defs>
+                              <clipPath id="clip0_4418_9525">
+                                <rect width="24" height="24" fill="white"/>
+                              </clipPath>
+                            </defs>
+                          </svg>
+                        </div>
+                        <span class="megamenu-card-tag">05 · Safety</span>
+                      </div>
+                      <h4 class="megamenu-card-title">Quality Control &amp; Patient Safety</h4>
+                      <p class="megamenu-card-desc">ALARA radiation protection principles, dosimetry calibration, lead shielding &amp; QA metrics.</p>
+                      <div class="megamenu-tags-row">
+                        <span class="megamenu-chip">ALARA</span>
+                        <span class="megamenu-chip">Dosimetry</span>
+                        <span class="megamenu-chip">Shielding</span>
+                      </div>
+                    </a>
+
+                    <!-- Module 6: Medical Ethics & Legal -->
+                    <a href="#medical-ethics" class="megamenu-card" role="menuitem">
+                      <div class="megamenu-card-header">
+                        <div class="megamenu-card-icon" aria-hidden="true">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <g clip-path="url(#clip0_4418_9782)">
+                              <path d="M20.0101 18.5106L15.0601 13.5605" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                              <path d="M15.06 13.56L11.52 17.1C10.74 17.88 9.47 17.88 8.69 17.1L4.44999 12.86C3.66999 12.08 3.66999 10.81 4.44999 10.03L11.52 2.96C12.3 2.18 13.57 2.18 14.35 2.96L18.59 7.20002C19.37 7.98002 19.37 9.25001 18.59 10.03L15.06 13.56Z" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                              <path d="M2 21H8" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                              <path d="M6.56006 7.91992L13.6301 14.9899" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                            </g>
+                            <defs>
+                              <clipPath id="clip0_4418_9782">
+                                <rect width="24" height="24" fill="white"/>
+                              </clipPath>
+                            </defs>
+                          </svg>
+                        </div>
+                        <span class="megamenu-card-tag">06 · Legal</span>
+                      </div>
+                      <h4 class="megamenu-card-title">Medical Ethics &amp; Legal</h4>
+                      <p class="megamenu-card-desc">Informed consent, HIPAA patient confidentiality, malpractice risk &amp; clinical records.</p>
+                      <div class="megamenu-tags-row">
+                        <span class="megamenu-chip">Informed Consent</span>
+                        <span class="megamenu-chip">HIPAA</span>
+                        <span class="megamenu-chip">Standard of Care</span>
+                      </div>
+                    </a>
+
+                  </div>
+
+                  <!-- Mega Menu Footer -->
+                  <div class="megamenu-bottombar">
+                    <div class="megamenu-bottom-info">
+                      <span class="megamenu-sparkle" aria-hidden="true">✦</span>
+                      <span>High-yield ARRT-aligned diagnostic references for clinical education</span>
+                    </div>
+                    <div class="megamenu-bottom-links">
+                      <a href="#roadmap-2026" class="megamenu-action-btn">
+                        <span>Explore Full Syllabus Index</span>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <!-- 2. Standard Dropdown: Study Tools -->
+            <li class="desktop-nav-item has-dropdown" data-dropdown="resources">
+              <button
+                type="button"
+                class="desktop-nav-btn"
+                id="nav-btn-resources"
+                aria-haspopup="true"
+                aria-expanded="false"
+                aria-controls="dropdown-resources"
+              >
+                <span class="desktop-nav-text">Study Tools</span>
+                <svg class="nav-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M19.9201 8.9502L13.4001 15.4702C12.6301 16.2402 11.3701 16.2402 10.6001 15.4702L4.08008 8.9502" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+
+              <div
+                class="desktop-dropdown-panel standard-dropdown-panel"
+                id="dropdown-resources"
+                role="menu"
+                aria-labelledby="nav-btn-resources"
+              >
+                <ul class="dropdown-list">
+                  <li>
+                    <a href="#daily-journal" class="dropdown-link-item" role="menuitem">
+                      <span class="dropdown-icon-wrapper" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/>
+                          <path d="M6 6h10M6 10h10M6 14h6"/>
+                        </svg>
+                      </span>
+                      <div class="dropdown-text">
+                        <span class="dropdown-heading">Daily Study Journal</span>
+                        <span class="dropdown-sub">Personal findings, logs &amp; workspace notes</span>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#bookmarks" class="dropdown-link-item" role="menuitem">
+                      <span class="dropdown-icon-wrapper" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/>
+                        </svg>
+                      </span>
+                      <div class="dropdown-text">
+                        <span class="dropdown-heading">Saved Bookmarks</span>
+                        <span class="dropdown-sub">Pinned high-yield references &amp; quick cards</span>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#architecture" class="dropdown-link-item" role="menuitem">
+                      <span class="dropdown-icon-wrapper" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                          <line x1="8" y1="21" x2="16" y2="21"/>
+                          <line x1="12" y1="17" x2="12" y2="21"/>
+                        </svg>
+                      </span>
+                      <div class="dropdown-text">
+                        <span class="dropdown-heading">System Architecture</span>
+                        <span class="dropdown-sub">Technical specifications &amp; engine design</span>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+
+            <!-- 3. Standard Dropdown: Case Library -->
+            <li class="desktop-nav-item has-dropdown" data-dropdown="cases">
+              <button
+                type="button"
+                class="desktop-nav-btn"
+                id="nav-btn-cases"
+                aria-haspopup="true"
+                aria-expanded="false"
+                aria-controls="dropdown-cases"
+              >
+                <span class="desktop-nav-text">Case Library</span>
+                <svg class="nav-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M19.9201 8.9502L13.4001 15.4702C12.6301 16.2402 11.3701 16.2402 10.6001 15.4702L4.08008 8.9502" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+
+              <div
+                class="desktop-dropdown-panel standard-dropdown-panel"
+                id="dropdown-cases"
+                role="menu"
+                aria-labelledby="nav-btn-cases"
+              >
+                <ul class="dropdown-list">
+                  <li>
+                    <a href="#overview" class="dropdown-link-item" role="menuitem">
+                      <span class="dropdown-icon-wrapper" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                          <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                        </svg>
+                      </span>
+                      <div class="dropdown-text">
+                        <span class="dropdown-heading">Interactive DICOM Stack</span>
+                        <span class="dropdown-sub">Scrollable CT &amp; MRI multi-slice series</span>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#roadmap-2026" class="dropdown-link-item" role="menuitem">
+                      <span class="dropdown-icon-wrapper" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
+                      </span>
+                      <div class="dropdown-text">
+                        <span class="dropdown-heading">Board Review Pearls</span>
+                        <span class="dropdown-sub">High-yield classical radiological signs</span>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#about" class="dropdown-link-item" role="menuitem">
+                      <span class="dropdown-icon-wrapper" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                          <circle cx="12" cy="12" r="10"/>
+                          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                          <path d="M12 17h.01"/>
+                        </svg>
+                      </span>
+                      <div class="dropdown-text">
+                        <span class="dropdown-heading">Differential Decision Trees</span>
+                        <span class="dropdown-sub">Diagnostic algorithms &amp; matrices</span>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+
+            <!-- 4. Direct Link: Best Books (No mega, no dropdown) -->
+            <li class="desktop-nav-item">
+              <a href="#best-books" class="desktop-nav-btn direct-link" role="menuitem">
+                <span class="desktop-nav-text">Best Books</span>
+              </a>
+            </li>
+
+            <!-- 5. Direct Link: Roadmap 2026 -->
+            <li class="desktop-nav-item">
+              <a href="#roadmap-2026" class="desktop-nav-btn direct-link" role="menuitem">
+                <span class="desktop-nav-text">Roadmap 2026</span>
+              </a>
+            </li>
+
+            <!-- 6. Direct Link: About -->
+            <li class="desktop-nav-item">
+              <a href="#about" class="desktop-nav-btn direct-link" role="menuitem">
+                <span class="desktop-nav-text">About</span>
+              </a>
+            </li>
+
+          </ul>
+        </nav>
+
         <!-- Right Section: Search Icon & Mode Changer -->
         <div class="header-right">
           <button
@@ -534,14 +916,14 @@
                 width="24"
                 height="24"
                 viewBox="0 0 24 24"
-                fill="currentColor"
+                fill="#ffffff"
                 aria-hidden="true"
               >
-                <g clip-path="url(#clip0_extra_dark_modal)">
-                  <path d="M12 21.75C6.62 21.75 2.25 17.38 2.25 12C2.25 6.62 6.62 2.25 12 2.25C17.38 2.25 21.75 6.62 21.75 12C21.75 17.38 17.38 21.75 12 21.75ZM12 3.75C7.45 3.75 3.75 7.45 3.75 12C3.75 16.55 7.45 20.25 12 20.25V3.75Z" fill="white" style="fill: var(--fillg, currentColor);"/>
+                <g clip-path="url(#clip0_4418_7940)">
+                  <path d="M21.53 15.9304C21.37 15.6604 20.92 15.2404 19.8 15.4404C19.18 15.5504 18.55 15.6004 17.92 15.5704C15.59 15.4704 13.48 14.4004 12.01 12.7504C10.71 11.3004 9.90995 9.41036 9.89995 7.37036C9.89995 6.23036 10.12 5.13036 10.57 4.09036C11.01 3.08036 10.7 2.55036 10.48 2.33036C10.25 2.10036 9.70995 1.78036 8.64995 2.22036C4.55995 3.94036 2.02995 8.04036 2.32995 12.4304C2.62995 16.5604 5.52995 20.0904 9.36995 21.4204C10.29 21.7404 11.26 21.9304 12.26 21.9704C12.42 21.9804 12.58 21.9904 12.74 21.9904C16.09 21.9904 19.23 20.4104 21.21 17.7204C21.88 16.7904 21.7 16.2004 21.53 15.9304Z" fill="white" style="fill: var(--fillg);"/>
                 </g>
                 <defs>
-                  <clipPath id="clip0_extra_dark_modal">
+                  <clipPath id="clip0_4418_7940">
                     <rect width="24" height="24" fill="white"/>
                   </clipPath>
                 </defs>
