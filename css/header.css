@@ -778,12 +778,12 @@
   padding: 0;
 }
 
-/* Subtle Company Categories Separator (Touches left and right edges of the sidebar seamlessly) */
+/* Company Categories Separator (Matches the exact intensity and color of the sidebar right border) */
 .tree-divider {
   display: block;
   list-style: none;
   height: 1px;
-  background-color: var(--color-border-subtle);
+  background-color: var(--drawer-border, var(--color-border));
   margin-top: 6px;
   margin-bottom: 6px;
   margin-left: -10px;
