@@ -23,10 +23,34 @@
     const shareBtn = document.getElementById('pinned-share-btn');
     const shareText = document.getElementById('pinned-share-text');
 
+    const PINNED_SVG_PLUS = `<g clip-path="url(#clip0_save_btn)">
+        <path d="M14.5 10.6504H9.5" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M12 8.21094V13.2109" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M16.8199 2H7.17995C5.04995 2 3.31995 3.74 3.31995 5.86V19.95C3.31995 21.75 4.60995 22.51 6.18995 21.64L11.0699 18.93C11.5899 18.64 12.4299 18.64 12.9399 18.93L17.8199 21.64C19.3999 22.52 20.6899 21.76 20.6899 19.95V5.86C20.6799 3.74 18.9499 2 16.8199 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+      </g>
+      <defs>
+        <clipPath id="clip0_save_btn">
+          <rect width="24" height="24" fill="white"/>
+        </clipPath>
+      </defs>`;
+    const PINNED_SVG_MINUS = `<g clip-path="url(#clip0_save_btn)">
+        <path d="M14.5 10.6504H9.5" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M16.8199 2H7.17995C5.04995 2 3.31995 3.74 3.31995 5.86V19.95C3.31995 21.75 4.60995 22.51 6.18995 21.64L11.0699 18.93C11.5899 18.64 12.4299 18.64 12.9399 18.93L17.8199 21.64C19.3999 22.52 20.6899 21.76 20.6899 19.95V5.86C20.6799 3.74 18.9499 2 16.8199 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+      </g>
+      <defs>
+        <clipPath id="clip0_save_btn">
+          <rect width="24" height="24" fill="white"/>
+        </clipPath>
+      </defs>`;
+
     if (bookmarkBtn) {
       bookmarkBtn.addEventListener('click', () => {
         const isSaved = bookmarkBtn.classList.toggle('is-active');
         bookmarkBtn.setAttribute('aria-pressed', String(isSaved));
+        const iconSvg = bookmarkBtn.querySelector('svg');
+        if (iconSvg) {
+          iconSvg.innerHTML = isSaved ? PINNED_SVG_MINUS : PINNED_SVG_PLUS;
+        }
         if (bookmarkText) {
           bookmarkText.textContent = isSaved ? 'Saved' : 'Save';
         }

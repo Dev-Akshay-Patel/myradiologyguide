@@ -1,0 +1,679 @@
+/* ==========================================================================
+   BLOG CARDS & PAGINATION CSS
+   - 3 in a row for PC (>= 1024px)
+   - 2 in a row for mobile (< 1024px)
+   - Clean editorial cards matching the clinical radiology theme
+   - Harmonious borders (1px solid var(--color-border)) & 12px radius
+   - Interactive, accessible pagination at the bottom with custom SVGs
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Blog Section Container
+   Sits inside .layout-main directly lower to the pinned post
+   -------------------------------------------------------------------------- */
+.blog-section {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* --------------------------------------------------------------------------
+   Section Header Bar
+   -------------------------------------------------------------------------- */
+.blog-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.blog-section-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.blog-section-title {
+  margin: 0;
+  font-family: var(--font-family-base);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--color-text-primary);
+  line-height: 1.25;
+}
+
+@media (min-width: 768px) {
+  .blog-section-title {
+    font-size: 17px;
+  }
+}
+
+.blog-count-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--text-2xs, 11.5px);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 3px 9px;
+  border-radius: 6px;
+  background-color: color-mix(in srgb, var(--accent-color) 14%, transparent);
+  color: var(--accent-color);
+  border: 1px solid color-mix(in srgb, var(--accent-color) 25%, transparent);
+  line-height: 1.2;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+
+/* --------------------------------------------------------------------------
+   Blog Grid: 3 in a row for PC, 2 in a row for mobiles
+   Accommodated for left column space (.layout-main)
+   -------------------------------------------------------------------------- */
+.blog-grid {
+  display: grid;
+  /* Mobile-first: strictly 2 in a row for mobile devices */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  transition: opacity var(--transition-fast);
+}
+
+@media (min-width: 640px) {
+  .blog-grid {
+    gap: 12px;
+  }
+}
+
+/* PC Desktop: strictly 3 in a row inside left column */
+@media (min-width: 1024px) {
+  .blog-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .blog-grid {
+    gap: 14px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Blog Card Component
+   Compact, refined sizing for harmonious left-column integration
+   -------------------------------------------------------------------------- */
+.blog-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-surface);
+  overflow: hidden;
+  box-sizing: border-box;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color var(--transition-fast);
+}
+
+/* Hover: ONLY change border, no card translation, no shadow, no image zoom */
+.blog-card:hover {
+  border-color: color-mix(in srgb, var(--accent-color) 45%, var(--color-border));
+}
+
+.blog-card:focus-visible {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px var(--accent-ring);
+}
+
+/* Card Media / Thumbnail */
+.blog-card-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  background-color: var(--color-bg-elevated);
+  overflow: hidden;
+  display: block;
+}
+
+.blog-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Save Button with Slide-Out 'Save' Text from SVG (Zero CLS) - Matches Theme Preference */
+.blog-card-save-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 28px;
+  padding: 0 6px;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  border-color: color-mix(in srgb, var(--accent-color) 25%, var(--color-border));
+  background-color: var(--color-bg-surface);
+  color: var(--accent-color);
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background-color var(--transition-fast),
+              border-color var(--transition-fast),
+              color var(--transition-fast),
+              box-shadow var(--transition-fast);
+  overflow: hidden;
+  user-select: none;
+}
+
+.blog-card-save-btn:hover {
+  border-color: var(--accent-color);
+  background-color: color-mix(in srgb, var(--accent-color) 8%, var(--color-bg-surface));
+  color: var(--accent-color);
+}
+
+/* Dark theme & Extra-Dark theme & system dark fallback */
+[data-theme="dark"] .blog-card-save-btn,
+[data-theme="extra-dark"] .blog-card-save-btn {
+  background-color: var(--color-bg-surface);
+  border-color: color-mix(in srgb, var(--accent-color) 30%, var(--color-border));
+  color: var(--accent-color);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
+}
+
+[data-theme="dark"] .blog-card-save-btn:hover,
+[data-theme="extra-dark"] .blog-card-save-btn:hover {
+  background-color: color-mix(in srgb, var(--accent-color) 12%, var(--color-bg-surface));
+  border-color: var(--accent-color);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .blog-card-save-btn {
+    background-color: var(--color-bg-surface);
+    border-color: color-mix(in srgb, var(--accent-color) 30%, var(--color-border));
+    color: var(--accent-color);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
+  }
+}
+
+.blog-card-save-btn:focus-visible {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px var(--accent-ring);
+}
+
+.blog-card-save-text {
+  max-width: 0;
+  opacity: 0;
+  white-space: nowrap;
+  font-family: var(--font-family-base);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  margin-right: 0;
+  transform: translateX(4px);
+  color: inherit;
+  transition: max-width 0.22s cubic-bezier(0.2, 0, 0, 1),
+              opacity 0.18s cubic-bezier(0.2, 0, 0, 1),
+              transform 0.22s cubic-bezier(0.2, 0, 0, 1),
+              margin-right 0.22s cubic-bezier(0.2, 0, 0, 1);
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Hover on un-saved card or button: Save text slides out to the left of SVG */
+.blog-card-save-btn:hover .blog-card-save-text,
+.blog-card:hover .blog-card-save-text {
+  max-width: 64px;
+  opacity: 1;
+  transform: translateX(0);
+  margin-right: 4px;
+}
+
+.blog-card-save-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: inherit;
+}
+
+.blog-card-save-icon svg,
+.blog-save-svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+  stroke: currentColor;
+}
+
+/* Saved state: matches theme preference accent color and palette */
+.blog-card-save-btn.is-saved {
+  color: var(--accent-color);
+  background-color: color-mix(in srgb, var(--accent-color) 15%, var(--color-bg-surface));
+  border-color: color-mix(in srgb, var(--accent-color) 55%, transparent);
+  box-shadow: 0 1px 4px color-mix(in srgb, var(--accent-color) 25%, rgba(0, 0, 0, 0.12));
+}
+
+.blog-card-save-btn.is-saved:hover {
+  background-color: color-mix(in srgb, var(--accent-color) 22%, var(--color-bg-surface));
+  border-color: var(--accent-color);
+}
+
+/* When saved: keep the text out, don't let it slide in */
+.blog-card-save-btn.is-saved .blog-card-save-text,
+.blog-card-save-btn.is-saved:hover .blog-card-save-text,
+.blog-card:hover .blog-card-save-btn.is-saved .blog-card-save-text {
+  max-width: 64px;
+  opacity: 1;
+  transform: translateX(0);
+  margin-right: 4px;
+}
+
+/* Card Body Content - Compact for Left Column Layout */
+.blog-card-body {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 10px 11px 11px 11px;
+  box-sizing: border-box;
+}
+
+@media (min-width: 640px) {
+  .blog-card-body {
+    padding: 11px 12px 12px 12px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .blog-card-body {
+    padding: 12px 13px 13px 13px;
+  }
+}
+
+/* Metadata row: in MRI / CT */
+.blog-card-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  font-size: 11.5px;
+  line-height: 1.25;
+  margin-bottom: 6px;
+}
+
+@media (min-width: 640px) {
+  .blog-card-meta {
+    font-size: 12px;
+  }
+}
+
+.blog-card-in {
+  color: var(--color-text-tertiary);
+  opacity: 0.55;
+  font-weight: 500;
+  margin-right: 2px;
+}
+
+.blog-card-labels {
+  color: var(--color-text-secondary);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* Card Title - slightly increased font size */
+.blog-card-title-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.blog-card-title {
+  margin: 0 0 5px 0;
+  font-family: var(--font-family-base);
+  font-size: 13.8px;
+  font-weight: 600;
+  line-height: 1.34;
+  color: var(--color-text-primary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: color var(--transition-fast);
+}
+
+@media (min-width: 640px) {
+  .blog-card-title {
+    font-size: 14.4px;
+    line-height: 1.35;
+    margin-bottom: 6px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .blog-card-title {
+    font-size: 15px;
+    line-height: 1.35;
+  }
+}
+
+.blog-card:hover .blog-card-title {
+  color: var(--accent-color);
+}
+
+/* Card Excerpt - slightly increased font size */
+.blog-card-excerpt {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.44;
+  color: var(--color-text-secondary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex-grow: 1;
+}
+
+@media (min-width: 1280px) {
+  .blog-card-excerpt {
+    font-size: 12.6px;
+    line-height: 1.46;
+  }
+}
+
+/* Card Footer Action: Date on Left, Read Protocol on Right */
+.blog-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: auto;
+  padding: 8px 11px;
+  border-top: 1px solid var(--color-border);
+  font-size: 11.5px;
+  box-sizing: border-box;
+  background-color: transparent;
+  transition: border-color var(--transition-fast);
+}
+
+@media (min-width: 640px) {
+  .blog-card-footer {
+    padding: 9px 12px;
+    font-size: 12px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .blog-card-footer {
+    padding: 9px 13px;
+  }
+}
+
+/* In case footer is inside body, ensure it spans full width from edge to edge */
+.blog-card-body > .blog-card-footer {
+  margin: auto -11px 0 -11px;
+  padding-left: 11px;
+  padding-right: 11px;
+  width: calc(100% + 22px);
+}
+
+@media (min-width: 640px) {
+  .blog-card-body > .blog-card-footer {
+    margin: auto -12px 0 -12px;
+    padding-left: 12px;
+    padding-right: 12px;
+    width: calc(100% + 24px);
+  }
+}
+
+@media (min-width: 1280px) {
+  .blog-card-body > .blog-card-footer {
+    margin: auto -13px 0 -13px;
+    padding-left: 13px;
+    padding-right: 13px;
+    width: calc(100% + 26px);
+  }
+}
+
+.blog-card:hover .blog-card-footer {
+  border-top-color: color-mix(in srgb, var(--accent-color) 45%, var(--color-border));
+}
+
+.blog-card-date {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+}
+
+@media (min-width: 640px) {
+  .blog-card-date {
+    font-size: 12px;
+  }
+}
+
+.blog-card-read-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--accent-color);
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+  transition: color var(--transition-fast), opacity var(--transition-fast);
+}
+
+.blog-card-read-label:hover {
+  color: var(--accent-color-hover, var(--accent-color));
+  opacity: 0.9;
+}
+
+.blog-card-read-label,
+.blog-card-read-label * {
+  cursor: pointer !important;
+}
+
+@media (min-width: 640px) {
+  .blog-card-read-label {
+    font-size: 12px;
+  }
+}
+
+.blog-card-chevron {
+  width: 13px;
+  height: 13px;
+  stroke: currentColor;
+  transition: transform var(--transition-fast);
+}
+
+.blog-card:hover .blog-card-chevron {
+  transform: translateX(3px);
+}
+
+/* --------------------------------------------------------------------------
+   Pagination Component at End of Blog Cards
+   Uses user's provided SVGs for Home, Left arrow, Right arrow
+   -------------------------------------------------------------------------- */
+.blog-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 20px;
+  padding: 12px 0 4px 0;
+  box-sizing: border-box;
+}
+
+@media (min-width: 640px) {
+  .blog-pagination {
+    gap: 7px;
+    margin-top: 24px;
+    padding: 14px 0 6px 0;
+  }
+}
+
+/* Base button for Home, Prev, Next */
+.pagination-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  padding: 0;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-sizing: border-box;
+}
+
+@media (min-width: 640px) {
+  .pagination-btn {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    min-height: 38px;
+  }
+}
+
+/* Ensure user-provided SVGs dynamically inherit stroke colors cleanly */
+.pagination-btn svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.pagination-btn svg path,
+.pagination-btn svg g path {
+  stroke: currentColor !important;
+  transition: stroke var(--transition-fast);
+}
+
+.pagination-btn:hover:not(:disabled) {
+  border-color: var(--accent-color);
+  background-color: var(--btn-subtle-bg);
+  color: var(--accent-color);
+}
+
+.pagination-btn:focus-visible {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px var(--accent-ring);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+  border-color: var(--color-border-subtle);
+  background-color: transparent;
+}
+
+/* Page Numbers Group */
+.pagination-numbers {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+@media (min-width: 640px) {
+  .pagination-numbers {
+    gap: 6px;
+  }
+}
+
+.pagination-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-surface);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-base);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-sizing: border-box;
+}
+
+@media (min-width: 640px) {
+  .pagination-number {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    min-height: 38px;
+    font-size: 13.5px;
+  }
+}
+
+.pagination-number:hover:not(.is-active) {
+  border-color: var(--accent-color);
+  background-color: var(--btn-subtle-bg);
+  color: var(--accent-color);
+}
+
+.pagination-number.is-active {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Dark mode and palette adjustments for active page number */
+[data-theme="dark"] .pagination-number.is-active,
+[data-theme="extra-dark"] .pagination-number.is-active {
+  background-color: var(--accent-color);
+  color: #121214;
+}
+
+[data-palette="default"][data-theme="light"] .pagination-number.is-active {
+  background-color: #18181b;
+  color: #ffffff;
+}
+
+.pagination-number:focus-visible {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px var(--accent-ring);
+}
+
+.pagination-ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 38px;
+  color: var(--color-text-tertiary);
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  user-select: none;
+}

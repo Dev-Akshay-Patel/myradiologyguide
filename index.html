@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Responsive Header</title>
-    <meta name="description" content="A clean, fullscreen responsive header with crisp high-zoom vectors, dynamic theme-colored SVG radiation logo, expandable tree-view sidebar, minimal search and theme modal, and a prominent hero carousel with 8px rounded hash tags, minimalist compact centered dots, consistent site-wide gutters and margins, pure text overlay, and companion layout space." />
+    <meta name="description" content="A responsive clinical radiology portal featuring a rich multi-column mega menu, interactive hero carousel, pinned post, compact 3-column clinical articles grid with custom SVG pagination in the left column, and dedicated popular posts and topics in the right sidebar." />
     <meta property="og:title" content="Responsive Header" />
-    <meta property="og:description" content="A clean, fullscreen responsive header with crisp high-zoom vectors, dynamic theme-colored SVG radiation logo, expandable tree-view sidebar, minimal search and theme modal, and a prominent hero carousel with 8px rounded hash tags, minimalist compact centered dots, consistent site-wide gutters and margins, pure text overlay, and companion layout space." />
+    <meta property="og:description" content="A responsive clinical radiology portal featuring a rich multi-column mega menu, interactive hero carousel, pinned post, compact 3-column clinical articles grid with custom SVG pagination in the left column, and dedicated popular posts and topics in the right sidebar." />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
 
@@ -36,6 +36,8 @@
     <link rel="stylesheet" href="css/header.css" />
     <!-- Carousel Component Stylesheet -->
     <link rel="stylesheet" href="css/carousel.css" />
+    <!-- Blog Cards & Pagination Stylesheet -->
+    <link rel="stylesheet" href="css/blog.css" />
 
     <!-- Global Theme Controller -->
     <script src="js/global.js"></script>
@@ -43,6 +45,8 @@
     <script src="js/header.js" defer></script>
     <!-- Carousel Component Logic -->
     <script src="js/carousel.js" defer></script>
+    <!-- Blog Cards & Pagination Logic -->
+    <script src="js/blog.js" defer></script>
   </head>
   <body>
     <!-- Fullscreen Site Header -->
@@ -820,6 +824,366 @@
               </div>
             </div>
           </article>
+
+          <!-- Clinical Articles Section: Positioned directly lower to the pinned post in the main left column -->
+          <section class="blog-section" id="blog-section" aria-label="Latest Clinical Radiology Articles">
+            <div class="blog-section-header">
+              <div class="blog-section-title-group">
+                <h3 class="blog-section-title">Clinical Articles</h3>
+                <span class="blog-count-badge" id="blog-count-badge">18 Articles</span>
+              </div>
+            </div>
+
+            <!-- Cards Grid: 3 in a row for PC, 2 for mobile (tailored for left column layout) -->
+            <div class="blog-grid" id="blog-grid" role="region" aria-label="Radiology articles list" aria-live="polite">
+              <!-- Card 1 -->
+              <article class="blog-card" id="post-1">
+                <a href="#post-cardiac-mri" class="blog-card-media" aria-label="Cardiac MRI in Non-Ischemic Cardiomyopathy">
+                  <img
+                    src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=800&q=80"
+                    alt="Cardiac diagnostic MRI multiplanar imaging"
+                    class="blog-card-img"
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
+                  />
+                  <button
+                    type="button"
+                    class="blog-card-save-btn"
+                    aria-label="Save protocol"
+                    data-post-id="post-1"
+                    title="Save"
+                  >
+                    <span class="blog-card-save-text">Save</span>
+                    <span class="blog-card-save-icon">
+                      <svg class="blog-save-svg" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M14.5 10.6504H9.5" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M12 8.21094V13.2109" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M16.8199 2H7.17995C5.04995 2 3.31995 3.74 3.31995 5.86V19.95C3.31995 21.75 4.60995 22.51 6.18995 21.64L11.0699 18.93C11.5899 18.64 12.4299 18.64 12.9399 18.93L17.8199 21.64C19.3999 22.52 20.6899 21.76 20.6899 19.95V5.86C20.6799 3.74 18.9499 2 16.8199 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </span>
+                  </button>
+                </a>
+                <div class="blog-card-body">
+                  <div class="blog-card-meta">
+                    <span class="blog-card-in">in</span>
+                    <span class="blog-card-labels">MRI / CT</span>
+                  </div>
+                  <a href="#post-cardiac-mri" class="blog-card-title-link">
+                    <h4 class="blog-card-title">Cardiac MRI in Non-Ischemic Cardiomyopathy</h4>
+                  </a>
+                  <p class="blog-card-excerpt">T1/T2 mapping quantification, late gadolinium enhancement (LGE) distribution patterns, and acute myocarditis diagnostic criteria.</p>
+                </div>
+                <div class="blog-card-footer">
+                  <span class="blog-card-date">March 7, 2026</span>
+                  <a href="#post-cardiac-mri" class="blog-card-read-label" aria-label="Read Protocol: Cardiac MRI in Non-Ischemic Cardiomyopathy">
+                    <span>Read Protocol</span>
+                    <svg class="blog-card-chevron" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M8.9502 4.08008L15.4702 10.6001C16.2402 11.3701 16.2402 12.6301 15.4702 13.4001L8.9502 19.9201" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  </a>
+                </div>
+              </article>
+
+              <!-- Card 2 -->
+              <article class="blog-card" id="post-2">
+                <a href="#post-trauma-ct" class="blog-card-media" aria-label="Emergency Trauma CT Pan-Scan Protocols">
+                  <img
+                    src="https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=800&q=80"
+                    alt="Computed tomography trauma emergency imaging workstation"
+                    class="blog-card-img"
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
+                  />
+                  <button
+                    type="button"
+                    class="blog-card-save-btn"
+                    aria-label="Save protocol"
+                    data-post-id="post-2"
+                    title="Save"
+                  >
+                    <span class="blog-card-save-text">Save</span>
+                    <span class="blog-card-save-icon">
+                      <svg class="blog-save-svg" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M14.5 10.6504H9.5" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M12 8.21094V13.2109" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M16.8199 2H7.17995C5.04995 2 3.31995 3.74 3.31995 5.86V19.95C3.31995 21.75 4.60995 22.51 6.18995 21.64L11.0699 18.93C11.5899 18.64 12.4299 18.64 12.9399 18.93L17.8199 21.64C19.3999 22.52 20.6899 21.76 20.6899 19.95V5.86C20.6799 3.74 18.9499 2 16.8199 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </span>
+                  </button>
+                </a>
+                <div class="blog-card-body">
+                  <div class="blog-card-meta">
+                    <span class="blog-card-in">in</span>
+                    <span class="blog-card-labels">CT / Trauma</span>
+                  </div>
+                  <a href="#post-trauma-ct" class="blog-card-title-link">
+                    <h4 class="blog-card-title">Emergency Trauma CT Pan-Scan Protocols</h4>
+                  </a>
+                  <p class="blog-card-excerpt">Whole-body polytrauma acquisition timing, active arterial extravasation detection, and solid organ injury grading guidelines.</p>
+                </div>
+                <div class="blog-card-footer">
+                  <span class="blog-card-date">March 6, 2026</span>
+                  <a href="#post-trauma-ct" class="blog-card-read-label" aria-label="Read Protocol: Emergency Trauma CT Pan-Scan Protocols">
+                    <span>Read Protocol</span>
+                    <svg class="blog-card-chevron" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M8.9502 4.08008L15.4702 10.6001C16.2402 11.3701 16.2402 12.6301 15.4702 13.4001L8.9502 19.9201" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  </a>
+                </div>
+              </article>
+
+              <!-- Card 3 -->
+              <article class="blog-card" id="post-3">
+                <a href="#post-neck-mass" class="blog-card-media" aria-label="Advanced Head & Neck CT Neck Mass Algorithm">
+                  <img
+                    src="https://images.unsplash.com/photo-1530497610245-94d3c16cda28?auto=format&fit=crop&w=800&q=80"
+                    alt="Cervical spine and neck CT diagnostic display"
+                    class="blog-card-img"
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
+                  />
+                  <button
+                    type="button"
+                    class="blog-card-save-btn"
+                    aria-label="Save protocol"
+                    data-post-id="post-3"
+                    title="Save"
+                  >
+                    <span class="blog-card-save-text">Save</span>
+                    <span class="blog-card-save-icon">
+                      <svg class="blog-save-svg" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M14.5 10.6504H9.5" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M12 8.21094V13.2109" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M16.8199 2H7.17995C5.04995 2 3.31995 3.74 3.31995 5.86V19.95C3.31995 21.75 4.60995 22.51 6.18995 21.64L11.0699 18.93C11.5899 18.64 12.4299 18.64 12.9399 18.93L17.8199 21.64C19.3999 22.52 20.6899 21.76 20.6899 19.95V5.86C20.6799 3.74 18.9499 2 16.8199 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </span>
+                  </button>
+                </a>
+                <div class="blog-card-body">
+                  <div class="blog-card-meta">
+                    <span class="blog-card-in">in</span>
+                    <span class="blog-card-labels">CT / Head &amp; Neck</span>
+                  </div>
+                  <a href="#post-neck-mass" class="blog-card-title-link">
+                    <h4 class="blog-card-title">Advanced Head &amp; Neck CT Neck Mass Algorithm</h4>
+                  </a>
+                  <p class="blog-card-excerpt">Deep cervical fascial spaces, nodal staging in mucosal HPV-positive carcinomas, and critical carotid sheath involvement.</p>
+                </div>
+                <div class="blog-card-footer">
+                  <span class="blog-card-date">March 5, 2026</span>
+                  <a href="#post-neck-mass" class="blog-card-read-label" aria-label="Read Protocol: Advanced Head & Neck CT Neck Mass Algorithm">
+                    <span>Read Protocol</span>
+                    <svg class="blog-card-chevron" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M8.9502 4.08008L15.4702 10.6001C16.2402 11.3701 16.2402 12.6301 15.4702 13.4001L8.9502 19.9201" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  </a>
+                </div>
+              </article>
+
+              <!-- Card 4 -->
+              <article class="blog-card" id="post-4">
+                <a href="#post-pediatric-neuro" class="blog-card-media" aria-label="Pediatric Neuroimaging: Congenital Malformations">
+                  <img
+                    src="https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&w=800&q=80"
+                    alt="Pediatric clinical magnetic resonance scan display"
+                    class="blog-card-img"
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
+                  />
+                  <button
+                    type="button"
+                    class="blog-card-save-btn"
+                    aria-label="Save protocol"
+                    data-post-id="post-4"
+                    title="Save"
+                  >
+                    <span class="blog-card-save-text">Save</span>
+                    <span class="blog-card-save-icon">
+                      <svg class="blog-save-svg" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M14.5 10.6504H9.5" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M12 8.21094V13.2109" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M16.8199 2H7.17995C5.04995 2 3.31995 3.74 3.31995 5.86V19.95C3.31995 21.75 4.60995 22.51 6.18995 21.64L11.0699 18.93C11.5899 18.64 12.4299 18.64 12.9399 18.93L17.8199 21.64C19.3999 22.52 20.6899 21.76 20.6899 19.95V5.86C20.6799 3.74 18.9499 2 16.8199 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </span>
+                  </button>
+                </a>
+                <div class="blog-card-body">
+                  <div class="blog-card-meta">
+                    <span class="blog-card-in">in</span>
+                    <span class="blog-card-labels">MRI / Pediatrics</span>
+                  </div>
+                  <a href="#post-pediatric-neuro" class="blog-card-title-link">
+                    <h4 class="blog-card-title">Pediatric Neuroimaging: Congenital Malformations</h4>
+                  </a>
+                  <p class="blog-card-excerpt">Posterior fossa anomalies, cortical dysplasias on 3T MRI, and age-specific myelination chronological milestones.</p>
+                </div>
+                <div class="blog-card-footer">
+                  <span class="blog-card-date">March 4, 2026</span>
+                  <a href="#post-pediatric-neuro" class="blog-card-read-label" aria-label="Read Protocol: Pediatric Neuroimaging: Congenital Malformations">
+                    <span>Read Protocol</span>
+                    <svg class="blog-card-chevron" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M8.9502 4.08008L15.4702 10.6001C16.2402 11.3701 16.2402 12.6301 15.4702 13.4001L8.9502 19.9201" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  </a>
+                </div>
+              </article>
+
+              <!-- Card 5 -->
+              <article class="blog-card" id="post-5">
+                <a href="#post-interventional-fluoroscopy" class="blog-card-media" aria-label="Interventional Fluoroscopy & Vascular Embolization">
+                  <img
+                    src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80"
+                    alt="Endovascular interventional fluoroscopy angiography suite"
+                    class="blog-card-img"
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
+                  />
+                  <button
+                    type="button"
+                    class="blog-card-save-btn"
+                    aria-label="Save protocol"
+                    data-post-id="post-5"
+                    title="Save"
+                  >
+                    <span class="blog-card-save-text">Save</span>
+                    <span class="blog-card-save-icon">
+                      <svg class="blog-save-svg" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M14.5 10.6504H9.5" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M12 8.21094V13.2109" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M16.8199 2H7.17995C5.04995 2 3.31995 3.74 3.31995 5.86V19.95C3.31995 21.75 4.60995 22.51 6.18995 21.64L11.0699 18.93C11.5899 18.64 12.4299 18.64 12.9399 18.93L17.8199 21.64C19.3999 22.52 20.6899 21.76 20.6899 19.95V5.86C20.6799 3.74 18.9499 2 16.8199 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </span>
+                  </button>
+                </a>
+                <div class="blog-card-body">
+                  <div class="blog-card-meta">
+                    <span class="blog-card-in">in</span>
+                    <span class="blog-card-labels">Fluoroscopy / Vascular</span>
+                  </div>
+                  <a href="#post-interventional-fluoroscopy" class="blog-card-title-link">
+                    <h4 class="blog-card-title">Interventional Fluoroscopy &amp; Vascular Embolization</h4>
+                  </a>
+                  <p class="blog-card-excerpt">Superselective microcatheter navigation, microparticle vs. coil embolization, and radiation dose-reduction mechanics.</p>
+                </div>
+                <div class="blog-card-footer">
+                  <span class="blog-card-date">March 3, 2026</span>
+                  <a href="#post-interventional-fluoroscopy" class="blog-card-read-label" aria-label="Read Protocol: Interventional Fluoroscopy & Vascular Embolization">
+                    <span>Read Protocol</span>
+                    <svg class="blog-card-chevron" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M8.9502 4.08008L15.4702 10.6001C16.2402 11.3701 16.2402 12.6301 15.4702 13.4001L8.9502 19.9201" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  </a>
+                </div>
+              </article>
+
+              <!-- Card 6 -->
+              <article class="blog-card" id="post-6">
+                <a href="#post-spine-mri" class="blog-card-media" aria-label="Spine MRI: Degenerative Stenosis vs. Epidural Pathology">
+                  <img
+                    src="https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=800&q=80"
+                    alt="Spine MRI lumbar sagittal diagnostic sequence"
+                    class="blog-card-img"
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
+                  />
+                  <button
+                    type="button"
+                    class="blog-card-save-btn"
+                    aria-label="Save protocol"
+                    data-post-id="post-6"
+                    title="Save"
+                  >
+                    <span class="blog-card-save-text">Save</span>
+                    <span class="blog-card-save-icon">
+                      <svg class="blog-save-svg" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M14.5 10.6504H9.5" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M12 8.21094V13.2109" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M16.8199 2H7.17995C5.04995 2 3.31995 3.74 3.31995 5.86V19.95C3.31995 21.75 4.60995 22.51 6.18995 21.64L11.0699 18.93C11.5899 18.64 12.4299 18.64 12.9399 18.93L17.8199 21.64C19.3999 22.52 20.6899 21.76 20.6899 19.95V5.86C20.6799 3.74 18.9499 2 16.8199 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </span>
+                  </button>
+                </a>
+                <div class="blog-card-body">
+                  <div class="blog-card-meta">
+                    <span class="blog-card-in">in</span>
+                    <span class="blog-card-labels">MRI / Spine</span>
+                  </div>
+                  <a href="#post-spine-mri" class="blog-card-title-link">
+                    <h4 class="blog-card-title">Spine MRI: Degenerative Stenosis vs. Epidural Pathology</h4>
+                  </a>
+                  <p class="blog-card-excerpt">Central canal dimensions, neural foraminal impingement grading, and post-operative epidural fibrosis versus recurrent disc herniation.</p>
+                </div>
+                <div class="blog-card-footer">
+                  <span class="blog-card-date">March 2, 2026</span>
+                  <a href="#post-spine-mri" class="blog-card-read-label" aria-label="Read Protocol: Spine MRI: Degenerative Stenosis vs. Epidural Pathology">
+                    <span>Read Protocol</span>
+                    <svg class="blog-card-chevron" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M8.9502 4.08008L15.4702 10.6001C16.2402 11.3701 16.2402 12.6301 15.4702 13.4001L8.9502 19.9201" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  </a>
+                </div>
+              </article>
+            </div>
+
+            <!-- Pagination at the End of Left Main Column -->
+            <nav class="blog-pagination" id="blog-pagination" aria-label="Clinical articles pagination">
+              <!-- Home button (using user's requested Home SVG) -->
+              <button
+                type="button"
+                class="pagination-btn pagination-home"
+                id="pagination-home-btn"
+                aria-label="First page"
+                title="First page"
+                disabled
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <g clip-path="url(#clip0_4418_9816)">
+                    <path d="M9.02 2.84016L3.63 7.04016C2.73 7.74016 2 9.23016 2 10.3602V17.7702C2 20.0902 3.89 21.9902 6.21 21.9902H17.79C20.11 21.9902 22 20.0902 22 17.7802V10.5002C22 9.29016 21.19 7.74016 20.2 7.05016L14.02 2.72016C12.62 1.74016 10.37 1.79016 9.02 2.84016Z" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M12 17.9902V14.9902" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </g>
+                  <defs>
+                    <clipPath id="clip0_4418_9816">
+                      <rect width="24" height="24" fill="white"/>
+                    </clipPath>
+                  </defs>
+                </svg>
+              </button>
+
+              <!-- Left Arrow button (using user's requested Left SVG) -->
+              <button
+                type="button"
+                class="pagination-btn pagination-prev"
+                id="pagination-prev-btn"
+                aria-label="Previous page"
+                title="Previous page"
+                disabled
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M17.9998 11.9996V14.6696C17.9998 17.9796 15.6498 19.3396 12.7798 17.6796L10.4698 16.3396L8.15982 14.9996C5.28982 13.3396 5.28982 10.6296 8.15982 8.96956L10.4698 7.62956L12.7798 6.28956C15.6498 4.65956 17.9998 6.00956 17.9998 9.32956V11.9996Z" stroke="#ffffff" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+
+              <!-- Page Numbers -->
+              <div class="pagination-numbers" id="pagination-numbers" role="group" aria-label="Page numbers">
+                <button type="button" class="pagination-number is-active" data-page="1" aria-current="page" aria-label="Page 1">1</button>
+                <button type="button" class="pagination-number" data-page="2" aria-label="Page 2">2</button>
+                <button type="button" class="pagination-number" data-page="3" aria-label="Page 3">3</button>
+              </div>
+
+              <!-- Right Arrow button (using user's requested Right SVG) -->
+              <button
+                type="button"
+                class="pagination-btn pagination-next"
+                id="pagination-next-btn"
+                aria-label="Next page"
+                title="Next page"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M6 11.9997V9.32968C6 6.01968 8.35 4.65968 11.22 6.31968L13.53 7.65968L15.84 8.99968C18.71 10.6597 18.71 13.3697 15.84 15.0297L13.53 16.3697L11.22 17.7097C8.35 19.3397 6 17.9897 6 14.6697V11.9997Z" stroke="#ffffff" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+            </nav>
+          </section>
         </div>
 
         <!-- Right Side Companion: Popular Posts (No outer container, Post 1 with image overlayed by text, Posts 2-5 sequential) -->
@@ -1372,12 +1736,17 @@
                 <li class="tree-item tree-leaf" role="none" data-tree-id="bookmarks" data-title="Bookmarks">
                   <a href="#bookmarks" class="tree-row tree-leaf-link" role="treeitem" aria-selected="false" tabindex="0">
                     <span class="tree-icon" aria-hidden="true">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#ffffff">
-                        <g clip-path="url(#clip_bm_saved)">
-                          <path d="M15.31 15.02C14.73 15.02 14.1 14.83 13.47 14.44L12.15 13.64C12.09 13.6 11.91 13.6 11.85 13.64L10.53 14.44C9.45 15.1 8.39 15.2 7.54 14.72C6.71 14.25 6.25 13.31 6.25 12.08V5.03C6.25 2.59 7.58 1.25 10 1.25H14C16.42 1.25 17.75 2.59 17.75 5.03V12.08C17.75 13.32 17.29 14.26 16.46 14.72C16.11 14.92 15.72 15.02 15.31 15.02ZM12 12.11C12.33 12.11 12.66 12.19 12.93 12.35L14.25 13.15C14.84 13.51 15.38 13.6 15.72 13.41C16.05 13.22 16.24 12.73 16.24 12.07V5.03C16.24 3.43 15.57 2.75 13.99 2.75H9.99C8.41 2.75 7.74 3.43 7.74 5.03V12.08C7.74 12.74 7.93 13.23 8.26 13.42C8.6 13.61 9.14 13.52 9.73 13.16L11.05 12.36C11.34 12.19 11.67 12.11 12 12.11Z" fill="white" style="fill: var(--fillg);"/>
-                          <path d="M15 22.749H9C3.57 22.749 1.25 20.409 1.25 14.929V11.899C1.25 7.23903 2.93 4.87903 6.69 4.24903C7.09 4.17903 7.48 4.45903 7.55 4.86903C7.62 5.27903 7.34 5.65903 6.93 5.72903C3.92 6.22903 2.74 7.95903 2.74 11.899V14.929C2.74 19.539 4.43 21.249 8.99 21.249H14.99C19.55 21.249 21.24 19.539 21.24 14.929V11.899C21.24 7.89903 20.02 6.16903 16.88 5.69903C16.47 5.63903 16.19 5.25903 16.25 4.84903C16.31 4.43903 16.69 4.15903 17.1 4.21903C21 4.79903 22.74 7.15903 22.74 11.899V14.929C22.75 20.409 20.43 22.749 15 22.749Z" fill="white" style="fill: var(--fillg);"/>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <g clip-path="url(#clip0_4418_9959_tree)">
+                          <path d="M14.5 10.6504H9.5" stroke="#ffffff" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                          <path d="M12 8.21094V13.2109" stroke="#ffffff" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                          <path d="M16.8199 2H7.17995C5.04995 2 3.31995 3.74 3.31995 5.86V19.95C3.31995 21.75 4.60995 22.51 6.18995 21.64L11.0699 18.93C11.5899 18.64 12.4299 18.64 12.9399 18.93L17.8199 21.64C19.3999 22.52 20.6899 21.76 20.6899 19.95V5.86C20.6799 3.74 18.9499 2 16.8199 2Z" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                         </g>
-                        <defs><clipPath id="clip_bm_saved"><rect width="24" height="24" fill="white"/></clipPath></defs>
+                        <defs>
+                          <clipPath id="clip0_4418_9959_tree">
+                            <rect width="24" height="24" fill="white"/>
+                          </clipPath>
+                        </defs>
                       </svg>
                     </span>
                     <span class="tree-label">Bookmarks</span>

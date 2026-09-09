@@ -1600,6 +1600,11 @@
   fill: var(--fillg, currentColor) !important;
 }
 
+.tree-icon svg[fill="none"] path {
+  fill: none !important;
+  stroke: var(--fillg, currentColor) !important;
+}
+
 /* Node Label */
 .tree-label {
   flex: 1;
