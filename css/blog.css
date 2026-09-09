@@ -41,17 +41,11 @@
 .blog-section-title {
   margin: 0;
   font-family: var(--font-family-base);
-  font-size: 16px;
+  font-size: var(--text-xl, 19px);
   font-weight: 700;
   letter-spacing: -0.015em;
   color: var(--color-text-primary);
   line-height: 1.25;
-}
-
-@media (min-width: 768px) {
-  .blog-section-title {
-    font-size: 17px;
-  }
 }
 
 .blog-count-badge {
@@ -706,18 +700,12 @@
 
 .browse-subjects-title {
   font-family: var(--font-family-base);
-  font-size: 16px;
+  font-size: var(--text-xl, 19px);
   font-weight: 700;
   color: var(--color-text-primary);
   margin: 0;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
   line-height: 1.3;
-}
-
-@media (min-width: 768px) {
-  .browse-subjects-title {
-    font-size: 17px;
-  }
 }
 
 .browse-subjects-subtitle {
@@ -931,26 +919,28 @@
   stroke: currentColor;
 }
 
-/* Guide Count Badge at Top Right */
+/* Guide Count Badge at Top Right - Styled like .blog-count-badge and .popular-badge */
 .subject-guide-badge {
   display: inline-flex;
   align-items: center;
-  font-size: 11.5px;
+  font-size: var(--text-2xs, 11.5px);
   font-weight: 600;
-  color: var(--color-text-secondary);
-  background-color: var(--header-btn-bg);
-  border: 1px solid var(--header-btn-border);
-  padding: 3px 8px;
-  border-radius: var(--radius-btn-subtle, 5px);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 3px 9px;
+  border-radius: 6px;
+  background-color: color-mix(in srgb, var(--accent-color) 14%, transparent);
+  color: var(--accent-color);
+  border: 1px solid color-mix(in srgb, var(--accent-color) 25%, transparent);
+  line-height: 1.2;
   white-space: nowrap;
-  letter-spacing: 0.01em;
-  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+  transition: all var(--transition-fast);
 }
 
 .subject-card:hover .subject-guide-badge {
-  background-color: var(--header-btn-hover-bg);
-  border-color: var(--header-btn-hover-border);
-  color: var(--color-text-primary);
+  background-color: color-mix(in srgb, var(--accent-color) 22%, transparent);
+  border-color: color-mix(in srgb, var(--accent-color) 35%, transparent);
+  color: var(--accent-color);
 }
 
 /* Card Body */
