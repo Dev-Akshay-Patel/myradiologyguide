@@ -230,5 +230,18 @@
     const currentPalette = document.documentElement.getAttribute('data-palette') || getPreferredPalette();
     applyTheme(currentTheme, false);
     applyPalette(currentPalette, false);
+    initFooter();
   });
+
+  function initFooter() {
+    const backToTopBtn = document.getElementById('footer-back-to-top');
+    if (backToTopBtn) {
+      backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+    }
+  }
 })();
