@@ -282,6 +282,27 @@
         }
       });
     }
+
+    initSubjectCards();
+  }
+
+  function initSubjectCards() {
+    const subjectCards = document.querySelectorAll('.subject-card');
+    if (!subjectCards.length) return;
+
+    subjectCards.forEach((card) => {
+      // Prevent browser holding focus ring when clicked
+      card.addEventListener('mousedown', function () {
+        if (document.activeElement && typeof document.activeElement.blur === 'function') {
+          document.activeElement.blur();
+        }
+      });
+      card.addEventListener('click', function () {
+        if (document.activeElement && typeof document.activeElement.blur === 'function') {
+          document.activeElement.blur();
+        }
+      });
+    });
   }
 
   function handleSaveToggle(e) {

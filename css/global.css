@@ -1169,3 +1169,35 @@ input {
   white-space: nowrap;
   border-width: 0;
 }
+
+/* --------------------------------------------------------------------------
+   Universal Themed Text Selection (Standard & Mozilla Firefox ::-moz-selection)
+   Replaces default browser blue with active theme palette accent for every theme
+   -------------------------------------------------------------------------- */
+::selection,
+*::selection {
+  background-color: var(--accent-color);
+  color: #ffffff;
+}
+
+::-moz-selection,
+*::-moz-selection {
+  background-color: var(--accent-color);
+  color: #ffffff;
+}
+
+[data-theme="dark"] ::selection,
+[data-theme="dark"] *::selection,
+[data-theme="extra-dark"] ::selection,
+[data-theme="extra-dark"] *::selection {
+  background-color: var(--accent-color);
+  color: #121212;
+}
+
+[data-theme="dark"] ::-moz-selection,
+[data-theme="dark"] *::-moz-selection,
+[data-theme="extra-dark"] ::-moz-selection,
+[data-theme="extra-dark"] *::-moz-selection {
+  background-color: var(--accent-color);
+  color: #121212;
+}

@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Responsive Header</title>
-    <meta name="description" content="A responsive clinical radiology portal featuring a rich multi-column mega menu, interactive hero carousel, pinned post, compact 3-column clinical articles grid with custom SVG pagination in the left column, and dedicated popular posts and topics in the right sidebar." />
+    <meta name="description" content="A responsive clinical radiology portal featuring a rich multi-column mega menu, interactive hero carousel, pinned post, compact 3-column clinical articles grid with custom SVG pagination, dedicated Browse by Subject curriculum hub in the left column, and popular posts and topics in the right sidebar." />
     <meta property="og:title" content="Responsive Header" />
-    <meta property="og:description" content="A responsive clinical radiology portal featuring a rich multi-column mega menu, interactive hero carousel, pinned post, compact 3-column clinical articles grid with custom SVG pagination in the left column, and dedicated popular posts and topics in the right sidebar." />
+    <meta property="og:description" content="A responsive clinical radiology portal featuring a rich multi-column mega menu, interactive hero carousel, pinned post, compact 3-column clinical articles grid with custom SVG pagination, dedicated Browse by Subject curriculum hub in the left column, and popular posts and topics in the right sidebar." />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
 
@@ -1183,6 +1183,241 @@
                 </svg>
               </button>
             </nav>
+          </section>
+
+          <!-- Browse by Subject Section: Positioned below pagination in the left column -->
+          <section class="browse-subjects-section" id="browse-subjects-section" aria-label="Browse by Subject">
+            <div class="browse-subjects-header">
+              <div class="browse-subjects-top-row">
+                <h3 class="browse-subjects-title">Browse by Subject</h3>
+                <!-- Full Syllabus button commented out for now as requested
+                <a href="#curriculum" class="browse-subjects-view-all" id="browse-subjects-view-all" aria-label="View Full Syllabus">
+                  <span>Full Syllabus</span>
+                  <svg class="browse-subjects-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M8.9502 4.08008L15.4702 10.6001C16.2402 11.3701 16.2402 12.6301 15.4702 13.4001L8.9502 19.9201" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </a>
+                -->
+              </div>
+              <p class="browse-subjects-subtitle">Structured core radiologic sciences curriculum, diagnostic physics &amp; clinical ARRT board standards.</p>
+            </div>
+
+            <!-- Subject Cards Grid: 2 columns on desktop left column, responsive on mobile -->
+            <div class="browse-subjects-grid" role="list" aria-label="Core Subjects List">
+              
+              <!-- Subject 1: Anatomy & Physiology -->
+              <article class="subject-card" role="listitem" data-subject="anatomy-physiology">
+                <a href="#anatomy-physiology" class="subject-card-link" aria-label="Explore Anatomy & Physiology Subject">
+                  <div class="subject-card-main">
+                    <div class="subject-card-top">
+                      <div class="subject-icon-box" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-5.04z"/>
+                          <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-5.04z"/>
+                        </svg>
+                      </div>
+                      <span class="subject-guide-badge">14 Guides</span>
+                    </div>
+                    <div class="subject-card-body">
+                      <h4 class="subject-card-title">Anatomy &amp; Physiology</h4>
+                      <p class="subject-card-desc">Systemic organ anatomy, cross-sectional landmarks &amp; normal radiographic variants.</p>
+                    </div>
+                  </div>
+                  <div class="subject-card-footer">
+                    <span class="subject-browse-btn">
+                      <span>Browse</span>
+                      <svg class="subject-browse-arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M8.90991 19.9201L15.4299 13.4001C16.1999 12.6301 16.1999 11.3701 15.4299 10.6001L8.90991 4.08008" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </span>
+                  </div>
+                </a>
+              </article>
+
+              <!-- Subject 2: Basic Physics -->
+              <article class="subject-card" role="listitem" data-subject="basic-physics">
+                <a href="#basic-physics" class="subject-card-link" aria-label="Explore Basic Physics Subject">
+                  <div class="subject-card-main">
+                    <div class="subject-card-top">
+                      <div class="subject-icon-box" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                          <g clip-path="url(#clip0_browse_basic_physics)">
+                            <path d="M8.29999 18.0402V16.8802C5.99999 15.4902 4.10999 12.7802 4.10999 9.90018C4.10999 4.95018 8.65999 1.07018 13.8 2.19018C16.06 2.69018 18.04 4.19018 19.07 6.26018C21.16 10.4602 18.96 14.9202 15.73 16.8702V18.0302C15.73 18.3202 15.84 18.9902 14.77 18.9902H9.25999C8.15999 19.0002 8.29999 18.5702 8.29999 18.0402Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M8.5 21.9992C10.79 21.3492 13.21 21.3492 15.5 21.9992" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                          </g>
+                          <defs>
+                            <clipPath id="clip0_browse_basic_physics">
+                              <rect width="24" height="24" fill="white"/>
+                            </clipPath>
+                          </defs>
+                        </svg>
+                      </div>
+                      <span class="subject-guide-badge">12 Guides</span>
+                    </div>
+                    <div class="subject-card-body">
+                      <h4 class="subject-card-title">Basic Physics</h4>
+                      <p class="subject-card-desc">Electromagnetic spectrum, atomic structure, photon interactions &amp; energy transfer.</p>
+                    </div>
+                  </div>
+                  <div class="subject-card-footer">
+                    <span class="subject-browse-btn">
+                      <span>Browse</span>
+                      <svg class="subject-browse-arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M8.90991 19.9201L15.4299 13.4001C16.1999 12.6301 16.1999 11.3701 15.4299 10.6001L8.90991 4.08008" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </span>
+                  </div>
+                </a>
+              </article>
+
+              <!-- Subject 3: Radiological Physics -->
+              <article class="subject-card" role="listitem" data-subject="radiological-physics">
+                <a href="#radiological-physics" class="subject-card-link" aria-label="Explore Radiological Physics Subject">
+                  <div class="subject-card-main">
+                    <div class="subject-card-top">
+                      <div class="subject-icon-box" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                          <g clip-path="url(#clip0_browse_rad_physics)">
+                            <path d="M12 9V14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M12.0001 21.4093H5.94005C2.47005 21.4093 1.02005 18.9293 2.70005 15.8993L5.82006 10.2793L8.76006 4.9993C10.5401 1.7893 13.4601 1.7893 15.2401 4.9993L18.1801 10.2893L21.3001 15.9093C22.9801 18.9393 21.5201 21.4193 18.0601 21.4193H12.0001V21.4093Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M11.9945 17H12.0035" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                          </g>
+                          <defs>
+                            <clipPath id="clip0_browse_rad_physics">
+                              <rect width="24" height="24" fill="white"/>
+                            </clipPath>
+                          </defs>
+                        </svg>
+                      </div>
+                      <span class="subject-guide-badge">16 Guides</span>
+                    </div>
+                    <div class="subject-card-body">
+                      <h4 class="subject-card-title">Radiological Physics</h4>
+                      <p class="subject-card-desc">X-ray tube generation, beam filtration, attenuation coefficients &amp; scatter grid dynamics.</p>
+                    </div>
+                  </div>
+                  <div class="subject-card-footer">
+                    <span class="subject-browse-btn">
+                      <span>Browse</span>
+                      <svg class="subject-browse-arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M8.90991 19.9201L15.4299 13.4001C16.1999 12.6301 16.1999 11.3701 15.4299 10.6001L8.90991 4.08008" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </span>
+                  </div>
+                </a>
+              </article>
+
+              <!-- Subject 4: Radiography -->
+              <article class="subject-card" role="listitem" data-subject="radiography">
+                <a href="#radiography" class="subject-card-link" aria-label="Explore Radiography Subject">
+                  <div class="subject-card-main">
+                    <div class="subject-card-top">
+                      <div class="subject-icon-box" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                          <g clip-path="url(#clip0_browse_radiography)">
+                            <path d="M7.5 5H16.5C17.12 5 17.67 5.02 18.16 5.09C20.79 5.38 21.5 6.62 21.5 10V14C21.5 17.38 20.79 18.62 18.16 18.91C17.67 18.98 17.12 19 16.5 19H7.5C6.88 19 6.33 18.98 5.84 18.91C3.21 18.62 2.5 17.38 2.5 14V10C2.5 6.62 3.21 5.38 5.84 5.09C6.33 5.02 6.88 5 7.5 5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            <path opacity="0.4" d="M4.5 2H19.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            <path opacity="0.4" d="M5 22H20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                          </g>
+                          <defs>
+                            <clipPath id="clip0_browse_radiography">
+                              <rect width="24" height="24" fill="white"/>
+                            </clipPath>
+                          </defs>
+                        </svg>
+                      </div>
+                      <span class="subject-guide-badge">22 Guides</span>
+                    </div>
+                    <div class="subject-card-body">
+                      <h4 class="subject-card-title">Radiography</h4>
+                      <p class="subject-card-desc">Positioning protocols, exposure factors (kVp/mAs), digital detectors &amp; image processing.</p>
+                    </div>
+                  </div>
+                  <div class="subject-card-footer">
+                    <span class="subject-browse-btn">
+                      <span>Browse</span>
+                      <svg class="subject-browse-arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M8.90991 19.9201L15.4299 13.4001C16.1999 12.6301 16.1999 11.3701 15.4299 10.6001L8.90991 4.08008" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </span>
+                  </div>
+                </a>
+              </article>
+
+              <!-- Subject 5: Quality Control & Patient Safety -->
+              <article class="subject-card" role="listitem" data-subject="quality-control">
+                <a href="#quality-control" class="subject-card-link" aria-label="Explore Quality Control & Patient Safety Subject">
+                  <div class="subject-card-main">
+                    <div class="subject-card-top">
+                      <div class="subject-icon-box" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                          <g clip-path="url(#clip0_browse_qc_safety)">
+                            <path d="M20.91 11.1203C20.91 16.0103 17.36 20.5903 12.51 21.9303C12.18 22.0203 11.82 22.0203 11.49 21.9303C6.63996 20.5903 3.08997 16.0103 3.08997 11.1203V6.73028C3.08997 5.91028 3.70998 4.98028 4.47998 4.67028L10.05 2.39031C11.3 1.88031 12.71 1.88031 13.96 2.39031L19.53 4.67028C20.29 4.98028 20.92 5.91028 20.92 6.73028L20.91 11.1203Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                          </g>
+                          <defs>
+                            <clipPath id="clip0_browse_qc_safety">
+                              <rect width="24" height="24" fill="white"/>
+                            </clipPath>
+                          </defs>
+                        </svg>
+                      </div>
+                      <span class="subject-guide-badge">15 Guides</span>
+                    </div>
+                    <div class="subject-card-body">
+                      <h4 class="subject-card-title">Quality Control &amp; Safety</h4>
+                      <p class="subject-card-desc">ALARA radiation protection principles, dosimetry calibration, lead shielding &amp; QA metrics.</p>
+                    </div>
+                  </div>
+                  <div class="subject-card-footer">
+                    <span class="subject-browse-btn">
+                      <span>Browse</span>
+                      <svg class="subject-browse-arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M8.90991 19.9201L15.4299 13.4001C16.1999 12.6301 16.1999 11.3701 15.4299 10.6001L8.90991 4.08008" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </span>
+                  </div>
+                </a>
+              </article>
+
+              <!-- Subject 6: Medical Ethics & Legal -->
+              <article class="subject-card" role="listitem" data-subject="medical-ethics">
+                <a href="#medical-ethics" class="subject-card-link" aria-label="Explore Medical Ethics & Legal Subject">
+                  <div class="subject-card-main">
+                    <div class="subject-card-top">
+                      <div class="subject-icon-box" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                          <g clip-path="url(#clip0_browse_ethics_legal)">
+                            <path d="M20.0101 18.5106L15.0601 13.5605" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M15.06 13.56L11.52 17.1C10.74 17.88 9.47 17.88 8.69 17.1L4.44999 12.86C3.66999 12.08 3.66999 10.81 4.44999 10.03L11.52 2.96C12.3 2.18 13.57 2.18 14.35 2.96L18.59 7.20002C19.37 7.98002 19.37 9.25001 18.59 10.03L15.06 13.56Z" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M2 21H8" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M6.56006 7.91992L13.6301 14.9899" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                          </g>
+                          <defs>
+                            <clipPath id="clip0_browse_ethics_legal">
+                              <rect width="24" height="24" fill="white"/>
+                            </clipPath>
+                          </defs>
+                        </svg>
+                      </div>
+                      <span class="subject-guide-badge">10 Guides</span>
+                    </div>
+                    <div class="subject-card-body">
+                      <h4 class="subject-card-title">Medical Ethics &amp; Legal</h4>
+                      <p class="subject-card-desc">Informed consent, HIPAA patient confidentiality, malpractice risk &amp; clinical records.</p>
+                    </div>
+                  </div>
+                  <div class="subject-card-footer">
+                    <span class="subject-browse-btn">
+                      <span>Browse</span>
+                      <svg class="subject-browse-arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M8.90991 19.9201L15.4299 13.4001C16.1999 12.6301 16.1999 11.3701 15.4299 10.6001L8.90991 4.08008" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </span>
+                  </div>
+                </a>
+              </article>
+
+            </div>
           </section>
         </div>
 

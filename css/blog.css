@@ -677,3 +677,391 @@
   letter-spacing: 0.1em;
   user-select: none;
 }
+
+/* ==========================================================================
+   Browse by Subject Section (Left Column below Pagination)
+   Presents core curriculum subjects with theme-adaptive styling and custom SVGs
+   ========================================================================== */
+.browse-subjects-section {
+  margin-top: 36px;
+  padding-top: 24px;
+  border-top: 1px solid var(--color-border);
+  box-sizing: border-box;
+}
+
+.browse-subjects-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.browse-subjects-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+}
+
+.browse-subjects-title {
+  font-family: var(--font-family-base);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+@media (min-width: 768px) {
+  .browse-subjects-title {
+    font-size: 17px;
+  }
+}
+
+.browse-subjects-subtitle {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  margin: 0;
+  max-width: 540px;
+}
+
+@media (min-width: 1024px) {
+  .browse-subjects-subtitle {
+    white-space: nowrap;
+    max-width: none;
+    font-size: 13.5px;
+  }
+}
+
+.browse-subjects-view-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent-color);
+  text-decoration: none;
+  padding: 4px 10px;
+  border-radius: var(--radius-btn-subtle, 5px);
+  border: 1px solid var(--header-btn-border);
+  background-color: var(--header-btn-bg);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.browse-subjects-view-all:hover {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: #ffffff;
+}
+
+[data-theme="dark"] .browse-subjects-view-all:hover,
+[data-theme="extra-dark"] .browse-subjects-view-all:hover {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: #121212;
+  font-weight: 700;
+}
+
+.browse-subjects-view-all:hover .browse-subjects-chevron {
+  color: inherit;
+}
+
+.browse-subjects-view-all:hover .browse-subjects-chevron path {
+  stroke: currentColor;
+}
+
+.browse-subjects-chevron {
+  width: 14px;
+  height: 14px;
+  display: block;
+}
+
+/* 2-Column Responsive Grid */
+.browse-subjects-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+@media (min-width: 600px) {
+  .browse-subjects-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .browse-subjects-grid {
+    gap: 14px;
+  }
+}
+
+/* Subject Card:
+   - Clean background with subtle border
+   - When hovered: add background color, no animation, no glow/box-shadow
+*/
+.subject-card {
+  position: relative;
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* On hover: add subtle bg, change border, strictly NO animation / lift, NO glow/shadow */
+.subject-card:hover {
+  background-color: color-mix(in srgb, var(--accent-color) 6%, var(--color-bg-surface));
+  border-color: color-mix(in srgb, var(--accent-color) 35%, var(--color-border));
+  transform: none;
+  box-shadow: none;
+}
+
+.subject-card-link {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0;
+  text-decoration: none;
+  color: inherit;
+  box-sizing: border-box;
+}
+
+/* Remove focus outlines & rings when clicked */
+.subject-card:focus,
+.subject-card:focus-within,
+.subject-card-link:focus,
+.subject-card-link:active {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Accessibility keyboard navigation only */
+.subject-card-link:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+  border-radius: 10px;
+}
+
+/* Upper Card Content */
+.subject-card-main {
+  padding: 13px 13px 11px 13px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  box-sizing: border-box;
+}
+
+@media (min-width: 640px) {
+  .subject-card-main {
+    padding: 14px 14px 12px 14px;
+  }
+}
+
+/* Card Top Section: Icon on Left & Guide Count Badge on Right */
+.subject-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+/* Subject Icon with theme subtle background matching rest of UI, fills with theme color on hover */
+.subject-icon-box {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  border-radius: var(--radius-btn-subtle, 5px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--header-btn-bg);
+  border: 1px solid var(--header-btn-border);
+  color: var(--accent-color);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.subject-icon-box svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.subject-icon-box svg path,
+.subject-icon-box svg g path {
+  stroke: currentColor;
+}
+
+/* Main SVG of subject fills with theme color on card hover */
+.subject-card:hover .subject-icon-box {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: #ffffff;
+  transform: none;
+  box-shadow: none;
+}
+
+.subject-card:hover .subject-icon-box svg path,
+.subject-card:hover .subject-icon-box svg g path {
+  stroke: currentColor;
+}
+
+[data-theme="dark"] .subject-card:hover .subject-icon-box,
+[data-theme="extra-dark"] .subject-card:hover .subject-icon-box {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: #121212;
+}
+
+[data-theme="dark"] .subject-card:hover .subject-icon-box svg path,
+[data-theme="extra-dark"] .subject-card:hover .subject-icon-box svg path,
+[data-theme="dark"] .subject-card:hover .subject-icon-box svg g path,
+[data-theme="extra-dark"] .subject-card:hover .subject-icon-box svg g path {
+  stroke: currentColor;
+}
+
+/* Guide Count Badge at Top Right */
+.subject-guide-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  background-color: var(--header-btn-bg);
+  border: 1px solid var(--header-btn-border);
+  padding: 3px 8px;
+  border-radius: var(--radius-btn-subtle, 5px);
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.subject-card:hover .subject-guide-badge {
+  background-color: var(--header-btn-hover-bg);
+  border-color: var(--header-btn-hover-border);
+  color: var(--color-text-primary);
+}
+
+/* Card Body */
+.subject-card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.subject-card-title {
+  font-family: var(--font-family-base);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.34;
+  color: var(--color-text-primary);
+  margin: 0 0 6px 0;
+  letter-spacing: -0.01em;
+  transition: color var(--transition-fast);
+}
+
+@media (min-width: 640px) {
+  .subject-card-title {
+    font-size: 15.8px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .subject-card-title {
+    font-size: 16.5px;
+  }
+}
+
+.subject-card:hover .subject-card-title {
+  color: var(--accent-color);
+}
+
+.subject-card-desc {
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--color-text-secondary);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .subject-card-desc {
+    font-size: 14px;
+    line-height: 1.55;
+  }
+}
+
+@media (min-width: 1280px) {
+  .subject-card-desc {
+    font-size: 14.2px;
+    line-height: 1.55;
+  }
+}
+
+/* Card Footer: Border stretches 100% width edge-to-edge joining outer card borders */
+.subject-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 8px 13px;
+  border-top: 1px solid var(--color-border);
+  background-color: transparent;
+  gap: 8px;
+  margin-top: auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (min-width: 640px) {
+  .subject-card-footer {
+    padding: 8px 14px;
+  }
+}
+
+/* Browse Action in Footer */
+.subject-browse-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-color);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.subject-browse-arrow {
+  width: 15px;
+  height: 15px;
+  display: block;
+  transition: transform var(--transition-fast);
+}
+
+.subject-browse-arrow path {
+  stroke: currentColor;
+}
+
+.subject-card:hover .subject-browse-arrow {
+  transform: translateX(3px);
+}
+
+/* Focus states: No persistent focus or outlines when clicked */
+.subject-card:focus-within {
+  outline: none;
+  box-shadow: none;
+}
+
