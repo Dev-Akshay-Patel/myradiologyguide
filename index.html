@@ -24,7 +24,7 @@
             t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
           }
           document.documentElement.setAttribute('data-theme', t);
-          var p = localStorage.getItem('app-palette-preference') || 'beige';
+          var p = localStorage.getItem('app-palette-preference') || 'default';
           document.documentElement.setAttribute('data-palette', p);
         } catch(e) {}
       })();
@@ -562,9 +562,9 @@
                   <!-- Pure text overlay on left with multiple 8px border-radius tags with Hash (min 1, max 3) -->
                   <div class="carousel-overlay">
                     <div class="slide-tags">
-                      <span class="slide-tag"><span class="slide-tag-hash" aria-hidden="true">#</span>Neuroradiology</span>
-                      <span class="slide-tag"><span class="slide-tag-hash" aria-hidden="true">#</span>MRI Triage</span>
-                      <span class="slide-tag"><span class="slide-tag-hash" aria-hidden="true">#</span>Stroke Protocol</span>
+                      <span class="slide-tag"><svg class="slide-tag-hash-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10 3L8 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M16 3L14 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M3.5 9H21.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M2.5 15H20.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>Neuroradiology</span>
+                      <span class="slide-tag"><svg class="slide-tag-hash-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10 3L8 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M16 3L14 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M3.5 9H21.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M2.5 15H20.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>MRI Triage</span>
+                      <span class="slide-tag"><svg class="slide-tag-hash-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10 3L8 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M16 3L14 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M3.5 9H21.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M2.5 15H20.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>Stroke Protocol</span>
                     </div>
                     <h2 class="slide-title">Brain MRI &amp; Stroke Protocol</h2>
                     <p class="slide-desc">Rapid DWI-FLAIR mismatch detection, perfusion imaging thresholds, and acute ischemic pathway triage reference.</p>
@@ -582,8 +582,8 @@
                   />
                   <div class="carousel-overlay">
                     <div class="slide-tags">
-                      <span class="slide-tag"><span class="slide-tag-hash" aria-hidden="true">#</span>Chest Imaging</span>
-                      <span class="slide-tag"><span class="slide-tag-hash" aria-hidden="true">#</span>High-Res CT</span>
+                      <span class="slide-tag"><svg class="slide-tag-hash-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10 3L8 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M16 3L14 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M3.5 9H21.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M2.5 15H20.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>Chest Imaging</span>
+                      <span class="slide-tag"><svg class="slide-tag-hash-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10 3L8 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M16 3L14 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M3.5 9H21.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M2.5 15H20.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>High-Res CT</span>
                     </div>
                     <h2 class="slide-title">High-Resolution Chest CT</h2>
                     <p class="slide-desc">Differential criteria for interstitial lung disease patterns, ground-glass opacities, and vascular embolisms.</p>
@@ -601,9 +601,9 @@
                   />
                   <div class="carousel-overlay">
                     <div class="slide-tags">
-                      <span class="slide-tag"><span class="slide-tag-hash" aria-hidden="true">#</span>Ultrasonography</span>
-                      <span class="slide-tag"><span class="slide-tag-hash" aria-hidden="true">#</span>MSK Atlas</span>
-                      <span class="slide-tag"><span class="slide-tag-hash" aria-hidden="true">#</span>Guided Intervention</span>
+                      <span class="slide-tag"><svg class="slide-tag-hash-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10 3L8 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M16 3L14 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M3.5 9H21.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M2.5 15H20.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>Ultrasonography</span>
+                      <span class="slide-tag"><svg class="slide-tag-hash-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10 3L8 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M16 3L14 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M3.5 9H21.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M2.5 15H20.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>MSK Atlas</span>
+                      <span class="slide-tag"><svg class="slide-tag-hash-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10 3L8 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M16 3L14 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M3.5 9H21.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M2.5 15H20.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>Guided Intervention</span>
                     </div>
                     <h2 class="slide-title">Dynamic Musculoskeletal US</h2>
                     <p class="slide-desc">Point-of-care rotator cuff evaluation, tendon kinematics, and ultrasound-guided intervention atlas.</p>
@@ -621,8 +621,8 @@
                   />
                   <div class="carousel-overlay">
                     <div class="slide-tags">
-                      <span class="slide-tag"><span class="slide-tag-hash" aria-hidden="true">#</span>Hybrid Imaging</span>
-                      <span class="slide-tag"><span class="slide-tag-hash" aria-hidden="true">#</span>PET-CT Oncology</span>
+                      <span class="slide-tag"><svg class="slide-tag-hash-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10 3L8 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M16 3L14 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M3.5 9H21.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M2.5 15H20.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>Hybrid Imaging</span>
+                      <span class="slide-tag"><svg class="slide-tag-hash-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10 3L8 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M16 3L14 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M3.5 9H21.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M2.5 15H20.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>PET-CT Oncology</span>
                     </div>
                     <h2 class="slide-title">PET-CT Oncology Protocols</h2>
                     <p class="slide-desc">FDG tracer quantification, standardized uptake values (SUVmax), and accurate tumor restaging criteria.</p>
@@ -672,6 +672,154 @@
               ></button>
             </div>
           </section>
+
+          <!-- Pinned Post: Spanning full width of left main area -->
+          <article class="pinned-post" id="pinned-post" aria-labelledby="pinned-post-title">
+            <!-- Pinned Header / Context Bar -->
+            <div class="pinned-header" id="pinned-header">
+              <div class="pinned-header-left" id="pinned-header-left">
+                <div class="pinned-badge" id="pinned-badge">
+                  <svg class="pinned-pin-icon" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="12" y1="17" x2="12" y2="22"></line>
+                    <path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.89A2 2 0 0 1 15 10.77V6a3 3 0 0 0-6 0v4.77a2 2 0 0 1-1.11 1.79l-1.78.89A2 2 0 0 0 5 15.24Z"></path>
+                  </svg>
+                  <span>Pinned</span>
+                </div>
+              </div>
+
+              <div class="pinned-header-right" id="pinned-header-right">
+                <span class="pinned-meta-item" id="pinned-meta-date">March 8, 2026</span>
+                <span class="pinned-meta-dot" aria-hidden="true">&bull;</span>
+                <span class="pinned-meta-item" id="pinned-meta-time">
+                  <svg class="pinned-meta-icon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <g clip-path="url(#clip0_clock_icon)">
+                      <path d="M22 12C22 17.52 17.52 22 12 22C6.48 22 2 17.52 2 12C2 6.48 6.48 2 12 2C17.52 2 22 6.48 22 12Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                      <path d="M15.71 15.1798L12.61 13.3298C12.07 13.0098 11.63 12.2398 11.63 11.6098V7.50977" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </g>
+                    <defs>
+                      <clipPath id="clip0_clock_icon">
+                        <rect width="24" height="24" fill="white"/>
+                      </clipPath>
+                    </defs>
+                  </svg>
+                  <span>7 min read</span>
+                </span>
+              </div>
+            </div>
+
+            <!-- Main Body Layout: Editorial Content -->
+            <div class="pinned-body" id="pinned-body">
+              <div class="pinned-content" id="pinned-content">
+                <h2 class="pinned-title" id="pinned-post-title">
+                  <a href="#stroke-cta-protocol" class="pinned-title-link" id="pinned-title-link">
+                    Acute Ischemic Stroke: Multiphase CTA Collateral Atlas &amp; ASPECTS Triage Protocol
+                  </a>
+                </h2>
+
+                <p class="pinned-excerpt" id="pinned-post-desc">
+                  Standardized emergency triage criteria for grading leptomeningeal collateral circulation, verifying Alberta Stroke Program Early CT Scores (ASPECTS &ge; 6), and optimizing rapid endovascular thrombectomy candidate selection within the extended window.
+                </p>
+
+                <!-- Key Clinical Highlights / Clickable Tags with Hash SVG -->
+                <div class="pinned-highlights" id="pinned-highlights">
+                  <a href="#tag-aspects-cutoff" class="pinned-highlight-item" id="pinned-highlight-1">
+                    <svg class="pinned-tag-hash-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <g clip-path="url(#clip0_hash_tag_1)">
+                        <path d="M10 3L8 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M16 3L14 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M3.5 9H21.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M2.5 15H20.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                      </g>
+                      <defs>
+                        <clipPath id="clip0_hash_tag_1">
+                          <rect width="24" height="24" fill="white"/>
+                        </clipPath>
+                      </defs>
+                    </svg>
+                    <span>ASPECTS &ge; 6 Cutoff Verification</span>
+                  </a>
+                  <a href="#tag-cta-washout" class="pinned-highlight-item" id="pinned-highlight-2">
+                    <svg class="pinned-tag-hash-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <g clip-path="url(#clip0_hash_tag_2)">
+                        <path d="M10 3L8 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M16 3L14 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M3.5 9H21.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M2.5 15H20.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                      </g>
+                      <defs>
+                        <clipPath id="clip0_hash_tag_2">
+                          <rect width="24" height="24" fill="white"/>
+                        </clipPath>
+                      </defs>
+                    </svg>
+                    <span>Multiphase Phase II/III Washout Timing</span>
+                  </a>
+                  <a href="#tag-perfusion-thresholds" class="pinned-highlight-item" id="pinned-highlight-3">
+                    <svg class="pinned-tag-hash-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <g clip-path="url(#clip0_hash_tag_3)">
+                        <path d="M10 3L8 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M16 3L14 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M3.5 9H21.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M2.5 15H20.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                      </g>
+                      <defs>
+                        <clipPath id="clip0_hash_tag_3">
+                          <rect width="24" height="24" fill="white"/>
+                        </clipPath>
+                      </defs>
+                    </svg>
+                    <span>Core vs. Penumbra Perfusion Thresholds</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Footer Action Row: Save & Share on Left, Read Full Protocol on Right -->
+            <div class="pinned-footer" id="pinned-footer">
+              <div class="pinned-actions-left" id="pinned-actions-left">
+                <button type="button" class="pinned-action-btn" id="pinned-bookmark-btn" aria-label="Save this protocol" aria-pressed="false">
+                  <svg class="pinned-btn-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <g clip-path="url(#clip0_save_btn)">
+                      <path d="M14.5 10.6504H9.5" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                      <path d="M12 8.21094V13.2109" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                      <path d="M16.8199 2H7.17995C5.04995 2 3.31995 3.74 3.31995 5.86V19.95C3.31995 21.75 4.60995 22.51 6.18995 21.64L11.0699 18.93C11.5899 18.64 12.4299 18.64 12.9399 18.93L17.8199 21.64C19.3999 22.52 20.6899 21.76 20.6899 19.95V5.86C20.6799 3.74 18.9499 2 16.8199 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </g>
+                    <defs>
+                      <clipPath id="clip0_save_btn">
+                        <rect width="24" height="24" fill="white"/>
+                      </clipPath>
+                    </defs>
+                  </svg>
+                  <span class="pinned-btn-text" id="pinned-bookmark-text">Save</span>
+                </button>
+
+                <button type="button" class="pinned-action-btn" id="pinned-share-btn" aria-label="Share this protocol">
+                  <svg class="pinned-btn-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <g clip-path="url(#clip0_share_btn)">
+                      <path d="M7.40005 6.32015L15.8901 3.49015C19.7001 2.22015 21.7701 4.30015 20.5101 8.11015L17.6801 16.6002C15.7801 22.3102 12.6601 22.3102 10.7601 16.6002L9.92005 14.0802L7.40005 13.2402C1.69005 11.3402 1.69005 8.23015 7.40005 6.32015Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                      <path d="M10.11 13.6505L13.69 10.0605" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </g>
+                    <defs>
+                      <clipPath id="clip0_share_btn">
+                        <rect width="24" height="24" fill="white"/>
+                      </clipPath>
+                    </defs>
+                  </svg>
+                  <span class="pinned-btn-text" id="pinned-share-text">Share</span>
+                </button>
+              </div>
+
+              <div class="pinned-actions-right" id="pinned-actions-right">
+                <a href="#stroke-cta-protocol" class="pinned-primary-btn" id="pinned-read-btn" aria-label="Read Full Protocol">
+                  <span class="pinned-btn-label-desktop">Read Full Protocol</span>
+                  <span class="pinned-btn-label-mobile">Read</span>
+                  <svg class="nav-chevron pinned-chevron-right" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M19.9201 8.9502L13.4001 15.4702C12.6301 16.2402 11.3701 16.2402 10.6001 15.4702L4.08008 8.9502" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </article>
         </div>
 
         <!-- Right Side Companion: Popular Posts (No outer container, Post 1 with image overlayed by text, Posts 2-5 sequential) -->
@@ -697,8 +845,8 @@
                   
                   <div class="popular-overlay-body">
                     <div class="popular-overlay-top">
-                      <span class="popular-rank-pill rank-top"># 1</span>
-                      <span class="popular-overlay-tag">#Neuroradiology</span>
+                      <span class="popular-rank-pill rank-top"><svg class="popular-rank-hash-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10 3L8 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M16 3L14 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M3.5 9H21.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M2.5 15H20.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg><span>1</span></span>
+                      <span class="popular-overlay-tag"><svg class="popular-tag-hash-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10 3L8 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M16 3L14 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M3.5 9H21.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M2.5 15H20.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>Neuroradiology</span>
                     </div>
                     <h4 class="popular-overlay-title">Brain MRI Acute Stroke Protocol &amp; DWI-FLAIR Mismatch</h4>
                     <p class="popular-overlay-desc">Comprehensive emergency neuro-imaging algorithm for identifying salvageable penumbra, assessing core infarct ratios, and evaluating mechanical thrombectomy triage...</p>
@@ -716,7 +864,7 @@
                 <!-- Post 2 -->
                 <article class="popular-text-item">
                   <a href="#post-chest-ct-ild" class="popular-text-link" aria-label="Popular Post # 2: High-Resolution Chest CT">
-                    <span class="popular-rank-pill"># 2</span>
+                    <span class="popular-rank-pill"><svg class="popular-rank-hash-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10 3L8 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M16 3L14 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M3.5 9H21.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M2.5 15H20.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg><span>2</span></span>
                     <div class="popular-text-content">
                       <h4 class="popular-text-title">High-Resolution Chest CT: Interstitial Lung Disease Patterns</h4>
                       <div class="popular-meta-row">
@@ -731,7 +879,7 @@
                 <!-- Post 3 -->
                 <article class="popular-text-item">
                   <a href="#post-msk-ultrasound" class="popular-text-link" aria-label="Popular Post # 3: Dynamic Musculoskeletal Ultrasound">
-                    <span class="popular-rank-pill"># 3</span>
+                    <span class="popular-rank-pill"><svg class="popular-rank-hash-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10 3L8 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M16 3L14 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M3.5 9H21.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M2.5 15H20.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg><span>3</span></span>
                     <div class="popular-text-content">
                       <h4 class="popular-text-title">Dynamic Musculoskeletal US: Rotator Cuff &amp; Joint Atlas</h4>
                       <div class="popular-meta-row">
@@ -746,7 +894,7 @@
                 <!-- Post 4 -->
                 <article class="popular-text-item">
                   <a href="#post-pet-ct-suv" class="popular-text-link" aria-label="Popular Post # 4: Hybrid PET-CT Oncology">
-                    <span class="popular-rank-pill"># 4</span>
+                    <span class="popular-rank-pill"><svg class="popular-rank-hash-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10 3L8 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M16 3L14 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M3.5 9H21.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M2.5 15H20.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg><span>4</span></span>
                     <div class="popular-text-content">
                       <h4 class="popular-text-title">Hybrid PET-CT Oncology: Standardized SUVmax Quantification</h4>
                       <div class="popular-meta-row">
@@ -761,7 +909,7 @@
                 <!-- Post 5 -->
                 <article class="popular-text-item">
                   <a href="#post-radiation-safety" class="popular-text-link" aria-label="Popular Post # 5: ALARA Radiation Protection">
-                    <span class="popular-rank-pill"># 5</span>
+                    <span class="popular-rank-pill"><svg class="popular-rank-hash-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10 3L8 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M16 3L14 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M3.5 9H21.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M2.5 15H20.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg><span>5</span></span>
                     <div class="popular-text-content">
                       <h4 class="popular-text-title">ALARA Radiation Protection &amp; CT Dosimetry Calibration</h4>
                       <div class="popular-meta-row">
@@ -1074,14 +1222,18 @@
           </div>
         </div>
 
-        <!-- Color Palette Selector (10 Subtle Material Tones: Beige default, Green, Orange, Blue, Teal, Brown, Pink, Purple, Magenta, Red) -->
+        <!-- Color Palette Selector (11 Tones: Default Black & White, Beige, Green, Orange, Blue, Teal, Brown, Pink, Purple, Magenta, Red) -->
         <div class="theme-section">
           <div class="theme-section-header">
             <span class="theme-section-label">Color Palette</span>
-            <span class="theme-section-caption" id="current-palette-name">Beige</span>
+            <span class="theme-section-caption" id="current-palette-name">Default</span>
           </div>
           <div class="palette-grid" id="palette-grid" role="radiogroup" aria-label="Color palette selection">
-            <button type="button" class="palette-btn is-active" data-palette-val="beige" role="radio" aria-checked="true">
+            <button type="button" class="palette-btn is-active" data-palette-val="default" role="radio" aria-checked="true">
+              <span class="palette-name">Default</span>
+              <span class="palette-dot dot-default" aria-hidden="true"></span>
+            </button>
+            <button type="button" class="palette-btn" data-palette-val="beige" role="radio" aria-checked="false">
               <span class="palette-name">Beige</span>
               <span class="palette-dot dot-beige" aria-hidden="true"></span>
             </button>

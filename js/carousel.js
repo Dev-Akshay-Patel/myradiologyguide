@@ -14,7 +14,61 @@
   document.addEventListener('DOMContentLoaded', () => {
     initCarousel();
     initTopicsShowMore();
+    initPinnedPostActions();
   });
+
+  function initPinnedPostActions() {
+    const bookmarkBtn = document.getElementById('pinned-bookmark-btn');
+    const bookmarkText = document.getElementById('pinned-bookmark-text');
+    const shareBtn = document.getElementById('pinned-share-btn');
+    const shareText = document.getElementById('pinned-share-text');
+
+    if (bookmarkBtn) {
+      bookmarkBtn.addEventListener('click', () => {
+        const isSaved = bookmarkBtn.classList.toggle('is-active');
+        bookmarkBtn.setAttribute('aria-pressed', String(isSaved));
+        if (bookmarkText) {
+          bookmarkText.textContent = isSaved ? 'Saved' : 'Save';
+        }
+      });
+    }
+
+    if (shareBtn) {
+      shareBtn.addEventListener('click', async () => {
+        const shareUrl = window.location.href.split('#')[0] + '#stroke-cta-protocol';
+        const shareData = {
+          title: 'Acute Ischemic Stroke: Multiphase CTA Collateral Atlas & ASPECTS Triage Protocol',
+          text: 'Check out this clinical reference protocol on RADPULSE.',
+          url: shareUrl,
+        };
+
+        let shared = false;
+        if (navigator.share) {
+          try {
+            await navigator.share(shareData);
+            shared = true;
+          } catch {
+            // User cancelled or aborted
+          }
+        }
+
+        if (!shared && navigator.clipboard) {
+          try {
+            await navigator.clipboard.writeText(shareUrl);
+            if (shareText) {
+              const prev = shareText.textContent;
+              shareText.textContent = 'Copied!';
+              setTimeout(() => {
+                shareText.textContent = prev || 'Share';
+              }, 2000);
+            }
+          } catch {
+            // Clipboard write failed
+          }
+        }
+      });
+    }
+  }
 
   function initTopicsShowMore() {
     const toggleBtn = document.getElementById('topics-toggle-btn');

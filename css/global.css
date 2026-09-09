@@ -70,6 +70,7 @@
   --page-max-width: 100%;
 
   /* Swatch Dot Colors for UI Selector */
+  --dot-default: #18181b;
   --dot-beige: #8d7053;
   --dot-green: #3d805c;
   --dot-orange: #c4682c;
@@ -112,28 +113,28 @@
   --drawer-shadow: none;
 
   /* ========================================================================
-     DEFAULT PALETTE: BEIGE (LIGHT)
-     Subtle warm sand / linen tonal background inspired by Material Design
+     DEFAULT PALETTE: BLACK & WHITE (LIGHT)
+     Pure, clean monochrome aesthetic with high legibility and zero color tint
      ======================================================================== */
-  --color-bg-body: #f7f4ee;
+  --color-bg-body: #f8f8f9;
   --color-bg-surface: #ffffff;
-  --color-bg-elevated: #fbf8f3;
-  --color-border: #e6dfd4;
-  --color-border-subtle: #efe9df;
-  --header-bg: rgba(247, 244, 238, 0.88);
-  --header-border: #e5dfd4;
-  --accent-color: #7d6350;
-  --accent-hover: #695240;
-  --accent-ring: rgba(125, 99, 80, 0.3);
-  --btn-subtle-bg: rgba(125, 99, 80, 0.08);
-  --btn-subtle-border: rgba(125, 99, 80, 0.12);
-  --btn-subtle-hover-bg: rgba(125, 99, 80, 0.14);
-  --btn-subtle-hover-border: rgba(125, 99, 80, 0.2);
-  --btn-subtle-active-bg: rgba(125, 99, 80, 0.18);
-  --modal-bg: #fcfaf6;
-  --modal-border: #e6dfd4;
-  --drawer-bg: #fcfaf6;
-  --drawer-border: #e6dfd4;
+  --color-bg-elevated: #ffffff;
+  --color-border: #e2e2e5;
+  --color-border-subtle: #ececef;
+  --header-bg: rgba(255, 255, 255, 0.92);
+  --header-border: #e2e2e5;
+  --accent-color: #18181b;
+  --accent-hover: #000000;
+  --accent-ring: rgba(24, 24, 27, 0.25);
+  --btn-subtle-bg: rgba(24, 24, 27, 0.05);
+  --btn-subtle-border: rgba(24, 24, 27, 0.1);
+  --btn-subtle-hover-bg: rgba(24, 24, 27, 0.09);
+  --btn-subtle-hover-border: rgba(24, 24, 27, 0.16);
+  --btn-subtle-active-bg: rgba(24, 24, 27, 0.14);
+  --modal-bg: #ffffff;
+  --modal-border: #e2e2e5;
+  --drawer-bg: #ffffff;
+  --drawer-border: #e2e2e5;
 }
 
 /* ==========================================================================
@@ -164,26 +165,26 @@
   --tree-item-active-bg: color-mix(in srgb, var(--accent-color) 18%, transparent);
   --tree-item-active-text: var(--accent-color);
 
-  /* BEIGE DARK (Default Dark) */
-  --color-bg-body: #181613;
-  --color-bg-surface: #201e19;
-  --color-bg-elevated: #28251f;
-  --color-border: #332d25;
-  --color-border-subtle: #29241d;
-  --header-bg: rgba(24, 22, 19, 0.88);
-  --header-border: #2f2a22;
-  --accent-color: #d8c3b0;
-  --accent-hover: #eddcd0;
-  --accent-ring: rgba(216, 195, 176, 0.35);
-  --btn-subtle-bg: rgba(216, 195, 176, 0.1);
-  --btn-subtle-border: rgba(216, 195, 176, 0.16);
-  --btn-subtle-hover-bg: rgba(216, 195, 176, 0.16);
-  --btn-subtle-hover-border: rgba(216, 195, 176, 0.22);
-  --btn-subtle-active-bg: rgba(216, 195, 176, 0.22);
-  --modal-bg: #201e19;
-  --modal-border: #332d25;
-  --drawer-bg: #201e19;
-  --drawer-border: #332d25;
+  /* DEFAULT DARK: BLACK & WHITE (MONOCHROME) */
+  --color-bg-body: #121214;
+  --color-bg-surface: #1a1a1d;
+  --color-bg-elevated: #222226;
+  --color-border: #2e2e34;
+  --color-border-subtle: #242429;
+  --header-bg: rgba(18, 18, 20, 0.9);
+  --header-border: #28282e;
+  --accent-color: #f4f4f5;
+  --accent-hover: #ffffff;
+  --accent-ring: rgba(244, 244, 245, 0.35);
+  --btn-subtle-bg: rgba(244, 244, 245, 0.08);
+  --btn-subtle-border: rgba(244, 244, 245, 0.14);
+  --btn-subtle-hover-bg: rgba(244, 244, 245, 0.14);
+  --btn-subtle-hover-border: rgba(244, 244, 245, 0.2);
+  --btn-subtle-active-bg: rgba(244, 244, 245, 0.2);
+  --modal-bg: #1a1a1d;
+  --modal-border: #2e2e34;
+  --drawer-bg: #1a1a1d;
+  --drawer-border: #2e2e34;
 }
 
 /* ==========================================================================
@@ -214,26 +215,98 @@
   --tree-item-active-bg: color-mix(in srgb, var(--accent-color) 20%, transparent);
   --tree-item-active-text: var(--accent-color);
 
-  /* DEFAULT EXTRA DARK (#121212 with Beige Accent) */
-  --color-bg-body: #121212;
-  --color-bg-surface: #1c1a18;
-  --color-bg-elevated: #24221e;
-  --color-border: #2f2a24;
-  --color-border-subtle: #23201a;
-  --header-bg: rgba(18, 18, 18, 0.92);
-  --header-border: #2a251e;
-  --accent-color: #e0cfc0;
-  --accent-hover: #f0e2d5;
-  --accent-ring: rgba(224, 207, 192, 0.35);
-  --btn-subtle-bg: rgba(224, 207, 192, 0.08);
-  --btn-subtle-border: rgba(224, 207, 192, 0.14);
-  --btn-subtle-hover-bg: rgba(224, 207, 192, 0.14);
-  --btn-subtle-hover-border: rgba(224, 207, 192, 0.2);
-  --btn-subtle-active-bg: rgba(224, 207, 192, 0.2);
-  --modal-bg: #1c1a18;
-  --modal-border: #2f2a24;
-  --drawer-bg: #181715;
-  --drawer-border: #2a251e;
+  /* DEFAULT EXTRA DARK: PURE BLACK & WHITE */
+  --color-bg-body: #000000;
+  --color-bg-surface: #111113;
+  --color-bg-elevated: #1a1a1e;
+  --color-border: #26262b;
+  --color-border-subtle: #1c1c20;
+  --header-bg: rgba(0, 0, 0, 0.94);
+  --header-border: #1f1f23;
+  --accent-color: #ffffff;
+  --accent-hover: #f4f4f5;
+  --accent-ring: rgba(255, 255, 255, 0.4);
+  --btn-subtle-bg: rgba(255, 255, 255, 0.09);
+  --btn-subtle-border: rgba(255, 255, 255, 0.16);
+  --btn-subtle-hover-bg: rgba(255, 255, 255, 0.16);
+  --btn-subtle-hover-border: rgba(255, 255, 255, 0.24);
+  --btn-subtle-active-bg: rgba(255, 255, 255, 0.24);
+  --modal-bg: #111113;
+  --modal-border: #26262b;
+  --drawer-bg: #0d0d0f;
+  --drawer-border: #1f1f23;
+}
+
+/* ==========================================================================
+   PALETTE 0: DEFAULT (PURE BLACK & WHITE / MONOCHROME)
+   Clean, distraction-free neutral aesthetic with pure black and white styling
+   ========================================================================== */
+[data-palette="default"] {
+  --color-bg-body: #f8f8f9;
+  --color-bg-surface: #ffffff;
+  --color-bg-elevated: #ffffff;
+  --color-border: #e2e2e5;
+  --color-border-subtle: #ececef;
+  --header-bg: rgba(255, 255, 255, 0.92);
+  --header-border: #e2e2e5;
+  --accent-color: #18181b;
+  --accent-hover: #000000;
+  --accent-ring: rgba(24, 24, 27, 0.25);
+  --btn-subtle-bg: rgba(24, 24, 27, 0.05);
+  --btn-subtle-border: rgba(24, 24, 27, 0.1);
+  --btn-subtle-hover-bg: rgba(24, 24, 27, 0.09);
+  --btn-subtle-hover-border: rgba(24, 24, 27, 0.16);
+  --btn-subtle-active-bg: rgba(24, 24, 27, 0.14);
+  --modal-bg: #ffffff;
+  --modal-border: #e2e2e5;
+  --drawer-bg: #ffffff;
+  --drawer-border: #e2e2e5;
+}
+
+[data-palette="default"][data-theme="dark"],
+[data-theme="dark"] [data-palette="default"] {
+  --color-bg-body: #121214;
+  --color-bg-surface: #1a1a1d;
+  --color-bg-elevated: #222226;
+  --color-border: #2e2e34;
+  --color-border-subtle: #242429;
+  --header-bg: rgba(18, 18, 20, 0.9);
+  --header-border: #28282e;
+  --accent-color: #f4f4f5;
+  --accent-hover: #ffffff;
+  --accent-ring: rgba(244, 244, 245, 0.35);
+  --btn-subtle-bg: rgba(244, 244, 245, 0.08);
+  --btn-subtle-border: rgba(244, 244, 245, 0.14);
+  --btn-subtle-hover-bg: rgba(244, 244, 245, 0.14);
+  --btn-subtle-hover-border: rgba(244, 244, 245, 0.2);
+  --btn-subtle-active-bg: rgba(244, 244, 245, 0.2);
+  --modal-bg: #1a1a1d;
+  --modal-border: #2e2e34;
+  --drawer-bg: #1a1a1d;
+  --drawer-border: #2e2e34;
+}
+
+[data-palette="default"][data-theme="extra-dark"],
+[data-theme="extra-dark"] [data-palette="default"] {
+  --color-bg-body: #000000;
+  --color-bg-surface: #111113;
+  --color-bg-elevated: #1a1a1e;
+  --color-border: #26262b;
+  --color-border-subtle: #1c1c20;
+  --header-bg: rgba(0, 0, 0, 0.94);
+  --header-border: #1f1f23;
+  --accent-color: #ffffff;
+  --accent-hover: #f4f4f5;
+  --accent-ring: rgba(255, 255, 255, 0.4);
+  --btn-subtle-bg: rgba(255, 255, 255, 0.09);
+  --btn-subtle-border: rgba(255, 255, 255, 0.16);
+  --btn-subtle-hover-bg: rgba(255, 255, 255, 0.16);
+  --btn-subtle-hover-border: rgba(255, 255, 255, 0.24);
+  --btn-subtle-active-bg: rgba(255, 255, 255, 0.24);
+  --modal-bg: #111113;
+  --modal-border: #26262b;
+  --drawer-bg: #0d0d0f;
+  --drawer-border: #1f1f23;
 }
 
 /* ==========================================================================

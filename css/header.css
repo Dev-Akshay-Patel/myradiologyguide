@@ -2089,7 +2089,7 @@
 
 @media (min-width: 640px) {
   .palette-grid {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 8px;
   }
 }
@@ -2163,6 +2163,17 @@
 }
 
 /* Palette dot specific colors */
+.dot-default {
+  background: linear-gradient(135deg, #18181b 50%, #ffffff 50%);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .dot-default,
+[data-theme="extra-dark"] .dot-default {
+  background: linear-gradient(135deg, #09090b 50%, #ffffff 50%);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.3);
+}
+
 .dot-beige { background-color: var(--dot-beige); }
 .dot-green { background-color: var(--dot-green); }
 .dot-orange { background-color: var(--dot-orange); }

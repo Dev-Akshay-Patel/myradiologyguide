@@ -14,6 +14,7 @@
   const VALID_THEMES = ['light', 'dark', 'extra-dark'];
 
   const VALID_PALETTES = [
+    'default',
     'beige',
     'green',
     'orange',
@@ -26,7 +27,7 @@
     'red',
   ];
 
-  const DEFAULT_PALETTE = 'beige';
+  const DEFAULT_PALETTE = 'default';
 
   /**
    * Determine the current active theme
@@ -49,7 +50,7 @@
   /**
    * Determine the current active color palette
    * Priority: 1. Stored user preference in localStorage
-   *           2. Default fallback to 'beige'
+   *           2. Default fallback to 'default' (Black & White)
    * @returns {string}
    */
   function getPreferredPalette() {
