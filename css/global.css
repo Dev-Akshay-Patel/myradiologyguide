@@ -1,8 +1,8 @@
 /* ==========================================================================
-   GLOBAL CSS - Base Styles, Outfit Font, Tokens, Material Subtle Palettes & Focus Rings
+   GLOBAL CSS - Base Styles, Plus Jakarta Sans Font, Tokens, Material Subtle Palettes & Focus Rings
    ========================================================================== */
 
-/* Outfit font is loaded with preconnect in index.html to eliminate CLS */
+/* Plus Jakarta Sans font is loaded with preconnect in index.html to eliminate CLS */
 
 /* Suppress all transitions and animations during initial page load to prevent lag and paint flash */
 .preload,
@@ -18,7 +18,7 @@
    -------------------------------------------------------------------------- */
 :root {
   /* Typography with robust system fallback metrics to eliminate CLS */
-  --font-family-base: 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-family-base: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   --font-size-base: 16px;
   --line-height-base: 1.55;
 
