@@ -13,7 +13,83 @@
 
   document.addEventListener('DOMContentLoaded', () => {
     initCarousel();
+    initTopicsShowMore();
   });
+
+  function initTopicsShowMore() {
+    const toggleBtn = document.getElementById('topics-toggle-btn');
+    const wrapper = document.getElementById('topics-expandable-wrapper');
+    if (!toggleBtn || !wrapper) return;
+
+    const toggleText = toggleBtn.querySelector('.topics-toggle-text');
+    const hiddenItems = Array.from(wrapper.querySelectorAll('.topic-item'));
+    const hiddenCount = hiddenItems.length;
+
+    // Remove hidden items from keyboard navigation order while collapsed
+    hiddenItems.forEach((item) => {
+      item.setAttribute('tabindex', '-1');
+    });
+
+    const moreText = `Show More (+${hiddenCount})`;
+    const lessText = 'Show Less';
+
+    if (toggleText) {
+      toggleText.textContent = moreText;
+    }
+
+    toggleBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+      const willExpand = !isExpanded;
+
+      // Capture exact scroll position before state change
+      const lockedScrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
+
+      toggleBtn.setAttribute('aria-expanded', String(willExpand));
+      wrapper.setAttribute('aria-hidden', String(!willExpand));
+
+      if (willExpand) {
+        wrapper.classList.add('is-expanded');
+        if (toggleText) {
+          toggleText.textContent = lessText;
+        }
+        hiddenItems.forEach((item) => {
+          item.removeAttribute('tabindex');
+        });
+      } else {
+        wrapper.classList.remove('is-expanded');
+        if (toggleText) {
+          toggleText.textContent = moreText;
+        }
+        hiddenItems.forEach((item) => {
+          item.setAttribute('tabindex', '-1');
+        });
+      }
+
+      // Prevent browser from auto-scrolling to follow the moving button
+      if (e.detail > 0) {
+        toggleBtn.blur();
+      }
+
+      // Lock scroll position during drawer transition to ensure elements above never shift
+      const startTime = performance.now();
+      const lockDuration = 420;
+
+      function lockScroll(now) {
+        const currentY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
+        if (Math.abs(currentY - lockedScrollY) > 0.5) {
+          window.scrollTo({ top: lockedScrollY, behavior: 'instant' });
+        }
+        if (now - startTime < lockDuration) {
+          requestAnimationFrame(lockScroll);
+        }
+      }
+
+      requestAnimationFrame(lockScroll);
+    });
+  }
 
   function initCarousel() {
     const container = document.getElementById('featured-carousel');

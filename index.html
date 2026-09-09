@@ -813,36 +813,59 @@
                 <span class="topic-name">Pediatric</span>
                 <span class="topic-count">(08)</span>
               </a>
+            </div>
 
-              <!-- Row 4: Topic 7 (09) Topic 8 (27) -->
-              <a href="#topic-radiation-safety" class="topic-item" data-topic="radiation-safety" role="listitem" aria-label="Radiation QA topic with 09 articles">
-                <span class="topic-name">Radiation QA</span>
-                <span class="topic-count">(09)</span>
-              </a>
-              <a href="#topic-gastrointestinal" class="topic-item" data-topic="gastrointestinal" role="listitem" aria-label="GI Imaging topic with 27 articles">
-                <span class="topic-name">GI Imaging</span>
-                <span class="topic-count">(27)</span>
-              </a>
+            <!-- Expandable Topics Section (Slide-in vertical drawer animation) -->
+            <div class="topics-expandable-wrapper" id="topics-expandable-wrapper" aria-hidden="true">
+              <div class="topics-expandable-inner">
+                <div class="topics-grid topics-grid-more" role="list" aria-label="Additional Clinical Radiology Topics">
+                  <!-- Row 4: Topic 7 (09) Topic 8 (27) -->
+                  <a href="#topic-radiation-safety" class="topic-item" data-topic="radiation-safety" role="listitem" aria-label="Radiation QA topic with 09 articles">
+                    <span class="topic-name">Radiation QA</span>
+                    <span class="topic-count">(09)</span>
+                  </a>
+                  <a href="#topic-gastrointestinal" class="topic-item" data-topic="gastrointestinal" role="listitem" aria-label="GI Imaging topic with 27 articles">
+                    <span class="topic-name">GI Imaging</span>
+                    <span class="topic-count">(27)</span>
+                  </a>
 
-              <!-- Row 5: Topic 9 (16) Topic 10 (31) -->
-              <a href="#topic-cardiac-mri" class="topic-item" data-topic="cardiac-mri" role="listitem" aria-label="Cardiac MRI topic with 16 articles">
-                <span class="topic-name">Cardiac MRI</span>
-                <span class="topic-count">(16)</span>
-              </a>
-              <a href="#topic-emergency" class="topic-item" data-topic="emergency" role="listitem" aria-label="Emergency topic with 31 articles">
-                <span class="topic-name">Emergency</span>
-                <span class="topic-count">(31)</span>
-              </a>
+                  <!-- Row 5: Topic 9 (16) Topic 10 (31) -->
+                  <a href="#topic-cardiac-mri" class="topic-item" data-topic="cardiac-mri" role="listitem" aria-label="Cardiac MRI topic with 16 articles">
+                    <span class="topic-name">Cardiac MRI</span>
+                    <span class="topic-count">(16)</span>
+                  </a>
+                  <a href="#topic-emergency" class="topic-item" data-topic="emergency" role="listitem" aria-label="Emergency topic with 31 articles">
+                    <span class="topic-name">Emergency</span>
+                    <span class="topic-count">(31)</span>
+                  </a>
 
-              <!-- Row 6: Topic 11 (14) Topic 12 (25) -->
-              <a href="#topic-head-neck" class="topic-item" data-topic="head-neck" role="listitem" aria-label="Head and Neck topic with 14 articles">
-                <span class="topic-name">Head &amp; Neck</span>
-                <span class="topic-count">(14)</span>
-              </a>
-              <a href="#topic-ultrasound" class="topic-item" data-topic="ultrasound" role="listitem" aria-label="Ultrasound topic with 25 articles">
-                <span class="topic-name">Ultrasound</span>
-                <span class="topic-count">(25)</span>
-              </a>
+                  <!-- Row 6: Topic 11 (14) Topic 12 (25) -->
+                  <a href="#topic-head-neck" class="topic-item" data-topic="head-neck" role="listitem" aria-label="Head and Neck topic with 14 articles">
+                    <span class="topic-name">Head &amp; Neck</span>
+                    <span class="topic-count">(14)</span>
+                  </a>
+                  <a href="#topic-ultrasound" class="topic-item" data-topic="ultrasound" role="listitem" aria-label="Ultrasound topic with 25 articles">
+                    <span class="topic-name">Ultrasound</span>
+                    <span class="topic-count">(25)</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Left-aligned Show More Button -->
+            <div class="topics-action-row">
+              <button
+                type="button"
+                class="topics-toggle-btn"
+                id="topics-toggle-btn"
+                aria-expanded="false"
+                aria-controls="topics-expandable-wrapper"
+              >
+                <span class="topics-toggle-text">Show More (+6)</span>
+                <svg class="nav-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M19.9201 8.9502L13.4001 15.4702C12.6301 16.2402 11.3701 16.2402 10.6001 15.4702L4.08008 8.9502" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
             </div>
           </div>
         </aside>
