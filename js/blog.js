@@ -215,6 +215,7 @@
   const ITEMS_PER_PAGE = 6;
   const TOTAL_PAGES = Math.ceil(ARTICLES_DATA.length / ITEMS_PER_PAGE);
   let currentPage = 1;
+  let currentPaginationToken = 0;
 
   // Single SVG templates: Plus when not bookmarked, Minus when bookmarked
   const SVG_BOOKMARK_PLUS = `<svg class="blog-save-svg" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -246,7 +247,6 @@
     const homeBtn = document.getElementById('pagination-home-btn');
     const prevBtn = document.getElementById('pagination-prev-btn');
     const nextBtn = document.getElementById('pagination-next-btn');
-    const numbersContainer = document.getElementById('pagination-numbers');
     const countBadge = document.getElementById('blog-count-badge');
 
     if (!grid) return;
@@ -255,7 +255,8 @@
       countBadge.textContent = `${ARTICLES_DATA.length} Articles`;
     }
 
-    renderCards(currentPage);
+    currentPaginationToken++;
+    renderCards(currentPage, currentPaginationToken);
     renderPagination();
 
     // Event listeners
@@ -350,35 +351,28 @@
   function goToPage(pageNum) {
     if (pageNum < 1 || pageNum > TOTAL_PAGES || pageNum === currentPage) return;
 
-    const grid = document.getElementById('blog-grid');
-    if (grid) {
-      grid.style.opacity = '0.35';
+    // Increment pagination generation token so any in-flight image loads from previous page are cleanly ignored
+    currentPaginationToken++;
+    const sessionToken = currentPaginationToken;
+
+    currentPage = pageNum;
+    renderCards(currentPage, sessionToken);
+    renderPagination();
+
+    // Smooth scroll back to blog section header if scrolled past
+    const section = document.getElementById('blog-section');
+    if (section) {
+      const rect = section.getBoundingClientRect();
+      if (rect.top < 0) {
+        window.scrollTo({
+          top: window.pageYOffset + rect.top - 80,
+          behavior: 'smooth'
+        });
+      }
     }
-
-    setTimeout(() => {
-      currentPage = pageNum;
-      renderCards(currentPage);
-      renderPagination();
-
-      if (grid) {
-        grid.style.opacity = '1';
-      }
-
-      // Smooth scroll back to blog section header if scrolled past
-      const section = document.getElementById('blog-section');
-      if (section) {
-        const rect = section.getBoundingClientRect();
-        if (rect.top < 0) {
-          window.scrollTo({
-            top: window.pageYOffset + rect.top - 80,
-            behavior: 'smooth'
-          });
-        }
-      }
-    }, 140);
   }
 
-  function renderCards(page) {
+  function renderCards(page, sessionToken) {
     const grid = document.getElementById('blog-grid');
     if (!grid) return;
 
@@ -392,14 +386,39 @@
         const iconSvg = isSaved ? SVG_BOOKMARK_MINUS : SVG_BOOKMARK_PLUS;
         return `
         <article class="blog-card" id="${item.id}">
-          <a href="${item.url}" class="blog-card-media" aria-label="${item.title}">
+          <a href="${item.url}" class="blog-card-media is-loading" aria-label="${item.title}">
+            <!-- Image skeleton shimmer placeholder -->
+            <div class="blog-card-skeleton" aria-hidden="true">
+              <div class="blog-skeleton-shimmer"></div>
+              <div class="blog-skeleton-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
+                  <circle cx="9" cy="9" r="2"/>
+                  <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Real Article Thumbnail -->
             <img
               src="${item.image}"
               alt="${item.alt}"
               class="blog-card-img"
               loading="lazy"
               referrerPolicy="no-referrer"
+              decoding="async"
             />
+
+            <!-- Error fallback -->
+            <div class="blog-card-img-fallback" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+              <span class="blog-fallback-text">Image unavailable</span>
+            </div>
+
             <button
               type="button"
               class="blog-card-save-btn ${isSaved ? 'is-saved' : ''}"
@@ -442,6 +461,57 @@
       .join('');
 
     attachSaveListeners();
+    setupCardImageLoaders(sessionToken || currentPaginationToken);
+  }
+
+  function setupCardImageLoaders(pageSessionToken) {
+    const grid = document.getElementById('blog-grid');
+    if (!grid) return;
+
+    const cards = grid.querySelectorAll('.blog-card');
+    cards.forEach((card) => {
+      const media = card.querySelector('.blog-card-media');
+      const img = card.querySelector('.blog-card-img');
+      const skeleton = card.querySelector('.blog-card-skeleton');
+      const fallback = card.querySelector('.blog-card-img-fallback');
+
+      if (!media || !img) return;
+
+      let handled = false;
+
+      function onLoaded() {
+        if (handled) return;
+        handled = true;
+        // Verify this callback belongs to the current active pagination session
+        if (pageSessionToken !== currentPaginationToken) return;
+
+        media.classList.remove('is-loading');
+        media.classList.add('is-loaded');
+      }
+
+      function onError() {
+        if (handled) return;
+        handled = true;
+        if (pageSessionToken !== currentPaginationToken) return;
+
+        media.classList.remove('is-loading');
+        media.classList.add('is-error');
+        if (skeleton) skeleton.style.display = 'none';
+        if (fallback) fallback.style.display = 'flex';
+      }
+
+      // Check if image is already cached and available immediately
+      if (img.complete) {
+        if (img.naturalWidth > 0) {
+          onLoaded();
+        } else {
+          onError();
+        }
+      } else {
+        img.addEventListener('load', onLoaded, { once: true });
+        img.addEventListener('error', onError, { once: true });
+      }
+    });
   }
 
   function renderPagination() {
