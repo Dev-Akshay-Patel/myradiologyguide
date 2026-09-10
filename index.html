@@ -47,6 +47,8 @@
     <script src="js/header.js" defer></script>
     <!-- Carousel Component Logic -->
     <script src="js/carousel.js" defer></script>
+    <!-- Central Post Data Engine -->
+    <script src="js/posts-data.js" defer></script>
     <!-- Blog Cards & Pagination Logic -->
     <script src="js/blog.js" defer></script>
   </head>
@@ -833,6 +835,16 @@
               <div class="blog-section-title-group">
                 <h3 class="blog-section-title">Clinical Articles</h3>
                 <span class="blog-count-badge" id="blog-count-badge">18 Articles</span>
+              </div>
+              <div class="blog-filter-indicator" id="blog-filter-indicator" style="display: none;">
+                <span class="blog-filter-text" id="blog-filter-text">Filtered by: </span>
+                <button type="button" class="blog-filter-clear-btn" id="blog-filter-clear-btn" aria-label="Clear active filter">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                  <span>Clear Filter</span>
+                </button>
               </div>
             </div>
 
@@ -1922,6 +1934,11 @@
             Clear
           </button>
         </form>
+
+        <!-- Live Real-Time Multi-Field Search Results -->
+        <div class="search-modal-results" id="search-modal-results" role="region" aria-label="Search results" aria-live="polite">
+          <!-- Dynamically populated from POSTS_DATA -->
+        </div>
 
         <div class="search-modal-footer">
           <span>Search or jump to...</span>

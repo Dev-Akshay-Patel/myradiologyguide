@@ -388,7 +388,9 @@
         e.preventDefault();
         const query = searchInput ? searchInput.value.trim() : '';
         if (query) {
-          console.log('Search query submitted:', query);
+          if (typeof window.radiologySearch === 'function') {
+            window.radiologySearch(query, `Query: "${query}"`);
+          }
           closeSearchModal();
         }
       });
