@@ -315,6 +315,11 @@
 
       // Attach click to filter blog grid by this topic
       item.onclick = (e) => {
+        if (!document.getElementById('blog-grid')) {
+          // On secondary pages (e.g. /books/), navigate directly to homepage anchor
+          window.location.href = `../index.html#topic-${dataTopic}`;
+          return;
+        }
         e.preventDefault();
         const nameSpan = item.querySelector('.topic-name');
         const topicName = nameSpan ? nameSpan.textContent.trim() : dataTopic;
@@ -783,40 +788,47 @@
 
       searchResults.innerHTML = `
         <div class="search-results-summary">
-          <span class="search-results-count">Found ${matches.length} articles</span>
-          <button type="button" class="search-summary-filter-btn" id="search-summary-filter-btn" title="Filter blog grid with this query">
-            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <span class="search-results-count">Found ${matches.length} ${matches.length === 1 ? 'article' : 'articles'}</span>
+        </div>
+        <div class="search-results-items-list">
+          ${matches.map((post) => `
+            <div class="search-result-item" data-id="${post.id}" data-url="${post.url}" tabindex="0" role="button" aria-label="Open ${post.title}">
+              <div class="search-result-content">
+                <div class="search-result-meta">
+                  <span class="search-result-in">in</span>
+                  <span class="search-result-labels">${post.Topic}</span>
+                </div>
+                <h4 class="search-result-title">${highlightText(post.title, query)}</h4>
+                <p class="search-result-desc">${highlightText(post.description, query)}</p>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+        <div class="search-filter-grid-action-wrap">
+          <button type="button" class="search-filter-grid-action-btn" id="search-filter-grid-action-btn" title="Filter the blog grid with this query">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
             </svg>
-            <span>Filter in Grid</span>
+            <span>CLICK TO FILTER GRID</span>
           </button>
         </div>
-        ${matches.map((post) => `
-          <div class="search-result-item" data-id="${post.id}" data-url="${post.url}" tabindex="0" role="button" aria-label="Open ${post.title}">
-            <div class="search-result-content">
-              <div class="search-result-meta">
-                <span class="search-result-in">in</span>
-                <span class="search-result-labels">${post.Topic}</span>
-                ${post.pinned ? `<span class="search-result-pinned-badge">Pinned</span>` : ''}
-              </div>
-              <h4 class="search-result-title">${highlightText(post.title, query)}</h4>
-              <p class="search-result-desc">${highlightText(post.description, query)}</p>
-            </div>
-          </div>
-        `).join('')}
       `;
 
-      // Filter in Grid summary button
-      const summaryFilterBtn = searchResults.querySelector('#search-summary-filter-btn');
-      if (summaryFilterBtn) {
-        summaryFilterBtn.addEventListener('click', (e) => {
+      // CLICK TO FILTER GRID action button
+      const filterGridBtn = searchResults.querySelector('#search-filter-grid-action-btn');
+      if (filterGridBtn) {
+        filterGridBtn.addEventListener('click', (e) => {
           e.preventDefault();
           e.stopPropagation();
-          filterByTerm(query, `Query: "${query}"`);
           closeSearchModal();
           const blogSection = document.getElementById('blog-posts') || document.getElementById('blog-grid');
           if (blogSection) {
+            filterByTerm(query, `Query: "${query}"`);
             blogSection.scrollIntoView({ behavior: 'smooth' });
+          } else {
+            // On secondary subpages (e.g. /books/), store query and navigate to homepage
+            sessionStorage.setItem('radiology_pending_filter', query);
+            window.location.href = `../index.html#blog-posts`;
           }
         });
       }
@@ -834,7 +846,11 @@
               if (targetEl) {
                 targetEl.scrollIntoView({ behavior: 'smooth' });
               } else {
-                window.location.hash = targetUrl;
+                if (window.location.pathname.includes('/books') || window.location.pathname.includes('/admin')) {
+                  window.location.href = `../index.html${targetUrl}`;
+                } else {
+                  window.location.hash = targetUrl;
+                }
               }
             } else {
               window.location.href = targetUrl;
@@ -905,6 +921,21 @@
     window.radiologySearch = filterByTerm;
     window.radiologyFilterByTopic = filterByTopic;
     window.radiologyClearFilter = clearFilter;
+
+    // Check pending filter from cross-page navigation
+    try {
+      const pendingQuery = sessionStorage.getItem('radiology_pending_filter');
+      if (pendingQuery) {
+        sessionStorage.removeItem('radiology_pending_filter');
+        filterByTerm(pendingQuery, `Query: "${pendingQuery}"`);
+        const blogSection = document.getElementById('blog-posts') || document.getElementById('blog-grid');
+        if (blogSection) {
+          blogSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    } catch (e) {
+      // ignore
+    }
   }
 
   if (document.readyState === 'loading') {

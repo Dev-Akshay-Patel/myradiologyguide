@@ -1198,6 +1198,8 @@
         closeTopicManager();
         closeCodeExportModal();
         closeImportModal();
+        closeBookModal();
+        closeBooksImportModal();
       }
       if ((e.ctrlKey || e.metaKey) && e.key === 's') {
         const editModal = document.getElementById('admin-edit-modal');
@@ -1207,6 +1209,454 @@
         }
       }
     });
+
+    // Initialize Admin Tab Navigation & Books Catalog CMS
+    initAdminTabs();
+    initBooksCatalog();
+  }
+
+  /* --------------------------------------------------------------------------
+     Admin Tab Navigation (Protocols vs Books Library)
+     -------------------------------------------------------------------------- */
+  function initAdminTabs() {
+    const tabProtocols = document.getElementById('nav-tab-protocols');
+    const tabBooks = document.getElementById('nav-tab-books');
+    const sectionProtocols = document.getElementById('admin-section-protocols');
+    const sectionBooks = document.getElementById('admin-section-books');
+
+    if (tabProtocols && tabBooks) {
+      tabProtocols.addEventListener('click', () => {
+        tabProtocols.classList.add('is-active');
+        tabBooks.classList.remove('is-active');
+        if (sectionProtocols) sectionProtocols.style.display = '';
+        if (sectionBooks) sectionBooks.style.display = 'none';
+      });
+
+      tabBooks.addEventListener('click', () => {
+        tabBooks.classList.add('is-active');
+        tabProtocols.classList.remove('is-active');
+        if (sectionProtocols) sectionProtocols.style.display = 'none';
+        if (sectionBooks) sectionBooks.style.display = 'flex';
+        renderBooksTable();
+      });
+    }
+  }
+
+  /* --------------------------------------------------------------------------
+     Best Books Library Catalog CMS
+     -------------------------------------------------------------------------- */
+  const BOOKS_STORAGE_KEY = 'radiology_books_data';
+  let books = [];
+  let booksSearchQuery = '';
+  let booksSortOption = 'title-asc';
+  let editingBookId = null;
+
+  async function initBooksCatalog() {
+    // 1. Try local storage
+    try {
+      const stored = localStorage.getItem(BOOKS_STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          books = parsed;
+        }
+      }
+    } catch (e) {
+      console.warn('Could not read books from localStorage', e);
+    }
+
+    // 2. Fetch /data/books.json if empty
+    if (!books || books.length === 0) {
+      try {
+        const res = await fetch('/data/books.json');
+        if (res.ok) {
+          books = await res.json();
+          localStorage.setItem(BOOKS_STORAGE_KEY, JSON.stringify(books, null, 2));
+        }
+      } catch (err) {
+        console.warn('Could not fetch /data/books.json', err);
+      }
+    }
+
+    updateBooksBadge();
+    renderBooksTable();
+    setupBooksEventListeners();
+  }
+
+  function persistBooks() {
+    try {
+      localStorage.setItem(BOOKS_STORAGE_KEY, JSON.stringify(books, null, 2));
+      window.dispatchEvent(new Event('radiology_books_updated'));
+    } catch (e) {
+      console.error('Error saving books to storage:', e);
+    }
+    updateBooksBadge();
+  }
+
+  function updateBooksBadge() {
+    const badge = document.getElementById('admin-books-count-badge');
+    if (badge) {
+      badge.textContent = books.length;
+    }
+  }
+
+  function parseSizeBytes(sizeStr) {
+    if (!sizeStr) return 0;
+    const str = String(sizeStr).trim().toUpperCase();
+    const match = str.match(/^([\d.]+)\s*([A-Z]+)?$/);
+    if (!match) return 0;
+    const val = parseFloat(match[1]) || 0;
+    const unit = match[2] || 'MB';
+    if (unit === 'GB') return val * 1024 * 1024 * 1024;
+    if (unit === 'MB') return val * 1024 * 1024;
+    if (unit === 'KB') return val * 1024;
+    return val * 1024 * 1024;
+  }
+
+  function renderBooksTable() {
+    const tbody = document.getElementById('admin-books-table-body');
+    if (!tbody) return;
+
+    let filtered = books.slice();
+
+    // Text search
+    if (booksSearchQuery) {
+      const q = booksSearchQuery.toLowerCase();
+      filtered = filtered.filter((b) => {
+        return (
+          (b.title && b.title.toLowerCase().includes(q)) ||
+          (b.size && b.size.toLowerCase().includes(q))
+        );
+      });
+    }
+
+    // Sort
+    filtered.sort((a, b) => {
+      switch (booksSortOption) {
+        case 'title-asc':
+          return (a.title || '').localeCompare(b.title || '');
+        case 'title-desc':
+          return (b.title || '').localeCompare(a.title || '');
+        case 'size-desc':
+          return parseSizeBytes(b.size) - parseSizeBytes(a.size);
+        case 'size-asc':
+          return parseSizeBytes(a.size) - parseSizeBytes(b.size);
+        default:
+          return (a.title || '').localeCompare(b.title || '');
+      }
+    });
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="4" style="text-align: center; padding: 32px 16px; color: var(--color-text-tertiary);">
+            No books found matching your filter criteria. Click <strong>Add New Book</strong> above to create one.
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tbody.innerHTML = filtered.map((b) => {
+      const escapedTitle = escapeHtml(b.title || 'Untitled');
+      const escapedSize = escapeHtml(b.size || '--');
+      const downloadLink = (b.downloadLink || b.link) ? escapeHtml(b.downloadLink || b.link) : null;
+
+      return `
+        <tr data-book-id="${escapeHtml(b.id)}">
+          <td>
+            <div class="admin-book-title-meta">
+              <span class="admin-book-title-text">${escapedTitle}</span>
+            </div>
+          </td>
+          <td>
+            <span style="font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; color: var(--color-text-secondary);">${escapedSize}</span>
+          </td>
+          <td>
+            <div class="admin-book-links-cell">
+              ${
+                downloadLink
+                  ? `<a href="${downloadLink}" target="_blank" rel="noopener noreferrer" class="admin-book-link-tag is-download" title="Open Download Link">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                      </svg>
+                      <span>Download</span>
+                    </a>`
+                  : '<span style="font-size: 11px; color: var(--color-text-tertiary);">No link</span>'
+              }
+            </div>
+          </td>
+          <td>
+            <div class="admin-book-actions">
+              <button type="button" class="admin-action-icon-btn btn-edit-book" data-id="${escapeHtml(b.id)}" title="Edit book details">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                </svg>
+              </button>
+              <button type="button" class="admin-action-icon-btn btn-duplicate-book" data-id="${escapeHtml(b.id)}" title="Duplicate book">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+              </button>
+              <button type="button" class="admin-action-icon-btn admin-book-btn-del btn-delete-book" data-id="${escapeHtml(b.id)}" title="Delete book">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    // Attach row button events
+    tbody.querySelectorAll('.btn-edit-book').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-id');
+        const b = books.find((x) => x.id === id);
+        if (b) openBookModal(b);
+      });
+    });
+
+    tbody.querySelectorAll('.btn-duplicate-book').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-id');
+        duplicateBook(id);
+      });
+    });
+
+    tbody.querySelectorAll('.btn-delete-book').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-id');
+        deleteBook(id);
+      });
+    });
+  }
+
+  function openBookModal(bookToEdit = null) {
+    const modal = document.getElementById('admin-book-modal');
+    const titleEl = document.getElementById('book-modal-title');
+    const idInput = document.getElementById('book-form-id');
+    const titleInput = document.getElementById('book-form-title');
+    const sizeInput = document.getElementById('book-form-size');
+    const downloadLinkInput = document.getElementById('book-form-download-link');
+
+    if (!modal) return;
+
+    if (bookToEdit) {
+      editingBookId = bookToEdit.id;
+      if (titleEl) titleEl.textContent = 'Edit Book Details';
+      if (idInput) idInput.value = bookToEdit.id;
+      if (titleInput) titleInput.value = bookToEdit.title || '';
+      if (sizeInput) sizeInput.value = bookToEdit.size || '';
+      if (downloadLinkInput) downloadLinkInput.value = bookToEdit.downloadLink || bookToEdit.link || '';
+    } else {
+      editingBookId = null;
+      if (titleEl) titleEl.textContent = 'Add New Book';
+      if (idInput) idInput.value = 'book-' + Date.now();
+      if (titleInput) titleInput.value = '';
+      if (sizeInput) sizeInput.value = '';
+      if (downloadLinkInput) downloadLinkInput.value = '';
+    }
+
+    modal.classList.add('is-active');
+    setTimeout(() => {
+      if (titleInput) titleInput.focus();
+    }, 100);
+  }
+
+  function closeBookModal() {
+    const modal = document.getElementById('admin-book-modal');
+    if (modal) modal.classList.remove('is-active');
+    editingBookId = null;
+  }
+
+  function handleBookFormSubmit(e) {
+    e.preventDefault();
+    const idInput = document.getElementById('book-form-id');
+    const titleInput = document.getElementById('book-form-title');
+    const sizeInput = document.getElementById('book-form-size');
+    const downloadLinkInput = document.getElementById('book-form-download-link');
+
+    const title = (titleInput ? titleInput.value : '').trim();
+    if (!title) {
+      alert('Book title is required');
+      return;
+    }
+
+    const id = (idInput && idInput.value) ? idInput.value : ('book-' + Date.now());
+    const size = (sizeInput ? sizeInput.value : '').trim() || '--';
+    const downloadLink = (downloadLinkInput ? downloadLinkInput.value : '').trim();
+
+    const bookObj = {
+      id: id,
+      title: title,
+      size: size,
+      downloadLink: downloadLink
+    };
+
+    const existingIndex = books.findIndex((b) => b.id === id);
+    if (existingIndex >= 0) {
+      books[existingIndex] = bookObj;
+      showToast('Book updated successfully!', 'success');
+    } else {
+      books.unshift(bookObj);
+      showToast('New book added to library!', 'success');
+    }
+
+    persistBooks();
+    renderBooksTable();
+    closeBookModal();
+  }
+
+  function duplicateBook(bookId) {
+    const orig = books.find((b) => b.id === bookId);
+    if (!orig) return;
+
+    const copy = {
+      ...orig,
+      id: 'book-' + Date.now(),
+      title: `${orig.title} (Copy)`
+    };
+
+    const origIdx = books.findIndex((b) => b.id === bookId);
+    books.splice(origIdx + 1, 0, copy);
+    persistBooks();
+    renderBooksTable();
+    showToast('Book duplicated successfully', 'success');
+  }
+
+  function deleteBook(bookId) {
+    const target = books.find((b) => b.id === bookId);
+    if (!target) return;
+
+    if (confirm(`Are you sure you want to remove "${target.title}" from the books catalog?`)) {
+      books = books.filter((b) => b.id !== bookId);
+      persistBooks();
+      renderBooksTable();
+      showToast('Book deleted from catalog', 'info');
+    }
+  }
+
+  function exportBooksJson() {
+    const dataStr = JSON.stringify(books, null, 2);
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'books.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('Downloaded books.json - Save in /data/books.json', 'success');
+  }
+
+  function openBooksImportModal() {
+    const modal = document.getElementById('admin-books-import-modal');
+    const textarea = document.getElementById('import-books-textarea');
+    if (modal && textarea) {
+      textarea.value = JSON.stringify(books, null, 2);
+      modal.classList.add('is-active');
+    }
+  }
+
+  function closeBooksImportModal() {
+    const modal = document.getElementById('admin-books-import-modal');
+    if (modal) modal.classList.remove('is-active');
+  }
+
+  function submitBooksImport() {
+    const textarea = document.getElementById('import-books-textarea');
+    if (!textarea) return;
+
+    try {
+      const parsed = JSON.parse(textarea.value.trim());
+      if (!Array.isArray(parsed)) {
+        alert('Invalid format: The imported data must be a JSON array of book objects.');
+        return;
+      }
+
+      books = parsed.map((item, idx) => ({
+        id: item.id || ('book-' + (idx + 1)),
+        title: item.title || 'Untitled Book',
+        size: item.size || '--',
+        downloadLink: item.downloadLink || item.link || ''
+      }));
+
+      persistBooks();
+      renderBooksTable();
+      closeBooksImportModal();
+      showToast(`Imported ${books.length} books successfully!`, 'success');
+    } catch (err) {
+      alert('JSON Parse Error: ' + err.message);
+    }
+  }
+
+  function setupBooksEventListeners() {
+    // Add Book button
+    const btnAdd = document.getElementById('btn-add-book');
+    if (btnAdd) btnAdd.onclick = () => openBookModal(null);
+
+    // Book Form submit
+    const bookForm = document.getElementById('admin-book-form');
+    if (bookForm) bookForm.onsubmit = handleBookFormSubmit;
+
+    // Cancel Book Modal
+    const btnCancelBook = document.getElementById('btn-cancel-book-modal');
+    if (btnCancelBook) btnCancelBook.onclick = closeBookModal;
+
+    const btnCloseBook = document.getElementById('btn-close-book-modal');
+    if (btnCloseBook) btnCloseBook.onclick = closeBookModal;
+
+    // Search input
+    const searchInput = document.getElementById('admin-books-search-input');
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        booksSearchQuery = e.target.value.trim();
+        renderBooksTable();
+      });
+    }
+
+    // Sort order
+    const sortSelect = document.getElementById('admin-books-sort');
+    if (sortSelect) {
+      sortSelect.addEventListener('change', (e) => {
+        booksSortOption = e.target.value;
+        renderBooksTable();
+      });
+    }
+
+    // Export Books JSON
+    const btnExport = document.getElementById('btn-export-books-json');
+    if (btnExport) btnExport.onclick = exportBooksJson;
+
+    // Import Books JSON
+    const btnImport = document.getElementById('btn-import-books-json');
+    if (btnImport) btnImport.onclick = openBooksImportModal;
+
+    const btnCloseImport = document.getElementById('btn-close-books-import-modal');
+    if (btnCloseImport) btnCloseImport.onclick = closeBooksImportModal;
+
+    const btnCancelImport = document.getElementById('btn-cancel-books-import');
+    if (btnCancelImport) btnCancelImport.onclick = closeBooksImportModal;
+
+    const btnSubmitImport = document.getElementById('btn-submit-books-import');
+    if (btnSubmitImport) btnSubmitImport.onclick = submitBooksImport;
+  }
+
+  function escapeHtml(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
   }
 
   // Run on DOM load

@@ -1,0 +1,679 @@
+/* ==========================================================================
+   BOOKS CSS - Best Books & Clinical Literature Library
+   Clean layout without images, consistent with site theme and tokens
+   ========================================================================== */
+
+.books-workspace {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg, 24px);
+  width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   Header & Intro Section
+   -------------------------------------------------------------------------- */
+.books-header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: 4px;
+}
+
+.books-breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--text-xs, 12.5px);
+  color: var(--color-text-tertiary);
+}
+
+.books-breadcrumb-link {
+  color: var(--color-text-tertiary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.books-breadcrumb-link:hover {
+  color: var(--accent-color);
+}
+
+.books-breadcrumb-sep {
+  opacity: 0.5;
+}
+
+.books-breadcrumb-current {
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.books-title-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.books-main-title {
+  font-family: var(--font-family-base);
+  font-size: clamp(22px, 2.5vw, 28px);
+  font-weight: 800;
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.books-subtitle {
+  font-size: var(--text-base, 15px);
+  color: var(--color-text-secondary);
+  line-height: 1.55;
+  margin: 0;
+  max-width: 780px;
+}
+
+
+
+
+/* --------------------------------------------------------------------------
+   Filter & Search Toolbar
+   -------------------------------------------------------------------------- */
+.books-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+  border-radius: var(--radius-md, 8px);
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+}
+
+.books-toolbar-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.books-search-box {
+  display: flex;
+  align-items: center;
+  position: relative;
+  flex: 1;
+  min-width: 240px;
+}
+
+.books-search-icon {
+  position: absolute;
+  left: 12px;
+  color: var(--color-text-tertiary);
+  pointer-events: none;
+}
+
+.books-search-input {
+  width: 100%;
+  height: 40px;
+  padding: 0 36px 0 38px;
+  border-radius: var(--radius-input, 8px);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-body);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-base);
+  font-size: var(--text-base, 14.5px);
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.books-search-input:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px var(--accent-ring);
+}
+
+.books-search-clear {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: var(--color-text-tertiary);
+  display: none;
+  border-radius: 4px;
+}
+
+.books-search-clear.is-visible {
+  display: flex;
+}
+
+.books-toolbar-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.books-select-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-sm, 13px);
+  color: var(--color-text-secondary);
+}
+
+.books-select {
+  height: 38px;
+  padding: 0 28px 0 10px;
+  border-radius: var(--radius-btn-subtle, 6px);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-body);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-base);
+  font-size: var(--text-sm, 13.5px);
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  background-image: url("data:image/svg2+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+}
+
+.books-select:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px var(--accent-ring);
+}
+
+.books-view-toggle {
+  display: inline-flex;
+  border-radius: var(--radius-btn-subtle, 6px);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-body);
+  padding: 2px;
+  gap: 2px;
+}
+
+.books-view-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  border: none;
+  background: none;
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.books-view-btn:hover {
+  color: var(--color-text-primary);
+}
+
+.books-view-btn.is-active {
+  background-color: var(--color-bg-surface);
+  color: var(--accent-color);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+
+
+
+/* --------------------------------------------------------------------------
+   Books Display: List / Table View (Dense, high-craft, NO images)
+   -------------------------------------------------------------------------- */
+.books-table-wrapper {
+  border-radius: var(--radius-md, 8px);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-surface);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+}
+
+.books-table {
+  width: 100%;
+  min-width: 540px;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.books-table th {
+  padding: 12px 16px;
+  font-size: var(--text-xs, 12.5px);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-tertiary);
+  background-color: var(--color-bg-body);
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+}
+
+.books-table th.th-book-title {
+  width: 66%;
+  text-align: left;
+}
+
+.books-table th.th-book-size {
+  width: 17%;
+  text-align: left;
+}
+
+.books-table th.th-book-download {
+  width: 17%;
+  text-align: center;
+}
+
+.books-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+  font-size: var(--text-sm, 14px);
+  color: var(--color-text-secondary);
+  text-align: left;
+}
+
+.books-table td.td-book-title {
+  text-align: left;
+}
+
+.books-table td.td-book-size {
+  text-align: left;
+}
+
+.books-table td.td-book-download {
+  text-align: center;
+}
+
+.books-table tr:last-child td {
+  border-bottom: none;
+}
+
+.books-table tr:hover td {
+  background-color: var(--color-bg-elevated);
+}
+
+/* Book Title Cell */
+.book-cell-title {
+  display: flex;
+  align-items: center;
+  text-align: left;
+}
+
+.book-title-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  text-align: left;
+}
+
+.book-primary-title {
+  font-family: var(--font-family-base);
+  font-size: var(--text-base, 15px);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  line-height: 1.4;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.book-primary-title:hover {
+  color: var(--accent-color);
+}
+
+/* Sub-size badge under title (shown only on mobile) */
+.book-sub-size {
+  display: none;
+}
+
+/* File Size Indicator */
+.book-size-badge {
+  font-family: var(--font-family-base);
+  font-size: var(--text-sm, 13.5px);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  text-align: left;
+}
+
+/* Action Buttons - Middle Aligned */
+.book-action-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: center;
+  text-align: center;
+}
+
+.book-no-download {
+  font-size: 13px;
+  color: var(--color-text-tertiary);
+  font-family: var(--font-mono);
+}
+
+/* Download Button: Icon-only, UI matched for Light and Dark modes (No hover state as requested) */
+.book-download-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  padding: 0;
+  border-radius: var(--radius-btn-subtle, 6px);
+  background-color: var(--header-btn-bg, var(--btn-subtle-bg));
+  border: 1px solid var(--header-btn-border, var(--btn-subtle-border));
+  color: var(--btn-icon-color, var(--color-text-primary));
+  cursor: pointer;
+  flex-shrink: 0;
+  position: relative;
+  overflow: visible;
+  outline: none;
+  margin: 0 auto;
+}
+
+.book-download-btn:active {
+  background-color: var(--header-btn-active-bg, var(--btn-subtle-active-bg));
+  transform: scale(0.96);
+}
+
+.book-download-btn:focus-visible {
+  box-shadow: 0 0 0 2px var(--color-bg-body), 0 0 0 4px var(--accent-color);
+}
+
+.book-download-btn svg:not(.container) {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.book-download-btn svg:not(.container) path {
+  stroke: currentColor;
+}
+
+.book-download-btn.is-loading {
+  cursor: wait;
+  pointer-events: none;
+  background-color: var(--header-btn-hover-bg, var(--btn-subtle-hover-bg));
+}
+
+.book-download-btn .container {
+  --uib-size: 19px;
+  --uib-color: currentColor;
+  --uib-bg-opacity: 0.2;
+}
+
+/* --------------------------------------------------------------------------
+   Background Fetch Spinner Loader
+   -------------------------------------------------------------------------- */
+.container {
+  --uib-size: 40px;
+  --uib-color: currentColor;
+  --uib-speed: .8s;
+  --uib-bg-opacity: 0.15;
+  height: var(--uib-size);
+  width: var(--uib-size);
+  transform-origin: center;
+  animation: rotate var(--uib-speed) linear infinite;
+  will-change: transform;
+  overflow: visible;
+}
+
+.car {
+  fill: none;
+  stroke: var(--uib-color, currentColor);
+  stroke-dasharray: 25, 75;
+  stroke-dashoffset: 0;
+  stroke-linecap: round;
+  transition: stroke 0.5s ease;
+}
+
+.track {
+  fill: none;
+  stroke: var(--uib-color, currentColor);
+  opacity: var(--uib-bg-opacity, 0.2);
+  transition: stroke 0.5s ease;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Books Display: Cards Grid View (Dense cards with NO images)
+   -------------------------------------------------------------------------- */
+.books-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.book-card-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px;
+  border-radius: var(--radius-md, 8px);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-surface);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  transition: all var(--transition-normal);
+  gap: 14px;
+}
+
+.book-card-item:hover {
+  border-color: color-mix(in srgb, var(--accent-color) 40%, var(--color-border));
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transform: translateY(-1px);
+}
+
+.book-card-top {
+  display: flex;
+  align-items: flex-start;
+}
+
+.book-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.book-card-title {
+  font-family: var(--font-family-base);
+  font-size: var(--text-base, 15px);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.book-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border);
+  gap: 10px;
+}
+
+/* --------------------------------------------------------------------------
+   Empty State & Loading Shimmer
+   -------------------------------------------------------------------------- */
+.books-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  text-align: center;
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md, 8px);
+  gap: 12px;
+}
+
+.books-empty-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background-color: var(--color-bg-body);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-tertiary);
+  margin-bottom: 4px;
+}
+
+.books-empty-title {
+  font-family: var(--font-family-base);
+  font-size: var(--text-lg, 17px);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.books-empty-desc {
+  font-size: var(--text-sm, 13.5px);
+  color: var(--color-text-secondary);
+  margin: 0;
+  max-width: 460px;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .books-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .books-search-box {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .books-toolbar-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .books-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 680px) {
+  .books-table-wrapper {
+    overflow-x: hidden;
+    border-radius: var(--radius-md, 8px);
+  }
+
+  .books-table {
+    min-width: 100%;
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  .books-table th,
+  .books-table td {
+    padding: 10px 8px;
+    font-size: 13px;
+  }
+
+  .books-table th:first-child,
+  .books-table td:first-child {
+    padding-left: 12px;
+  }
+
+  .books-table th:last-child,
+  .books-table td:last-child {
+    padding-right: 12px;
+  }
+
+  /* Title column takes all remaining flex width */
+  .books-table th.th-book-title,
+  .books-table td.td-book-title {
+    width: auto;
+    padding-right: 8px;
+  }
+
+  /* Hide separate Size column on mobile so Download column gets full room without cutting */
+  .books-table th.th-book-size,
+  .books-table td.td-book-size {
+    display: none;
+  }
+
+  /* Show size badge directly underneath the book title on mobile */
+  .book-sub-size {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 5px;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    background-color: var(--header-btn-bg, var(--btn-subtle-bg));
+    border: 1px solid var(--header-btn-border, var(--btn-subtle-border));
+    padding: 2px 7px;
+    border-radius: 4px;
+    width: fit-content;
+    white-space: nowrap;
+  }
+
+  /* Dedicated Download column on mobile with ample room for the header text */
+  .books-table th.th-book-download,
+  .books-table td.td-book-download {
+    width: 90px;
+    min-width: 86px;
+    padding-left: 4px;
+    padding-right: 12px;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .book-primary-title {
+    font-size: 13.5px;
+    line-height: 1.35;
+    word-break: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .book-action-group {
+    justify-content: center;
+    margin: 0 auto;
+  }
+
+  .book-download-btn {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border-radius: 7px;
+  }
+
+  .book-download-btn svg:not(.container) {
+    width: 19px;
+    height: 19px;
+  }
+
+  .book-download-btn .container {
+    --uib-size: 18px;
+  }
+}
+

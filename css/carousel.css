@@ -38,6 +38,13 @@
   align-items: start;
 }
 
+@media (min-width: 860px) {
+  .content-layout {
+    grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr);
+    gap: var(--page-gutter, 12px);
+  }
+}
+
 @media (min-width: 1024px) {
   .content-layout {
     /* Slightly trimmer medium proportion for right companion panel */

@@ -97,8 +97,34 @@
       </div>
     </header>
 
+    <!-- Tab Switcher Bar: Protocols vs Books Library -->
+    <div class="admin-nav-tabs-bar">
+      <div class="admin-nav-tabs">
+        <button type="button" class="admin-nav-tab is-active" id="nav-tab-protocols">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+          <span>Clinical Protocols</span>
+        </button>
+        <button type="button" class="admin-nav-tab" id="nav-tab-books">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path>
+            <path d="M6 6h10"></path>
+            <path d="M6 10h10"></path>
+          </svg>
+          <span>Best Books Library</span>
+          <span class="admin-tab-count" id="admin-books-count-badge">0</span>
+        </button>
+      </div>
+    </div>
+
     <!-- Main Workspace -->
     <main class="admin-main">
+      <div id="admin-section-protocols">
       <!-- Top Overview: Pinned Post & Popular Rankings 1-5 -->
       <section class="admin-overview-grid" aria-label="Core Placements">
         <!-- Pinned Post Controller Box -->
@@ -215,6 +241,88 @@
       <!-- Main Posts Cards Grid -->
       <section class="admin-posts-grid" id="admin-posts-grid" aria-label="Protocols Cards Grid">
         <!-- Dynamically populated -->
+      </section>
+      </div> <!-- End #admin-section-protocols -->
+
+      <!-- Books Library Catalog Management Section -->
+      <section id="admin-section-books" class="admin-books-section" style="display: none;" aria-label="Books Catalog Manager">
+        <!-- Books Top Bar -->
+        <div class="admin-books-header-bar">
+          <div class="admin-books-header-text">
+            <h2 class="admin-books-title">Best Radiology Books Catalog</h2>
+            <p class="admin-books-subtitle">Manage books title, size, and direct download links.</p>
+          </div>
+          <div class="admin-books-header-actions">
+            <button type="button" class="admin-btn" id="btn-import-books-json" title="Import books JSON array">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+              <span>Import</span>
+            </button>
+            <button type="button" class="admin-btn" id="btn-export-books-json" title="Export books.json file">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span>Export books.json</span>
+            </button>
+            <button type="button" class="admin-btn admin-btn-primary" id="btn-add-book">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              <span>Add New Book</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Books Search & Filter Toolbar -->
+        <div class="admin-toolbar">
+          <div class="admin-toolbar-row">
+            <div class="admin-search-wrapper">
+              <svg class="admin-search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input
+                type="text"
+                id="admin-books-search-input"
+                class="admin-search-input"
+                placeholder="Search books by title or size..."
+                aria-label="Filter books"
+              />
+            </div>
+
+            <div class="admin-filter-group">
+              <select id="admin-books-sort" class="admin-select" aria-label="Sort Order">
+                <option value="title-asc">Title (A → Z)</option>
+                <option value="title-desc">Title (Z → A)</option>
+                <option value="size-desc">Size (Largest First)</option>
+                <option value="size-asc">Size (Smallest First)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Books Table List -->
+        <div class="admin-books-table-wrapper">
+          <table class="admin-books-table">
+            <thead>
+              <tr>
+                <th style="width: 52%;">Book Title</th>
+                <th style="width: 16%;">Size</th>
+                <th style="width: 18%;">Download Link</th>
+                <th style="width: 14%; text-align: right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-books-table-body">
+              <!-- Dynamically populated via admin.js -->
+            </tbody>
+          </table>
+        </div>
       </section>
     </main>
 
@@ -435,6 +543,91 @@
         <div class="admin-modal-footer">
           <button type="button" class="admin-btn" id="btn-cancel-import" onclick="document.getElementById('admin-import-modal').classList.remove('is-active')">Cancel</button>
           <button type="button" class="admin-btn admin-btn-primary" id="btn-submit-import">Import and Edit</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Add / Edit Book -->
+    <div class="admin-modal-backdrop" id="admin-book-modal" role="dialog" aria-modal="true" aria-labelledby="book-modal-title">
+      <div class="admin-modal-card" style="max-width: 620px;">
+        <div class="admin-modal-header">
+          <h3 class="admin-modal-title" id="book-modal-title">Add New Book</h3>
+          <button type="button" class="admin-modal-close-btn" id="btn-close-book-modal" aria-label="Close modal">✕</button>
+        </div>
+
+        <form id="admin-book-form">
+          <div class="admin-modal-body">
+            <input type="hidden" id="book-form-id" />
+
+            <!-- Title -->
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="book-form-title">
+                <span>Book Title</span>
+                <span style="color: #dc2626;">*</span>
+              </label>
+              <input
+                type="text"
+                id="book-form-title"
+                class="admin-form-input"
+                required
+                placeholder="e.g. Osborn's Brain: Imaging, Pathology, and Anatomy"
+              />
+            </div>
+
+            <!-- Size -->
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="book-form-size">
+                <span>Size</span>
+              </label>
+              <input
+                type="text"
+                id="book-form-size"
+                class="admin-form-input"
+                placeholder="e.g. 164.8 MB, 95 MB, 1.2 GB"
+              />
+            </div>
+
+            <!-- Download Link -->
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="book-form-download-link">
+                <span>Download Link</span>
+              </label>
+              <input
+                type="url"
+                id="book-form-download-link"
+                class="admin-form-input"
+                placeholder="https://example.com/download/osborn.pdf"
+              />
+              <span class="admin-form-label-hint">Direct file download or access link.</span>
+            </div>
+          </div>
+
+          <div class="admin-modal-footer">
+            <button type="button" class="admin-btn" id="btn-cancel-book-modal">Cancel</button>
+            <button type="submit" class="admin-btn admin-btn-primary" id="btn-save-book">Save Book</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal: Import Books JSON -->
+    <div class="admin-modal-backdrop" id="admin-books-import-modal" role="dialog" aria-modal="true" aria-labelledby="books-import-modal-title">
+      <div class="admin-modal-card" style="max-width: 620px;">
+        <div class="admin-modal-header">
+          <h3 class="admin-modal-title" id="books-import-modal-title">Import Books JSON</h3>
+          <button type="button" class="admin-modal-close-btn" id="btn-close-books-import-modal" aria-label="Close modal">✕</button>
+        </div>
+
+        <div class="admin-modal-body">
+          <p style="font-size: 12.5px; color: var(--color-text-secondary); margin: 0 0 8px 0;">
+            Paste your <code>books.json</code> array below to load into the catalog:
+          </p>
+          <textarea id="import-books-textarea" class="admin-form-textarea" rows="12" placeholder="[ { &quot;id&quot;: &quot;book-1&quot;, &quot;title&quot;: &quot;...&quot;, &quot;edition&quot;: &quot;2nd Edition&quot;, &quot;bookType&quot;: &quot;PDF&quot;, &quot;size&quot;: &quot;164.8 MB&quot;, &quot;link&quot;: &quot;...&quot;, &quot;downloadLink&quot;: &quot;...&quot; } ]"></textarea>
+        </div>
+
+        <div class="admin-modal-footer">
+          <button type="button" class="admin-btn" id="btn-cancel-books-import">Cancel</button>
+          <button type="button" class="admin-btn admin-btn-primary" id="btn-submit-books-import">Import Books</button>
         </div>
       </div>
     </div>

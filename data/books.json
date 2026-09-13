@@ -1,0 +1,146 @@
+[
+  {
+    "id": "book-1",
+    "title": "Osborn's Brain: Imaging, Pathology, and Anatomy",
+    "edition": "2nd Edition",
+    "bookType": "PDF",
+    "size": "164.8 MB",
+    "link": "https://example.com/books/osborns-brain-2nd-ed",
+    "downloadLink": "https://example.com/download/osborns-brain-2nd-ed.pdf"
+  },
+  {
+    "id": "book-2",
+    "title": "Diagnostic Imaging: Brain",
+    "edition": "4th Edition",
+    "bookType": "PDF",
+    "size": "215.4 MB",
+    "link": "https://example.com/books/diagnostic-imaging-brain-4th",
+    "downloadLink": "https://example.com/download/diagnostic-imaging-brain-4th.pdf"
+  },
+  {
+    "id": "book-3",
+    "title": "Barkovich Pediatric Neuroimaging",
+    "edition": "6th Edition",
+    "bookType": "EPUB",
+    "size": "98.2 MB",
+    "link": "https://example.com/books/barkovich-pediatric-neuroimaging-6th",
+    "downloadLink": "https://example.com/download/barkovich-pediatric-neuroimaging-6th.epub"
+  },
+  {
+    "id": "book-4",
+    "title": "Fundamentals of Body CT",
+    "edition": "5th Edition",
+    "bookType": "PDF",
+    "size": "84.5 MB",
+    "link": "https://example.com/books/fundamentals-body-ct-5th",
+    "downloadLink": "https://example.com/download/fundamentals-body-ct-5th.pdf"
+  },
+  {
+    "id": "book-5",
+    "title": "Fundamentals of Body CT",
+    "edition": "4th Edition",
+    "bookType": "PDF",
+    "size": "76.1 MB",
+    "link": "https://example.com/books/fundamentals-body-ct-4th",
+    "downloadLink": "https://example.com/download/fundamentals-body-ct-4th.pdf"
+  },
+  {
+    "id": "book-6",
+    "title": "Webb, Müller and Naidich's High-Resolution CT of the Lung",
+    "edition": "5th Edition",
+    "bookType": "PDF",
+    "size": "112.3 MB",
+    "link": "https://example.com/books/hrct-lung-5th",
+    "downloadLink": "https://example.com/download/hrct-lung-5th.pdf"
+  },
+  {
+    "id": "book-7",
+    "title": "Musculoskeletal Imaging: The Requisites",
+    "edition": "4th Edition",
+    "bookType": "PDF",
+    "size": "145.0 MB",
+    "link": "https://example.com/books/msk-imaging-requisites-4th",
+    "downloadLink": "https://example.com/download/msk-imaging-requisites-4th.pdf"
+  },
+  {
+    "id": "book-8",
+    "title": "Diagnostic Ultrasound: Musculoskeletal",
+    "edition": "2nd Edition",
+    "bookType": "EPUB",
+    "size": "68.4 MB",
+    "link": "https://example.com/books/diagnostic-ultrasound-msk-2nd",
+    "downloadLink": "https://example.com/download/diagnostic-ultrasound-msk-2nd.epub"
+  },
+  {
+    "id": "book-9",
+    "title": "Caffey's Pediatric Diagnostic Imaging",
+    "edition": "13th Edition",
+    "bookType": "PDF",
+    "size": "410.5 MB",
+    "link": "https://example.com/books/caffeys-pediatric-imaging-13th",
+    "downloadLink": "https://example.com/download/caffeys-pediatric-imaging-13th.pdf"
+  },
+  {
+    "id": "book-10",
+    "title": "Pediatric Radiology: The Requisites",
+    "edition": "4th Edition",
+    "bookType": "PDF",
+    "size": "92.3 MB",
+    "link": "https://example.com/books/pediatric-radiology-requisites-4th",
+    "downloadLink": "https://example.com/download/pediatric-radiology-requisites-4th.pdf"
+  },
+  {
+    "id": "book-11",
+    "title": "Christensen's Physics of Diagnostic Radiology",
+    "edition": "4th Edition",
+    "bookType": "PDF",
+    "size": "72.8 MB",
+    "link": "https://example.com/books/christensens-physics-4th",
+    "downloadLink": "https://example.com/download/christensens-physics-4th.pdf"
+  },
+  {
+    "id": "book-12",
+    "title": "Brant and Helms' Fundamentals of Diagnostic Radiology",
+    "edition": "5th Edition",
+    "bookType": "PDF",
+    "size": "580.4 MB",
+    "link": "https://example.com/books/brant-and-helms-5th",
+    "downloadLink": "https://example.com/download/brant-and-helms-5th.pdf"
+  },
+  {
+    "id": "book-13",
+    "title": "Brant and Helms' Fundamentals of Diagnostic Radiology",
+    "edition": "4th Edition",
+    "bookType": "PDF",
+    "size": "520.1 MB",
+    "link": "https://example.com/books/brant-and-helms-4th",
+    "downloadLink": "https://example.com/download/brant-and-helms-4th.pdf"
+  },
+  {
+    "id": "book-14",
+    "title": "Radiology Core Exam: A Core Review",
+    "edition": "2nd Edition",
+    "bookType": "PDF",
+    "size": "88.6 MB",
+    "link": "https://example.com/books/radiology-core-exam-review-2nd",
+    "downloadLink": "https://example.com/download/radiology-core-exam-review-2nd.pdf"
+  },
+  {
+    "id": "book-15",
+    "title": "Crack the Core Exam: Volume 1",
+    "edition": "Vol 1 (6th Ed)",
+    "bookType": "EPUB",
+    "size": "45.2 MB",
+    "link": "https://example.com/books/crack-the-core-vol1",
+    "downloadLink": "https://example.com/download/crack-the-core-vol1.epub"
+  },
+  {
+    "id": "book-16",
+    "title": "Crack the Core Exam: Volume 2",
+    "edition": "Vol 2 (6th Ed)",
+    "bookType": "EPUB",
+    "size": "48.1 MB",
+    "link": "https://example.com/books/crack-the-core-vol2",
+    "downloadLink": "https://example.com/download/crack-the-core-vol2.epub"
+  }
+]
