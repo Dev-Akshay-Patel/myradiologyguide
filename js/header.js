@@ -356,9 +356,15 @@
 
     if (searchModalOverlay) {
       searchModalOverlay.addEventListener('click', (e) => {
-        if (searchModal && !searchModal.contains(e.target)) {
+        if (e.target === searchModalOverlay) {
           closeSearchModal();
         }
+      });
+    }
+
+    if (searchModal) {
+      searchModal.addEventListener('click', (e) => {
+        e.stopPropagation();
       });
     }
 
@@ -488,9 +494,15 @@
     // Close when clicking outside theme modal card
     if (themeModalOverlay) {
       themeModalOverlay.addEventListener('click', (e) => {
-        if (themeModal && !themeModal.contains(e.target)) {
+        if (e.target === themeModalOverlay) {
           closeThemeModal();
         }
+      });
+    }
+
+    if (themeModal) {
+      themeModal.addEventListener('click', (e) => {
+        e.stopPropagation();
       });
     }
 

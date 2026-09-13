@@ -12,10 +12,23 @@
 (function () {
   'use strict';
 
-  // Fallback if posts-data.js hasn't loaded yet
-  const POSTS = (typeof window !== 'undefined' && Array.isArray(window.POSTS_DATA))
-    ? window.POSTS_DATA
-    : [];
+  // Load posts: check admin draft in localStorage first, then fallback to window.POSTS_DATA
+  let POSTS = [];
+  try {
+    const draft = localStorage.getItem('radiology_admin_draft_posts');
+    if (draft) {
+      const parsed = JSON.parse(draft);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        POSTS = parsed;
+      }
+    }
+  } catch (e) {
+    console.warn('Could not load admin draft posts', e);
+  }
+
+  if (POSTS.length === 0 && typeof window !== 'undefined' && Array.isArray(window.POSTS_DATA)) {
+    POSTS = window.POSTS_DATA;
+  }
 
   const ITEMS_PER_PAGE = 6;
   let activePosts = [...POSTS];
@@ -472,21 +485,6 @@
               <span class="blog-fallback-text">Image unavailable</span>
             </div>
 
-            <!-- Copy Direct Image URL Action -->
-            <button
-              type="button"
-              class="blog-card-img-copy-btn"
-              data-img-url="${item.thumbnail}"
-              title="Copy direct image link"
-              aria-label="Copy direct image link for ${item.title}"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
-                <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
-              </svg>
-              <span class="img-btn-label">Image</span>
-            </button>
-
             <!-- Save Protocol Button -->
             <button
               type="button"
@@ -531,36 +529,8 @@
       .join('');
 
     attachSaveListeners();
-    attachImageCopyListeners();
     setupCardImageLoaders(sessionToken);
     renderPagination(totalPages);
-  }
-
-  /**
-   * Clipboard helper to copy image links
-   */
-  function attachImageCopyListeners() {
-    document.querySelectorAll('.blog-card-img-copy-btn').forEach((btn) => {
-      btn.onclick = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        const url = btn.getAttribute('data-img-url');
-        if (!url) return;
-
-        navigator.clipboard.writeText(url).then(() => {
-          const label = btn.querySelector('.img-btn-label');
-          btn.classList.add('is-copied');
-          if (label) label.textContent = 'Copied!';
-          setTimeout(() => {
-            btn.classList.remove('is-copied');
-            if (label) label.textContent = 'Image';
-          }, 2000);
-        }).catch(() => {
-          // Fallback
-          window.open(url, '_blank', 'noopener,noreferrer');
-        });
-      };
-    });
   }
 
   function setupCardImageLoaders(pageSessionToken) {
@@ -757,11 +727,17 @@
       `;
 
       searchResults.querySelectorAll('.search-suggested-tag').forEach((btn) => {
-        btn.onclick = () => {
+        btn.onclick = (e) => {
+          if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
           const tag = btn.getAttribute('data-tag');
           if (tag) {
             searchInput.value = tag;
+            if (clearBtn) clearBtn.classList.add('is-visible');
             performSearch(tag);
+            searchInput.focus();
           }
         };
       });
@@ -799,7 +775,7 @@
         searchResults.innerHTML = `
           <div class="search-empty-state">
             <p class="search-empty-title">No notes or protocols found for "${query}"</p>
-            <p style="font-size: 12px; margin: 0;">Try synonyms like "CT", "MRI", "Stroke", "Trauma", or "LGE"</p>
+            <p class="search-empty-desc">Try synonyms like "CT", "MRI", "Stroke", "Trauma", or "LGE"</p>
           </div>
         `;
         return;
@@ -807,61 +783,71 @@
 
       searchResults.innerHTML = `
         <div class="search-results-summary">
-          <span>Found ${matches.length} articles</span>
-          <span style="font-size: 10.5px; opacity: 0.8;">Press Enter to filter grid</span>
+          <span class="search-results-count">Found ${matches.length} articles</span>
+          <button type="button" class="search-summary-filter-btn" id="search-summary-filter-btn" title="Filter blog grid with this query">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+            </svg>
+            <span>Filter in Grid</span>
+          </button>
         </div>
         ${matches.map((post) => `
-          <div class="search-result-item" data-id="${post.id}" data-url="${post.url}" tabindex="0" role="button">
-            <img src="${post.thumbnail}" alt="${post.title}" class="search-result-thumb" loading="lazy" />
+          <div class="search-result-item" data-id="${post.id}" data-url="${post.url}" tabindex="0" role="button" aria-label="Open ${post.title}">
             <div class="search-result-content">
-              <div class="search-result-top">
-                <span class="search-result-topic">${post.Topic}</span>
-                ${post.pinned ? `<span class="search-result-pinned-tag">Pinned</span>` : ''}
-                <span class="search-result-time">• ${post.readTime || '5 min read'}</span>
+              <div class="search-result-meta">
+                <span class="search-result-in">in</span>
+                <span class="search-result-labels">${post.Topic}</span>
+                ${post.pinned ? `<span class="search-result-pinned-badge">Pinned</span>` : ''}
               </div>
               <h4 class="search-result-title">${highlightText(post.title, query)}</h4>
               <p class="search-result-desc">${highlightText(post.description, query)}</p>
-              <div class="search-result-actions">
-                <button type="button" class="search-action-btn search-filter-now-btn" data-id="${post.id}">
-                  Filter In Grid
-                </button>
-                <button type="button" class="search-action-btn search-copy-img-btn" data-img="${post.thumbnail}">
-                  Copy Image Link
-                </button>
-              </div>
             </div>
           </div>
         `).join('')}
       `;
 
-      // Click result to filter
-      searchResults.querySelectorAll('.search-result-item').forEach((item) => {
-        item.addEventListener('click', (e) => {
-          // If clicked the copy button, don't close
-          if (e.target.closest('.search-copy-img-btn')) return;
-          const postId = item.getAttribute('data-id');
-          const matchedPost = POSTS.find((p) => p.id === postId);
-          if (matchedPost) {
-            filterByTerm(matchedPost.title, matchedPost.title);
-            closeSearchModal();
+      // Filter in Grid summary button
+      const summaryFilterBtn = searchResults.querySelector('#search-summary-filter-btn');
+      if (summaryFilterBtn) {
+        summaryFilterBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          filterByTerm(query, `Query: "${query}"`);
+          closeSearchModal();
+          const blogSection = document.getElementById('blog-posts') || document.getElementById('blog-grid');
+          if (blogSection) {
+            blogSection.scrollIntoView({ behavior: 'smooth' });
           }
         });
-      });
+      }
 
-      // Copy image button inside search modal
-      searchResults.querySelectorAll('.search-copy-img-btn').forEach((btn) => {
-        btn.onclick = (e) => {
+      // Click on post result directly: navigate to that page/post with NO grid filter
+      searchResults.querySelectorAll('.search-result-item').forEach((item) => {
+        const navigateDirectly = (e) => {
+          e.preventDefault();
           e.stopPropagation();
-          const imgUrl = btn.getAttribute('data-img');
-          if (imgUrl) {
-            navigator.clipboard.writeText(imgUrl).then(() => {
-              btn.textContent = 'Copied!';
-              setTimeout(() => {
-                btn.textContent = 'Copy Image Link';
-              }, 1800);
-            });
+          const targetUrl = item.getAttribute('data-url');
+          closeSearchModal();
+          if (targetUrl) {
+            if (targetUrl.startsWith('#')) {
+              const targetEl = document.querySelector(targetUrl) || document.getElementById(targetUrl.replace(/^#/, ''));
+              if (targetEl) {
+                targetEl.scrollIntoView({ behavior: 'smooth' });
+              } else {
+                window.location.hash = targetUrl;
+              }
+            } else {
+              window.location.href = targetUrl;
+            }
           }
         };
+
+        item.addEventListener('click', navigateDirectly);
+        item.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            navigateDirectly(e);
+          }
+        });
       });
     }
 
