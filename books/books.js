@@ -35,6 +35,10 @@
   let searchInput;
   let searchClearBtn;
   let sortSelect;
+  let sortDropdown;
+  let sortTrigger;
+  let sortMenu;
+  let sortSelectedText;
   let viewTableBtn;
   let viewGridBtn;
 
@@ -43,6 +47,10 @@
     searchInput = document.getElementById('books-search-input');
     searchClearBtn = document.getElementById('books-search-clear');
     sortSelect = document.getElementById('books-sort-select');
+    sortDropdown = document.getElementById('books-sort-dropdown');
+    sortTrigger = document.getElementById('books-sort-trigger');
+    sortMenu = document.getElementById('books-sort-menu');
+    sortSelectedText = document.getElementById('books-sort-selected-text');
     viewTableBtn = document.getElementById('view-table-btn');
     viewGridBtn = document.getElementById('view-grid-btn');
   }
@@ -165,7 +173,99 @@
       });
     }
 
-    // Sort selector
+    // Custom Sort Dropdown Handler
+    if (sortTrigger && sortMenu) {
+      const sortOptions = sortMenu.querySelectorAll('.books-sort-option');
+
+      function closeSortMenu() {
+        sortMenu.classList.remove('is-open');
+        sortTrigger.setAttribute('aria-expanded', 'false');
+      }
+
+      function openSortMenu() {
+        sortMenu.classList.add('is-open');
+        sortTrigger.setAttribute('aria-expanded', 'true');
+        const activeOpt = sortMenu.querySelector('.books-sort-option.is-active');
+        if (activeOpt) activeOpt.focus();
+      }
+
+      sortTrigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = sortMenu.classList.contains('is-open');
+        if (isOpen) {
+          closeSortMenu();
+        } else {
+          openSortMenu();
+        }
+      });
+
+      sortOptions.forEach((option) => {
+        const selectOption = () => {
+          const val = option.getAttribute('data-value');
+          if (!val) return;
+          sortBy = val;
+
+          sortOptions.forEach((opt) => {
+            const isMatch = opt.getAttribute('data-value') === val;
+            opt.classList.toggle('is-active', isMatch);
+            opt.setAttribute('aria-selected', isMatch ? 'true' : 'false');
+          });
+
+          const labelSpan = option.querySelector('.sort-option-label') || option.querySelector('span');
+          if (labelSpan && sortSelectedText) {
+            sortSelectedText.innerHTML = labelSpan.innerHTML.trim();
+          }
+
+          if (sortSelect) {
+            sortSelect.value = val;
+          }
+
+          closeSortMenu();
+          sortTrigger.focus();
+          applyFilterAndRender();
+        };
+
+        option.addEventListener('click', (e) => {
+          e.stopPropagation();
+          selectOption();
+        });
+
+        option.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            selectOption();
+          } else if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            const next = option.nextElementSibling;
+            if (next && next.classList.contains('books-sort-option')) next.focus();
+          } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            const prev = option.previousElementSibling;
+            if (prev && prev.classList.contains('books-sort-option')) prev.focus();
+          } else if (e.key === 'Escape') {
+            closeSortMenu();
+            sortTrigger.focus();
+          }
+        });
+      });
+
+      // Close on click outside
+      document.addEventListener('click', (e) => {
+        if (sortDropdown && !sortDropdown.contains(e.target)) {
+          closeSortMenu();
+        }
+      });
+
+      // Close on Escape
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && sortMenu.classList.contains('is-open')) {
+          closeSortMenu();
+          sortTrigger.focus();
+        }
+      });
+    }
+
+    // Sort selector fallback
     if (sortSelect) {
       sortSelect.addEventListener('change', (e) => {
         sortBy = e.target.value;
@@ -209,18 +309,15 @@
       }
     });
 
-    // Custom local event for same-tab updates
-    window.addEventListener('radiology_books_updated', () => {
-      const cached = localStorage.getItem(STORAGE_KEY);
-      if (cached) {
-        try {
-          booksData = JSON.parse(cached);
-          parsedBooks = processBooksData(booksData);
+    // Handle viewport resize: ensure mobile view is consistently table view
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        if (window.innerWidth <= 768 && viewMode === 'grid') {
           applyFilterAndRender();
-        } catch (err) {
-          console.error(err);
         }
-      }
+      }, 150);
     });
   }
 
@@ -240,7 +337,7 @@
     // 1. Enter Loading State
     btn.classList.add('is-loading');
     btn.setAttribute('aria-busy', 'true');
-    btn.setAttribute('aria-label', `Downloading ${bookTitle}...`);
+    btn.setAttribute('aria-label', `Saving ${bookTitle}...`);
     btn.innerHTML = LOADER_SVG;
 
     const minLoadTime = 1100; // minimum duration so user sees smooth spinner
@@ -315,7 +412,7 @@
     // 5. Restore Button State
     btn.classList.remove('is-loading');
     btn.removeAttribute('aria-busy');
-    btn.setAttribute('aria-label', `Download ${bookTitle}`);
+    btn.setAttribute('aria-label', `Save ${bookTitle}`);
     btn.innerHTML = DOWNLOAD_ICON_SVG;
   }
 
@@ -373,7 +470,8 @@
       return;
     }
 
-    if (viewMode === 'table') {
+    const isMobile = window.innerWidth <= 768;
+    if (viewMode === 'table' || isMobile) {
       renderTableView(books);
     } else {
       renderGridView(books);
@@ -388,7 +486,7 @@
             <tr>
               <th scope="col" class="th-book-title">Book Title</th>
               <th scope="col" class="th-book-size">Size</th>
-              <th scope="col" class="th-book-download">Download</th>
+              <th scope="col" class="th-book-download">Save</th>
             </tr>
           </thead>
           <tbody>
@@ -412,9 +510,6 @@
                 ${escapeHtml(b.title)}
               </a>
               <span class="book-sub-size" aria-label="File size ${escapeHtml(b.size)}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="opacity: 0.7;">
-                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                </svg>
                 ${escapeHtml(b.size)}
               </span>
             </div>
@@ -427,10 +522,10 @@
           <div class="book-action-group">
             ${
               b.downloadLink
-                ? `<button type="button" class="book-download-btn" data-download-url="${escapeHtml(b.downloadLink)}" data-book-title="${escapeHtml(b.title)}" title="Download ${escapeHtml(b.title)}" aria-label="Download ${escapeHtml(b.title)}">
+                ? `<button type="button" class="book-download-btn" data-download-url="${escapeHtml(b.downloadLink)}" data-book-title="${escapeHtml(b.title)}" title="Save ${escapeHtml(b.title)}" aria-label="Save ${escapeHtml(b.title)}">
                     ${DOWNLOAD_ICON_SVG}
                   </button>`
-                : `<span class="book-no-download" title="No download link available">--</span>`
+                : `<span class="book-no-download" title="No link available">--</span>`
             }
           </div>
         </td>
@@ -464,16 +559,13 @@
 
         <div class="book-card-footer">
           <span class="book-size-badge" title="File Size">
-            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 3px; opacity: 0.7;">
-              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-            </svg>
             ${escapeHtml(b.size)}
           </span>
 
           <div class="book-action-group">
             ${
               b.downloadLink
-                ? `<button type="button" class="book-download-btn" data-download-url="${escapeHtml(b.downloadLink)}" data-book-title="${escapeHtml(b.title)}" title="Download ${escapeHtml(b.title)}" aria-label="Download ${escapeHtml(b.title)}">
+                ? `<button type="button" class="book-download-btn" data-download-url="${escapeHtml(b.downloadLink)}" data-book-title="${escapeHtml(b.title)}" title="Save ${escapeHtml(b.title)}" aria-label="Save ${escapeHtml(b.title)}">
                     ${DOWNLOAD_ICON_SVG}
                   </button>`
                 : ''
@@ -488,32 +580,25 @@
     booksContainer.innerHTML = `
       <div class="books-empty-state">
         <div class="books-empty-icon" aria-hidden="true">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <g clip-path="url(#clip0_4418_9823)">
+              <path d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M12 8V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M11.9945 16H12.0035" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </g>
+            <defs>
+              <clipPath id="clip0_4418_9823">
+                <rect width="24" height="24" fill="white"/>
+              </clipPath>
+            </defs>
           </svg>
         </div>
         <h2 class="books-empty-title">No books found</h2>
         <p class="books-empty-desc">
-          Try clearing your search query to browse all available books.
+          Try adjusting your search query to browse available books.
         </p>
-        <button type="button" class="books-empty-reset-btn" id="books-filter-reset-btn">
-          Clear Search
-        </button>
       </div>
     `;
-
-    const resetBtn = document.getElementById('books-filter-reset-btn');
-    if (resetBtn) {
-      resetBtn.addEventListener('click', () => {
-        if (searchInput) searchInput.value = '';
-        searchQuery = '';
-        if (searchClearBtn) searchClearBtn.classList.remove('is-visible');
-        if (sortSelect) sortSelect.value = 'title-asc';
-        sortBy = 'title-asc';
-        applyFilterAndRender();
-      });
-    }
   }
 
   function renderLoadingShimmer() {

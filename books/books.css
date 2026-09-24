@@ -67,6 +67,18 @@
   gap: 10px;
 }
 
+.books-main-title-icon {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  color: var(--accent-color);
+  display: block;
+}
+
+.books-main-title-icon path {
+  stroke: currentColor;
+}
+
 .books-subtitle {
   font-size: var(--text-base, 15px);
   color: var(--color-text-secondary);
@@ -104,48 +116,111 @@
   position: relative;
   flex: 1;
   min-width: 240px;
+  height: 48px;
+  background-color: var(--color-bg-body);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-input, 12px);
+  padding: 0 10px 0 14px;
+  gap: 10px;
+  outline: none !important;
+  box-shadow: none !important;
+  transition: background-color var(--transition-normal);
+}
+
+/* Strictly remove focus outline, border color shift, and shadow from search bar */
+.books-search-box:focus-within,
+.books-search-box:focus,
+.books-search-box:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: var(--color-border) !important;
 }
 
 .books-search-icon {
-  position: absolute;
-  left: 12px;
+  width: 20px;
+  height: 20px;
   color: var(--color-text-tertiary);
-  pointer-events: none;
+  fill: var(--color-text-tertiary);
+  flex-shrink: 0;
+  display: block;
+}
+
+.books-search-icon path {
+  fill: currentColor;
 }
 
 .books-search-input {
-  width: 100%;
-  height: 40px;
-  padding: 0 36px 0 38px;
-  border-radius: var(--radius-input, 8px);
-  border: 1px solid var(--color-border);
-  background-color: var(--color-bg-body);
+  flex: 1;
+  height: 100%;
+  border: none !important;
+  background: transparent;
   color: var(--color-text-primary);
   font-family: var(--font-family-base);
-  font-size: var(--text-base, 14.5px);
-  outline: none;
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  font-size: var(--text-base, 15.5px);
+  outline: none !important;
+  box-shadow: none !important;
+  padding: 0;
 }
 
-.books-search-input:focus {
-  border-color: var(--accent-color);
-  box-shadow: 0 0 0 2px var(--accent-ring);
+.books-search-input:focus,
+.books-search-input:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.books-search-input::placeholder {
+  color: var(--color-text-tertiary);
+}
+
+/* Suppress browser native search clear icons */
+.books-search-input::-webkit-search-cancel-button,
+.books-search-input::-webkit-search-decoration,
+.books-search-input::-webkit-search-results-button,
+.books-search-input::-webkit-search-results-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
 }
 
 .books-search-clear {
-  position: absolute;
-  right: 10px;
-  background: none;
-  border: none;
-  padding: 4px;
-  cursor: pointer;
-  color: var(--color-text-tertiary);
   display: none;
-  border-radius: 4px;
+  align-items: center;
+  justify-content: center;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: var(--radius-btn-subtle, 6px);
+  background-color: var(--btn-subtle-bg);
+  border: 1px solid var(--btn-subtle-border);
+  color: var(--color-text-secondary);
+  font-family: var(--font-family-base);
+  font-size: var(--text-xs, 12.5px);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  user-select: none;
+  cursor: pointer;
+  transition: background-color var(--transition-fast),
+              border-color var(--transition-fast),
+              color var(--transition-fast),
+              transform var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.books-search-clear:hover {
+  color: var(--color-text-primary);
+  background-color: var(--btn-subtle-hover-bg, color-mix(in srgb, var(--accent-color) 8%, var(--color-bg-body)));
+  border-color: var(--btn-subtle-hover-border, color-mix(in srgb, var(--accent-color) 25%, var(--btn-subtle-border)));
+}
+
+.books-search-clear:active {
+  background-color: var(--btn-subtle-active-bg, var(--btn-subtle-hover-bg));
+  transform: scale(0.96);
 }
 
 .books-search-clear.is-visible {
-  display: flex;
+  display: inline-flex;
+  animation: clearBtnFadeIn 140ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .books-toolbar-controls {
@@ -155,18 +230,21 @@
   flex-wrap: wrap;
 }
 
-.books-select-wrap {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: var(--text-sm, 13px);
-  color: var(--color-text-secondary);
+/* --------------------------------------------------------------------------
+   Responsive Custom Sort Dropdown (Matches Website UI Design)
+   -------------------------------------------------------------------------- */
+.books-sort-dropdown {
+  position: relative;
+  display: inline-block;
 }
 
-.books-select {
-  height: 38px;
-  padding: 0 28px 0 10px;
-  border-radius: var(--radius-btn-subtle, 6px);
+.books-sort-trigger {
+  display: inline-flex;
+  align-items: center;
+  height: 48px;
+  padding: 0 14px;
+  gap: 8px;
+  border-radius: var(--radius-input, 12px);
   border: 1px solid var(--color-border);
   background-color: var(--color-bg-body);
   color: var(--color-text-primary);
@@ -174,34 +252,168 @@
   font-size: var(--text-sm, 13.5px);
   font-weight: 500;
   cursor: pointer;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast), color var(--transition-fast);
+  user-select: none;
+  white-space: nowrap;
+}
+
+.books-sort-trigger:hover {
+  background-color: color-mix(in srgb, var(--accent-color) 8%, var(--color-bg-body));
+  border-color: color-mix(in srgb, var(--accent-color) 30%, var(--color-border));
+}
+
+.books-sort-trigger:hover .books-sort-chevron {
+  color: var(--accent-color);
+}
+
+.books-sort-trigger[aria-expanded="true"] {
+  border-color: color-mix(in srgb, var(--accent-color) 45%, var(--color-border));
+  background-color: color-mix(in srgb, var(--accent-color) 12%, var(--color-bg-body));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 12%, transparent);
+}
+
+.books-sort-trigger[aria-expanded="true"] .books-sort-chevron {
+  transform: rotate(180deg);
+  color: var(--accent-color);
+}
+
+.books-sort-trigger[aria-expanded="true"] .books-sort-selected-text {
+  color: var(--accent-color);
+}
+
+.books-sort-trigger-label {
+  color: var(--color-text-tertiary);
+  font-weight: 500;
+}
+
+.books-sort-selected-text {
+  color: var(--color-text-primary);
+  font-weight: 600;
+  transition: color var(--transition-fast);
+}
+
+.books-sort-chevron {
+  color: var(--color-text-tertiary);
+  transition: transform var(--transition-fast), color var(--transition-fast);
+  margin-left: 2px;
+}
+
+.books-sort-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 220px;
+  padding: 6px;
+  margin: 0;
+  list-style: none;
+  z-index: 120;
+  background-color: var(--modal-bg, var(--color-bg-surface));
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid color-mix(in srgb, var(--accent-color) 18%, var(--color-border));
+  border-radius: var(--radius-modal, 12px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12), 0 0 0 1px color-mix(in srgb, var(--accent-color) 8%, transparent);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px) scale(0.98);
+  transform-origin: top right;
+  transition: opacity var(--transition-fast), transform var(--transition-fast), visibility var(--transition-fast);
+  pointer-events: none;
+}
+
+.books-sort-menu.is-open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.books-sort-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 12px;
+  border-radius: var(--radius-sm, 6px);
+  font-size: var(--text-sm, 13.5px);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
   outline: none;
-  appearance: none;
-  background-image: url("data:image/svg2+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 8px center;
+  border: 1px solid transparent;
 }
 
-.books-select:focus {
-  border-color: var(--accent-color);
-  box-shadow: 0 0 0 2px var(--accent-ring);
+.books-sort-option:hover,
+.books-sort-option:focus-visible {
+  background-color: color-mix(in srgb, var(--accent-color) 9%, var(--color-bg-body));
+  border-color: color-mix(in srgb, var(--accent-color) 20%, transparent);
+  color: var(--color-text-primary);
 }
 
+.books-sort-option.is-active {
+  color: var(--accent-color);
+  font-weight: 600;
+  background-color: color-mix(in srgb, var(--accent-color) 12%, var(--color-bg-body));
+  border-color: color-mix(in srgb, var(--accent-color) 22%, transparent);
+}
+
+.books-sort-option .sort-check-icon {
+  display: none;
+  width: 18px;
+  height: 18px;
+  color: var(--accent-color);
+  fill: var(--accent-color);
+  --fillg: var(--accent-color);
+  flex-shrink: 0;
+}
+
+.books-sort-option .sort-check-icon path {
+  fill: currentColor;
+}
+
+.books-sort-option.is-active .sort-check-icon {
+  display: block;
+}
+
+/* Arrow SVG inside sort label & selected text */
+.sort-arrow-icon {
+  display: inline-block;
+  vertical-align: middle;
+  width: 14px;
+  height: 14px;
+  margin: 0 3px;
+  flex-shrink: 0;
+  stroke: currentColor;
+}
+
+.sort-arrow-icon path {
+  stroke: currentColor;
+}
+
+/* --------------------------------------------------------------------------
+   View Mode Toggles
+   -------------------------------------------------------------------------- */
 .books-view-toggle {
   display: inline-flex;
-  border-radius: var(--radius-btn-subtle, 6px);
+  align-items: center;
+  height: 48px;
+  border-radius: var(--radius-input, 12px);
   border: 1px solid var(--color-border);
   background-color: var(--color-bg-body);
-  padding: 2px;
-  gap: 2px;
+  padding: 4px;
+  gap: 4px;
 }
 
 .books-view-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 4px;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
   border: none;
   background: none;
   color: var(--color-text-tertiary);
@@ -209,14 +421,24 @@
   transition: all var(--transition-fast);
 }
 
+.books-view-btn svg {
+  display: block;
+  flex-shrink: 0;
+}
+
+.books-view-btn svg path {
+  stroke: currentColor;
+}
+
 .books-view-btn:hover {
   color: var(--color-text-primary);
+  background-color: color-mix(in srgb, var(--accent-color) 8%, var(--color-bg-body));
 }
 
 .books-view-btn.is-active {
   background-color: var(--color-bg-surface);
   color: var(--accent-color);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 
@@ -504,8 +726,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: 12px;
-  border-top: 1px solid var(--color-border);
+  padding-top: 0;
+  border-top: none;
   gap: 10px;
 }
 
@@ -563,11 +785,50 @@
   .books-search-box {
     max-width: 100%;
     width: 100%;
+    min-width: 0;
   }
 
   .books-toolbar-controls {
     width: 100%;
-    justify-content: space-between;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Remove Card Grid view toggle on mobile - table list view is the clean standard on mobile */
+  .books-view-toggle {
+    display: none !important;
+  }
+
+  .books-sort-dropdown {
+    width: 100%;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .books-sort-trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 14px;
+    gap: 8px;
+  }
+
+  .books-sort-selected-text {
+    margin-right: auto;
+  }
+
+  .books-sort-chevron {
+    margin-left: 4px;
+    flex-shrink: 0;
+  }
+
+  .books-sort-menu {
+    right: 0;
+    left: auto;
+    min-width: 200px;
+    max-width: calc(100vw - 32px);
   }
 
   .books-cards-grid {
@@ -617,28 +878,26 @@
     display: none;
   }
 
-  /* Show size badge directly underneath the book title on mobile */
+  /* Show size text directly underneath the book title on mobile (clean text, no pill background/border) */
   .book-sub-size {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    margin-top: 5px;
-    font-size: 11.5px;
-    font-weight: 600;
-    color: var(--color-text-secondary);
-    background-color: var(--header-btn-bg, var(--btn-subtle-bg));
-    border: 1px solid var(--header-btn-border, var(--btn-subtle-border));
-    padding: 2px 7px;
-    border-radius: 4px;
+    display: block;
+    margin-top: 3px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-text-tertiary);
+    background: transparent;
+    border: none;
+    padding: 0;
+    border-radius: 0;
     width: fit-content;
     white-space: nowrap;
   }
 
-  /* Dedicated Download column on mobile with ample room for the header text */
+  /* Dedicated Save column on mobile with ample room for the header text */
   .books-table th.th-book-download,
   .books-table td.td-book-download {
-    width: 90px;
-    min-width: 86px;
+    width: 68px;
+    min-width: 64px;
     padding-left: 4px;
     padding-right: 12px;
     text-align: center;

@@ -27,7 +27,7 @@ window.POSTS_DATA = [
     slug: "stroke-cta-protocol",
     title: "Acute Ischemic Stroke: Multiphase CTA Collateral Atlas & ASPECTS Triage Protocol",
     description: "Standardized emergency triage criteria for grading leptomeningeal collateral circulation, verifying Alberta Stroke Program Early CT Scores (ASPECTS ≥ 6), and optimizing rapid endovascular thrombectomy candidate selection within the extended window.",
-    url: "#stroke-cta-protocol",
+    url: "/post/index.html",
     thumbnail: "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=800&q=80",
     alt: "Emergency neurovascular CTA imaging display",
     Topic: "Neuroradiology",

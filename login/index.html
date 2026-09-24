@@ -1,0 +1,1055 @@
+<!doctype html>
+<html lang="en" class="preload">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In | My Radiology Guide</title>
+    <meta name="description" content="Sign in with your Google account to access clinical radiology protocols, bookmarks, and digital reference library." />
+    <meta property="og:title" content="Sign In | My Radiology Guide" />
+    <meta property="og:description" content="Sign in with your Google account to access clinical radiology protocols, bookmarks, and digital reference library." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary" />
+
+    <!-- Google Fonts Preconnect & Loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Instant Inline Theme & Palette State -->
+    <script>
+      (function() {
+        try {
+          var t = localStorage.getItem('app-theme-preference');
+          if (!t) {
+            t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+          }
+          document.documentElement.setAttribute('data-theme', t);
+          var p = localStorage.getItem('app-palette-preference') || 'default';
+          document.documentElement.setAttribute('data-palette', p);
+        } catch(e) {}
+      })();
+    </script>
+
+    <!-- Global Stylesheets -->
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/header.css" />
+    <link rel="stylesheet" href="../css/footer.css" />
+    <!-- Dedicated Login Stylesheet -->
+    <link rel="stylesheet" href="./login.css" />
+
+    <!-- Global Theme Controller -->
+    <script src="../js/global.js"></script>
+    <!-- Header Component Logic -->
+    <script src="../js/header.js" defer></script>
+    <!-- Central Post Data Engine (for search) -->
+    <script src="../js/posts-data.js" defer></script>
+    <!-- Blog & Search Logic -->
+    <script src="../js/blog.js" defer></script>
+    <!-- Login Controller -->
+    <script src="./login.js" defer></script>
+  </head>
+  <body>
+    <!-- Fullscreen Site Header -->
+    <header class="site-header" id="site-header">
+      <div class="header-inner">
+        <!-- Left Section: Hamburger & Text Logo -->
+        <div class="header-left">
+          <button
+            type="button"
+            class="header-btn hamburger-btn"
+            id="hamburger-btn"
+            aria-label="Toggle navigation menu"
+            aria-expanded="false"
+            aria-controls="nav-drawer"
+          >
+            <span class="hamburger-box">
+              <span class="hamburger-line"></span>
+              <span class="hamburger-line"></span>
+              <span class="hamburger-line"></span>
+            </span>
+          </button>
+
+          <a href="../index.html" class="header-logo" id="site-logo" aria-label="My Radiology Guide" title="My Radiology Guide">
+            <svg
+              class="header-logo-svg"
+              viewBox="0 0 512 512"
+              width="26"
+              height="26"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <g>
+                <path d="m208,239.893c0,26.508 21.468,48 48,48 26.484,0 48-21.492 48-48 0-26.509-21.516-48-48-48-26.532-2.84217e-14-48,21.491-48,48z"></path>
+                <path d="m384,19.339c-15.297-8.852-34.875-3.594-43.711,11.703l-55.578,96.227c-8.805,15.242-3.648,34.727 11.539,43.625 24.312,14.227 39.484,40.336 39.75,68.273-0.023,0.406-0.039,0.82-0.047,1.102-0.188,8.602 3.102,16.922 9.117,23.078 6.023,6.148 14.266,9.617 22.875,9.617h112.055c17.672,0 32-14.328 32-32 0-91.109-49.047-176.031-128-221.625z"></path>
+                <path d="m339.219,321.058c-8.82-15.258-28.289-20.523-43.617-11.758-24.406,13.984-54.906,13.953-79.227,0.016-15.297-8.734-34.773-3.492-43.609,11.773l-56.476,97.789c-8.813,15.258-3.625,34.773 11.601,43.648 38.664,22.531 82.961,34.438 128.109,34.438 45.148,0 89.445-11.906 128.109-34.438 15.227-8.875 20.414-28.391 11.602-43.656l-56.492-97.812z"></path>
+                <path d="m166.93,263.347c6.016-6.156 9.305-14.477 9.117-23.078-0.008-0.266-0.023-0.68-0.047-1.086 0.258-27.977 15.43-54.094 39.719-68.313 15.195-8.883 20.359-28.375 11.555-43.625l-55.563-96.203c-8.836-15.297-28.406-20.562-43.711-11.703-78.953,45.594-128,130.516-128,221.625 0,17.672 14.328,32 32,32h112.055c8.609,0 16.851-3.469 22.875-9.617z"></path>
+              </g>
+            </svg>
+          </a>
+        </div>
+
+        <!-- Desktop Navigation Menu (Desktop Only: Displays at >=1024px) -->
+        <nav class="header-desktop-nav" id="header-desktop-nav" aria-label="Primary Desktop Navigation">
+          <ul class="desktop-nav-list" role="menubar">
+
+            <!-- 1. Mega Menu: Resources -->
+            <li class="desktop-nav-item has-dropdown has-megamenu" data-dropdown="curriculum">
+              <button
+                type="button"
+                class="desktop-nav-btn"
+                id="nav-btn-curriculum"
+                aria-haspopup="true"
+                aria-expanded="false"
+                aria-controls="megamenu-curriculum"
+              >
+                <span class="desktop-nav-text">Resources</span>
+                <svg class="nav-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M19.9201 8.9502L13.4001 15.4702C12.6301 16.2402 11.3701 16.2402 10.6001 15.4702L4.08008 8.9502" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+
+              <div
+                class="desktop-dropdown-panel megamenu-panel"
+                id="megamenu-curriculum"
+                role="menu"
+                aria-labelledby="nav-btn-curriculum"
+              >
+                <div class="megamenu-inner">
+                  <div class="megamenu-topbar">
+                    <div class="megamenu-title-group">
+                      <span class="megamenu-badge">Curriculum</span>
+                      <h3 class="megamenu-main-title">Core Radiologic Sciences &amp; Clinical Modules</h3>
+                    </div>
+                    <div class="megamenu-topbar-meta">
+                      <span class="megamenu-count-pill">6 Core Modules</span>
+                      <span class="megamenu-guide-hint">Standardized ARRT &amp; ACR Clinical Guidelines</span>
+                    </div>
+                  </div>
+
+                  <div class="megamenu-grid-6">
+                    <a href="../index.html#anatomy-physiology" class="megamenu-card" role="menuitem">
+                      <div class="megamenu-card-header">
+                        <span class="megamenu-card-icon" aria-hidden="true">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                          </svg>
+                        </span>
+                        <div class="megamenu-card-title-wrap">
+                          <h4 class="megamenu-card-title">Anatomy &amp; Physiology</h4>
+                          <span class="megamenu-card-subtitle">Normal variants &amp; landmarks</span>
+                        </div>
+                      </div>
+                      <p class="megamenu-card-desc">Comprehensive cross-sectional musculoskeletal, abdominal, and neuroanatomy atlas.</p>
+                      <div class="megamenu-card-footer">
+                        <span class="megamenu-tag">18 Sections</span>
+                        <span class="megamenu-arrow">&rarr;</span>
+                      </div>
+                    </a>
+
+                    <a href="../index.html#basic-physics" class="megamenu-card" role="menuitem">
+                      <div class="megamenu-card-header">
+                        <span class="megamenu-card-icon" aria-hidden="true">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="7"/>
+                            <path d="M12 2v3m0 14v3M2 12h3m14 0h3"/>
+                          </svg>
+                        </span>
+                        <div class="megamenu-card-title-wrap">
+                          <h4 class="megamenu-card-title">Basic Physics</h4>
+                          <span class="megamenu-card-subtitle">Electromagnetism &amp; matter</span>
+                        </div>
+                      </div>
+                      <p class="megamenu-card-desc">Radiation production, atomic structure, Compton scatter, and photoelectric absorption.</p>
+                      <div class="megamenu-card-footer">
+                        <span class="megamenu-tag">Core Foundation</span>
+                        <span class="megamenu-arrow">&rarr;</span>
+                      </div>
+                    </a>
+
+                    <a href="../index.html#radiological-physics" class="megamenu-card" role="menuitem">
+                      <div class="megamenu-card-header">
+                        <span class="megamenu-card-icon" aria-hidden="true">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9m14.2 0c3.9 3.9 3.9 10.3 0 14.2M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5m8.4 0c2.3 2.3 2.3 6.1 0 8.5"/>
+                            <circle cx="12" cy="12" r="2"/>
+                          </svg>
+                        </span>
+                        <div class="megamenu-card-title-wrap">
+                          <h4 class="megamenu-card-title">Radiological Physics</h4>
+                          <span class="megamenu-card-subtitle">CT, MRI &amp; Ultrasound</span>
+                        </div>
+                      </div>
+                      <p class="megamenu-card-desc">Beam geometry, multi-detector array mathematics, MRI pulse sequences &amp; k-space.</p>
+                      <div class="megamenu-card-footer">
+                        <span class="megamenu-tag">Advanced Modalities</span>
+                        <span class="megamenu-arrow">&rarr;</span>
+                      </div>
+                    </a>
+
+                    <a href="../index.html#radiography" class="megamenu-card" role="menuitem">
+                      <div class="megamenu-card-header">
+                        <span class="megamenu-card-icon" aria-hidden="true">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="18" height="18" x="3" y="3" rx="2"/>
+                            <path d="M7 7h10v10H7z"/>
+                          </svg>
+                        </span>
+                        <div class="megamenu-card-title-wrap">
+                          <h4 class="megamenu-card-title">Radiography &amp; Positioning</h4>
+                          <span class="megamenu-card-subtitle">Projection protocols</span>
+                        </div>
+                      </div>
+                      <p class="megamenu-card-desc">Standard and supplemental projections, central ray angulation, and image critiques.</p>
+                      <div class="megamenu-card-footer">
+                        <span class="megamenu-tag">Clinical Protocols</span>
+                        <span class="megamenu-arrow">&rarr;</span>
+                      </div>
+                    </a>
+
+                    <a href="../index.html#quality-control" class="megamenu-card" role="menuitem">
+                      <div class="megamenu-card-header">
+                        <span class="megamenu-card-icon" aria-hidden="true">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                          </svg>
+                        </span>
+                        <div class="megamenu-card-title-wrap">
+                          <h4 class="megamenu-card-title">Quality Assurance &amp; QC</h4>
+                          <span class="megamenu-card-subtitle">Compliance standards</span>
+                        </div>
+                      </div>
+                      <p class="megamenu-card-desc">Phantom evaluations, calibration checks, artifact remediation, and ACR standards.</p>
+                      <div class="megamenu-card-footer">
+                        <span class="megamenu-tag">ACR Guidelines</span>
+                        <span class="megamenu-arrow">&rarr;</span>
+                      </div>
+                    </a>
+
+                    <a href="../index.html#medical-ethics" class="megamenu-card" role="menuitem">
+                      <div class="megamenu-card-header">
+                        <span class="megamenu-card-icon" aria-hidden="true">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                          </svg>
+                        </span>
+                        <div class="megamenu-card-title-wrap">
+                          <h4 class="megamenu-card-title">Patient Care &amp; Ethics</h4>
+                          <span class="megamenu-card-subtitle">Clinical safety &amp; law</span>
+                        </div>
+                      </div>
+                      <p class="megamenu-card-desc">Informed consent, IV contrast management, anaphylaxis response, and HIPAA regulations.</p>
+                      <div class="megamenu-card-footer">
+                        <span class="megamenu-tag">Safety Protocols</span>
+                        <span class="megamenu-arrow">&rarr;</span>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <!-- 2. Dropdown: Curriculum -->
+            <li class="desktop-nav-item has-dropdown" data-dropdown="imaging-protocols">
+              <button
+                type="button"
+                class="desktop-nav-btn"
+                id="nav-btn-protocols"
+                aria-haspopup="true"
+                aria-expanded="false"
+                aria-controls="dropdown-protocols"
+              >
+                <span class="desktop-nav-text">Curriculum</span>
+                <svg class="nav-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M19.9201 8.9502L13.4001 15.4702C12.6301 16.2402 11.3701 16.2402 10.6001 15.4702L4.08008 8.9502" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+
+              <div
+                class="desktop-dropdown-panel standard-dropdown-panel"
+                id="dropdown-protocols"
+                role="menu"
+                aria-labelledby="nav-btn-protocols"
+              >
+                <ul class="dropdown-list">
+                  <li>
+                    <a href="../index.html#topic-neuroradiology" class="dropdown-link-item" role="menuitem">
+                      <span class="dropdown-icon-wrapper" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                          <circle cx="12" cy="12" r="10"/>
+                          <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
+                          <path d="M2 12h20"/>
+                        </svg>
+                      </span>
+                      <div class="dropdown-text">
+                        <span class="dropdown-heading">Neuroradiology &amp; Head</span>
+                        <span class="dropdown-sub">Acute Stroke CTA, Brain MRI sequences</span>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="../index.html#topic-cardiac-mri" class="dropdown-link-item" role="menuitem">
+                      <span class="dropdown-icon-wrapper" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                        </svg>
+                      </span>
+                      <div class="dropdown-text">
+                        <span class="dropdown-heading">Cardiovascular Imaging</span>
+                        <span class="dropdown-sub">Viability mapping &amp; Coronary CTA</span>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="../index.html#topic-emergency" class="dropdown-link-item" role="menuitem">
+                      <span class="dropdown-icon-wrapper" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                          <path d="m9 12 2 2 4-4"/>
+                        </svg>
+                      </span>
+                      <div class="dropdown-text">
+                        <span class="dropdown-heading">Emergency &amp; Trauma</span>
+                        <span class="dropdown-sub">Whole-body pan-scan algorithms</span>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="../index.html#topic-musculoskeletal" class="dropdown-link-item" role="menuitem">
+                      <span class="dropdown-icon-wrapper" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M6 18h12M6 6h12M9 12h6"/>
+                        </svg>
+                      </span>
+                      <div class="dropdown-text">
+                        <span class="dropdown-heading">Musculoskeletal (MSK)</span>
+                        <span class="dropdown-sub">High-resolution joint arthrograms</span>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+
+            <!-- 3. Direct Link: Best Books -->
+            <li class="desktop-nav-item">
+              <a href="/books/" class="desktop-nav-btn direct-link" role="menuitem">
+                <span class="desktop-nav-text">Best Books</span>
+              </a>
+            </li>
+
+            <!-- 4. Direct Link: Roadmap 2026 -->
+            <li class="desktop-nav-item">
+              <a href="../index.html#roadmap-2026" class="desktop-nav-btn direct-link" role="menuitem">
+                <span class="desktop-nav-text">Roadmap 2026</span>
+              </a>
+            </li>
+
+            <!-- 5. Direct Link: About -->
+            <li class="desktop-nav-item">
+              <a href="../index.html#about" class="desktop-nav-btn direct-link" role="menuitem">
+                <span class="desktop-nav-text">About</span>
+              </a>
+            </li>
+
+            <!-- 6. Direct Link: Admin CMS -->
+            <li class="desktop-nav-item">
+              <a href="/admin/index.html" class="desktop-nav-btn direct-link" role="menuitem" title="Visual Post & Metadata Manager">
+                <span class="desktop-nav-text">Admin CMS</span>
+              </a>
+            </li>
+
+            <!-- 7. Direct Link: Sign In (Active on this page) -->
+            <li class="desktop-nav-item">
+              <a href="/login/" class="desktop-nav-btn direct-link is-active" role="menuitem" title="Sign In with Google" aria-current="page" style="color: var(--accent-color); font-weight: 600;">
+                <span class="desktop-nav-text">Sign In</span>
+              </a>
+            </li>
+
+          </ul>
+        </nav>
+
+        <!-- Right Section: Search Icon, Mode Changer & Login Button -->
+        <div class="header-right">
+          <button
+            type="button"
+            class="header-btn search-btn"
+            id="search-btn"
+            aria-label="Search"
+            aria-expanded="false"
+            aria-controls="search-modal"
+          >
+            <svg
+              class="search-icon"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="#ffffff"
+              aria-hidden="true"
+            >
+              <path d="M11.5 21.75C5.85 21.75 1.25 17.15 1.25 11.5C1.25 5.85 5.85 1.25 11.5 1.25C17.15 1.25 21.75 5.85 21.75 11.5C21.75 17.15 17.15 21.75 11.5 21.75ZM11.5 2.75C6.67 2.75 2.75 6.68 2.75 11.5C2.75 16.32 6.67 20.25 11.5 20.25C16.33 20.25 20.25 16.32 20.25 11.5C20.25 6.68 16.33 2.75 11.5 2.75Z" fill="white" style="fill: var(--fillg);"/>
+              <path d="M21.9999 22.7499C21.8099 22.7499 21.6199 22.6799 21.4699 22.5299L19.4699 20.5299C19.1799 20.2399 19.1799 19.7599 19.4699 19.4699C19.7599 19.1799 20.2399 19.1799 20.5299 19.4699L22.5299 21.4699C22.8199 21.7599 22.8199 22.2399 22.5299 22.5299C22.3799 22.6799 22.1899 22.7499 21.9999 22.7499Z" fill="white" style="fill: var(--fillg);"/>
+            </svg>
+          </button>
+
+          <button
+            type="button"
+            class="header-btn mode-btn"
+            id="mode-btn"
+            aria-label="Theme and palette settings"
+            title="Theme and palette settings"
+            aria-haspopup="dialog"
+            aria-expanded="false"
+            aria-controls="theme-modal"
+          >
+            <svg
+              class="mode-icon sun-icon"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path d="M12 19.25C8 19.25 4.75 16 4.75 12C4.75 8 8 4.75 12 4.75C16 4.75 19.25 8 19.25 12C19.25 16 16 19.25 12 19.25ZM12 6.25C8.83 6.25 6.25 8.83 6.25 12C6.25 15.17 8.83 17.75 12 17.75C15.17 17.75 17.75 15.17 17.75 12C17.75 8.83 15.17 6.25 12 6.25Z" fill="white" style="fill: var(--fillg, currentColor);"/>
+              <path d="M12 22.96C11.45 22.96 11 22.55 11 22V21.92C11 21.37 11.45 20.92 12 20.92C12.55 20.92 13 21.37 13 21.92C13 22.47 12.55 22.96 12 22.96ZM19.14 20.14C18.88 20.14 18.63 20.04 18.43 19.85L18.3 19.72C17.91 19.33 17.91 18.7 18.3 18.31C18.69 17.92 19.32 17.92 19.71 18.31L19.84 18.44C20.23 18.83 20.23 19.46 19.84 19.85C19.65 20.04 19.4 20.14 19.14 20.14ZM4.86 20.14C4.6 20.14 4.35 20.04 4.15 19.85C3.76 19.46 3.76 18.83 4.15 18.44L4.28 18.31C4.67 17.92 5.3 17.92 5.69 18.31C6.08 18.7 6.08 19.33 5.69 19.72L5.56 19.85C5.37 20.04 5.11 20.14 4.86 20.14ZM22 13H21.92C21.37 13 20.92 12.55 20.92 12C20.92 11.45 21.37 11 21.92 11C22.47 11 22.96 11.45 22.96 12C22.96 12.55 22.55 13 22 13ZM2.08 13H2C1.45 13 1 12.55 1 12C1 11.45 1.45 11 2 11C2.55 11 3.04 11.45 3.04 12C3.04 12.55 2.63 13 2.08 13ZM19.01 5.99C18.75 5.99 18.5 5.89 18.3 5.7C17.91 5.31 17.91 4.68 18.3 4.29L18.43 4.16C18.82 3.77 19.45 3.77 19.84 4.16C20.23 4.55 20.23 5.18 19.84 5.57L19.71 5.7C19.52 5.89 19.27 5.99 19.01 5.99ZM4.99 5.99C4.73 5.99 4.48 5.89 4.28 5.7L4.15 5.56C3.76 5.17 3.76 4.54 4.15 4.15C4.54 3.76 5.17 3.76 5.56 4.15L5.69 4.28C6.08 4.67 6.08 5.3 5.69 5.69C5.5 5.89 5.24 5.99 4.99 5.99ZM12 3.04C11.45 3.04 11 2.63 11 2.08V2C11 1.45 11.45 1 12 1C12.55 1 13 1.45 13 2C13 2.55 12.55 3.04 12 3.04Z" fill="white" style="fill: var(--fillg, currentColor);"/>
+            </svg>
+
+            <svg
+              class="mode-icon moon-icon"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path d="M2.03009 12.42C2.39009 17.57 6.76009 21.76 11.9901 21.99C15.6801 22.15 18.9801 20.43 20.9601 17.72C21.7801 16.61 21.3401 15.87 19.9701 16.12C19.3001 16.24 18.6101 16.29 17.8901 16.26C13.0001 16.06 9.00009 11.97 8.98009 7.13996C8.97009 5.83996 9.24009 4.60996 9.73009 3.48996C10.2701 2.24996 9.62009 1.65996 8.37009 2.18996C4.41009 3.85996 1.70009 7.84996 2.03009 12.42Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+
+            <span class="mode-palette-dot" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Body Content: Dedicated Google Login Card with NO Right Column / Popular Posts / Topics -->
+    <main class="main-body login-main-body" id="main-content">
+      <div class="login-container">
+        
+        <!-- Breadcrumbs Navigation -->
+        <nav class="login-breadcrumbs" aria-label="Breadcrumb">
+          <a href="../index.html" class="login-breadcrumb-link">Home</a>
+          <span class="login-breadcrumb-sep">/</span>
+          <span class="login-breadcrumb-current">Sign In</span>
+        </nav>
+
+        <!-- Main Authentication Card -->
+        <div class="login-card" id="login-card">
+          
+          <!-- Top Radiology Brand Badge -->
+          <div class="login-badge-wrap">
+            <div class="login-logo-badge" title="My Radiology Guide Clinical Access">
+              <svg class="login-badge-svg" viewBox="0 0 512 512" width="28" height="28" fill="currentColor" aria-hidden="true">
+                <g>
+                  <path d="m208,239.893c0,26.508 21.468,48 48,48 26.484,0 48-21.492 48-48 0-26.509-21.516-48-48-48-26.532-2.84217e-14-48,21.491-48,48z"></path>
+                  <path d="m384,19.339c-15.297-8.852-34.875-3.594-43.711,11.703l-55.578,96.227c-8.805,15.242-3.648,34.727 11.539,43.625 24.312,14.227 39.484,40.336 39.75,68.273-0.023,0.406-0.039,0.82-0.047,1.102-0.188,8.602 3.102,16.922 9.117,23.078 6.023,6.148 14.266,9.617 22.875,9.617h112.055c17.672,0 32-14.328 32-32 0-91.109-49.047-176.031-128-221.625z"></path>
+                  <path d="m339.219,321.058c-8.82-15.258-28.289-20.523-43.617-11.758-24.406,13.984-54.906,13.953-79.227,0.016-15.297-8.734-34.773-3.492-43.609,11.773l-56.476,97.789c-8.813,15.258-3.625,34.773 11.601,43.648 38.664,22.531 82.961,34.438 128.109,34.438 45.148,0 89.445-11.906 128.109-34.438 15.227-8.875 20.414-28.391 11.602-43.656l-56.492-97.812z"></path>
+                  <path d="m166.93,263.347c6.016-6.156 9.305-14.477 9.117-23.078-0.008-0.266-0.023-0.68-0.047-1.086 0.258-27.977 15.43-54.094 39.719-68.313 15.195-8.883 20.359-28.375 11.555-43.625l-55.563-96.203c-8.836-15.297-28.406-20.562-43.711-11.703-78.953,45.594-128,130.516-128,221.625 0,17.672 14.328,32 32,32h112.055c8.609,0 16.851-3.469 22.875-9.617z"></path>
+                </g>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Header Copy -->
+          <div class="login-header-text">
+            <h1 class="login-title">Sign In</h1>
+            <p class="login-subtitle">
+              Connect your Google account to access clinical radiology protocols, bookmarks, and digital reference library.
+            </p>
+          </div>
+
+          <!-- Logged Out: Google Sign-In Action (Only with Google) -->
+          <div class="login-action-section" id="login-logged-out-view">
+            <button
+              type="button"
+              class="google-signin-btn"
+              id="google-signin-btn"
+              aria-label="Sign in with Google"
+            >
+              <span class="google-icon-wrapper">
+                <svg class="google-icon" viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
+                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/>
+                </svg>
+              </span>
+              <span class="google-btn-text" id="google-btn-text">Continue with Google</span>
+              <span class="google-btn-spinner" id="google-btn-spinner" aria-hidden="true"></span>
+            </button>
+
+            <div class="login-security-note">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+              <span>Single Sign-On (SSO) with verified Google Workspace &amp; personal accounts</span>
+            </div>
+          </div>
+
+          <!-- Signed In State (Shown upon Google authentication) -->
+          <div class="login-signed-in-section is-hidden" id="login-signed-in-view">
+            <div class="user-profile-card">
+              <div class="user-avatar-wrap">
+                <img class="user-avatar" id="user-avatar-img" src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=150&auto=format&fit=crop&q=80" alt="User avatar" />
+                <span class="user-google-badge" title="Verified Google Account">
+                  <svg viewBox="0 0 24 24" width="12" height="12" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
+                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/>
+                  </svg>
+                </span>
+              </div>
+              <div class="user-info">
+                <div class="user-name" id="user-display-name">Akshay Patel</div>
+                <div class="user-email" id="user-display-email">mr.akshaypatel05@gmail.com</div>
+                <div class="user-status-tag">
+                  <span class="status-dot"></span>
+                  <span>Google Account Connected</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="login-quick-links">
+              <a href="../index.html" class="login-quick-btn primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                  <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+                <span>Protocols</span>
+              </a>
+              <a href="/books/" class="login-quick-btn secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/>
+                  <path d="M6 6h10"/>
+                  <path d="M6 10h10"/>
+                </svg>
+                <span>Best Books</span>
+              </a>
+            </div>
+
+            <button type="button" class="login-signout-btn" id="login-signout-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                <polyline points="16 17 21 12 16 7"/>
+                <line x1="21" y1="12" x2="9" y2="12"/>
+              </svg>
+              <span>Sign Out</span>
+            </button>
+          </div>
+
+          <!-- Feature Value Highlights -->
+          <div class="login-features-list">
+            <div class="login-feature-item">
+              <span class="feature-icon-box">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </span>
+              <span class="feature-text">Sync clinical reading progress across workstations</span>
+            </div>
+            <div class="login-feature-item">
+              <span class="feature-icon-box">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </span>
+              <span class="feature-text">Save DICOM case studies and imaging protocols</span>
+            </div>
+            <div class="login-feature-item">
+              <span class="feature-icon-box">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </span>
+              <span class="feature-text">High-yield ARRT &amp; ABR board review tracking</span>
+            </div>
+          </div>
+
+          <!-- Terms and Privacy Note -->
+          <div class="login-card-footer">
+            <p class="login-terms-text">
+              By signing in, you agree to our 
+              <a href="../index.html#terms" class="login-terms-link">Terms of Service</a> 
+              and 
+              <a href="../index.html#privacy" class="login-terms-link">Privacy Policy</a>.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </main>
+
+    <!-- Site Footer: Exact Same Full-Width Footer Spanning All Columns -->
+    <footer class="site-footer" id="site-footer" role="contentinfo" aria-label="Site Footer">
+      <div class="footer-inner">
+        <!-- Top Main Footer Grid -->
+        <div class="footer-grid">
+          
+          <!-- Column 1: Brand Info & Mission Statement -->
+          <div class="footer-col footer-col-brand">
+            <a href="../index.html" class="footer-brand-logo" aria-label="My Radiology Guide Home">
+              <span class="footer-logo-box">
+                <svg
+                  class="footer-logo-svg"
+                  viewBox="0 0 512 512"
+                  width="20"
+                  height="20"
+                  fill="#000000"
+                  aria-hidden="true"
+                >
+                  <g>
+                    <path d="m208,239.893c0,26.508 21.468,48 48,48 26.484,0 48-21.492 48-48 0-26.509-21.516-48-48-48-26.532-2.84217e-14-48,21.491-48,48z"></path>
+                    <path d="m384,19.339c-15.297-8.852-34.875-3.594-43.711,11.703l-55.578,96.227c-8.805,15.242-3.648,34.727 11.539,43.625 24.312,14.227 39.484,40.336 39.75,68.273-0.023,0.406-0.039,0.82-0.047,1.102-0.188,8.602 3.102,16.922 9.117,23.078 6.023,6.148 14.266,9.617 22.875,9.617h112.055c17.672,0 32-14.328 32-32 0-91.109-49.047-176.031-128-221.625z"></path>
+                    <path d="m339.219,321.058c-8.82-15.258-28.289-20.523-43.617-11.758-24.406,13.984-54.906,13.953-79.227,0.016-15.297-8.734-34.773-3.492-43.609,11.773l-56.476,97.789c-8.813,15.258-3.625,34.773 11.601,43.648 38.664,22.531 82.961,34.438 128.109,34.438 45.148,0 89.445-11.906 128.109-34.438 15.227-8.875 20.414-28.391 11.602-43.656l-56.492-97.812z"></path>
+                    <path d="m166.93,263.347c6.016-6.156 9.305-14.477 9.117-23.078-0.008-0.266-0.023-0.68-0.047-1.086 0.258-27.977 15.43-54.094 39.719-68.313 15.195-8.883 20.359-28.375 11.555-43.625l-55.563-96.203c-8.836-15.297-28.406-20.562-43.711-11.703-78.953,45.594-128,130.516-128,221.625 0,17.672 14.328,32 32,32h112.055c8.609,0 16.851-3.469 22.875-9.617z"></path>
+                  </g>
+                </svg>
+              </span>
+              <span class="footer-brand-title">My Radiology Guide</span>
+            </a>
+            <p class="footer-brand-desc">
+              Comprehensive open-access clinical radiology curriculum, standardized diagnostic imaging protocols, physics foundations, and ARRT board examination reviews.
+            </p>
+          </div>
+
+          <!-- Column 2: Core Curriculum -->
+          <div class="footer-col">
+            <h4 class="footer-heading">Curriculum</h4>
+            <ul class="footer-links-list">
+              <li><a href="../index.html#anatomy-physiology" class="footer-link">Anatomy &amp; Physiology</a></li>
+              <li><a href="../index.html#basic-physics" class="footer-link">Basic Physics</a></li>
+              <li><a href="../index.html#radiological-physics" class="footer-link">Diagnostic Imaging Physics</a></li>
+              <li><a href="../index.html#radiography" class="footer-link">Radiographic Positioning</a></li>
+              <li><a href="../index.html#quality-control" class="footer-link">Quality Control &amp; QA</a></li>
+              <li><a href="../index.html#medical-ethics" class="footer-link">Patient Care &amp; Ethics</a></li>
+            </ul>
+          </div>
+
+          <!-- Column 3: Diagnostic Modalities -->
+          <div class="footer-col">
+            <h4 class="footer-heading">Modalities</h4>
+            <ul class="footer-links-list">
+              <li><a href="../index.html#topic-neuroradiology" class="footer-link">Acute Stroke &amp; Neuro CTA</a></li>
+              <li><a href="../index.html#topic-cardiac-mri" class="footer-link">Cardiac MRI &amp; Myopathy</a></li>
+              <li><a href="../index.html#topic-emergency" class="footer-link">Emergency Trauma Pan-Scan</a></li>
+              <li><a href="../index.html#topic-musculoskeletal" class="footer-link">MSK &amp; Cartilage Imaging</a></li>
+              <li><a href="../index.html#topic-interventional" class="footer-link">Interventional Fluoroscopy</a></li>
+              <li><a href="../index.html#topic-radiation-safety" class="footer-link">Radiation Safety &amp; ALARA</a></li>
+            </ul>
+          </div>
+
+          <!-- Column 4: Quick Resources & Roadmap -->
+          <div class="footer-col">
+            <h4 class="footer-heading">Resources</h4>
+            <ul class="footer-links-list">
+              <li><a href="../index.html#roadmap-2026" class="footer-link">Interactive Roadmap 2026</a></li>
+              <li><a href="/books/" class="footer-link">Best Books &amp; Literature</a></li>
+              <li><a href="../index.html#daily-journal" class="footer-link">Clinical Daily Journal</a></li>
+              <li><a href="../index.html#bookmarks" class="footer-link">Saved Bookmarks</a></li>
+              <li><a href="../index.html#architecture" class="footer-link">System Architecture</a></li>
+            </ul>
+          </div>
+
+          <!-- Column 5: Company & Legal -->
+          <div class="footer-col">
+            <h4 class="footer-heading">Company</h4>
+            <ul class="footer-links-list">
+              <li><a href="../index.html#about" class="footer-link">About Us</a></li>
+              <li><a href="../index.html#privacy" class="footer-link">Privacy Policy</a></li>
+              <li><a href="../index.html#terms" class="footer-link">Terms of Service</a></li>
+              <li><a href="../index.html#arrt-standards" class="footer-link">ARRT Standards</a></li>
+              <li><a href="/login/" class="footer-link" style="color: var(--accent-color); font-weight: 600;">Sign In (Google)</a></li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Footer Bottom Bar -->
+      <div class="footer-bottom">
+        <div class="footer-bottom-inner">
+          <p class="footer-copyright">
+            <svg class="footer-copyright-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <g clip-path="url(#clip0_4418_9701_login_attr)">
+                <path d="M12 22C6.48 22 2 17.52 2 12C2 6.48 6.48 2 12 2C17.52 2 22 6.48 22 12C22 17.52 17.52 22 12 22Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M14.88 15C14.17 15.62 13.25 16 12.24 16C10.03 16 8.23999 14.21 8.23999 12C8.23999 9.79 10.03 8 12.24 8C13.25 8 14.17 8.38 14.88 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              </g>
+              <defs>
+                <clipPath id="clip0_4418_9701_login_attr">
+                  <rect width="24" height="24" fill="white"/>
+                </clipPath>
+              </defs>
+            </svg>
+            <span>2026</span>
+            <span class="footer-dot-sep">‧</span>
+            <span class="footer-brand-name"><span>My Radiology Guide</span><svg class="footer-verified-badge" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-label="Verified">
+                <g clip-path="url(#clip0_4418_8618_login_attr)">
+                  <path d="M21.5599 10.7405L20.1999 9.16055C19.9399 8.86055 19.7299 8.30055 19.7299 7.90055V6.20055C19.7299 5.14055 18.8599 4.27055 17.7999 4.27055H16.0999C15.7099 4.27055 15.1399 4.06055 14.8399 3.80055L13.2599 2.44055C12.5699 1.85055 11.4399 1.85055 10.7399 2.44055L9.16988 3.81055C8.86988 4.06055 8.29988 4.27055 7.90988 4.27055H6.17988C5.11988 4.27055 4.24988 5.14055 4.24988 6.20055V7.91055C4.24988 8.30055 4.03988 8.86055 3.78988 9.16055L2.43988 10.7505C1.85988 11.4405 1.85988 12.5605 2.43988 13.2505L3.78988 14.8405C4.03988 15.1405 4.24988 15.7005 4.24988 16.0905V17.8005C4.24988 18.8605 5.11988 19.7305 6.17988 19.7305H7.90988C8.29988 19.7305 8.86988 19.9405 9.16988 20.2005L10.7499 21.5605C11.4399 22.1505 12.5699 22.1505 13.2699 21.5605L14.8499 20.2005C15.1499 19.9405 15.7099 19.7305 16.1099 19.7305H17.8099C18.8699 19.7305 19.7399 18.8605 19.7399 17.8005V16.1005C19.7399 15.7105 19.9499 15.1405 20.2099 14.8405L21.5699 13.2605C22.1499 12.5705 22.1499 11.4305 21.5599 10.7405ZM16.1599 10.1105L11.3299 14.9405C11.1899 15.0805 10.9999 15.1605 10.7999 15.1605C10.5999 15.1605 10.4099 15.0805 10.2699 14.9405L7.84988 12.5205C7.55988 12.2305 7.55988 11.7505 7.84988 11.4605C8.13988 11.1705 8.61988 11.1705 8.90988 11.4605L10.7999 13.3505L15.0999 9.05055C15.3899 8.76055 15.8699 8.76055 16.1599 9.05055C16.4499 9.34055 16.4499 9.82055 16.1599 10.1105Z" fill="currentColor"/>
+                </g>
+                <defs>
+                  <clipPath id="clip0_4418_8618_login_attr">
+                    <rect width="24" height="24" fill="white"/>
+                  </clipPath>
+                </defs>
+              </svg></span>
+            <span class="footer-dot-sep">‧</span>
+            <span>All rights reserved.</span>
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Clean, Minimal Search Modal -->
+    <div class="search-modal-overlay" id="search-modal-overlay" aria-hidden="true">
+      <div class="search-modal" id="search-modal" role="dialog" aria-modal="true" aria-labelledby="search-modal-title">
+        <div class="bottom-sheet-handle" aria-hidden="true"></div>
+
+        <div class="search-modal-header">
+          <h2 id="search-modal-title" class="search-modal-title">Search</h2>
+          <button
+            type="button"
+            class="header-btn search-close-btn"
+            id="search-close-btn"
+            aria-label="Close search modal"
+          >
+            <svg
+              class="close-svg"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <g clip-path="url(#clip0_4418_7386_login_search)">
+                <path d="M9.17011 15.5794C8.98011 15.5794 8.79011 15.5094 8.64011 15.3594C8.35011 15.0694 8.35011 14.5894 8.64011 14.2994L14.3001 8.63938C14.5901 8.34938 15.0701 8.34938 15.3601 8.63938C15.6501 8.92937 15.6501 9.40937 15.3601 9.69937L9.70011 15.3594C9.56011 15.5094 9.36011 15.5794 9.17011 15.5794Z" fill="white" style="fill: var(--fillg, currentColor);"/>
+                <path d="M14.8301 15.5794C14.6401 15.5794 14.4501 15.5094 14.3001 15.3594L8.64011 9.69937C8.35011 9.40937 8.35011 8.92937 8.64011 8.63938C8.93011 8.34938 9.41011 8.34938 9.70011 8.63938L15.3601 14.2994C15.6501 14.5894 15.6501 15.0694 15.3601 15.3594C15.2101 15.5094 15.0201 15.5794 14.8301 15.5794Z" fill="white" style="fill: var(--fillg, currentColor);"/>
+                <path d="M15 22.75H9C3.57 22.75 1.25 20.43 1.25 15V9C1.25 3.57 3.57 1.25 9 1.25H15C20.43 1.25 22.75 3.57 22.75 9V15C22.75 20.43 20.43 22.75 15 22.75ZM9 2.75C4.39 2.75 2.75 4.39 2.75 9V15C2.75 19.61 4.39 21.25 9 21.25H15C19.61 21.25 21.25 19.61 21.25 15V9C21.25 4.39 19.61 2.75 15 2.75H9Z" fill="white" style="fill: var(--fillg, currentColor);"/>
+              </g>
+              <defs>
+                <clipPath id="clip0_4418_7386_login_search">
+                  <rect width="24" height="24" fill="white"/>
+                </clipPath>
+              </defs>
+            </svg>
+          </button>
+        </div>
+
+        <form class="search-modal-field" id="search-form" role="search">
+          <svg
+            class="search-field-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="#ffffff"
+            aria-hidden="true"
+          >
+            <path d="M11.5 21.75C5.85 21.75 1.25 17.15 1.25 11.5C1.25 5.85 5.85 1.25 11.5 1.25C17.15 1.25 21.75 5.85 21.75 11.5C21.75 17.15 17.15 21.75 11.5 21.75ZM11.5 2.75C6.67 2.75 2.75 6.68 2.75 11.5C2.75 16.32 6.67 20.25 11.5 20.25C16.33 20.25 20.25 16.32 20.25 11.5C20.25 6.68 16.33 2.75 11.5 2.75Z" fill="white" style="fill: var(--fillg);"/>
+            <path d="M21.9999 22.7499C21.8099 22.7499 21.6199 22.6799 21.4699 22.5299L19.4699 20.5299C19.1799 20.2399 19.1799 19.7599 19.4699 19.4699C19.7599 19.1799 20.2399 19.1799 20.5299 19.4699L22.5299 21.4699C22.8199 21.7599 22.8199 22.2399 22.5299 22.5299C22.3799 22.6799 22.1899 22.7499 21.9999 22.7499Z" fill="white" style="fill: var(--fillg);"/>
+          </svg>
+          <input
+            type="search"
+            class="search-modal-input"
+            id="search-input"
+            placeholder="looking for notes?"
+            autocomplete="off"
+          />
+          <button
+            type="button"
+            class="search-clear-btn"
+            id="search-clear-btn"
+            aria-label="Clear query"
+          >
+            Clear
+          </button>
+        </form>
+
+        <div class="search-modal-results" id="search-modal-results" role="region" aria-label="Search results" aria-live="polite">
+        </div>
+
+        <div class="search-modal-footer">
+          <span>Search or jump to...</span>
+          <span class="search-kbd">ESC to close</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Clean, Minimal Theme & Palette Modal -->
+    <div class="theme-modal-overlay" id="theme-modal-overlay" aria-hidden="true">
+      <div class="theme-modal" id="theme-modal" role="dialog" aria-modal="true" aria-labelledby="theme-modal-title">
+        <div class="bottom-sheet-handle" aria-hidden="true"></div>
+        <div class="theme-modal-header">
+          <h2 id="theme-modal-title" class="theme-modal-title">Theme &amp; Palette</h2>
+          <button
+            type="button"
+            class="header-btn theme-close-btn"
+            id="theme-close-btn"
+            aria-label="Close theme modal"
+          >
+            <svg
+              class="close-svg"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <g clip-path="url(#clip0_4418_7386_login_theme)">
+                <path d="M9.17011 15.5794C8.98011 15.5794 8.79011 15.5094 8.64011 15.3594C8.35011 15.0694 8.35011 14.5894 8.64011 14.2994L14.3001 8.63938C14.5901 8.34938 15.0701 8.34938 15.3601 8.63938C15.6501 8.92937 15.6501 9.40937 15.3601 9.69937L9.70011 15.3594C9.56011 15.5094 9.36011 15.5794 9.17011 15.5794Z" fill="white" style="fill: var(--fillg, currentColor);"/>
+                <path d="M14.8301 15.5794C14.6401 15.5794 14.4501 15.5094 14.3001 15.3594L8.64011 9.69937C8.35011 9.40937 8.35011 8.92937 8.64011 8.63938C8.93011 8.34938 9.41011 8.34938 9.70011 8.63938L15.3601 14.2994C15.6501 14.5894 15.6501 15.0694 15.3601 15.3594C15.2101 15.5094 15.0201 15.5794 14.8301 15.5794Z" fill="white" style="fill: var(--fillg, currentColor);"/>
+                <path d="M15 22.75H9C3.57 22.75 1.25 20.43 1.25 15V9C1.25 3.57 3.57 1.25 9 1.25H15C20.43 1.25 22.75 3.57 22.75 9V15C22.75 20.43 20.43 22.75 15 22.75ZM9 2.75C4.39 2.75 2.75 4.39 2.75 9V15C2.75 19.61 4.39 21.25 9 21.25H15C19.61 21.25 21.25 19.61 21.25 15V9C21.25 4.39 19.61 2.75 15 2.75H9Z" fill="white" style="fill: var(--fillg, currentColor);"/>
+              </g>
+              <defs>
+                <clipPath id="clip0_4418_7386_login_theme">
+                  <rect width="24" height="24" fill="white"/>
+                </clipPath>
+              </defs>
+            </svg>
+          </button>
+        </div>
+
+        <div class="theme-modal-body">
+          <div class="theme-modal-section">
+            <h3 class="theme-section-title">Color Mode</h3>
+            <div class="theme-mode-row" role="radiogroup" aria-label="Appearance Mode">
+              <button type="button" class="mode-select-btn" data-mode="light" role="radio" aria-checked="false">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="5"/>
+                  <line x1="12" y1="1" x2="12" y2="3"/>
+                  <line x1="12" y1="21" x2="12" y2="23"/>
+                  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                  <line x1="1" y1="12" x2="3" y2="12"/>
+                  <line x1="21" y1="12" x2="23" y2="12"/>
+                  <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                  <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                </svg>
+                <span>Light</span>
+              </button>
+              <button type="button" class="mode-select-btn" data-mode="dark" role="radio" aria-checked="false">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
+                <span>Dark</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="theme-modal-section">
+            <h3 class="theme-section-title">Accent Palette</h3>
+            <div class="theme-palette-grid" role="radiogroup" aria-label="Color Palette Selection">
+              <button type="button" class="palette-btn is-active" data-palette="default" role="radio" aria-checked="true">
+                <span class="palette-swatch swatch-default"></span>
+                <span class="palette-label">Clinical Blue</span>
+              </button>
+              <button type="button" class="palette-btn" data-palette="black-white" role="radio" aria-checked="false">
+                <span class="palette-swatch swatch-bw"></span>
+                <span class="palette-label">Monochrome</span>
+              </button>
+              <button type="button" class="palette-btn" data-palette="emerald" role="radio" aria-checked="false">
+                <span class="palette-swatch swatch-emerald"></span>
+                <span class="palette-label">Teal Pulse</span>
+              </button>
+              <button type="button" class="palette-btn" data-palette="amber" role="radio" aria-checked="false">
+                <span class="palette-swatch swatch-amber"></span>
+                <span class="palette-label">Warm Bone</span>
+              </button>
+              <button type="button" class="palette-btn" data-palette="cyan" role="radio" aria-checked="false">
+                <span class="palette-swatch swatch-cyan"></span>
+                <span class="palette-label">Diagnostic Cyan</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div class="nav-backdrop" id="nav-backdrop" aria-hidden="true"></div>
+    <aside class="nav-drawer" id="nav-drawer" aria-label="Workspace Navigation" aria-hidden="true">
+      <div class="drawer-header-tree">
+        <div class="drawer-brand-group">
+          <a href="../index.html" class="drawer-brand-logo" aria-label="My Radiology Guide Home">
+            <svg class="header-logo-svg" viewBox="0 0 512 512" width="22" height="22" fill="currentColor" aria-hidden="true">
+              <g>
+                <path d="m208,239.893c0,26.508 21.468,48 48,48 26.484,0 48-21.492 48-48 0-26.509-21.516-48-48-48-26.532-2.84217e-14-48,21.491-48,48z"></path>
+                <path d="m384,19.339c-15.297-8.852-34.875-3.594-43.711,11.703l-55.578,96.227c-8.805,15.242-3.648,34.727 11.539,43.625 24.312,14.227 39.484,40.336 39.75,68.273-0.023,0.406-0.039,0.82-0.047,1.102-0.188,8.602 3.102,16.922 9.117,23.078 6.023,6.148 14.266,9.617 22.875,9.617h112.055c17.672,0 32-14.328 32-32 0-91.109-49.047-176.031-128-221.625z"></path>
+                <path d="m339.219,321.058c-8.82-15.258-28.289-20.523-43.617-11.758-24.406,13.984-54.906,13.953-79.227,0.016-15.297-8.734-34.773-3.492-43.609,11.773l-56.476,97.789c-8.813,15.258-3.625,34.773 11.601,43.648 38.664,22.531 82.961,34.438 128.109,34.438 45.148,0 89.445-11.906 128.109-34.438 15.227-8.875 20.414-28.391 11.602-43.656l-56.492-97.812z"></path>
+                <path d="m166.93,263.347c6.016-6.156 9.305-14.477 9.117-23.078-0.008-0.266-0.023-0.68-0.047-1.086 0.258-27.977 15.43-54.094 39.719-68.313 15.195-8.883 20.359-28.375 11.555-43.625l-55.563-96.203c-8.836-15.297-28.406-20.562-43.711-11.703-78.953,45.594-128,130.516-128,221.625 0,17.672 14.328,32 32,32h112.055c8.609,0 16.851-3.469 22.875-9.617z"></path>
+              </g>
+            </svg>
+          </a>
+          <div class="drawer-brand-text">
+            <span class="drawer-title">Clinical Workspace</span>
+            <span class="drawer-subtitle">My Radiology Guide</span>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="header-btn drawer-close-btn"
+          id="drawer-close-btn"
+          aria-label="Close navigation menu"
+        >
+          <svg
+            class="close-svg"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <g clip-path="url(#clip0_4418_7386_login_drawer)">
+              <path d="M9.17011 15.5794C8.98011 15.5794 8.79011 15.5094 8.64011 15.3594C8.35011 15.0694 8.35011 14.5894 8.64011 14.2994L14.3001 8.63938C14.5901 8.34938 15.0701 8.34938 15.3601 8.63938C15.6501 8.92937 15.6501 9.40937 15.3601 9.69937L9.70011 15.3594C9.56011 15.5094 9.36011 15.5794 9.17011 15.5794Z" fill="white" style="fill: var(--fillg, currentColor);"/>
+              <path d="M14.8301 15.5794C14.6401 15.5794 14.4501 15.5094 14.3001 15.3594L8.64011 9.69937C8.35011 9.40937 8.35011 8.92937 8.64011 8.63938C8.93011 8.34938 9.41011 8.34938 9.70011 8.63938L15.3601 14.2994C15.6501 14.5894 15.6501 15.0694 15.3601 15.3594C15.2101 15.5094 15.0201 15.5794 14.8301 15.5794Z" fill="white" style="fill: var(--fillg, currentColor);"/>
+              <path d="M15 22.75H9C3.57 22.75 1.25 20.43 1.25 15V9C1.25 3.57 3.57 1.25 9 1.25H15C20.43 1.25 22.75 3.57 22.75 9V15C22.75 20.43 20.43 22.75 15 22.75ZM9 2.75C4.39 2.75 2.75 4.39 2.75 9V15C2.75 19.61 4.39 21.25 9 21.25H15C19.61 21.25 21.25 19.61 21.25 15V9C21.25 4.39 19.61 2.75 15 2.75H9Z" fill="white" style="fill: var(--fillg, currentColor);"/>
+            </g>
+            <defs>
+              <clipPath id="clip0_4418_7386_login_drawer">
+                <rect width="24" height="24" fill="white"/>
+              </clipPath>
+            </defs>
+          </svg>
+        </button>
+      </div>
+
+      <nav class="drawer-nav tree-nav" aria-label="Workspace tree navigation">
+        <ul class="tree-root" role="tree" id="tree-root">
+
+          <!-- Leaf: Home -->
+          <li class="tree-item tree-leaf" role="none" data-tree-id="overview" data-title="Home">
+            <a href="../index.html" class="tree-row tree-leaf-link" role="treeitem" tabindex="0">
+              <span class="tree-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#ffffff">
+                  <g clip-path="url(#clip_home_login_b)">
+                    <path d="M17.79 22.75H6.21C3.47 22.75 1.25 20.52 1.25 17.78V10.37C1.25 9.00997 2.09 7.29997 3.17 6.45997L8.56 2.25997C10.18 0.999974 12.77 0.939974 14.45 2.11997L20.63 6.44997C21.82 7.27997 22.75 9.05997 22.75 10.51V17.79C22.75 20.52 20.53 22.75 17.79 22.75ZM9.48 3.43997L4.09 7.63997C3.38 8.19997 2.75 9.46997 2.75 10.37V17.78C2.75 19.69 4.3 21.25 6.21 21.25H17.79C19.7 21.25 21.25 19.7 21.25 17.79V10.51C21.25 9.54997 20.56 8.21997 19.77 7.67997L13.59 3.34997C12.45 2.54997 10.57 2.58997 9.48 3.43997Z" fill="white" style="fill: var(--fillg);"/>
+                    <path d="M12 18.75C11.59 18.75 11.25 18.41 11.25 18V15C11.25 14.59 11.59 14.25 12 14.25C12.41 14.25 12.75 14.59 12.75 15V18C12.75 18.41 12.41 18.75 12 18.75Z" fill="white" style="fill: var(--fillg);"/>
+                  </g>
+                  <defs><clipPath id="clip_home_login_b"><rect width="24" height="24" fill="white"/></clipPath></defs>
+                </svg>
+              </span>
+              <span class="tree-label">Home</span>
+            </a>
+          </li>
+
+          <!-- Leaf: Best Books -->
+          <li class="tree-item tree-leaf" role="none" data-tree-id="best-books" data-title="Best Books">
+            <a href="/books/" class="tree-row tree-leaf-link" role="treeitem" aria-selected="false" tabindex="0">
+              <span class="tree-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path>
+                  <path d="M6 6h10"></path>
+                  <path d="M6 10h10"></path>
+                </svg>
+              </span>
+              <span class="tree-label">Best Books</span>
+            </a>
+          </li>
+
+          <!-- Leaf: Sign In (Google) - Active on this page -->
+          <li class="tree-item tree-leaf" role="none" data-tree-id="login" data-title="Sign In">
+            <a href="/login/" class="tree-row tree-leaf-link is-active" role="treeitem" aria-selected="true" tabindex="0">
+              <span class="tree-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </span>
+              <span class="tree-label">Sign In (Google)</span>
+            </a>
+          </li>
+
+          <!-- Parent: Workspace Notes -->
+          <li class="tree-item tree-parent" role="none" data-tree-id="workspace-notes">
+            <div class="tree-row tree-parent-row" role="treeitem" aria-expanded="false" tabindex="0">
+              <span class="tree-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#ffffff">
+                  <g clip-path="url(#clip_folder_notes_login_b)">
+                    <path d="M18.29 22.75H5.70995C2.30995 22.75 2.12995 20.88 1.97995 19.37L1.57995 14.36C1.48995 13.39 1.76995 12.42 2.38995 11.64C3.12995 10.74 4.17995 10.25 5.30995 10.25H18.69C19.8 10.25 20.85 10.74 21.5599 11.59L21.7299 11.82C22.27 12.56 22.51 13.46 22.42 14.37L22.02 19.36C21.87 20.88 21.69 22.75 18.29 22.75ZM5.30995 11.75C4.63995 11.75 3.99995 12.05 3.57995 12.57L3.50995 12.64C3.18995 13.05 3.01995 13.63 3.07995 14.23L3.47995 19.24C3.61995 20.7 3.67995 21.25 5.70995 21.25H18.29C20.33 21.25 20.38 20.7 20.52 19.23L20.92 14.22C20.9799 13.63 20.8099 13.04 20.42 12.58L20.32 12.46C19.8699 11.99 19.3 11.75 18.68 11.75H5.30995Z" fill="white" style="fill: var(--fillg);"/>
+                    <path d="M20.5 12.2203C20.09 12.2203 19.75 11.8803 19.75 11.4703V9.68027C19.75 6.70027 19.23 6.18027 16.25 6.18027H13.7C12.57 6.18027 12.18 5.78027 11.75 5.21027L10.46 3.50027C10.02 2.92027 9.92 2.78027 9.02 2.78027H7.75C4.77 2.78027 4.25 3.30027 4.25 6.28027V11.4303C4.25 11.8403 3.91 12.1803 3.5 12.1803C3.09 12.1803 2.75 11.8403 2.75 11.4303V6.28027C2.75 2.45027 3.92 1.28027 7.75 1.28027H9.03C10.57 1.28027 11.05 1.78027 11.67 2.60027L12.95 4.30027C13.22 4.66027 13.24 4.68027 13.71 4.68027H16.26C20.09 4.68027 21.26 5.85027 21.26 9.68027V11.4703C21.25 11.8803 20.91 12.2203 20.5 12.2203Z" fill="white" style="fill: var(--fillg);"/>
+                    <path d="M14.5699 17.75H9.42993C9.01993 17.75 8.67993 17.41 8.67993 17C8.67993 16.59 9.01993 16.25 9.42993 16.25H14.5699C14.9799 16.25 15.3199 16.59 15.3199 17C15.3199 17.41 14.9899 17.75 14.5699 17.75Z" fill="white" style="fill: var(--fillg);"/>
+                  </g>
+                  <defs><clipPath id="clip_folder_notes_login_b"><rect width="24" height="24" fill="white"/></clipPath></defs>
+                </svg>
+              </span>
+              <span class="tree-label">Workspace Notes</span>
+              <button type="button" class="tree-chevron-btn" aria-label="Toggle Workspace Notes" aria-expanded="false" tabindex="-1">
+                <svg class="tree-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#ffffff" aria-hidden="true">
+                  <path d="M12 16.7996C11.3 16.7996 10.6 16.5296 10.07 15.9996L3.55002 9.47965C3.26002 9.18965 3.26002 8.70965 3.55002 8.41965C3.84002 8.12965 4.32002 8.12965 4.61002 8.41965L11.13 14.9396C11.61 15.4196 12.39 15.4196 12.87 14.9396L19.39 8.41965C19.68 8.12965 20.16 8.12965 20.45 8.41965C20.74 8.70965 20.74 9.18965 20.45 9.47965L13.93 15.9996C13.4 16.5296 12.7 16.7996 12 16.7996Z" fill="white" style="fill: var(--fillg);"/>
+                </svg>
+              </button>
+            </div>
+            <div class="tree-children-wrapper">
+              <ul class="tree-children" role="group">
+                <li class="tree-item tree-leaf" role="none" data-tree-id="daily-journal" data-title="Daily Journal">
+                  <a href="../index.html#daily-journal" class="tree-row tree-leaf-link" role="treeitem" aria-selected="false" tabindex="0">
+                    <span class="tree-label">Daily Journal</span>
+                  </a>
+                </li>
+                <li class="tree-item tree-leaf" role="none" data-tree-id="bookmarks" data-title="Bookmarks">
+                  <a href="../index.html#bookmarks" class="tree-row tree-leaf-link" role="treeitem" aria-selected="false" tabindex="0">
+                    <span class="tree-label">Bookmarks</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </li>
+
+          <li class="tree-divider" role="separator" aria-hidden="true"></li>
+
+          <!-- Leaf: Admin CMS -->
+          <li class="tree-item tree-leaf" role="none" data-tree-id="admin-cms" data-title="Admin CMS">
+            <a href="/admin/index.html" class="tree-row tree-leaf-link" role="treeitem" aria-selected="false" tabindex="0">
+              <span class="tree-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              </span>
+              <span class="tree-label">Admin CMS (Manage Posts)</span>
+            </a>
+          </li>
+
+        </ul>
+      </nav>
+
+      <div class="drawer-footer-tree">
+        <span class="tree-status-pill">
+          <span class="tree-status-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#ffffff">
+              <g clip-path="url(#clip0_4418_7301_login_b)">
+                <path d="M5 15.75C4.59 15.75 4.25 15.41 4.25 15V8C4.25 7.59 4.59 7.25 5 7.25C5.41 7.25 5.75 7.59 5.75 8V15C5.75 15.41 5.41 15.75 5 15.75Z" fill="white" style="fill: var(--fillg);"/>
+                <path d="M5.25 22.75C3.04 22.75 1.25 20.96 1.25 18.75C1.25 16.54 3.04 14.75 5.25 14.75C7.46 14.75 9.25 16.54 9.25 18.75C9.25 20.96 7.46 22.75 5.25 22.75ZM5.25 16.25C3.87 16.25 2.75 17.37 2.75 18.75C2.75 20.13 3.87 21.25 5.25 21.25C6.63 21.25 7.75 20.13 7.75 18.75C7.75 17.37 6.63 16.25 5.25 16.25Z" fill="white" style="fill: var(--fillg);"/>
+                <path d="M5 8.75C2.93 8.75 1.25 7.07 1.25 5C1.25 2.93 2.93 1.25 5 1.25C7.07 1.25 8.75 2.93 8.75 5C8.75 7.07 7.07 8.75 5 8.75ZM5 2.75C3.76 2.75 2.75 3.76 2.75 5C2.75 6.24 3.76 7.25 5 7.25C6.24 7.25 7.25 6.24 7.25 5C7.25 3.76 6.24 2.75 5 2.75Z" fill="white" style="fill: var(--fillg);"/>
+                <path d="M19 8.75C16.93 8.75 15.25 7.07 15.25 5C15.25 2.93 16.93 1.25 19 1.25C21.07 1.25 22.75 2.93 22.75 5C22.75 7.07 21.07 8.75 19 8.75ZM19 2.75C17.76 2.75 16.75 3.76 16.75 5C16.75 6.24 17.76 7.25 19 7.25C20.24 7.25 21.25 6.24 21.25 5C21.25 3.76 20.24 2.75 19 2.75Z" fill="white" style="fill: var(--fillg);"/>
+                <path d="M5.13011 15.7503C5.07011 15.7503 5.01011 15.7403 4.94011 15.7303C4.54011 15.6303 4.30011 15.2203 4.40011 14.8203C4.95011 12.7003 6.86011 11.2203 9.05011 11.2203C9.06011 11.2203 9.06011 11.2203 9.07011 11.2203L12.5001 11.2303C12.5101 11.2303 12.5101 11.2303 12.5201 11.2303C14.7401 11.2303 16.7301 9.82026 17.4601 7.72026C17.6001 7.33026 18.0201 7.12027 18.4101 7.26027C18.8001 7.40027 19.0101 7.82025 18.8701 8.21025C17.9301 10.9202 15.3401 12.7003 12.4901 12.7303L9.06011 12.7203H9.05011C7.54011 12.7203 6.23011 13.7403 5.85011 15.2003C5.77011 15.5303 5.46011 15.7503 5.13011 15.7503Z" fill="white" style="fill: var(--fillg);"/>
+              </g>
+              <defs>
+                <clipPath id="clip0_4418_7301_login_b">
+                  <rect width="24" height="24" fill="white"/>
+                </clipPath>
+              </defs>
+            </svg>
+          </span>
+          <span>v1.4.2 : Radiology Guide</span>
+        </span>
+      </div>
+    </aside>
+  </body>
+</html>

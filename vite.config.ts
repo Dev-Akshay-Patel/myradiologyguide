@@ -25,6 +25,7 @@ export default defineConfig(() => {
           main: path.resolve(__dirname, 'index.html'),
           admin: path.resolve(__dirname, 'admin/index.html'),
           books: path.resolve(__dirname, 'books/index.html'),
+          post: path.resolve(__dirname, 'post/index.html'),
         },
       },
     },

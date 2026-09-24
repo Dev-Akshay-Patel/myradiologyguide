@@ -1,6 +1,6 @@
 {
   "name": "Responsive Header",
-  "description": "A responsive clinical radiology portal featuring a rich multi-column mega menu, interactive hero carousel, pinned post, compact clinical articles grid with custom SVG pagination, dedicated Browse by Subject curriculum hub, popular posts and topics, and a streamlined Best Books digital library with direct download access.",
+  "description": "A responsive clinical radiology portal featuring a rich multi-column mega menu, interactive hero carousel, pinned post, compact clinical articles grid with custom SVG pagination, dedicated Browse by Subject curriculum hub, popular posts and topics, a streamlined Best Books digital library with direct download access, and a dedicated Google-only Sign In page.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
