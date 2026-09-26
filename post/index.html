@@ -3,17 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Acute Ischemic Stroke: Multiphase CTA Collateral Atlas | My Radiology Guide</title>
-    <meta name="description" content="Standardized emergency triage criteria for grading leptomeningeal collateral circulation, verifying ASPECTS scores, and optimizing rapid endovascular thrombectomy candidate selection." />
-    <meta property="og:title" content="Acute Ischemic Stroke: Multiphase CTA Collateral Atlas" />
-    <meta property="og:description" content="Clinical radiology guide and emergency protocol for acute ischemic stroke and CTA collateral assessment." />
+    <title>Typography System &amp; Editorial Guidelines | My Radiology Guide</title>
+    <meta name="description" content="Comprehensive typographic hierarchy, data presentation, clinical callouts, citation frameworks, and interactive components powering every protocol, atlas entry, and case study across My Radiology Guide." />
+    <meta property="og:title" content="Typography System &amp; Editorial Guidelines | My Radiology Guide" />
+    <meta property="og:description" content="Comprehensive typographic hierarchy, data presentation, clinical callouts, citation frameworks, and interactive components powering every protocol, atlas entry, and case study across My Radiology Guide." />
     <meta property="og:type" content="article" />
     <meta name="twitter:card" content="summary_large_image" />
 
     <!-- Google Fonts Preconnect & Loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 
     <!-- Instant Inline Theme & Palette State -->
     <script>
@@ -38,6 +38,11 @@
     <link rel="stylesheet" href="../css/footer.css" />
     <!-- Post Dedicated Stylesheet -->
     <link rel="stylesheet" href="./post.css" />
+
+    <!-- KaTeX Minimal Fast Math Typesetting (Self-Hosted Open Source Plugin) -->
+    <link rel="stylesheet" href="/vendor/katex/katex.min.css" />
+    <script src="/vendor/katex/katex.min.js" defer></script>
+    <script src="/vendor/katex/contrib/auto-render.min.js" defer></script>
 
     <!-- Global Scripts -->
     <script src="../js/global.js"></script>
@@ -156,232 +161,912 @@
         <!-- Left Side: Blog Post Content -->
         <div class="layout-main">
           <article class="post-article-wrapper">
+
+            <!-- Breadcrumbs -->
+            <nav class="post-breadcrumbs" aria-label="Breadcrumb">
+              <a href="../index.html" class="post-breadcrumb-link">Home</a>
+              <span class="post-breadcrumb-sep">/</span>
+              <a href="../index.html#topics" class="post-breadcrumb-link">Design System</a>
+              <span class="post-breadcrumb-sep">/</span>
+              <span class="post-breadcrumb-current" aria-current="page">Typography &amp; Components</span>
+            </nav>
             
-            <!-- Post Header Card -->
+            <!-- Post Header Pure Card -->
             <header class="post-header-card">
-              <!-- Breadcrumbs -->
-              <nav class="post-breadcrumbs" aria-label="Breadcrumb">
-                <a href="../index.html" class="post-breadcrumb-link">Home</a>
-                <span class="post-breadcrumb-sep">/</span>
-                <a href="../index.html#topic-neuroradiology" class="post-breadcrumb-link">Neuroradiology</a>
-                <span class="post-breadcrumb-sep">/</span>
-                <span class="post-breadcrumb-current" aria-current="page">Stroke CTA Protocol</span>
-              </nav>
+              <div class="post-header-content">
+                <h1 class="post-title">Typography System &amp; Editorial Guidelines: Clinical Content Standards for My Radiology Guide</h1>
+                
+                <p class="post-lead-excerpt">
+                  A unified visual and semantic specification for body typography, heading hierarchies, diagnostic data structures, evidence citations, clinical callouts, and interactive widgets powering every protocol and atlas across our platform.
+                </p>
 
-              <!-- Topic badge and Actions (Save / Share) -->
-              <div class="post-header-top">
-                <span class="post-topic-badge">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none">
-                    <path d="M10 3L8 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M16 3L14 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M3.5 9H21.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M2.5 15H20.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                  </svg>
-                  Neuroradiology Clinical Guide
-                </span>
+                <div class="post-meta-bar">
+                  <div class="post-meta-left">
+                    <span class="post-meta-item post-meta-date">Published September 2026 · Clinical Design Board</span>
+                  </div>
 
-                <div class="post-actions-group">
-                  <button type="button" class="post-action-btn" id="post-save-btn" aria-label="Save this protocol" aria-pressed="false">
-                    <span id="post-save-icon">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
-                        <path d="M14.5 10.6504H9.5" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M12 8.21094V13.2109" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M16.8199 2H7.17995C5.04995 2 3.31995 3.74 3.31995 5.86V19.95C3.31995 21.75 4.60995 22.51 6.18995 21.64L11.0699 18.93C11.5899 18.64 12.4299 18.64 12.9399 18.93L17.8199 21.64C19.3999 22.52 20.6899 21.76 20.6899 19.95V5.86C20.6799 3.74 18.9499 2 16.8199 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                      </svg>
-                    </span>
-                    <span id="post-save-text">Save</span>
-                  </button>
+                  <div class="post-actions-group">
+                    <!-- Save Button -->
+                    <button type="button" class="post-action-btn" id="post-save-btn" aria-label="Save this specification" title="Save" aria-pressed="false">
+                      <span id="post-save-icon" class="post-action-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                          <g clip-path="url(#clip0_4418_9959)">
+                            <path d="M14.5 10.6504H9.5" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M12 8.21094V13.2109" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M16.8199 2H7.17995C5.04995 2 3.31995 3.74 3.31995 5.86V19.95C3.31995 21.75 4.60995 22.51 6.18995 21.64L11.0699 18.93C11.5899 18.64 12.4299 18.64 12.9399 18.93L17.8199 21.64C19.3999 22.52 20.6899 21.76 20.6899 19.95V5.86C20.6799 3.74 18.9499 2 16.8199 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                          </g>
+                          <defs>
+                            <clipPath id="clip0_4418_9959">
+                              <rect width="24" height="24" fill="white"/>
+                            </clipPath>
+                          </defs>
+                        </svg>
+                      </span>
+                    </button>
 
-                  <button type="button" class="post-action-btn" id="post-share-btn" aria-label="Share this protocol">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
-                      <path d="M18 8C19.6569 8 21 6.65685 21 5C21 3.34315 19.6569 2 18 2C16.3431 2 15 3.34315 15 5C15 5.25368 15.0315 5.50001 15.0909 5.73529L8.85507 9.35619C8.36273 8.52888 7.45143 8 6 8C3.79086 8 2 9.79086 2 12C2 14.2091 3.79086 16 6 16C7.45143 16 8.36273 15.4711 8.85507 14.6438L15.0909 18.2647C15.0315 18.5 15 18.7463 15 19C15 20.6569 16.3431 22 18 22C19.6569 22 21 20.6569 21 19C21 17.3431 19.6569 16 18 16C16.7022 16 15.5866 16.8284 15.1742 17.986L8.93836 14.3651C8.9788 14.1207 9 13.8698 9 13.6154C9 13.361 8.9788 13.1101 8.93836 12.8657L15.1742 9.24479C15.5866 10.4024 16.7022 11.2308 18 11.2308" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <span id="post-share-text">Share</span>
-                  </button>
-                </div>
-              </div>
-
-              <!-- Main Heading -->
-              <h1 class="post-title">Acute Ischemic Stroke: Multiphase CTA Collateral Atlas &amp; ASPECTS Triage Protocol</h1>
-              
-              <!-- Subtitle excerpt -->
-              <p class="post-lead-excerpt">
-                Comprehensive emergency neuro-imaging algorithm for identifying salvageable penumbra, assessing core infarct ratios, and evaluating mechanical thrombectomy candidate triage within the extended window.
-              </p>
-
-              <!-- Meta Row -->
-              <div class="post-meta-bar">
-                <div class="post-author-block">
-                  <div class="post-author-avatar">RG</div>
-                  <div class="post-author-info">
-                    <span class="post-author-name">Dr. Elena Vance, MD</span>
-                    <span class="post-author-role">Attending Neuroradiologist</span>
+                    <!-- Share Button -->
+                    <button type="button" class="post-action-btn" id="post-share-btn" aria-label="Share this specification" title="Share">
+                      <span class="post-action-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                          <g clip-path="url(#clip0_4418_9833)">
+                            <path d="M7.40005 6.32015L15.8901 3.49015C19.7001 2.22015 21.7701 4.30015 20.5101 8.11015L17.6801 16.6002C15.7801 22.3102 12.6601 22.3102 10.7601 16.6002L9.92005 14.0802L7.40005 13.2402C1.69005 11.3402 1.69005 8.23015 7.40005 6.32015Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M10.11 13.6505L13.69 10.0605" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                          </g>
+                          <defs>
+                            <clipPath id="clip0_4418_9833">
+                              <rect width="24" height="24" fill="white"/>
+                            </clipPath>
+                          </defs>
+                        </svg>
+                      </span>
+                    </button>
                   </div>
                 </div>
-
-                <span class="post-meta-dot">•</span>
-
-                <span class="post-meta-item">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none">
-                    <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/>
-                    <line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                    <line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                    <line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="1.5"/>
-                  </svg>
-                  Published March 8, 2026
-                </span>
-
-                <span class="post-meta-dot">•</span>
-
-                <span class="post-meta-item">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none">
-                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
-                    <polyline points="12 6 12 12 16 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                  </svg>
-                  7 min read
-                </span>
-
-                <span class="post-meta-dot">•</span>
-
-                <span class="post-meta-item">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="1.5"/>
-                    <path d="M7 12L10.5 15.5L17 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                  ARRT Certified Guide
-                </span>
               </div>
             </header>
 
-            <!-- Featured Image Media -->
-            <figure class="post-featured-media">
-              <img
-                src="https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=1200&q=80"
-                alt="Emergency neurovascular CTA imaging display and high-resolution clinical monitors"
-                class="post-featured-img"
-              />
-              <figcaption class="post-img-caption">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                  <circle cx="12" cy="12" r="10"/>
-                  <line x1="12" y1="16" x2="12" y2="12"/>
-                  <line x1="12" y1="8" x2="12.01" y2="8"/>
-                </svg>
-                Figure 1: Multiphase arterial and venous equilibrium CTA series evaluating salvageable ischemic penumbra and collateral leptomeningeal score.
-              </figcaption>
-            </figure>
-
-            <!-- Post Content Body & Typography -->
+            <!-- Post Content Body & Full Typography System Showcase -->
             <div class="post-content-container">
               <div class="post-prose">
                 <p class="lead">
-                  In acute ischemic stroke triage, rapid and accurate neurovascular assessment dictates patient outcome. Modern management relies on multiphase computed tomography angiography (mCTA) and the Alberta Stroke Program Early CT Score (ASPECTS) to triage candidates for emergent endovascular thrombectomy (EVT).
+                  Medical knowledge delivery demands rigorous visual hierarchy, high typographic contrast, and uncompromising semantic clarity. This living editorial specification outlines how each branch of our design system is deployed across all radiology articles, scanning protocols, and interactive tools on <em>My Radiology Guide</em>.
                 </p>
 
-                <h2>1. Core Principles of Multiphase CTA</h2>
-                <p>
-                  Single-phase CTA often underestimates collateral circulation in patients with slow or delayed retrograde flow. Multiphase CTA overcomes this hemodynamic limitation by acquiring three distinct phases during a single intravenous contrast bolus:
-                </p>
-                <ul>
-                  <li><strong>Phase 1 (Peak Arterial):</strong> Acquired from arch to vertex, visualizing proximal large vessel occlusions (LVO) including ICA terminus and MCA-M1 trunk.</li>
-                  <li><strong>Phase 2 (Peak Venous):</strong> Covers skull base to vertex, revealing leptomeningeal retrograde refill into ischemic territories.</li>
-                  <li><strong>Phase 3 (Late Venous):</strong> Captures delayed washout and residual microvascular pooling in penumbral tissue beds.</li>
-                </ul>
-
-                <!-- Clinical Pearl Callout Box -->
-                <div class="post-callout">
-                  <div class="post-callout-header">
-                    <svg class="post-callout-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                <!-- Interactive Table of Contents (TOC) -->
+                <nav class="post-toc" id="interactive-toc" aria-label="Table of Contents">
+                  <div class="post-toc-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="8" y1="6" x2="21" y2="6"></line>
+                      <line x1="8" y1="12" x2="21" y2="12"></line>
+                      <line x1="8" y1="18" x2="21" y2="18"></line>
+                      <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                      <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                      <line x1="3" y1="18" x2="3.01" y2="18"></line>
                     </svg>
-                    <span>Clinical Radiology Pearl</span>
+                    <span>Typography System Architecture Index</span>
                   </div>
-                  <p>
-                    A patient presenting with poor collaterals on single-phase CTA may demonstrate robust reconstitution on Phase 2 or 3 of multiphase CTA. Never disqualify an extended-window patient without reviewing delayed venous phases.
+                  <div class="post-toc-grid">
+                    <a href="#sec-text" class="post-toc-link"><span class="post-toc-num">01.</span> Text &amp; Inline Semantics</a>
+                    <a href="#sec-headings" class="post-toc-link"><span class="post-toc-num">02.</span> Heading Hierarchy (H1–H6)</a>
+                    <a href="#sec-lists" class="post-toc-link"><span class="post-toc-num">03.</span> Lists &amp; Taxonomy Systems</a>
+                    <a href="#sec-quotes" class="post-toc-link"><span class="post-toc-num">04.</span> Quotes &amp; Attributions</a>
+                    <a href="#sec-dividers" class="post-toc-link"><span class="post-toc-num">05.</span> Horizontal &amp; Section Dividers</a>
+                    <a href="#sec-links" class="post-toc-link"><span class="post-toc-num">06.</span> Hyperlink Paradigms</a>
+                    <a href="#sec-media" class="post-toc-link"><span class="post-toc-num">07.</span> Clinical Media, Figures &amp; Gallery</a>
+                    <a href="#sec-data" class="post-toc-link"><span class="post-toc-num">08.</span> Quantitative Data, Tables &amp; Math</a>
+                    <a href="#sec-code" class="post-toc-link"><span class="post-toc-num">09.</span> Code &amp; DICOM Syntax Snippets</a>
+                    <a href="#sec-references" class="post-toc-link"><span class="post-toc-num">10.</span> References, Citations &amp; Footnotes</a>
+                    <a href="#sec-callouts" class="post-toc-link"><span class="post-toc-num">11.</span> Clinical Callouts &amp; Alert Modalities</a>
+                    <a href="#sec-interactive" class="post-toc-link"><span class="post-toc-num">12.</span> Interactive Widgets, Tabs &amp; FAQ</a>
+                  </div>
+                </nav>
+
+                <!-- SECTION 01: TEXT -->
+                <section id="sec-text">
+                  <h2>01 · Text &amp; Inline Semantics</h2>
+                  <p class="lead">
+                    The lead paragraph establishes the clinical scope of every article. It is set at 16.5px with a line-height of 1.75 and a medium font weight to invite the eye into the technical literature.
                   </p>
+                  <p>
+                    Standard paragraphs form the analytical backbone of our educational literature. Set at 16px with an optimum 65–75 character line length, this size maximizes readability under high-stress diagnostic conditions. Every inline typographic style carries specific clinical purpose:
+                  </p>
+                  <ul>
+                    <li>
+                      <strong>Bold Emphasis (<code>&lt;strong&gt;</code>):</strong> Reserved exclusively for pathognomonic radiological signs, pivotal anatomical structures, and definitive diagnoses—such as the <strong>hyperdense MCA sign</strong>, the <strong>comb sign in Crohn disease</strong>, or the <strong>air crescent sign</strong> in aspergilloma.
+                    </li>
+                    <li>
+                      <em>Italic Nuance (<code>&lt;em&gt;</code>):</em> Employed for formal anatomical Latin nomenclature (e.g., <em>falx cerebri</em>, <em>fissura longitudinalis cerebri</em>), technical nuances, or gentle contextual emphasis.
+                    </li>
+                    <li>
+                      <mark class="highlight">Text Highlight (<code>&lt;mark&gt;</code>):</mark> Highlights actionable diagnostic cutoff points and clinical score triggers, such as <mark class="highlight">ASPECTS &lt; 6</mark> for thrombectomy eligibility, or <mark class="highlight">eGFR &lt; 30 mL/min/1.73 m²</mark> for contrast screening thresholds.
+                    </li>
+                    <li>
+                      <small>Small Annotations (<code>&lt;small&gt;</code>):</small> Utilized for scanner calibration footnotes, detector collimation fine-print, and manufacturer-specific algorithm caveats (<small>e.g., Siemens SAFIRE Level 3 vs. GE ASiR-V 50% iterative reconstruction kernels</small>).
+                    </li>
+                    <li>
+                      <strong>Subscript (<code>&lt;sub&gt;</code>):</strong> Formats chemical compounds and contrast formulations, such as CO<sub>2</sub> insufflation in colonography, H<sub>2</sub>O baseline attenuation, and I<sup>-</sup> ion release in non-ionic formulations.
+                    </li>
+                    <li>
+                      <strong>Superscript (<code>&lt;sup&gt;</code>):</strong> Denotes volumetric dosimetry units (e.g., 140 cm<sup>3</sup>, 2.5 mm<sup>2</sup>), radiopharmaceutical isotopes (such as <sup>99m</sup>Tc-sestamibi and <sup>18</sup>F-FDG), and reference citations<sup><a href="#fn-1" class="post-citation">[1]</a></sup>.
+                    </li>
+                  </ul>
+
+                  <!-- Text & Inline Semantics Live Spec Matrix -->
+                  <div class="inline-spec-matrix">
+                    <div class="inline-spec-item">
+                      <span class="inline-spec-tag">&lt;p.lead&gt;</span>
+                      <div class="inline-spec-val"><span class="lead" style="display:inline; margin:0;">Emergency neuro-vascular protocol: Multiphase CTA Collateral Assessment</span></div>
+                    </div>
+                    <div class="inline-spec-item">
+                      <span class="inline-spec-tag">&lt;strong&gt;</span>
+                      <div class="inline-spec-val">Pathognomonic finding: <strong>Hyperdense middle cerebral artery sign (dot sign)</strong></div>
+                    </div>
+                    <div class="inline-spec-item">
+                      <span class="inline-spec-tag">&lt;em&gt;</span>
+                      <div class="inline-spec-val">Anatomical landmark: <em>cisterna ambiens</em> and <em>tentorium cerebelli</em></div>
+                    </div>
+                    <div class="inline-spec-item">
+                      <span class="inline-spec-tag">&lt;mark&gt;</span>
+                      <div class="inline-spec-val">
+                        Critical threshold: <mark class="highlight">ASPECTS &lt; 6</mark> &nbsp;·&nbsp;
+                        <mark class="highlight">eGFR &lt; 30 mL/min/1.73 m²</mark> &nbsp;·&nbsp;
+                        <mark class="highlight highlight-rose">Core Volume &gt; 70 mL</mark> &nbsp;·&nbsp;
+                        <mark class="highlight highlight-teal">Mismatch Ratio ≥ 1.8</mark>
+                      </div>
+                    </div>
+                    <div class="inline-spec-item">
+                      <span class="inline-spec-tag">&lt;small&gt;</span>
+                      <div class="inline-spec-val"><small>Slice collimation: 128 × 0.625 mm · Dual source · Dose modulation CARE Dose 4D active</small></div>
+                    </div>
+                    <div class="inline-spec-item">
+                      <span class="inline-spec-tag">&lt;sub&gt; / &lt;sup&gt;</span>
+                      <div class="inline-spec-val">
+                        Molecules &amp; Units: CO<sub>2</sub>, H<sub>2</sub>O, <sup>99m</sup>Tc-HMPAO, <sup>18</sup>F-FDG, 120 cm<sup>3</sup>, 4.5 mm<sup>2</sup>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <div class="post-section-divider">
+                  <span class="post-section-divider-label">§ 02 · Headings Scale</span>
                 </div>
 
-                <h2>2. Standardized Collateral Grading System</h2>
-                <p>
-                  Collaterals are categorized on a six-point scale (scores 0 to 5) or simplified into three actionable clinical tiers based on the extent and delay of vascular filling in the occluded MCA territory:
-                </p>
+                <!-- SECTION 02: HEADINGS -->
+                <section id="sec-headings">
+                  <h2>02 · Headings Scale &amp; Structural Hierarchy</h2>
+                  <p>
+                    Clear heading hierarchy allows clinicians to skim rapidly during on-call readouts. Our system enforces a strict 6-tier hierarchical scale with proportional spacing and consistent weighting:
+                  </p>
 
-                <!-- Comparison Table in Prose -->
-                <div class="post-table-wrapper">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Grade</th>
-                        <th>Phase 1 (Arterial)</th>
-                        <th>Phase 2 (Peak Venous)</th>
-                        <th>Clinical Implications</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td><strong>Good (Tier 1)</strong></td>
-                        <td>Normal or minimal delay in pial filling</td>
-                        <td>Symmetrical or greater vessel density</td>
-                        <td>High EVT benefit; low hemorrhage risk</td>
-                      </tr>
-                      <tr>
-                        <td><strong>Intermediate (Tier 2)</strong></td>
-                        <td>Absent or visible filling lag (>2 phases)</td>
-                        <td>Partial asymmetry in vessel density</td>
-                        <td>Eligible if core infarct ratio is small</td>
-                      </tr>
-                      <tr>
-                        <td><strong>Poor (Tier 3)</strong></td>
-                        <td>No collateral filling in ischemic bed</td>
-                        <td>Persistent vascular void</td>
-                        <td>High likelihood of malignant MCA syndrome</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <div style="background: var(--color-bg-body); border: 1px solid var(--color-border); border-radius: var(--radius-md, 8px); padding: 20px 24px; margin: 20px 0;">
+                    <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-tertiary); margin-bottom: 4px;">Level 1 · Chapter &amp; Protocol Title (Rendered on Post Card)</div>
+                    <div style="font-size: clamp(23px, 2.5vw, 28px); font-weight: 800; color: var(--color-text-primary); margin-bottom: 16px;">H1: Acute Ischemic Stroke &amp; Vascular Triage Atlas</div>
+
+                    <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-tertiary); margin-bottom: 4px;">Level 2 · Major Clinical Section</div>
+                    <h2 style="margin-top: 0; margin-bottom: 16px;">H2: Multiphase Computed Tomography Angiography (mCTA)</h2>
+
+                    <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-tertiary); margin-bottom: 4px;">Level 3 · Procedural Subsection</div>
+                    <h3 style="margin-top: 0; margin-bottom: 14px;">H3: Leptomeningeal Retrograde Collateral Assessment</h3>
+
+                    <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-tertiary); margin-bottom: 4px;">Level 4 · Parameter / Modality Grouping</div>
+                    <h4 style="margin-top: 0; margin-bottom: 12px;">H4: Arterial Bolus Triggering &amp; Contrast Concentration</h4>
+
+                    <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-tertiary); margin-bottom: 4px;">Level 5 · Anatomical Field Specification</div>
+                    <h5 style="margin-top: 0; margin-bottom: 10px;">H5: MCA-M1 Trunk &amp; Sylvian Bifurcation Caliber</h5>
+
+                    <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-tertiary); margin-bottom: 4px;">Level 6 · Micro-Category / Classification Tag</div>
+                    <h6 style="margin-top: 0; margin-bottom: 0;">H6: ACR APPROPRIATENESS CRITERIA: RATING 9 (USUALLY APPROPRIATE)</h6>
+                  </div>
+                </section>
+
+                <div class="post-section-divider">
+                  <span class="post-section-divider-label">§ 03 · Lists &amp; Taxonomy</span>
                 </div>
 
-                <h2>3. ASPECTS Metric Breakdown</h2>
-                <p>
-                  The Alberta Stroke Program Early CT Score divides the middle cerebral artery territory into 10 distinct anatomic regions on non-contrast CT (NCCT). Each area showing early ischemic changes (hypoattenuation or loss of grey-white distinction) deducts 1 point from an initial score of 10:
-                </p>
+                <!-- SECTION 03: LISTS -->
+                <section id="sec-lists">
+                  <h2>03 · Lists &amp; Taxonomy Systems</h2>
+                  <p>
+                    Different clinical scenarios dictate specialized list architectures. We deploy standard bulleted lists, numbered algorithms, multi-tier nested taxonomies, interactive procedural checklists, and clinical definition lists:
+                  </p>
 
-                <blockquote>
-                  <p>“An initial ASPECTS score ≥ 6 identifies patients with salvageable brain tissue who benefit most dramatically from mechanical recanalization within the 6 to 24-hour therapeutic window.”</p>
-                </blockquote>
+                  <h3>A. Unordered Bullet List (Diagnostic Differentials)</h3>
+                  <ul>
+                    <li><strong>Non-contrast hyperdense vessel sign:</strong> Sensitive for acute intraluminal thrombus within the first 90 minutes.</li>
+                    <li><strong>Loss of insular ribbon:</strong> Earliest cortical sign due to vulnerability of insular collateral watersheds.</li>
+                    <li><strong>Obscuration of lentiform nucleus:</strong> Early intracellular cytotoxic edema of putamen and globus pallidus.</li>
+                  </ul>
 
-                <h3>Subcortical Structures (3 Points)</h3>
-                <ol>
-                  <li><strong>C:</strong> Caudate nucleus head</li>
-                  <li><strong>L:</strong> Lentiform nucleus (putamen &amp; globus pallidus)</li>
-                  <li><strong>IC:</strong> Internal capsule posterior limb</li>
-                </ol>
+                  <h3>B. Ordered Numbered List (Sequential Stroke Triage Workflow)</h3>
+                  <ol>
+                    <li>Perform non-contrast head CT (NCCT) to rule out intracranial hemorrhage and establish baseline ASPECTS.</li>
+                    <li>Execute Phase 1 CTA (aortic arch to vertex) with bolus tracking trigger at descending aorta (100 HU threshold).</li>
+                    <li>Execute Phase 2 (skull base to vertex) at 8-second delay to assess peak venous collateral retrograde filling.</li>
+                    <li>Execute Phase 3 (late venous) at subsequent 8-second delay to assess clearance and residual microvascular washout.</li>
+                  </ol>
 
-                <h3>Cortical MCA Territories (7 Points)</h3>
-                <ul>
-                  <li><strong>M1:</strong> Anterior MCA cortex (frontal operculum)</li>
-                  <li><strong>M2:</strong> MCA cortex lateral to insular ribbon (anterior temporal)</li>
-                  <li><strong>M3:</strong> Posterior MCA cortex (posterior temporal)</li>
-                  <li><strong>I:</strong> Insular ribbon (early loss is highly sensitive)</li>
-                  <li><strong>M4, M5, M6:</strong> Rostral supraganglionic MCA territories at corona radiata level</li>
-                </ul>
+                  <h3>C. Nested Hierarchical List</h3>
+                  <ul>
+                    <li><strong>Anterior Circulation Territorials:</strong>
+                      <ul>
+                        <li>Internal Carotid Artery (ICA):
+                          <ul>
+                            <li>Cervical &amp; petrous segments (C1–C2)</li>
+                            <li>Cavernous &amp; clinoid segments (C3–C5)</li>
+                            <li>Terminus bifurcation (C6–C7)</li>
+                          </ul>
+                        </li>
+                        <li>Middle Cerebral Artery (MCA):
+                          <ul>
+                            <li>M1 horizontal sphenoidal segment</li>
+                            <li>M2 insular branches</li>
+                            <li>M3 opercular &amp; M4 cortical convexity</li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
 
-                <h2>4. Protocol Recommendations &amp; Technique</h2>
-                <p>
-                  For standard 64-slice or dual-source CT systems, administer <code>65–75 mL</code> of non-ionic iodinated contrast (350–370 mg I/mL) at <code>4.5–5.0 mL/s</code>, followed by a 40 mL saline flush. Trigger automatically via bolus tracking at the descending thoracic aorta with a 100 HU threshold.
-                </p>
+                  <h3>D. Interactive Pre-Scan Screening Checklist</h3>
+                  <p>
+                    Click any procedural item below to toggle real-time confirmation status for scanner suite safety:
+                  </p>
+                  <ul class="post-checklist">
+                    <li>
+                      <input type="checkbox" class="post-checklist-checkbox" id="chk-1" />
+                      <label for="chk-1" class="post-checklist-text"><strong>Serum Creatinine &amp; eGFR Verified:</strong> Confirm eGFR ≥ 30 mL/min/1.73 m² prior to high-flow iodinated contrast injection.</label>
+                    </li>
+                    <li>
+                      <input type="checkbox" class="post-checklist-checkbox" id="chk-2" />
+                      <label for="chk-2" class="post-checklist-text"><strong>Intravenous Line Patency Tested:</strong> 18-gauge or 20-gauge antecubital IV flushed with saline at ≥ 4.5 mL/s without resistance.</label>
+                    </li>
+                    <li>
+                      <input type="checkbox" class="post-checklist-checkbox" id="chk-3" />
+                      <label for="chk-3" class="post-checklist-text"><strong>Contrast Allergy Premedication:</strong> Verified 12-hour oral methylprednisolone protocol or emergency IV regimen if prior reaction documented.</label>
+                    </li>
+                    <li>
+                      <input type="checkbox" class="post-checklist-checkbox" id="chk-4" />
+                      <label for="chk-4" class="post-checklist-text"><strong>Metallic Implant Clearance:</strong> Patient verified free of ferromagnetic clips, intracranial coils, and cardiac pacing devices for companion MRI.</label>
+                    </li>
+                  </ul>
 
-                <pre><code>// Recommended Acquisition Timings
-Phase 1: Bolus trigger + 4s delay (aortic arch to vertex)
-Phase 2: Phase 1 end + 8s inter-scan delay (skull base to vertex)
-Phase 3: Phase 2 end + 8s inter-scan delay (skull base to vertex)
-Slice thickness: 0.625mm source; 1.25mm axial & coronal MIP reconstructions</code></pre>
+                  <h3>E. Clinical Definition List (Anatomical &amp; Hemodynamic Lexicon)</h3>
+                  <dl class="post-def-list">
+                    <dt class="post-def-term">Ischemic Core</dt>
+                    <dd class="post-def-desc">Non-viable, irreversibly infracted brain tissue characterized by severe cerebral blood flow reduction (&lt; 30% of normal contralateral tissue) and ADC reduction &lt; 620 × 10<sup>-6</sup> mm<sup>2</sup>/s.</dd>
+
+                    <dt class="post-def-term">Penumbra</dt>
+                    <dd class="post-def-desc">Hypoperfused, structurally intact tissue surrounding the core that remains potentially salvageable if arterial recanalization occurs within the therapeutic time window.</dd>
+
+                    <dt class="post-def-term">Mismatch Ratio</dt>
+                    <dd class="post-def-desc">The quantitative quotient of critically hypoperfused tissue volume (Tmax &gt; 6.0 seconds) divided by ischemic core volume (rCBF &lt; 30%); a ratio ≥ 1.8 indicates favorable mechanical thrombectomy candidacy.</dd>
+                  </dl>
+                </section>
+
+                <div class="post-section-divider">
+                  <span class="post-section-divider-label">§ 04 · Quotes &amp; Attributions</span>
+                </div>
+
+                <!-- SECTION 04: QUOTES -->
+                <section id="sec-quotes">
+                  <h2>04 · Quotations, Attributions &amp; Pull Quotes</h2>
+                  <p>
+                    Guideline citations and editorial callouts are formatted cleanly without container boxes or distracting fills:
+                  </p>
+
+                  <!-- Standard Blockquote with subtle line on left side only -->
+                  <blockquote>
+                    <p>“In patients presenting with acute ischemic stroke in the extended 6-to-24 hour window, multiphase CTA collateral scoring provides non-inferior prognostication compared with automated perfusion software for mechanical thrombectomy selection.”</p>
+                    <cite>— American Heart Association / American Stroke Association (AHA/ASA) Focused Update Guidelines</cite>
+                  </blockquote>
+
+                  <p>
+                    When a critical clinical insight or board axiom must command visual attention across an extensive protocol, an editorial pull quote is deployed:
+                  </p>
+
+                  <div class="post-pullquote">
+                    “Time is brain, but collateral circulation is time: robust leptomeningeal collaterals freeze penumbral decay and expand the viable intervention window.”
+                    <cite>— International Stroke Imaging Collaborative Consensus</cite>
+                  </div>
+                </section>
+
+                <div class="post-section-divider">
+                  <span class="post-section-divider-label">§ 05 · Dividers</span>
+                </div>
+
+                <!-- SECTION 05: DIVIDERS -->
+                <section id="sec-dividers">
+                  <h2>05 · Structural Dividers</h2>
+                  <p>
+                    Dividers preserve rhythm without interrupting cognitive immersion. We distinguish between micro-dividers (standard clean <code>&lt;hr&gt;</code>) and thematic section dividers:
+                  </p>
+                  
+                  <p>Standard horizontal rule micro-break:</p>
+                  <hr />
+                  
+                  <p>Labeled section divider with centered accent capsule (as displayed throughout this guide):</p>
+                  <div class="post-section-divider">
+                    <span class="post-section-divider-label">§ 06 · Link Architecture</span>
+                  </div>
+                </section>
+
+                <!-- SECTION 06: LINKS -->
+                <section id="sec-links">
+                  <h2>06 · Hyperlink Paradigms</h2>
+                  <p>
+                    Every link on <em>My Radiology Guide</em> clearly communicates destination context through distinct semantic treatments:
+                  </p>
+                  <ul>
+                    <li>
+                      <strong>Inline Contextual Link:</strong> A natural reference seamlessly embedded in prose, such as our curated <a href="../books/index.html">Radiology Books &amp; Core Exam Curriculum</a> with interactive hover underlines.
+                    </li>
+                    <li>
+                      <strong>External Authority Link:</strong> Accompanied by a dedicated external vector arrow opening securely in a new tab: <a href="https://pubs.rsna.org/journal/radiology" target="_blank" rel="noopener noreferrer" class="post-external-link">Radiology (RSNA Journal) <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a>.
+                    </li>
+                    <li>
+                      <strong>Internal Anchor Jump:</strong> Instantly glides to in-page diagnostic sections like <a href="#sec-callouts" class="post-internal-link">Section 11: Clinical Callouts</a> or <a href="#sec-interactive" class="post-internal-link">Section 12: Interactive Widgets</a>.
+                    </li>
+                    <li>
+                      <strong>Read More Action Link:</strong> Prominent call-to-action link with trailing animation:
+                      <div>
+                        <a href="../index.html#topics" class="post-readmore-link">
+                          Explore All Clinical Protocols &amp; Imaging Atlases
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </a>
+                      </div>
+                    </li>
+                  </ul>
+                </section>
+
+                <div class="post-section-divider">
+                  <span class="post-section-divider-label">§ 07 · Media &amp; Figures</span>
+                </div>
+
+                <!-- SECTION 07: MEDIA -->
+                <section id="sec-media">
+                  <h2>07 · Clinical Media, Figures &amp; Gallery</h2>
+                  <p>
+                    Imaging figures require high-fidelity rendering, non-distorting aspect ratios, and unambiguous descriptive captions specifying windowing and slice location:
+                  </p>
+
+                  <figure class="post-figure">
+                    <img
+                      src="https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=1200&q=80"
+                      alt="Brain CT Neuro-imaging scan series showing normal brain parenchyma and early ischemic changes"
+                      loading="lazy"
+                      referrerpolicy="no-referrer"
+                    />
+                    <figcaption class="post-caption">
+                      <strong>Figure 1.1 · Diagnostic Neuro-Imaging Reference:</strong> Non-contrast axial CT demonstrating grey-white matter differentiation at the level of the basal ganglia and internal capsule (WW 80, WL 35, 1.25 mm reconstructed slice thickness).
+                    </figcaption>
+                  </figure>
+
+                  <h3>Comparative Modality Gallery</h3>
+                  <p>
+                    Side-by-side tri-modality galleries allow simultaneous evaluation of Non-contrast CT, CTA Maximum Intensity Projection (MIP), and Perfusion Map CBF/CBV mismatch:
+                  </p>
+
+                  <div class="post-media-gallery">
+                    <figure class="post-gallery-item">
+                      <img
+                        src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=600&q=80"
+                        alt="Phase 1 CT Angiography"
+                        loading="lazy"
+                        referrerpolicy="no-referrer"
+                      />
+                      <figcaption class="post-gallery-caption"><strong>Panel A:</strong> Non-Contrast CT (Early parenchymal assessment)</figcaption>
+                    </figure>
+                    <figure class="post-gallery-item">
+                      <img
+                        src="https://images.unsplash.com/photo-1530497610245-94d3c16cda28?auto=format&fit=crop&w=600&q=80"
+                        alt="Phase 2 Venous CTA"
+                        loading="lazy"
+                        referrerpolicy="no-referrer"
+                      />
+                      <figcaption class="post-gallery-caption"><strong>Panel B:</strong> Peak Arterial CTA (Large vessel occlusion mapping)</figcaption>
+                    </figure>
+                    <figure class="post-gallery-item">
+                      <img
+                        src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=600&q=80"
+                        alt="Phase 3 Late Venous Washout"
+                        loading="lazy"
+                        referrerpolicy="no-referrer"
+                      />
+                      <figcaption class="post-gallery-caption"><strong>Panel C:</strong> Delayed Venous (Leptomeningeal retrograde fill)</figcaption>
+                    </figure>
+                  </div>
+                </section>
+
+                <div class="post-section-divider">
+                  <span class="post-section-divider-label">§ 08 · Quantitative Data &amp; Math</span>
+                </div>
+
+                <!-- SECTION 08: DATA -->
+                <section id="sec-data">
+                  <h2>08 · Clinical Data, Tables, Formulas &amp; Scientific Notation</h2>
+                  <p>
+                    Protocols require precise numeric formatting for window widths (WW), window levels (WL), contrast flow rates, and radiation dosimetry formulas:
+                  </p>
+
+                  <h3>Standardized Modality Parameter Table</h3>
+                  <div class="post-table-wrapper">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Anatomical Target</th>
+                          <th>Window Width (WW)</th>
+                          <th>Window Level (WL)</th>
+                          <th>Contrast Rate</th>
+                          <th>Clinical Rationale</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><strong>Acute Brain Ischemia</strong></td>
+                          <td>30–40 HU</td>
+                          <td>30–35 HU</td>
+                          <td>4.5–5.0 mL/s</td>
+                          <td>Maximizes attenuation difference between edema and normal brain</td>
+                        </tr>
+                        <tr>
+                          <td><strong>Subdural Hematoma</strong></td>
+                          <td>130–180 HU</td>
+                          <td>50–75 HU</td>
+                          <td>N/A (Non-Contrast)</td>
+                          <td>Separates isodense subacute collection from adjacent inner calvarium</td>
+                        </tr>
+                        <tr>
+                          <td><strong>Temporal Bone (HRCT)</strong></td>
+                          <td>4000 HU</td>
+                          <td>700 HU</td>
+                          <td>N/A (Thin Bone)</td>
+                          <td>Sharp edge kernel visualization of ossicular chain &amp; cochlear turn</td>
+                        </tr>
+                        <tr>
+                          <td><strong>Pulmonary Embolism (PE)</strong></td>
+                          <td>700 HU</td>
+                          <td>100 HU</td>
+                          <td>4.0 mL/s (350 mg I)</td>
+                          <td>Accentuates intraluminal filling defects in subsegmental branches</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <h3>Diagnostic Physics Formula Cards</h3>
+
+                  <!-- Formula 1: Inverse Square Law -->
+                  <div class="post-formula-card">
+                    <div class="post-formula-header">
+                      <div class="post-formula-title">
+                        <span class="formula-badge">EQ. 01</span>
+                        <span>Inverse Square Law for Radiation Protection</span>
+                      </div>
+                      <button type="button" class="formula-copy-btn" data-latex="\frac{I_1}{I_2} = \frac{d_2^2}{d_1^2} \iff I_2 = I_1 \cdot \left(\frac{d_1}{d_2}\right)^2" aria-label="Copy LaTeX formula" title="Copy LaTeX">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        <span>LaTeX</span>
+                      </button>
+                    </div>
+                    <div class="post-formula-math katex-render" data-display="true" data-latex="\frac{I_1}{I_2} = \frac{d_2^2}{d_1^2} \quad \Longleftrightarrow \quad I_2 = I_1 \times \left(\frac{d_1}{d_2}\right)^2">
+                      $$\frac{I_1}{I_2} = \frac{d_2^2}{d_1^2} \quad \Longleftrightarrow \quad I_2 = I_1 \times \left(\frac{d_1}{d_2}\right)^2$$
+                    </div>
+                    <div class="post-formula-body">
+                      <p class="post-formula-desc">
+                        Doubling physical distance from a fluoroscopy scatter source reduces the operator exposure rate to exactly 25% (one-fourth) of initial intensity.
+                      </p>
+                      <div class="post-formula-variables">
+                        <div class="post-var-item">
+                          <span class="post-var-sym">I₁, I₂</span>
+                          <span>Radiation exposure rate or intensity (μGy/s or mR/h)</span>
+                        </div>
+                        <div class="post-var-item">
+                          <span class="post-var-sym">d₁, d₂</span>
+                          <span>Distance from the radiation scatter or tube focal point (meters)</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Formula 2: CTDIvol Calculation -->
+                  <div class="post-formula-card">
+                    <div class="post-formula-header">
+                      <div class="post-formula-title">
+                        <span class="formula-badge">EQ. 02</span>
+                        <span>Volumetric CT Dose Index (CTDIvol)</span>
+                      </div>
+                      <button type="button" class="formula-copy-btn" data-latex="\text{CTDI}_{\text{vol}} = \frac{\text{CTDI}_w}{\text{Pitch}} = \frac{\frac{1}{3}\,\text{CTDI}_{\text{center}} + \frac{2}{3}\,\text{CTDI}_{\text{periphery}}}{\text{Pitch}}" aria-label="Copy LaTeX formula" title="Copy LaTeX">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        <span>LaTeX</span>
+                      </button>
+                    </div>
+                    <div class="post-formula-math katex-render" data-display="true" data-latex="\text{CTDI}_{\text{vol}} = \frac{\text{CTDI}_w}{\text{Pitch}} = \frac{\frac{1}{3}\,\text{CTDI}_{\text{center}} + \frac{2}{3}\,\text{CTDI}_{\text{periphery}}}{\text{Pitch}}">
+                      $$\text{CTDI}_{\text{vol}} = \frac{\text{CTDI}_w}{\text{Pitch}} = \frac{\frac{1}{3}\,\text{CTDI}_{\text{center}} + \frac{2}{3}\,\text{CTDI}_{\text{periphery}}}{\text{Pitch}}$$
+                    </div>
+                    <div class="post-formula-body">
+                      <p class="post-formula-desc">
+                        Calculates the average absorbed dose across a standardized 16 cm (head) acrylic phantom over the full irradiated helical volume.
+                      </p>
+                      <div class="post-formula-variables">
+                        <div class="post-var-item">
+                          <span class="post-var-sym">CTDI_w</span>
+                          <span>Weighted CT Dose Index: ⅓ central + ⅔ peripheral dose</span>
+                        </div>
+                        <div class="post-var-item">
+                          <span class="post-var-sym">Pitch</span>
+                          <span>Table feed per rotation divided by total collimation width</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Formula 3: DLP & Effective Dose -->
+                  <div class="post-formula-card">
+                    <div class="post-formula-header">
+                      <div class="post-formula-title">
+                        <span class="formula-badge">EQ. 03</span>
+                        <span>Dose-Length Product (DLP) &amp; Effective Dose (E)</span>
+                      </div>
+                      <button type="button" class="formula-copy-btn" data-latex="\text{DLP} = \text{CTDI}_{\text{vol}} \times L \quad [\text{mGy}\cdot\text{cm}], \qquad E = k \times \text{DLP} \quad [\text{mSv}]" aria-label="Copy LaTeX formula" title="Copy LaTeX">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        <span>LaTeX</span>
+                      </button>
+                    </div>
+                    <div class="post-formula-math katex-render" data-display="true" data-latex="\text{DLP} = \text{CTDI}_{\text{vol}} \times L \quad [\text{mGy}\cdot\text{cm}], \qquad E = k \times \text{DLP} \quad [\text{mSv}]">
+                      $$\text{DLP} = \text{CTDI}_{\text{vol}} \times L \quad [\text{mGy}\cdot\text{cm}], \qquad E = k \times \text{DLP} \quad [\text{mSv}]$$
+                    </div>
+                    <div class="post-formula-body">
+                      <p class="post-formula-desc">
+                        Quantifies cumulative total radiation burden across the entire scan range and normalizes biological risk using tissue weighting factors.
+                      </p>
+                      <div class="post-formula-variables">
+                        <div class="post-var-item">
+                          <span class="post-var-sym">L</span>
+                          <span>Total anatomical scan length along patient z-axis (cm)</span>
+                        </div>
+                        <div class="post-var-item">
+                          <span class="post-var-sym">k</span>
+                          <span>Region conversion factor (k = 0.0021 mSv·mGy⁻¹·cm⁻¹ for Head &amp; Neck)</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Formula 4: Hounsfield Unit Attenuation -->
+                  <div class="post-formula-card">
+                    <div class="post-formula-header">
+                      <div class="post-formula-title">
+                        <span class="formula-badge">EQ. 04</span>
+                        <span>Hounsfield Unit (HU) Physical Attenuation Equation</span>
+                      </div>
+                      <button type="button" class="formula-copy-btn" data-latex="\text{HU} = 1000 \times \left( \frac{\mu_{\text{tissue}} - \mu_{\text{water}}}{\mu_{\text{water}}} \right)" aria-label="Copy LaTeX formula" title="Copy LaTeX">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        <span>LaTeX</span>
+                      </button>
+                    </div>
+                    <div class="post-formula-math katex-render" data-display="true" data-latex="\text{HU} = 1000 \times \left( \frac{\mu_{\text{tissue}} - \mu_{\text{water}}}{\mu_{\text{water}}} \right)">
+                      $$\text{HU} = 1000 \times \left( \frac{\mu_{\text{tissue}} - \mu_{\text{water}}}{\mu_{\text{water}}} \right)$$
+                    </div>
+                    <div class="post-formula-body">
+                      <p class="post-formula-desc">
+                        Defines linear X-ray attenuation coefficients relative to pure water (0 HU) and ambient room air (-1000 HU) across monochromatic and polychromatic spectra.
+                      </p>
+                      <div class="post-formula-variables">
+                        <div class="post-var-item">
+                          <span class="post-var-sym">μ_tissue</span>
+                          <span>Linear attenuation coefficient of sampled anatomical tissue (cm⁻¹)</span>
+                        </div>
+                        <div class="post-var-item">
+                          <span class="post-var-sym">μ_water</span>
+                          <span>Linear attenuation coefficient of distilled water at reference kVp</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <h3>Scientific &amp; Radiological Notation</h3>
+                  <p>
+                    Dosimetry values and isotope activities are formatted using monospace scientific notation tokens:
+                    <span class="post-scientific-notation"><span class="katex-inline" data-latex="2.4 \times 10^3\,\text{mGy}\cdot\text{cm}">2.4 × 10³ mGy·cm</span></span> (Dose-Length Product),
+                    <span class="post-scientific-notation"><span class="katex-inline" data-latex="3.7 \times 10^{10}\,\text{Bq}">3.7 × 10¹⁰ Bq</span></span> (1 Curie activity), and
+                    <span class="post-scientific-notation"><span class="katex-inline" data-latex="1.2 \times 10^{-4}\,\text{mSv/mAs}">1.2 × 10⁻⁴ mSv/mAs</span></span>.
+                  </p>
+                </section>
+
+                <div class="post-section-divider">
+                  <span class="post-section-divider-label">§ 09 · Code &amp; Protocols</span>
+                </div>
+
+                <!-- SECTION 09: CODE -->
+                <section id="sec-code">
+                  <h2>09 · Code &amp; Protocol Syntax Snippets</h2>
+                  <p>
+                    Technical scanner presets and DICOM header tags use clean monospace styling. Inline parameters like <code>0.625 mm slice</code>, <code>120 kVp</code>, and <code>100 HU bolus threshold</code> are displayed with dedicated border styling.
+                  </p>
+
+                  <div class="post-code-block">
+                    <div class="code-block-header">
+                      <span class="code-block-title">mCTA_Scanner_Protocol.json</span>
+                      <button type="button" class="code-copy-btn" data-target="code-snippet-1" aria-label="Copy code snippet">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        Copy Snippet
+                      </button>
+                    </div>
+                    <pre><code id="code-snippet-1">{
+  "modality": "CT",
+  "seriesDescription": "HEAD_NECK_mCTA_STROKE",
+  "acquisition": {
+    "tubeVoltage_kVp": 100,
+    "currentModulation": "CARE_Dose4D_ref_mAs_240",
+    "detectorCollimation_mm": "128 x 0.625",
+    "rotationTime_sec": 0.5,
+    "pitch": 0.8
+  },
+  "phases": [
+    { "phase": 1, "name": "Peak Arterial", "range": "Aortic Arch to Vertex", "delay": "Bolus + 4s" },
+    { "phase": 2, "name": "Peak Venous", "range": "Skull Base to Vertex", "delay": "Phase 1 end + 8s" },
+    { "phase": 3, "name": "Late Venous", "range": "Skull Base to Vertex", "delay": "Phase 2 end + 8s" }
+  ]
+}</code></pre>
+                  </div>
+                </section>
+
+                <div class="post-section-divider">
+                  <span class="post-section-divider-label">§ 10 · References &amp; Evidence</span>
+                </div>
+
+                <!-- SECTION 10: REFERENCES -->
+                <section id="sec-references">
+                  <h2>10 · References, Citations &amp; Footnotes</h2>
+                  <p>
+                    All clinical statements must link to verifiable peer-reviewed literature. In-text citations use clean superscript anchor pills<sup><a href="#fn-1" class="post-citation">[1]</a></sup>, which cross-reference the consensus trial literature<sup><a href="#fn-2" class="post-citation">[2]</a></sup> and radiation safety protocols<sup><a href="#fn-3" class="post-citation">[3]</a></sup> below.
+                  </p>
+
+                  <div class="post-bibliography">
+                    <div class="post-bib-item" id="bib-1">
+                      <strong>1. Goyal M, Menon BK, van Zwam WH, et al.</strong> Endovascular thrombectomy after large-vessel ischaemic stroke: a meta-analysis of individual patient data from five randomised trials (HERMES collaboration). <em>Lancet.</em> 2016;387(10029):1723-1731. doi:10.1016/S0140-6736(16)00163-X.
+                    </div>
+                    <div class="post-bib-item" id="bib-2">
+                      <strong>2. Menon BK, d'Esterre CD, Qazi EM, et al.</strong> Multiphase CT Angiography: A New Tool for the Detection of Collateral Status and Diagnostic Triage in Patients with Acute Ischemic Stroke. <em>Radiology.</em> 2015;275(2):510-520. doi:10.1148/radiol.15141596.
+                    </div>
+                    <div class="post-bib-item" id="bib-3">
+                      <strong>3. American College of Radiology (ACR).</strong> Manual on Contrast Media (2026 Edition). Committee on Drugs and Contrast Media. ISBN: 978-1-55903-012-0.
+                    </div>
+                  </div>
+
+                  <!-- Footnote Anchor List with Backlinks -->
+                  <div class="post-footnotes" id="footnotes-section">
+                    <h4>Clinical Footnotes</h4>
+                    <ol>
+                      <li id="fn-1">
+                        HERMES Collaboration Pooled Analysis: Confirmed functional independence (mRS 0–2 at 90 days) in 46.0% of thrombectomy patients vs 26.5% of medical control patients.
+                        <a href="#sec-text" class="post-footnote-backref" title="Return to text">↩</a>
+                      </li>
+                      <li id="fn-2">
+                        Multiphase CTA Trial: Inter-rater agreement for collateral grading was significantly higher on multiphase CTA (κ = 0.81) than single-phase CTA (κ = 0.58).
+                        <a href="#sec-references" class="post-footnote-backref" title="Return to text">↩</a>
+                      </li>
+                      <li id="fn-3">
+                        ACR Committee on Drugs and Contrast Media recommends pre-warming iodinated contrast to 37°C for injection flow rates &gt; 4.0 mL/s to minimize vascular shear stress.
+                        <a href="#sec-references" class="post-footnote-backref" title="Return to text">↩</a>
+                      </li>
+                    </ol>
+                  </div>
+                </section>
+
+                <div class="post-section-divider">
+                  <span class="post-section-divider-label">§ 11 · Clinical Callouts</span>
+                </div>
+
+                <!-- SECTION 11: CALLOUTS -->
+                <section id="sec-callouts">
+                  <h2>11 · Clinical Callouts &amp; Alert Modalities</h2>
+                  <p>
+                    We provide six standardized callout containers engineered with distinct chromatic signals to communicate urgency, safety, and board exam relevance:
+                  </p>
+
+                  <!-- 1. Note -->
+                  <div class="post-callout note">
+                    <div class="post-callout-header">
+                      <svg class="post-callout-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                      </svg>
+                      <span>Clinical Note</span>
+                    </div>
+                    <p>
+                      NCCT attenuation values can be falsely elevated in patients with severe polycythemia (hematocrit &gt; 55%), occasionally mimicking the hyperdense artery sign in patent vessels.
+                    </p>
+                  </div>
+
+                  <!-- 2. Tip -->
+                  <div class="post-callout tip">
+                    <div class="post-callout-header">
+                      <svg class="post-callout-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+                      </svg>
+                      <span>Technique Tip</span>
+                    </div>
+                    <p>
+                      Elevate patient arms above the head for torso scans, but maintain slight adduction for neck/head scans to eliminate beam hardening and clavicular streak artifact across the carotid bifurcation.
+                    </p>
+                  </div>
+
+                  <!-- 3. Important -->
+                  <div class="post-callout important">
+                    <div class="post-callout-header">
+                      <svg class="post-callout-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                      </svg>
+                      <span>Important Protocol Mandate</span>
+                    </div>
+                    <p>
+                      Immediately notify the neuro-interventional on-call fellow if an ICA terminus occlusion ("T-lesion") or proximal M1 thrombus is identified on Phase 1, even prior to completion of reconstructed thin-slice MIP series.
+                    </p>
+                  </div>
+
+                  <!-- 4. Warning -->
+                  <div class="post-callout warning">
+                    <div class="post-callout-header">
+                      <svg class="post-callout-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                      </svg>
+                      <span>Patient Safety Warning: Contrast Extravasation</span>
+                    </div>
+                    <p>
+                      If contrast extravasation occurs at flow rates ≥ 4.5 mL/s, stop injection immediately, aspirate residual fluid if feasible, elevate limb above heart level, apply cold compress, and monitor for acute compartment syndrome.
+                    </p>
+                  </div>
+
+                  <!-- 5. Definition -->
+                  <div class="post-callout definition">
+                    <div class="post-callout-header">
+                      <svg class="post-callout-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                      </svg>
+                      <span>Formal Diagnostic Criteria: ASPECTS</span>
+                    </div>
+                    <p>
+                      <strong>Alberta Stroke Program Early CT Score:</strong> A 10-point quantitative topographical scoring system dividing the MCA territory into 10 regions; 1 point is subtracted for each region demonstrating early parenchymal hypoattenuation.
+                    </p>
+                  </div>
+
+                  <!-- 6. Exam Tip -->
+                  <div class="post-callout exam-tip">
+                    <div class="post-callout-header">
+                      <svg class="post-callout-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                      </svg>
+                      <span>Core Exam High-Yield Pearl</span>
+                    </div>
+                    <p>
+                      Board examiners frequently test the differential between acute cytotoxic edema and vasogenic edema: cytotoxic edema involves both gray and white matter (loss of gray-white boundary), whereas vasogenic edema spares the cortex and respects the gray-white junction (finger-like projections in deep white matter).
+                    </p>
+                  </div>
+                </section>
+
+                <div class="post-section-divider">
+                  <span class="post-section-divider-label">§ 12 · Interactive Components</span>
+                </div>
+
+                <!-- SECTION 12: INTERACTIVE -->
+                <section id="sec-interactive">
+                  <h2>12 · Interactive Components, Tabs, Tooltips &amp; FAQs</h2>
+                  <p>
+                    Interactive components elevate passive reading into hands-on clinical comprehension. Every element below is built with pure semantic HTML, progressive enhancement, and full keyboard accessibility:
+                  </p>
+
+                  <!-- 1. Tabs Component -->
+                  <h3>A. Multi-Modality Parameter Tabs</h3>
+                  <div class="post-tabs">
+                    <div class="post-tab-list" role="tablist">
+                      <button type="button" class="post-tab-btn is-active" data-tab="tab-ct">CT Angiography (Neuro)</button>
+                      <button type="button" class="post-tab-btn" data-tab="tab-mri">MRI Diffusion / FLAIR</button>
+                      <button type="button" class="post-tab-btn" data-tab="tab-us">Carotid Doppler US</button>
+                    </div>
+                    <div class="post-tab-panel is-active" id="tab-ct">
+                      <h4>Computed Tomography Angiography (mCTA)</h4>
+                      <p>
+                        Dual-source or 64+ slice CT system. Acquisition speed: 0.5 s rotation time. 70 mL Omnipaque 350 at 5.0 mL/s via right antecubital 18G vein with automated bolus trigger at descending thoracic aorta (100 HU threshold).
+                      </p>
+                    </div>
+                    <div class="post-tab-panel" id="tab-mri">
+                      <h4>Magnetic Resonance Stroke Protocol (1.5T / 3.0T)</h4>
+                      <p>
+                        DWI (b=0, b=1000 s/mm<sup>2</sup>) with ADC mapping, axial FLAIR (to assess DWI-FLAIR mismatch &lt; 4.5 hours), 3D Time-of-Flight (TOF) MRA without contrast, and axial T2* gradient-echo or SWI to exclude microbleeds.
+                      </p>
+                    </div>
+                    <div class="post-tab-panel" id="tab-us">
+                      <h4>Carotid &amp; Vertebral Doppler Ultrasound</h4>
+                      <p>
+                        Linear array high-frequency probe (7–12 MHz). Measure peak systolic velocity (PSV) and end-diastolic velocity (EDV) in distal CCA, bulb, and proximal ICA. PSV &gt; 230 cm/s indicates ≥ 70% internal carotid stenosis by NASCET criteria.
+                      </p>
+                    </div>
+                  </div>
+
+                  <!-- 2. Tooltip Component -->
+                  <h3>B. Contextual Medical Abbreviation Tooltips</h3>
+                  <p>
+                    Hover over or tap the highlighted terms to view instant clinical definitions:
+                    Radiology safety mandates adhering to the
+                    <span class="post-tooltip" tabindex="0">
+                      ALARA
+                      <span class="tooltip-text">As Low As Reasonably Achievable: Universal ionizing radiation protection principle balancing diagnostic image quality with lowest dose.</span>
+                    </span>
+                    principle. In acute neurological deficit, verify the patient's
+                    <span class="post-tooltip" tabindex="0">
+                      ASPECTS
+                      <span class="tooltip-text">Alberta Stroke Program Early CT Score: 10-point topographical grading system for middle cerebral artery territory infarction on NCCT.</span>
+                    </span>
+                    prior to EVT, and evaluate renal
+                    <span class="post-tooltip" tabindex="0">
+                      eGFR
+                      <span class="tooltip-text">Estimated Glomerular Filtration Rate: Serum-derived metric evaluated prior to iodinated or gadolinium contrast injection (threshold: 30 mL/min).</span>
+                    </span>
+                    before high-pressure automated injector triggering according to
+                    <span class="post-tooltip" tabindex="0">
+                      DICOM
+                      <span class="tooltip-text">Digital Imaging and Communications in Medicine: The global standard for storing, transmitting, and viewing medical imaging data.</span>
+                    </span>
+                    standardized metadata.
+                  </p>
+
+                  <!-- 3. Accordion Component -->
+                  <h3>C. Diagnostic Troubleshooting Accordion</h3>
+                  <div class="post-accordion">
+                    <details>
+                      <summary>How do you differentiate pseudo-occlusion from genuine ICA terminus occlusion?</summary>
+                      <div class="post-accordion-content">
+                        Severe cervical ICA bulb stenosis or tortuosity can cause "contrast stagnation" mimicking intracranial occlusion on early arterial Phase 1. Delayed venous Phase 2 and 3 scans will reveal late trickle filling into the petrous and cavernous siphon, confirming patency and sparing unnecessary intracranial intervention.
+                      </div>
+                    </details>
+                    <details>
+                      <summary>What is the management algorithm for severe intravenous contrast extravasation?</summary>
+                      <div class="post-accordion-content">
+                        Immediately halt the injector and aspirate extravasated volume if the cannula is in place. Elevate the extremity above the level of the heart, apply cold packs (15–20 minutes at a time) to promote vasoconstriction and limit edema, measure limb circumference, check distal pulses, and consult plastic surgery if volume exceeds 100 mL or signs of compartment syndrome emerge.
+                      </div>
+                    </details>
+                    <details>
+                      <summary>How is the "DWI-FLAIR mismatch" used in wake-up stroke triage?</summary>
+                      <div class="post-accordion-content">
+                        A lesion that is hyperintense on diffusion-weighted imaging (DWI) but has not yet become hyperintense on FLAIR indicates that tissue ischemia began less than 4.5 hours ago. These "wake-up stroke" patients can safely receive IV thrombolysis (alteplase or tenecteplase) within standard window safety profiles.
+                      </div>
+                    </details>
+                  </div>
+
+                  <!-- 4. Frequently Asked Questions (FAQ) -->
+                  <h3>D. Frequently Asked Questions (Clinical Implementation FAQ)</h3>
+                  <div class="post-faq">
+                    <div class="post-faq-item">
+                      <div class="post-faq-question">
+                        <span>Q: Why is multiphase CTA superior to single-phase CTA for collateral assessment?</span>
+                      </div>
+                      <div class="post-faq-answer">
+                        Single-phase CTA acquires only a snapshot at peak arterial timing. Patients with slow retrograde leptomeningeal flow often appear to have "no collaterals" on Phase 1, but reveal robust collateral reconstitution by Phase 2 or 3. Multiphase CTA prevents erroneously excluding salvageable stroke candidates.
+                      </div>
+                    </div>
+                    <div class="post-faq-item">
+                      <div class="post-faq-question">
+                        <span>Q: Are there radiation dose penalties when acquiring multiphase CTA?</span>
+                      </div>
+                      <div class="post-faq-answer">
+                        Multiphase CTA uses low-dose acquisitions for Phase 2 and Phase 3 (restricted to the skull base to vertex, omitting the neck and chest). The combined radiation dose typically adds only 1.5–2.0 mSv over standard CTA, well below the radiation threshold of conventional CT perfusion acquisitions.
+                      </div>
+                    </div>
+                  </div>
+                </section>
 
                 <!-- Post Footer Tags -->
                 <div class="post-footer-tags">
-                  <span class="post-footer-tag-label">Related Topics:</span>
-                  <a href="../index.html#topic-neuroradiology" class="post-tag-pill">#Neuroradiology</a>
-                  <a href="../index.html#topic-emergency" class="post-tag-pill">#Stroke Protocol</a>
-                  <a href="../index.html#topic-chest-ct" class="post-tag-pill">#ASPECTS Score</a>
-                  <a href="../index.html#topic-radiation-safety" class="post-tag-pill">#CTA Imaging</a>
+                  <span class="post-footer-tag-label">Design &amp; Editorial Tags:</span>
+                  <a href="../index.html" class="post-tag-pill">#TypographySystem</a>
+                  <a href="../index.html" class="post-tag-pill">#DesignGuidelines</a>
+                  <a href="../index.html" class="post-tag-pill">#ClinicalEditorial</a>
+                  <a href="../index.html" class="post-tag-pill">#RadiologyProtocols</a>
+                  <a href="../index.html" class="post-tag-pill">#StyleGuide</a>
                 </div>
               </div>
             </div>
@@ -899,6 +1584,7 @@ Slice thickness: 0.625mm source; 1.25mm axial & coronal MIP reconstructions</cod
               <span class="tree-label">Sample Post</span>
             </a>
           </li>
+
 
           <li class="tree-divider" role="separator" aria-hidden="true"></li>
 

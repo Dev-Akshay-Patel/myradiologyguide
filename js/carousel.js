@@ -15,6 +15,7 @@
     initCarousel();
     initTopicsShowMore();
     initPinnedPostActions();
+    initMobileScrollExpand();
   });
 
   function initPinnedPostActions() {
@@ -300,5 +301,58 @@
     // Initial setup
     goToSlide(0);
     startAutoplay();
+  }
+
+  function initMobileScrollExpand() {
+    const pinnedPost = document.getElementById('pinned-post');
+    if (!pinnedPost) return;
+
+    let ticking = false;
+    let isExpanded = false;
+
+    function checkExpand() {
+      // Only operate on mobile and stacked viewports (screen width <= 859px)
+      if (window.innerWidth > 859) {
+        if (isExpanded) {
+          pinnedPost.classList.remove('is-scroll-expanded');
+          isExpanded = false;
+        }
+        return;
+      }
+
+      const rect = pinnedPost.getBoundingClientRect();
+      const scrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
+
+      // Smooth trigger condition with hysteresis:
+      // When scrolling down past the top area and the pinned post is in view, expand to acquire full viewport space
+      // Retract smoothly when scrolling back up near the top/carousel
+      const shouldExpand = scrollY > 40 && rect.top <= window.innerHeight * 0.82;
+      const shouldRetract = scrollY < 20 || rect.top > window.innerHeight * 0.88;
+
+      if (!isExpanded && shouldExpand) {
+        isExpanded = true;
+        pinnedPost.classList.add('is-scroll-expanded');
+      } else if (isExpanded && shouldRetract) {
+        isExpanded = false;
+        pinnedPost.classList.remove('is-scroll-expanded');
+      }
+    }
+
+    function onScroll() {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          checkExpand();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    window.addEventListener('orientationchange', onScroll, { passive: true });
+
+    // Initial check
+    checkExpand();
   }
 })();

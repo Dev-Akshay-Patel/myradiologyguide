@@ -1,6 +1,8 @@
 /* ==========================================================================
-   GLOBAL CSS - Base Styles, Plus Jakarta Sans Font, Tokens, Material Subtle Palettes & Focus Rings
+   GLOBAL CSS - Base Styles, Plus Jakarta Sans & Geist Mono Fonts, Tokens, Material Subtle Palettes & Focus Rings
    ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700;800&display=swap');
 
 /* Plus Jakarta Sans font is loaded with preconnect in index.html to eliminate CLS */
 
@@ -19,6 +21,7 @@
 :root {
   /* Typography with robust system fallback metrics to eliminate CLS */
   --font-family-base: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-family-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
   --font-size-base: 16px;
   --line-height-base: 1.55;
 
@@ -1153,6 +1156,63 @@ button {
 input {
   font-family: inherit;
   font-size: inherit;
+}
+
+/* Monospace Elements: Standardized on Geist Mono */
+code,
+kbd,
+samp,
+pre {
+  font-family: var(--font-family-mono);
+}
+
+/* Global Text Highlight / Mark with minimal footprint & high contrast */
+mark,
+.highlight {
+  background-color: #fef08a;
+  color: #1c1917;
+  padding: 0.1em 0.3em;
+  border-radius: 2px;
+  font-size: inherit;
+  font-weight: inherit;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  border: none;
+}
+
+[data-theme="dark"] mark,
+[data-theme="dark"] .highlight,
+[data-theme="extra-dark"] mark,
+[data-theme="extra-dark"] .highlight {
+  background-color: rgba(250, 204, 21, 0.25);
+  color: #fef08a;
+  border: none;
+}
+
+/* Standard Blockquote: Simple editorial design with subtle left line only, no div/box background */
+blockquote {
+  margin: 24px 0;
+  padding: 4px 0 4px 18px;
+  border-left: 2px solid var(--color-border);
+  border-top: none;
+  border-right: none;
+  border-bottom: none;
+  background: transparent;
+  background-color: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  font-style: italic;
+  color: var(--color-text-secondary);
+}
+
+blockquote p {
+  margin: 0;
+  color: inherit;
+  font-style: inherit;
+}
+
+blockquote p + p {
+  margin-top: 12px;
 }
 
 /* --------------------------------------------------------------------------

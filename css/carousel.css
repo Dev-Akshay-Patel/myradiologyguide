@@ -91,6 +91,21 @@
   gap: 22px;
   align-self: start;
   overflow-anchor: none;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.layout-aside::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+@media (min-width: 860px) {
+  .layout-aside {
+    position: sticky;
+    top: calc(var(--header-height, 60px) + var(--page-gutter, 12px));
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -993,7 +1008,11 @@
   box-shadow: none;
   display: flex;
   flex-direction: column;
-  transition: border-color var(--transition-fast);
+  transition: border-color var(--transition-fast),
+              margin 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+              border-radius 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+              border-left-color 0.32s ease,
+              border-right-color 0.32s ease;
 }
 
 .pinned-post:hover {
@@ -1379,6 +1398,64 @@
 
   .pinned-btn-label-mobile {
     display: inline;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Mobile Scroll Expansion: Smooth edge-to-edge transition on scroll
+   Acquires the full viewport space so it doesn't look like a card or div.
+   Lightweight, GPU-less, silky 60fps CSS transitions without layout shifts.
+   -------------------------------------------------------------------------- */
+@media (max-width: 859px) {
+  /* Targeted element from focus-mode: Pinned Header and its sections */
+  main#main-content:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > article:nth-of-type(1) > div:nth-of-type(1),
+  .pinned-header {
+    transition: padding 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.25s ease;
+  }
+
+  .pinned-post {
+    transition: margin 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+                border-radius 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.25s ease,
+                border-left-color 0.32s ease,
+                border-right-color 0.32s ease,
+                background-color 0.25s ease;
+  }
+
+  .pinned-body,
+  .pinned-footer {
+    transition: padding 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* When expanded during mobile scroll: acquires screen margin space, drops card borders/radii */
+  .pinned-post.is-scroll-expanded {
+    margin-left: calc(-1 * var(--page-gutter, 12px));
+    margin-right: calc(-1 * var(--page-gutter, 12px));
+    width: calc(100% + (2 * var(--page-gutter, 12px)));
+    max-width: calc(100% + (2 * var(--page-gutter, 12px)));
+    border-radius: 0;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  /* Pinned Header (Targeted element) expands seamlessly and aligns internal contents */
+  .pinned-post.is-scroll-expanded > div:nth-of-type(1),
+  .pinned-post.is-scroll-expanded .pinned-header {
+    padding-left: calc(var(--page-gutter, 12px) + 8px);
+    padding-right: calc(var(--page-gutter, 12px) + 8px);
+  }
+
+  .pinned-post.is-scroll-expanded .pinned-body {
+    padding-left: calc(var(--page-gutter, 12px) + 8px);
+    padding-right: calc(var(--page-gutter, 12px) + 8px);
+  }
+
+  .pinned-post.is-scroll-expanded .pinned-footer {
+    padding-left: calc(var(--page-gutter, 12px) + 8px);
+    padding-right: calc(var(--page-gutter, 12px) + 8px);
   }
 }
 
