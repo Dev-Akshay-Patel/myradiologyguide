@@ -113,6 +113,15 @@
         } catch (e) {}
       });
     }
+
+    const commentBtn = document.getElementById('post-comment-btn');
+    if (commentBtn) {
+      commentBtn.addEventListener('click', () => {
+        if (typeof window.openCommentsModal === 'function') {
+          window.openCommentsModal();
+        }
+      });
+    }
   }
 
   /**
@@ -333,6 +342,733 @@
     });
   }
 
+  /**
+   * Comments & Discussion Modal / Bottom Sheet System
+   */
+  function initCommentsModal() {
+    const overlay = document.getElementById('comments-modal-overlay');
+    const modal = document.getElementById('comments-modal');
+    const closeBtn = document.getElementById('comments-close-btn');
+    const commentsListEl = document.getElementById('comments-list');
+    const countBadge = document.getElementById('comments-count-badge');
+    const commentForm = document.getElementById('comment-form');
+    const commentInput = document.getElementById('comment-input');
+    const commentPostPill = document.getElementById('comment-post-pill');
+    const commentCurrentAvatarEl = document.getElementById('comment-current-avatar');
+    const replyingBanner = document.getElementById('comment-replying-banner');
+    const replyingToName = document.getElementById('replying-to-name');
+    const cancelReplyBtn = document.getElementById('cancel-reply-btn');
+    const sheetHandle = document.getElementById('comments-sheet-handle');
+
+    if (!overlay || !commentsListEl || !commentForm) return;
+
+    function adjustTextareaHeight() {
+      if (!commentInput) return;
+      commentInput.style.height = 'auto';
+      const newHeight = Math.min(Math.max(commentInput.scrollHeight, 38), 140);
+      commentInput.style.height = newHeight + 'px';
+    }
+
+    function updatePostPillVisibility() {
+      if (!commentPostPill || !commentInput) return;
+      const hasText = commentInput.value.trim().length > 0;
+      commentPostPill.disabled = !hasText;
+      commentPostPill.classList.toggle('is-visible', hasText);
+    }
+
+    // Helper to get self-hosted DiceBear avatar data URI
+    function getDicebearAvatar(seed) {
+      if (typeof window !== 'undefined' && window.DiceBear && typeof window.DiceBear.getRandomAvatar === 'function') {
+        return window.DiceBear.getRandomAvatar(seed);
+      }
+      return null;
+    }
+
+    // Returns avatar HTML markup: if user has avatarUrl, renders it; if user doesn't have a profile image, randomizes with DiceBear!
+    function getAvatarMarkup(item, cssClass = '') {
+      let avatarUrl = item.avatarUrl;
+      if (!avatarUrl) {
+        avatarUrl = getDicebearAvatar(item.author || item.id || 'radiology-user');
+      }
+
+      if (avatarUrl) {
+        return `<div class="comment-avatar ${cssClass}" title="${escapeHtml(item.author || 'User')}"><img class="comment-avatar-img" src="${avatarUrl}" alt="${escapeHtml(item.author || 'User')}" loading="lazy" /></div>`;
+      }
+      return `<div class="comment-avatar ${cssClass}" style="background-color: ${item.avatarBg || '#0891b2'};">${escapeHtml(item.avatarText || 'MD')}</div>`;
+    }
+
+    function updateCurrentAvatarUI() {
+      if (!commentCurrentAvatarEl) return;
+      let session = null;
+      try {
+        const raw = localStorage.getItem('my_radiology_user_session');
+        if (raw) session = JSON.parse(raw);
+      } catch (e) {}
+
+      let currentAvatar = session && session.avatar ? session.avatar : null;
+      let userName = session && session.name ? session.name : 'You';
+
+      // If user doesn't have a profile image, randomize with DiceBear
+      if (!currentAvatar) {
+        let guestAvatar = null;
+        try {
+          guestAvatar = localStorage.getItem('my_radiology_user_avatar');
+        } catch (e) {}
+        if (!guestAvatar) {
+          guestAvatar = getDicebearAvatar('user-' + Math.random().toString(36).substring(2, 9));
+          if (guestAvatar) {
+            try {
+              localStorage.setItem('my_radiology_user_avatar', guestAvatar);
+            } catch (e) {}
+          }
+        }
+        currentAvatar = guestAvatar;
+      }
+
+      if (currentAvatar) {
+        commentCurrentAvatarEl.innerHTML = `<img class="comment-current-avatar-img" src="${currentAvatar}" alt="${escapeHtml(userName)}" />`;
+      } else {
+        commentCurrentAvatarEl.innerHTML = `<span>${escapeHtml(userName.substring(0, 2))}</span>`;
+      }
+    }
+
+    if (commentCurrentAvatarEl) {
+      commentCurrentAvatarEl.addEventListener('click', () => {
+        const newSeed = 'user-' + Math.random().toString(36).substring(2, 10);
+        const newAvatar = getDicebearAvatar(newSeed);
+        if (!newAvatar) return;
+
+        try {
+          localStorage.setItem('my_radiology_user_avatar', newAvatar);
+          const raw = localStorage.getItem('my_radiology_user_session');
+          if (raw) {
+            const session = JSON.parse(raw);
+            session.avatar = newAvatar;
+            session.isDicebear = true;
+            localStorage.setItem('my_radiology_user_session', JSON.stringify(session));
+          }
+        } catch (e) {}
+
+        commentCurrentAvatarEl.classList.remove('is-spinning');
+        void commentCurrentAvatarEl.offsetWidth;
+        commentCurrentAvatarEl.innerHTML = `<img class="comment-current-avatar-img" src="${newAvatar}" alt="You" />`;
+        commentCurrentAvatarEl.classList.add('is-spinning');
+      });
+    }
+
+    if (commentInput) {
+      const handleInputChange = () => {
+        adjustTextareaHeight();
+        updatePostPillVisibility();
+      };
+
+      commentInput.addEventListener('input', handleInputChange);
+      commentInput.addEventListener('keyup', handleInputChange);
+      commentInput.addEventListener('change', handleInputChange);
+      commentInput.addEventListener('paste', () => {
+        setTimeout(handleInputChange, 10);
+      });
+
+      commentInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          if (commentInput.value.trim().length > 0) {
+            commentForm.dispatchEvent(new Event('submit', { cancelable: true }));
+          }
+        }
+      });
+
+      updatePostPillVisibility();
+    }
+
+    // Initialize current user avatar UI
+    updateCurrentAvatarUI();
+
+    const STORAGE_COMMENTS_KEY = 'mrg_post_comments_v8';
+
+    // Cleaned @ icon SVG
+    const AT_RATE_SVG = `<svg class="comment-at-icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M16.5485 20.9074C16.7993 21.3985 16.6058 22.0046 16.0939 22.2098C13.9858 23.0552 11.6589 23.2302 9.43437 22.6966C6.885 22.0852 4.63785 20.5833 3.09784 18.4616C1.55783 16.3399 0.82623 13.7379 1.03488 11.1246C1.24352 8.51121 2.37869 6.0583 4.23584 4.20784C6.09298 2.35738 8.54997 1.23105 11.1641 1.03182C13.7782 0.832594 16.3775 1.57356 18.4936 3.12121C20.6097 4.66885 22.1035 6.9214 22.7058 9.47296C22.9026 10.3069 23 11.1549 23 12L23 12.0022C22.9999 12.5715 22.9555 13.1396 22.8676 13.7012C22.5877 15.7731 21.7158 19 19 19C16.6669 19 15.889 17.6669 15.6297 16.778C14.6219 17.5448 13.3641 18 12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 12 18 14 17.9985 16C18 17 18.5 17 18.5 17C19.427 17 20.0112 16.2367 20.3791 15.3067C20.3882 15.2749 20.3987 15.2434 20.4106 15.2122C20.4524 15.1026 20.4921 14.9924 20.5296 14.8815C20.9613 13.5182 21 12 21 12H21.0031C21.0031 11.3083 20.9234 10.6143 20.7623 9.93171C20.2694 7.84334 19.0467 5.99971 17.3148 4.73301C15.5828 3.46632 13.4554 2.85986 11.3158 3.02292C9.17626 3.18599 7.1653 4.10785 5.64529 5.62239C4.12529 7.13693 3.19619 9.14455 3.02542 11.2835C2.85465 13.4224 3.45343 15.5521 4.71388 17.2886C5.97433 19.0251 7.81354 20.2544 9.90012 20.7548C11.6616 21.1773 13.5015 21.057 15.1819 20.4221C15.6977 20.2273 16.2977 20.4164 16.5485 20.9074ZM7.99803 12C7.99803 14.2102 9.78977 16.002 12 16.002C14.2102 16.002 16.002 14.2102 16.002 12C16.002 9.78978 14.2102 7.99803 12 7.99803C9.78977 7.99803 7.99803 9.78978 7.99803 12Z"/></svg>`;
+
+    // Delete comment SVG (from user specification)
+    const DELETE_COMMENT_SVG = `<svg class="comment-delete-svg" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+<g clip-path="url(#clip0_del)">
+<path d="M21 5.98047C17.67 5.65047 14.32 5.48047 10.98 5.48047C9 5.48047 7.02 5.58047 5.04 5.78047L3 5.98047" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M8.5 4.97L8.72 3.66C8.88 2.71 9 2 10.69 2H13.31C15 2 15.13 2.75 15.28 3.67L15.5 4.97" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M18.85 9.14062L18.2 19.2106C18.09 20.7806 18 22.0006 15.21 22.0006H8.79002C6.00002 22.0006 5.91002 20.7806 5.80002 19.2106L5.15002 9.14062" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M10.33 16.5H13.66" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M9.5 12.5H14.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+</g>
+<defs>
+<clipPath id="clip0_del">
+<rect width="24" height="24" fill="white"/>
+</clipPath>
+</defs>
+</svg>`;
+
+    // Seed realistic clinical comments with exact requested 1h ago, 3h ago, and clean replies without links
+    // Seed realistic clinical comments showcasing breaks, links, bold, italic, and strikethrough
+    const DEFAULT_COMMENTS = [
+      {
+        id: 'c-1',
+        author: 'Dr. Aris Thorne',
+        avatarText: 'AT',
+        avatarBg: '#2563eb',
+        timestamp: Date.now() - 3600 * 1000, // 1h ago
+        text: 'The dose-length product (**DLP**) formulas in Section 4 are spot on.\n\nOne key note for *acute stroke* protocols: verify [AAPM Guidelines](https://aapm.org) and avoid ~~fixed pitch~~ ratios in favor of automated tube current modulation.',
+        replies: [
+          {
+            id: 'r-1-1',
+            author: 'Sarah Jenkins, RT(R)(CT)',
+            avatarText: 'SJ',
+            avatarBg: '#0891b2',
+            timestamp: Date.now() - 35 * 60 * 1000, // 35m ago
+            text: 'Completely agree Dr. Thorne. We typically set pitch to 0.9–1.0 to avoid artifacts while keeping DLP below `800 mGy·cm`.'
+          },
+          {
+            id: 'r-1-2',
+            author: 'Marcus Vance, PhD',
+            avatarText: 'MV',
+            avatarBg: '#7c3aed',
+            timestamp: Date.now() - 15 * 60 * 1000, // 15m ago
+            mention: 'Sarah Jenkins, RT(R)(CT)',
+            text: 'Validated that exact range on our Somatom Force unit. Smooth transition across *all* detectors.'
+          }
+        ]
+      },
+      {
+        id: 'c-2',
+        author: 'Dr. Kenji Sato',
+        avatarText: 'KS',
+        avatarBg: '#059669',
+        timestamp: Date.now() - 3 * 3600 * 1000, // 3h ago
+        text: 'Fantastic layout clarity on the **KaTeX equations**.\nHaving `LaTeX` copyable into dosimetry logs saves hours during annual audits.',
+        replies: [
+          {
+            id: 'r-2-1',
+            author: 'Clinical Editorial Team',
+            avatarText: 'RG',
+            avatarBg: '#7c3aed',
+            timestamp: Date.now() - 2 * 3600 * 1000, // 2h ago
+            text: 'Thank you Dr. Sato! The one-click LaTeX copy feature was designed specifically for clinical physicists.'
+          }
+        ]
+      },
+      {
+        id: 'c-3',
+        author: 'Elena Rostova, MD',
+        avatarText: 'ER',
+        avatarBg: '#d97706',
+        timestamp: Date.now() - 5 * 3600 * 1000, // 5h ago
+        text: 'Would love to see a future section detailing pediatric CT protocol adjustments (*size-specific dose estimates* / **SSDE**).\n\nDetails available at https://imagegently.org for reference.',
+        replies: []
+      }
+    ];
+
+    // State
+    let comments = [];
+    let activeReplyTarget = null; // { parentId: string, replyToAuthor: string, isReplyToReply: boolean }
+    let expandedReplyIds = new Set(); // Replies hidden by default
+
+    // Load persisted comments
+    try {
+      const storedComments = localStorage.getItem(STORAGE_COMMENTS_KEY);
+      if (storedComments) {
+        comments = JSON.parse(storedComments);
+      } else {
+        comments = DEFAULT_COMMENTS;
+        localStorage.setItem(STORAGE_COMMENTS_KEY, JSON.stringify(comments));
+      }
+    } catch (e) {
+      comments = DEFAULT_COMMENTS;
+    }
+
+    function saveComments() {
+      try {
+        localStorage.setItem(STORAGE_COMMENTS_KEY, JSON.stringify(comments));
+      } catch (e) {}
+    }
+
+    // Relative Time Formatter ("1h ago", "35m ago", "just now", "yesterday", "2d ago")
+    function formatTimeAgo(ts) {
+      if (!ts) return 'just now';
+      const now = Date.now();
+      const diffSec = Math.max(0, Math.floor((now - ts) / 1000));
+      if (diffSec < 60) return 'just now';
+      const diffMin = Math.floor(diffSec / 60);
+      if (diffMin < 60) return `${diffMin}m ago`;
+      const diffHr = Math.floor(diffMin / 60);
+      if (diffHr < 24) return `${diffHr}h ago`;
+      const diffDays = Math.floor(diffHr / 24);
+      if (diffDays === 1) return 'yesterday';
+      if (diffDays < 7) return `${diffDays}d ago`;
+      const diffWeeks = Math.floor(diffDays / 7);
+      if (diffWeeks < 4) return `${diffWeeks}w ago`;
+      return new Date(ts).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    // Rich comment text formatter: supports breaks, auto-links, markdown links, bold, italic, strikethrough, inline code
+    function formatCommentText(rawText) {
+      if (!rawText) return '';
+      let text = escapeHtml(rawText);
+
+      // Token storage so formatting syntax isn't applied inside links or code
+      const tokens = [];
+      function addToken(html) {
+        const placeholder = `\x01TOKEN_${tokens.length}\x02`;
+        tokens.push(html);
+        return placeholder;
+      }
+
+      // Inline code: `code`
+      text = text.replace(/`([^`\n]+)`/g, (_m, code) => {
+        return addToken(`<code class="comment-code-inline">${code}</code>`);
+      });
+
+      // Markdown links: [label](url)
+      text = text.replace(/\[([^\]\n]+)\]\(((?:https?:\/\/|www\.)[^\s\)\"\'<>]+)\)/gi, (_m, label, url) => {
+        const href = url.toLowerCase().startsWith('www.') ? `https://${url}` : url;
+        return addToken(`<a href="${href}" target="_blank" rel="noopener noreferrer" class="comment-text-link">${label}</a>`);
+      });
+
+      // Raw URLs: https://... or http://... or www....
+      text = text.replace(/(^|[\s\(\[\{])((?:https?:\/\/|www\.)[^\s\)\"\'<>\],]+)/gi, (_m, prefix, url) => {
+        const href = url.toLowerCase().startsWith('www.') ? `https://${url}` : url;
+        return prefix + addToken(`<a href="${href}" target="_blank" rel="noopener noreferrer" class="comment-text-link">${url}</a>`);
+      });
+
+      // Bold + Italic: ***text***, ___text___, **_text_**
+      text = text.replace(/\*\*\*([^\*\n]+)\*\*\*/g, '<strong><em>$1</em></strong>');
+      text = text.replace(/___([^_\n]+)___/g, '<strong><em>$1</em></strong>');
+      text = text.replace(/\*\*\_([^\*\_\n]+)\_\*\*/g, '<strong><em>$1</em></strong>');
+
+      // Bold: **text** or __text__
+      text = text.replace(/\*\*([^\*\n]+)\*\*/g, '<strong>$1</strong>');
+      text = text.replace(/__([^_\n]+)__/g, '<strong>$1</strong>');
+
+      // Strikethrough: ~~text~~ or ~text~
+      text = text.replace(/~~([^~\n]+)~~/g, '<del>$1</del>');
+      text = text.replace(/~([^~\n]+)~/g, '<del>$1</del>');
+
+      // Italic: *text* or _text_
+      text = text.replace(/\*([^\*\n]+)\*/g, '<em>$1</em>');
+      text = text.replace(/(^|\s)_([^_\n]+)_(?=\s|$|[.,!?:;])/g, '$1<em>$2</em>');
+
+      // Restore protected tokens
+      tokens.forEach((html, i) => {
+        const placeholder = `\x01TOKEN_${i}\x02`;
+        text = text.replace(placeholder, html);
+      });
+
+      // Line breaks
+      text = text.replace(/\r\n|\r|\n/g, '<br>');
+
+      return text;
+    }
+
+    function getTotalCommentsCount() {
+      let count = 0;
+      comments.forEach((c) => {
+        count += 1;
+        if (Array.isArray(c.replies)) {
+          count += c.replies.length;
+        }
+      });
+      return count;
+    }
+
+    function updateCountBadge() {
+      if (countBadge) {
+        countBadge.textContent = String(getTotalCommentsCount());
+      }
+    }
+
+    // Render nested replies: full size like parent, with @ Name pill if replying to a reply
+    function renderReplies(replies, parentId, isExpanded = false) {
+      if (!replies || replies.length === 0) return '';
+      return `
+        <div class="comment-replies-list ${isExpanded ? 'is-expanded' : ''}" id="replies-${parentId}" role="group" aria-label="Replies">
+          ${replies.map((r) => {
+            return `
+              <div class="comment-reply-item" id="comment-${r.id}" data-id="${r.id}" data-parent-id="${parentId}">
+                ${getAvatarMarkup(r, 'avatar-reply')}
+                <div class="comment-main-content">
+                  <div class="comment-meta-row">
+                    <span class="comment-author-name">${escapeHtml(r.author)}</span>
+                    <time class="comment-timestamp">${formatTimeAgo(r.timestamp)}</time>
+                  </div>
+                  <div class="comment-body-text">${r.mention ? `<span class="comment-mention-pill">${AT_RATE_SVG}<span class="comment-mention-name">${escapeHtml(r.mention)}</span></span> ` : ''}${formatCommentText(r.text)}</div>
+                  <div class="comment-actions-row">
+                    <div class="comment-actions-left">
+                      <button type="button" class="comment-action-link comment-reply-btn" data-parent-id="${parentId}" data-author="${escapeHtml(r.author)}" data-is-reply="true">
+                        Reply
+                      </button>
+                    </div>
+                    <button type="button" class="comment-delete-btn" data-id="${r.id}" data-parent-id="${parentId}" aria-label="Delete reply" title="Delete reply">
+                      ${DELETE_COMMENT_SVG}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    // Render entire comments stream without tags or likes
+    function renderComments() {
+      updateCountBadge();
+
+      if (!comments || comments.length === 0) {
+        commentsListEl.innerHTML = `
+          <div class="comments-empty-state">
+            <svg class="comments-empty-icon" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <div class="comments-empty-title">No comments yet</div>
+            <div class="comments-empty-desc">Be the first to share clinical feedback or ask questions about this protocol.</div>
+          </div>
+        `;
+        return;
+      }
+
+      commentsListEl.innerHTML = comments.map((c) => {
+        const hasReplies = Array.isArray(c.replies) && c.replies.length > 0;
+        const isExpanded = expandedReplyIds.has(c.id);
+        const replyCount = hasReplies ? c.replies.length : 0;
+        return `
+          <article class="comment-item" id="comment-${c.id}" data-id="${c.id}">
+            ${getAvatarMarkup(c)}
+            <div class="comment-main-content">
+              <div class="comment-meta-row">
+                <span class="comment-author-name">${escapeHtml(c.author)}</span>
+                <time class="comment-timestamp">${formatTimeAgo(c.timestamp)}</time>
+              </div>
+              <div class="comment-body-text">${formatCommentText(c.text)}</div>
+              <div class="comment-actions-row">
+                <div class="comment-actions-left">
+                  <button type="button" class="comment-action-link comment-reply-btn" data-parent-id="${c.id}" data-author="${escapeHtml(c.author)}">
+                    Reply
+                  </button>
+                  ${hasReplies ? `
+                    <button type="button" class="comment-action-link comment-toggle-replies-btn ${isExpanded ? 'is-expanded' : ''}" data-parent-id="${c.id}" aria-expanded="${isExpanded ? 'true' : 'false'}">
+                      <span>${isExpanded ? 'Hide replies' : `View ${replyCount} ${replyCount === 1 ? 'reply' : 'replies'}`}</span>
+                    </button>
+                  ` : ''}
+                </div>
+                <button type="button" class="comment-delete-btn" data-id="${c.id}" aria-label="Delete comment" title="Delete comment">
+                  ${DELETE_COMMENT_SVG}
+                </button>
+              </div>
+
+              ${renderReplies(c.replies, c.id, isExpanded)}
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    // Deletion functions for comments and replies
+    function deleteComment(id) {
+      if (activeReplyTarget && activeReplyTarget.parentId === id) {
+        clearReplyTarget();
+      }
+      const el = document.getElementById(`comment-${id}`);
+      if (el) {
+        el.style.transition = 'opacity 0.18s ease, transform 0.18s ease';
+        el.style.opacity = '0';
+        el.style.transform = 'scale(0.96)';
+        setTimeout(() => {
+          comments = comments.filter((c) => c.id !== id);
+          expandedReplyIds.delete(id);
+          saveComments();
+          renderComments();
+        }, 160);
+      } else {
+        comments = comments.filter((c) => c.id !== id);
+        expandedReplyIds.delete(id);
+        saveComments();
+        renderComments();
+      }
+    }
+
+    function deleteReply(parentId, replyId) {
+      if (activeReplyTarget && activeReplyTarget.parentId === parentId && activeReplyTarget.isReplyToReply) {
+        clearReplyTarget();
+      }
+      const el = document.getElementById(`comment-${replyId}`);
+      if (el) {
+        el.style.transition = 'opacity 0.18s ease, transform 0.18s ease';
+        el.style.opacity = '0';
+        el.style.transform = 'scale(0.96)';
+        setTimeout(() => {
+          const parent = comments.find((c) => c.id === parentId);
+          if (parent && Array.isArray(parent.replies)) {
+            parent.replies = parent.replies.filter((r) => r.id !== replyId);
+          }
+          saveComments();
+          renderComments();
+        }, 160);
+      } else {
+        const parent = comments.find((c) => c.id === parentId);
+        if (parent && Array.isArray(parent.replies)) {
+          parent.replies = parent.replies.filter((r) => r.id !== replyId);
+        }
+        saveComments();
+        renderComments();
+      }
+    }
+
+    // Handle delegated clicks inside comments stream
+    commentsListEl.addEventListener('click', (e) => {
+      // Delete button click
+      const deleteBtn = e.target.closest('.comment-delete-btn');
+      if (deleteBtn) {
+        const commentId = deleteBtn.getAttribute('data-id');
+        const parentId = deleteBtn.getAttribute('data-parent-id');
+        if (parentId) {
+          deleteReply(parentId, commentId);
+        } else {
+          deleteComment(commentId);
+        }
+        return;
+      }
+
+      // Toggle replies visibility
+      const toggleRepliesBtn = e.target.closest('.comment-toggle-replies-btn');
+      if (toggleRepliesBtn) {
+        const parentId = toggleRepliesBtn.getAttribute('data-parent-id');
+        if (parentId) {
+          if (expandedReplyIds.has(parentId)) {
+            expandedReplyIds.delete(parentId);
+          } else {
+            expandedReplyIds.add(parentId);
+          }
+          renderComments();
+        }
+        return;
+      }
+
+      // Reply button click
+      const replyBtn = e.target.closest('.comment-reply-btn');
+      if (replyBtn) {
+        const parentId = replyBtn.getAttribute('data-parent-id');
+        const author = replyBtn.getAttribute('data-author');
+        const isReply = replyBtn.getAttribute('data-is-reply') === 'true';
+        if (parentId && author) {
+          setReplyTarget(parentId, author, isReply);
+        }
+        return;
+      }
+    });
+
+    // Reply target management: No @ symbol in banner or placeholder
+    function setReplyTarget(parentId, authorName, isReplyToReply = false) {
+      activeReplyTarget = { parentId, replyToAuthor: authorName, isReplyToReply };
+      const authorTextEl = document.getElementById('replying-author-text');
+      if (authorTextEl) {
+        authorTextEl.textContent = authorName;
+      } else if (replyingToName) {
+        replyingToName.textContent = authorName;
+      }
+      if (replyingBanner) {
+        replyingBanner.classList.remove('is-hidden');
+      }
+      if (commentInput) {
+        commentInput.placeholder = `Reply to ${authorName}...`;
+        commentInput.focus();
+      }
+    }
+
+    function clearReplyTarget() {
+      activeReplyTarget = null;
+      if (replyingBanner) {
+        replyingBanner.classList.add('is-hidden');
+      }
+      if (commentInput) {
+        commentInput.placeholder = 'Add to the discussion... (Shift+Enter for break)';
+      }
+    }
+
+    if (cancelReplyBtn) {
+      cancelReplyBtn.addEventListener('click', clearReplyTarget);
+    }
+
+    // Form Submission (Add Comment or Reply)
+    commentForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!commentInput) return;
+      const text = commentInput.value.trim();
+      if (!text) return;
+
+      const newId = 'cmt-' + Date.now();
+      const currentTimestamp = Date.now();
+
+      // Retrieve current session or randomized guest DiceBear avatar
+      let session = null;
+      try {
+        const raw = localStorage.getItem('my_radiology_user_session');
+        if (raw) session = JSON.parse(raw);
+      } catch (e) {}
+
+      let authorName = session && session.name ? session.name : 'You';
+      let userAvatarUrl = session && session.avatar ? session.avatar : null;
+      if (!userAvatarUrl) {
+        try {
+          userAvatarUrl = localStorage.getItem('my_radiology_user_avatar');
+        } catch (e) {}
+        if (!userAvatarUrl) {
+          userAvatarUrl = getDicebearAvatar('user-' + Math.random().toString(36).substring(2, 9));
+          if (userAvatarUrl) {
+            try {
+              localStorage.setItem('my_radiology_user_avatar', userAvatarUrl);
+            } catch (e) {}
+          }
+        }
+      }
+
+      if (activeReplyTarget && activeReplyTarget.parentId) {
+        // Add as reply to target parent (flat replies list, with @ Name pill if replying to a reply)
+        const parent = comments.find((c) => c.id === activeReplyTarget.parentId);
+        if (parent) {
+          if (!Array.isArray(parent.replies)) {
+            parent.replies = [];
+          }
+          parent.replies.push({
+            id: newId,
+            author: authorName,
+            avatarUrl: userAvatarUrl,
+            avatarText: authorName === 'You' ? 'You' : authorName.substring(0, 2).toUpperCase(),
+            avatarBg: '#0284c7',
+            timestamp: currentTimestamp,
+            text: text,
+            mention: activeReplyTarget.isReplyToReply ? activeReplyTarget.replyToAuthor : null
+          });
+          expandedReplyIds.add(activeReplyTarget.parentId);
+        }
+        clearReplyTarget();
+      } else {
+        // Add top-level comment at top
+        comments.unshift({
+          id: newId,
+          author: authorName,
+          avatarUrl: userAvatarUrl,
+          avatarText: authorName === 'You' ? 'You' : authorName.substring(0, 2).toUpperCase(),
+          avatarBg: '#0284c7',
+          timestamp: currentTimestamp,
+          text: text,
+          replies: []
+        });
+      }
+
+      saveComments();
+      commentInput.value = '';
+      commentInput.style.height = '38px';
+      updatePostPillVisibility();
+      renderComments();
+
+      // Scroll to new comment smoothly with rounded highlight & generous spacing
+      setTimeout(() => {
+        const newEl = document.getElementById(`comment-${newId}`);
+        if (newEl) {
+          newEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          newEl.classList.add('is-new-comment');
+          setTimeout(() => {
+            newEl.classList.remove('is-new-comment');
+          }, 1800);
+        }
+      }, 60);
+    });
+
+    // Open / Close Modal & Bottom Sheet Functions
+    function openModal() {
+      overlay.classList.add('is-active');
+      overlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      updateCurrentAvatarUI();
+      renderComments();
+      setTimeout(() => {
+        if (commentInput) commentInput.focus();
+      }, 200);
+    }
+
+    function closeModal() {
+      overlay.classList.remove('is-active');
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      clearReplyTarget();
+      if (commentInput) {
+        commentInput.value = '';
+        updatePostPillVisibility();
+      }
+    }
+
+    // Expose openCommentsModal globally for #post-comment-btn
+    window.openCommentsModal = openModal;
+    window.closeCommentsModal = closeModal;
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closeModal);
+    }
+
+    // Backdrop click dismiss
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) {
+        closeModal();
+      }
+    });
+
+    // Keyboard ESC dismiss
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay.classList.contains('is-active')) {
+        closeModal();
+      }
+    });
+
+    // Mobile touch swipe down on grab handle to dismiss bottom sheet
+    if (sheetHandle) {
+      let touchStartY = 0;
+      let touchCurrentY = 0;
+
+      sheetHandle.addEventListener('touchstart', (e) => {
+        touchStartY = e.touches[0].clientY;
+      }, { passive: true });
+
+      sheetHandle.addEventListener('touchmove', (e) => {
+        touchCurrentY = e.touches[0].clientY;
+        const diff = touchCurrentY - touchStartY;
+        if (diff > 0 && modal) {
+          modal.style.transform = `translate3d(0, ${diff}px, 0)`;
+        }
+      }, { passive: true });
+
+      sheetHandle.addEventListener('touchend', () => {
+        const diff = touchCurrentY - touchStartY;
+        if (modal) {
+          modal.style.transform = '';
+        }
+        if (diff > 75) {
+          closeModal();
+        }
+        touchStartY = 0;
+        touchCurrentY = 0;
+      });
+    }
+
+    // Initial render
+    renderComments();
+  }
+
   function init() {
     initPostActions();
     initPostTabs();
@@ -340,6 +1076,7 @@
     initChecklist();
     initSmoothScroll();
     initMathAndChem();
+    initCommentsModal();
   }
 
   if (document.readyState === 'loading') {

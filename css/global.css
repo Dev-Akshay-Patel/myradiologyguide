@@ -1261,3 +1261,287 @@ blockquote p + p {
   background-color: var(--accent-color);
   color: #121212;
 }
+
+/* --------------------------------------------------------------------------
+   Universal Minimal Alerts System (Info, Warning, Success, Error)
+   Pixel-accurate matching the clean rounded card, colored badge, stem line & text
+   -------------------------------------------------------------------------- */
+.alert {
+  position: relative;
+  display: block;
+  border-radius: 8px;
+  padding: 16px 20px 18px 20px;
+  margin: 20px 0;
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  font-family: inherit;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.alert-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 7px;
+}
+
+.alert-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.alert-icon svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.alert-title {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.alert-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0;
+}
+
+.alert-stem {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  width: 18px;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+.alert-stem::after {
+  content: "";
+  display: block;
+  width: 1.5px;
+  height: 15px;
+  background-color: currentColor;
+  opacity: 0.65;
+  border-radius: 1px;
+}
+
+.alert-message,
+.alert-text {
+  flex: 1;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+/* Fallback for simple markup: <div class="alert"><div class="alert-header">...</div><p>...</p></div> */
+.alert > p:not(.alert-body) {
+  position: relative;
+  margin: 0;
+  padding-left: 28px;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.alert > p:not(.alert-body)::before {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 3px;
+  width: 1.5px;
+  height: 15px;
+  background-color: currentColor;
+  opacity: 0.65;
+  border-radius: 1px;
+}
+
+/* 1. INFO ALERT (Soft blue card, solid sky-blue badge, rich blue text) */
+.alert-info,
+.alert.alert-info {
+  background-color: #eaf1f8;
+  color: #2b5c8f;
+  border-color: rgba(43, 92, 143, 0.08);
+}
+.alert-info .alert-title {
+  color: #244e7c;
+}
+.alert-info .alert-icon {
+  color: #0284c7;
+}
+.alert-info .alert-stem {
+  color: #2b5c8f;
+}
+.alert-info .alert-message,
+.alert-info .alert-text,
+.alert-info > p {
+  color: #356598;
+}
+
+/* 2. WARNING ALERT (Warm cream-amber card, amber badge, golden-brown text) */
+.alert-warning,
+.alert.alert-warning {
+  background-color: #f6f1e7;
+  color: #8c6b24;
+  border-color: rgba(140, 107, 36, 0.08);
+}
+.alert-warning .alert-title {
+  color: #785a19;
+}
+.alert-warning .alert-icon {
+  color: #d97706;
+}
+.alert-warning .alert-stem {
+  color: #8c6b24;
+}
+.alert-warning .alert-message,
+.alert-warning .alert-text,
+.alert-warning > p {
+  color: #8c6b24;
+}
+
+/* 3. SUCCESS ALERT (Soft mint sage card, emerald badge, forest green text) */
+.alert-success,
+.alert.alert-success {
+  background-color: #e8f2ee;
+  color: #1b6b4a;
+  border-color: rgba(27, 107, 74, 0.08);
+}
+.alert-success .alert-title {
+  color: #14563b;
+}
+.alert-success .alert-icon {
+  color: #10b981;
+}
+.alert-success .alert-stem {
+  color: #1b6b4a;
+}
+.alert-success .alert-message,
+.alert-success .alert-text,
+.alert-success > p {
+  color: #237352;
+}
+
+/* 4. ERROR / DANGER ALERT (Soft pastel rose card, coral/rose badge, crimson text) */
+.alert-error,
+.alert-danger,
+.alert.alert-error,
+.alert.alert-danger {
+  background-color: #f9e9ec;
+  color: #a8233c;
+  border-color: rgba(168, 35, 60, 0.08);
+}
+.alert-error .alert-title,
+.alert-danger .alert-title {
+  color: #921c32;
+}
+.alert-error .alert-icon,
+.alert-danger .alert-icon {
+  color: #e11d48;
+}
+.alert-error .alert-stem,
+.alert-danger .alert-stem {
+  color: #a8233c;
+}
+.alert-error .alert-message,
+.alert-error .alert-text,
+.alert-error > p,
+.alert-danger .alert-message,
+.alert-danger .alert-text,
+.alert-danger > p {
+  color: #b82e48;
+}
+
+/* Dark & Extra-Dark Mode Adaptations for High Contrast & Eye Comfort */
+[data-theme="dark"] .alert-info,
+[data-theme="extra-dark"] .alert-info {
+  background-color: rgba(14, 165, 233, 0.12);
+  border-color: rgba(56, 189, 248, 0.25);
+  color: #7dd3fc;
+}
+[data-theme="dark"] .alert-info .alert-title,
+[data-theme="extra-dark"] .alert-info .alert-title {
+  color: #bae6fd;
+}
+[data-theme="dark"] .alert-info .alert-message,
+[data-theme="dark"] .alert-info .alert-text,
+[data-theme="dark"] .alert-info > p,
+[data-theme="extra-dark"] .alert-info .alert-message,
+[data-theme="extra-dark"] .alert-info .alert-text,
+[data-theme="extra-dark"] .alert-info > p {
+  color: #93c5fd;
+}
+
+[data-theme="dark"] .alert-warning,
+[data-theme="extra-dark"] .alert-warning {
+  background-color: rgba(245, 158, 11, 0.12);
+  border-color: rgba(251, 191, 36, 0.25);
+  color: #fcd34d;
+}
+[data-theme="dark"] .alert-warning .alert-title,
+[data-theme="extra-dark"] .alert-warning .alert-title {
+  color: #fef08a;
+}
+[data-theme="dark"] .alert-warning .alert-message,
+[data-theme="dark"] .alert-warning .alert-text,
+[data-theme="dark"] .alert-warning > p,
+[data-theme="extra-dark"] .alert-warning .alert-message,
+[data-theme="extra-dark"] .alert-warning .alert-text,
+[data-theme="extra-dark"] .alert-warning > p {
+  color: #fde047;
+}
+
+[data-theme="dark"] .alert-success,
+[data-theme="extra-dark"] .alert-success {
+  background-color: rgba(16, 185, 129, 0.12);
+  border-color: rgba(52, 211, 153, 0.25);
+  color: #6ee7b7;
+}
+[data-theme="dark"] .alert-success .alert-title,
+[data-theme="extra-dark"] .alert-success .alert-title {
+  color: #a7f3d0;
+}
+[data-theme="dark"] .alert-success .alert-message,
+[data-theme="dark"] .alert-success .alert-text,
+[data-theme="dark"] .alert-success > p,
+[data-theme="extra-dark"] .alert-success .alert-message,
+[data-theme="extra-dark"] .alert-success .alert-text,
+[data-theme="extra-dark"] .alert-success > p {
+  color: #86efac;
+}
+
+[data-theme="dark"] .alert-error,
+[data-theme="dark"] .alert-danger,
+[data-theme="extra-dark"] .alert-error,
+[data-theme="extra-dark"] .alert-danger {
+  background-color: rgba(244, 63, 94, 0.12);
+  border-color: rgba(251, 113, 133, 0.25);
+  color: #fda4af;
+}
+[data-theme="dark"] .alert-error .alert-title,
+[data-theme="dark"] .alert-danger .alert-title,
+[data-theme="extra-dark"] .alert-error .alert-title,
+[data-theme="extra-dark"] .alert-danger .alert-title {
+  color: #fecdd3;
+}
+[data-theme="dark"] .alert-error .alert-message,
+[data-theme="dark"] .alert-error .alert-text,
+[data-theme="dark"] .alert-error > p,
+[data-theme="dark"] .alert-danger .alert-message,
+[data-theme="dark"] .alert-danger .alert-text,
+[data-theme="dark"] .alert-danger > p,
+[data-theme="extra-dark"] .alert-error .alert-message,
+[data-theme="extra-dark"] .alert-error .alert-text,
+[data-theme="extra-dark"] .alert-error > p,
+[data-theme="extra-dark"] .alert-danger .alert-message,
+[data-theme="extra-dark"] .alert-danger .alert-text,
+[data-theme="extra-dark"] .alert-danger > p {
+  color: #fca5a5;
+}
+

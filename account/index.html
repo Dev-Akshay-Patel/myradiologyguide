@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sign In | My Radiology Guide</title>
-    <meta name="description" content="Sign in with your Google account to access clinical radiology protocols, bookmarks, and digital reference library." />
-    <meta property="og:title" content="Sign In | My Radiology Guide" />
-    <meta property="og:description" content="Sign in with your Google account to access clinical radiology protocols, bookmarks, and digital reference library." />
+    <title>User Account &amp; Profile | My Radiology Guide</title>
+    <meta name="description" content="Manage your clinical radiology bookmarks, learning progress, and Google credentials." />
+    <meta property="og:title" content="User Account &amp; Profile | My Radiology Guide" />
+    <meta property="og:description" content="Manage your clinical radiology bookmarks, learning progress, and Google credentials." />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary" />
 
@@ -33,22 +33,17 @@
     <!-- Global Stylesheets -->
     <link rel="stylesheet" href="../css/global.css" />
     <link rel="stylesheet" href="../css/header.css" />
+    <link rel="stylesheet" href="../css/blog.css" />
     <link rel="stylesheet" href="../css/footer.css" />
-    <!-- Dedicated Login Stylesheet -->
-    <link rel="stylesheet" href="./login.css" />
+    <link rel="stylesheet" href="./account.css" />
 
-    <!-- Global Theme Controller -->
+    <!-- Global Scripts -->
     <script src="../js/global.js"></script>
-    <!-- DiceBear Self-Hosted Avatar Plugin (Privacy-Preserving & Local) -->
     <script src="../vendor/dicebear/dicebear.min.js"></script>
-    <!-- Header Component Logic -->
     <script src="../js/header.js" defer></script>
-    <!-- Central Post Data Engine (for search) -->
     <script src="../js/posts-data.js" defer></script>
-    <!-- Blog & Search Logic -->
     <script src="../js/blog.js" defer></script>
-    <!-- Login Controller -->
-    <script src="./login.js" defer></script>
+    <script src="./account.js" defer></script>
   </head>
   <body>
     <!-- Fullscreen Site Header -->
@@ -72,14 +67,7 @@
           </button>
 
           <a href="../index.html" class="header-logo" id="site-logo" aria-label="My Radiology Guide" title="My Radiology Guide">
-            <svg
-              class="header-logo-svg"
-              viewBox="0 0 512 512"
-              width="26"
-              height="26"
-              fill="currentColor"
-              aria-hidden="true"
-            >
+            <svg class="header-logo-svg" viewBox="0 0 512 512" width="26" height="26" fill="currentColor" aria-hidden="true">
               <g>
                 <path d="m208,239.893c0,26.508 21.468,48 48,48 26.484,0 48-21.492 48-48 0-26.509-21.516-48-48-48-26.532-2.84217e-14-48,21.491-48,48z"></path>
                 <path d="m384,19.339c-15.297-8.852-34.875-3.594-43.711,11.703l-55.578,96.227c-8.805,15.242-3.648,34.727 11.539,43.625 24.312,14.227 39.484,40.336 39.75,68.273-0.023,0.406-0.039,0.82-0.047,1.102-0.188,8.602 3.102,16.922 9.117,23.078 6.023,6.148 14.266,9.617 22.875,9.617h112.055c17.672,0 32-14.328 32-32 0-91.109-49.047-176.031-128-221.625z"></path>
@@ -90,11 +78,9 @@
           </a>
         </div>
 
-        <!-- Desktop Navigation Menu (Desktop Only: Displays at >=1024px) -->
+        <!-- Desktop Navigation Menu -->
         <nav class="header-desktop-nav" id="header-desktop-nav" aria-label="Primary Desktop Navigation">
           <ul class="desktop-nav-list" role="menubar">
-
-            <!-- 1. Mega Menu: Resources (Full-Width from Left to Right) -->
             <li class="desktop-nav-item has-dropdown has-megamenu" data-dropdown="curriculum">
               <button
                 type="button"
@@ -110,15 +96,8 @@
                 </svg>
               </button>
 
-              <!-- Full-Width Mega Menu Panel (Spans 100% width across the screen below header) -->
-              <div
-                class="desktop-dropdown-panel megamenu-panel"
-                id="megamenu-curriculum"
-                role="menu"
-                aria-labelledby="nav-btn-curriculum"
-              >
+              <div class="desktop-dropdown-panel megamenu-panel" id="megamenu-curriculum" role="menu" aria-labelledby="nav-btn-curriculum">
                 <div class="megamenu-inner">
-                  <!-- Top Bar inside Mega Menu -->
                   <div class="megamenu-topbar">
                     <div class="megamenu-title-group">
                       <span class="megamenu-badge">Curriculum</span>
@@ -158,12 +137,12 @@
                       <div class="megamenu-card-header">
                         <div class="megamenu-card-icon" aria-hidden="true">
                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
-                            <g clip-path="url(#clip0_4418_9918)">
+                            <g clip-path="url(#clip0_4418_9918_acc)">
                               <path d="M8.29999 18.0402V16.8802C5.99999 15.4902 4.10999 12.7802 4.10999 9.90018C4.10999 4.95018 8.65999 1.07018 13.8 2.19018C16.06 2.69018 18.04 4.19018 19.07 6.26018C21.16 10.4602 18.96 14.9202 15.73 16.8702V18.0302C15.73 18.3202 15.84 18.9902 14.77 18.9902H9.25999C8.15999 19.0002 8.29999 18.5702 8.29999 18.0402Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                               <path d="M8.5 21.9992C10.79 21.3492 13.21 21.3492 15.5 21.9992" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                             </g>
                             <defs>
-                              <clipPath id="clip0_4418_9918">
+                              <clipPath id="clip0_4418_9918_acc">
                                 <rect width="24" height="24" fill="white"/>
                               </clipPath>
                             </defs>
@@ -185,13 +164,13 @@
                       <div class="megamenu-card-header">
                         <div class="megamenu-card-icon" aria-hidden="true">
                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
-                            <g clip-path="url(#clip0_4418_9824)">
+                            <g clip-path="url(#clip0_4418_9824_acc)">
                               <path d="M12 9V14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                               <path d="M12.0001 21.4093H5.94005C2.47005 21.4093 1.02005 18.9293 2.70005 15.8993L5.82006 10.2793L8.76006 4.9993C10.5401 1.7893 13.4601 1.7893 15.2401 4.9993L18.1801 10.2893L21.3001 15.9093C22.9801 18.9393 21.5201 21.4193 18.0601 21.4193H12.0001V21.4093Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                               <path d="M11.9945 17H12.0035" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                             </g>
                             <defs>
-                              <clipPath id="clip0_4418_9824">
+                              <clipPath id="clip0_4418_9824_acc">
                                 <rect width="24" height="24" fill="white"/>
                               </clipPath>
                             </defs>
@@ -213,13 +192,13 @@
                       <div class="megamenu-card-header">
                         <div class="megamenu-card-icon" aria-hidden="true">
                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
-                            <g clip-path="url(#clip0_4418_5964)">
+                            <g clip-path="url(#clip0_4418_5964_acc)">
                               <path d="M7.5 5H16.5C17.12 5 17.67 5.02 18.16 5.09C20.79 5.38 21.5 6.62 21.5 10V14C21.5 17.38 20.79 18.62 18.16 18.91C17.67 18.98 17.12 19 16.5 19H7.5C6.88 19 6.33 18.98 5.84 18.91C3.21 18.62 2.5 17.38 2.5 14V10C2.5 6.62 3.21 5.38 5.84 5.09C6.33 5.02 6.88 5 7.5 5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                               <path opacity="0.4" d="M4.5 2H19.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                               <path opacity="0.4" d="M5 22H20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                             </g>
                             <defs>
-                              <clipPath id="clip0_4418_5964">
+                              <clipPath id="clip0_4418_5964_acc">
                                 <rect width="24" height="24" fill="white"/>
                               </clipPath>
                             </defs>
@@ -241,11 +220,11 @@
                       <div class="megamenu-card-header">
                         <div class="megamenu-card-icon" aria-hidden="true">
                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
-                            <g clip-path="url(#clip0_4418_9525)">
+                            <g clip-path="url(#clip0_4418_9525_acc)">
                               <path d="M20.91 11.1203C20.91 16.0103 17.36 20.5903 12.51 21.9303C12.18 22.0203 11.82 22.0203 11.49 21.9303C6.63996 20.5903 3.08997 16.0103 3.08997 11.1203V6.73028C3.08997 5.91028 3.70998 4.98028 4.47998 4.67028L10.05 2.39031C11.3 1.88031 12.71 1.88031 13.96 2.39031L19.53 4.67028C20.29 4.98028 20.92 5.91028 20.92 6.73028L20.91 11.1203Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                             </g>
                             <defs>
-                              <clipPath id="clip0_4418_9525">
+                              <clipPath id="clip0_4418_9525_acc">
                                 <rect width="24" height="24" fill="white"/>
                               </clipPath>
                             </defs>
@@ -267,14 +246,14 @@
                       <div class="megamenu-card-header">
                         <div class="megamenu-card-icon" aria-hidden="true">
                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
-                            <g clip-path="url(#clip0_4418_9782)">
-                              <path d="M20.0101 18.5106L15.0601 13.5605" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                            <g clip-path="url(#clip0_4418_9782_acc)">
+                              <path d="M20.0101 18.5106L15.0601 13.5605" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                               <path d="M15.06 13.56L11.52 17.1C10.74 17.88 9.47 17.88 8.69 17.1L4.44999 12.86C3.66999 12.08 3.66999 10.81 4.44999 10.03L11.52 2.96C12.3 2.18 13.57 2.18 14.35 2.96L18.59 7.20002C19.37 7.98002 19.37 9.25001 18.59 10.03L15.06 13.56Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                              <path d="M2 21H8" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                              <path d="M6.56006 7.91992L13.6301 14.9899" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                              <path d="M2 21H8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                              <path d="M6.56006 7.91992L13.6301 14.9899" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                             </g>
                             <defs>
-                              <clipPath id="clip0_4418_9782">
+                              <clipPath id="clip0_4418_9782_acc">
                                 <rect width="24" height="24" fill="white"/>
                               </clipPath>
                             </defs>
@@ -379,7 +358,7 @@
               </div>
             </li>
 
-            <!-- 3. Standard Dropdown: Case Library -->
+            <!-- 3. Standard Dropdown: Cases -->
             <li class="desktop-nav-item has-dropdown" data-dropdown="cases">
               <button
                 type="button"
@@ -471,15 +450,14 @@
 
             <!-- 7. Direct Link: Admin CMS -->
             <li class="desktop-nav-item">
-              <a href="/admin/index.html" class="desktop-nav-btn direct-link" role="menuitem" title="Visual Post & Metadata Manager">
+              <a href="/admin/index.html" class="desktop-nav-btn direct-link" role="menuitem" title="Visual Post &amp; Metadata Manager">
                 <span class="desktop-nav-text">Admin CMS</span>
               </a>
             </li>
-
           </ul>
         </nav>
 
-        <!-- Right Section: Search Icon, Mode Changer & Login Button -->
+        <!-- Right Section: Search Icon, Mode Changer & User Button -->
         <div class="header-right">
           <button
             type="button"
@@ -489,15 +467,7 @@
             aria-expanded="false"
             aria-controls="search-modal"
           >
-            <svg
-              class="search-icon"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="#ffffff"
-              aria-hidden="true"
-            >
+            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#ffffff" aria-hidden="true">
               <path d="M11.5 21.75C5.85 21.75 1.25 17.15 1.25 11.5C1.25 5.85 5.85 1.25 11.5 1.25C17.15 1.25 21.75 5.85 21.75 11.5C21.75 17.15 17.15 21.75 11.5 21.75ZM11.5 2.75C6.67 2.75 2.75 6.68 2.75 11.5C2.75 16.32 6.67 20.25 11.5 20.25C16.33 20.25 20.25 16.32 20.25 11.5C20.25 6.68 16.33 2.75 11.5 2.75Z" fill="white" style="fill: var(--fillg);"/>
               <path d="M21.9999 22.7499C21.8099 22.7499 21.6199 22.6799 21.4699 22.5299L19.4699 20.5299C19.1799 20.2399 19.1799 19.7599 19.4699 19.4699C19.7599 19.1799 20.2399 19.1799 20.5299 19.4699L22.5299 21.4699C22.8199 21.7599 22.8199 22.2399 22.5299 22.5299C22.3799 22.6799 22.1899 22.7499 21.9999 22.7499Z" fill="white" style="fill: var(--fillg);"/>
             </svg>
@@ -513,31 +483,13 @@
             aria-expanded="false"
             aria-controls="theme-modal"
           >
-            <svg
-              class="mode-icon sun-icon"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              aria-hidden="true"
-            >
+            <svg class="mode-icon sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M12 19.25C8 19.25 4.75 16 4.75 12C4.75 8 8 4.75 12 4.75C16 4.75 19.25 8 19.25 12C19.25 16 16 19.25 12 19.25ZM12 6.25C8.83 6.25 6.25 8.83 6.25 12C6.25 15.17 8.83 17.75 12 17.75C15.17 17.75 17.75 15.17 17.75 12C17.75 8.83 15.17 6.25 12 6.25Z" fill="white" style="fill: var(--fillg, currentColor);"/>
               <path d="M12 22.96C11.45 22.96 11 22.55 11 22V21.92C11 21.37 11.45 20.92 12 20.92C12.55 20.92 13 21.37 13 21.92C13 22.47 12.55 22.96 12 22.96ZM19.14 20.14C18.88 20.14 18.63 20.04 18.43 19.85L18.3 19.72C17.91 19.33 17.91 18.7 18.3 18.31C18.69 17.92 19.32 17.92 19.71 18.31L19.84 18.44C20.23 18.83 20.23 19.46 19.84 19.85C19.65 20.04 19.4 20.14 19.14 20.14ZM4.86 20.14C4.6 20.14 4.35 20.04 4.15 19.85C3.76 19.46 3.76 18.83 4.15 18.44L4.28 18.31C4.67 17.92 5.3 17.92 5.69 18.31C6.08 18.7 6.08 19.33 5.69 19.72L5.56 19.85C5.37 20.04 5.11 20.14 4.86 20.14ZM22 13H21.92C21.37 13 20.92 12.55 20.92 12C20.92 11.45 21.37 11 21.92 11C22.47 11 22.96 11.45 22.96 12C22.96 12.55 22.55 13 22 13ZM2.08 13H2C1.45 13 1 12.55 1 12C1 11.45 1.45 11 2 11C2.55 11 3.04 11.45 3.04 12C3.04 12.55 2.63 13 2.08 13ZM19.01 5.99C18.75 5.99 18.5 5.89 18.3 5.7C17.91 5.31 17.91 4.68 18.3 4.29L18.43 4.16C18.82 3.77 19.45 3.77 19.84 4.16C20.23 4.55 20.23 5.18 19.84 5.57L19.71 5.7C19.52 5.89 19.27 5.99 19.01 5.99ZM4.99 5.99C4.73 5.99 4.48 5.89 4.28 5.7L4.15 5.56C3.76 5.17 3.76 4.54 4.15 4.15C4.54 3.76 5.17 3.76 5.56 4.15L5.69 4.28C6.08 4.67 6.08 5.3 5.69 5.69C5.5 5.89 5.24 5.99 4.99 5.99ZM12 3.04C11.45 3.04 11 2.63 11 2.08V2C11 1.45 11.45 1 12 1C12.55 1 13 1.45 13 2C13 2.55 12.55 3.04 12 3.04Z" fill="white" style="fill: var(--fillg, currentColor);"/>
             </svg>
-
-            <svg
-              class="mode-icon moon-icon"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              aria-hidden="true"
-            >
+            <svg class="mode-icon moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M2.03009 12.42C2.39009 17.57 6.76009 21.76 11.9901 21.99C15.6801 22.15 18.9801 20.43 20.9601 17.72C21.7801 16.61 21.3401 15.87 19.9701 16.12C19.3001 16.24 18.6101 16.29 17.8901 16.26C13.0001 16.06 9.00009 11.97 8.98009 7.13996C8.97009 5.83996 9.24009 4.60996 9.73009 3.48996C10.2701 2.24996 9.62009 1.65996 8.37009 2.18996C4.41009 3.85996 1.70009 7.84996 2.03009 12.42Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
-
             <span class="mode-palette-dot" aria-hidden="true"></span>
           </button>
 
@@ -547,18 +499,9 @@
             class="header-btn user-btn"
             id="header-user-btn"
             aria-label="User Account"
-            title="Sign In / Account"
+            title="User Account"
           >
-            <svg
-              class="user-icon"
-              id="user-header-icon"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              aria-hidden="true"
-            >
+            <svg class="user-icon" id="user-header-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M12 12C14.4853 12 16.5 9.98528 16.5 7.5C16.5 5.01472 14.4853 3 12 3C9.51472 3 7.5 5.01472 7.5 7.5C7.5 9.98528 9.51472 12 12 12Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
               <path d="M20 21C20 17.134 16.4183 14 12 14C7.58172 14 4 17.134 4 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
@@ -568,87 +511,226 @@
       </div>
     </header>
 
-    <!-- Main Body Content: Dedicated Google Login Card with NO Right Column / Popular Posts / Topics -->
-    <main class="main-body login-main-body" id="main-content">
-      <div class="login-container">
+    <!-- Main Body: Full-Page Account Dashboard (Spans Full Width from Left to Right) -->
+    <main class="main-body account-main-body" id="main-content">
+      <div class="account-container">
         
-        <!-- Breadcrumbs Navigation -->
-        <nav class="login-breadcrumbs" aria-label="Breadcrumb">
-          <a href="../index.html" class="login-breadcrumb-link">Home</a>
-          <span class="login-breadcrumb-sep">/</span>
-          <span class="login-breadcrumb-current">Sign In</span>
+        <!-- Breadcrumbs -->
+        <nav class="account-breadcrumbs" aria-label="Breadcrumb">
+          <a href="../index.html" class="account-breadcrumb-link">Home</a>
+          <span class="account-breadcrumb-sep">/</span>
+          <span class="account-breadcrumb-current">Account &amp; Workspace</span>
         </nav>
 
-        <!-- Main Authentication Card -->
-        <div class="login-card" id="login-card">
+        <!-- Signed In View (Full Width) -->
+        <div class="account-full-view" id="account-signed-in-view">
           
-          <!-- Top Radiology Brand Badge -->
-          <div class="login-badge-wrap">
-            <div class="login-logo-badge" title="My Radiology Guide Clinical Access">
-              <svg class="login-badge-svg" viewBox="0 0 512 512" width="28" height="28" fill="currentColor" aria-hidden="true">
-                <g>
-                  <path d="m208,239.893c0,26.508 21.468,48 48,48 26.484,0 48-21.492 48-48 0-26.509-21.516-48-48-48-26.532-2.84217e-14-48,21.491-48,48z"></path>
-                  <path d="m384,19.339c-15.297-8.852-34.875-3.594-43.711,11.703l-55.578,96.227c-8.805,15.242-3.648,34.727 11.539,43.625 24.312,14.227 39.484,40.336 39.75,68.273-0.023,0.406-0.039,0.82-0.047,1.102-0.188,8.602 3.102,16.922 9.117,23.078 6.023,6.148 14.266,9.617 22.875,9.617h112.055c17.672,0 32-14.328 32-32 0-91.109-49.047-176.031-128-221.625z"></path>
-                  <path d="m339.219,321.058c-8.82-15.258-28.289-20.523-43.617-11.758-24.406,13.984-54.906,13.953-79.227,0.016-15.297-8.734-34.773-3.492-43.609,11.773l-56.476,97.789c-8.813,15.258-3.625,34.773 11.601,43.648 38.664,22.531 82.961,34.438 128.109,34.438 45.148,0 89.445-11.906 128.109-34.438 15.227-8.875 20.414-28.391 11.602-43.656l-56.492-97.812z"></path>
-                  <path d="m166.93,263.347c6.016-6.156 9.305-14.477 9.117-23.078-0.008-0.266-0.023-0.68-0.047-1.086 0.258-27.977 15.43-54.094 39.719-68.313 15.195-8.883 20.359-28.375 11.555-43.625l-55.563-96.203c-8.836-15.297-28.406-20.562-43.711-11.703-78.953,45.594-128,130.516-128,221.625 0,17.672 14.328,32 32,32h112.055c8.609,0 16.851-3.469 22.875-9.617z"></path>
-                </g>
-              </svg>
+          <!-- Full-Width Hero Profile Header -->
+          <div class="account-profile-hero">
+            <div class="account-hero-left">
+              <div class="account-avatar-wrap">
+                <img class="account-avatar-img" id="account-avatar-img" src="" alt="User avatar" />
+                <span class="account-google-badge" title="Verified Google Account">
+                  <svg viewBox="0 0 24 24" width="13" height="13" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
+                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/>
+                  </svg>
+                </span>
+              </div>
+
+              <div class="account-info">
+                <div class="account-name-row">
+                  <h1 class="account-name" id="account-display-name">Akshay Patel</h1>
+                  <span class="account-role-badge">Clinical Radiologist</span>
+                </div>
+                <div class="account-email" id="account-display-email">mr.akshaypatel05@gmail.com</div>
+                <div class="account-meta-line">
+                  <span>Member since <strong id="account-member-date">September 2026</strong></span>
+                  <span>‧</span>
+                  <span>Google Single Sign-On Active</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="account-hero-right">
+              <!-- Sign Out Button with Exact User-Requested SVG -->
+              <button type="button" class="account-btn-signout" id="account-signout-btn" title="Sign Out of Session">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M17.4399 14.62L19.9999 12.06L17.4399 9.5" stroke="#ffffff" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M9.75977 12.0596H19.9298" stroke="#ffffff" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M11.7598 20C7.33977 20 3.75977 17 3.75977 12C3.75977 7 7.33977 4 11.7598 4" stroke="#ffffff" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <span>Sign Out</span>
+              </button>
             </div>
           </div>
 
-          <!-- Header Copy -->
-          <div class="login-header-text">
-            <h1 class="login-title">Sign In</h1>
-          </div>
+          <!-- Full-Width Multi-Column Grid (From Left to Right) -->
+          <div class="account-dashboard-grid">
+            
+            <!-- Left Main Column: Workspace Hub & Highlights -->
+            <div class="account-section">
+              <div class="account-section-header">
+                <h2 class="account-section-title">
+                  <span>Clinical Learning Hub &amp; Workspaces</span>
+                </h2>
+                <span class="account-section-badge">Active Sync</span>
+              </div>
 
-          <!-- Google Sign-In Action -->
-          <div class="login-action-section" id="login-logged-out-view">
-            <button
-              type="button"
-              class="google-signin-btn"
-              id="google-signin-btn"
-              aria-label="Sign in with Google"
-            >
-              <span class="google-icon-wrapper">
-                <svg class="google-icon" viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
-                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/>
-                </svg>
-              </span>
-              <span class="google-btn-text" id="google-btn-text">Continue with Google</span>
-              <span class="google-btn-spinner" id="google-btn-spinner" aria-hidden="true"></span>
-            </button>
-          </div>
+              <!-- Quick Highlights Row -->
+              <div class="account-stats-row">
+                <a href="../index.html#bookmarks" class="account-stat-box">
+                  <span class="account-stat-title">Saved Bookmarks</span>
+                  <span class="account-stat-val">12</span>
+                  <span class="account-stat-hint">High-yield protocols &amp; pearls</span>
+                </a>
 
-          <!-- Terms and Privacy Note -->
-          <div class="login-card-footer">
-            <p class="login-terms-text">By signing in, you agree to our <a href="../index.html#terms" class="login-terms-link">Terms of Service</a> and <a href="../index.html#privacy" class="login-terms-link">Privacy Policy</a>.</p>
+                <a href="../index.html#daily-journal" class="account-stat-box">
+                  <span class="account-stat-title">Study Journal</span>
+                  <span class="account-stat-val">8 Logs</span>
+                  <span class="account-stat-hint">Clinical case entries &amp; notes</span>
+                </a>
+
+                <a href="/books/" class="account-stat-box">
+                  <span class="account-stat-title">Reference Books</span>
+                  <span class="account-stat-val">15 Books</span>
+                  <span class="account-stat-hint">Core physics &amp; diagnostic texts</span>
+                </a>
+              </div>
+
+              <!-- Interactive Saved Collections -->
+              <div class="account-section-header" style="margin-top: 12px;">
+                <h3 class="account-section-title">Recent Clinical Protocol Bookmarks</h3>
+                <a href="../index.html#bookmarks" class="account-breadcrumb-link" style="font-size: 12px;">View All</a>
+              </div>
+
+              <div class="account-items-list">
+                <a href="../post/index.html" class="account-item-card">
+                  <div class="account-item-left">
+                    <div class="account-item-icon">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/></svg>
+                    </div>
+                    <div class="account-item-text">
+                      <span class="account-item-title">Acute Stroke Protocol &amp; DWI-FLAIR Mismatch</span>
+                      <span class="account-item-desc">Ischemic penumbra triage &amp; rapid CT/MRI decision matrix</span>
+                    </div>
+                  </div>
+                  <span class="account-item-tag">Neuroradiology</span>
+                </a>
+
+                <a href="../index.html#radiological-physics" class="account-item-card">
+                  <div class="account-item-left">
+                    <div class="account-item-icon">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    </div>
+                    <div class="account-item-text">
+                      <span class="account-item-title">X-Ray Tube Rating Charts &amp; Heat Dissipation</span>
+                      <span class="account-item-desc">Anode cooling curves, HVL filtration &amp; grid dynamics</span>
+                    </div>
+                  </div>
+                  <span class="account-item-tag">Physics</span>
+                </a>
+
+                <a href="/books/" class="account-item-card">
+                  <div class="account-item-left">
+                    <div class="account-item-icon">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                    </div>
+                    <div class="account-item-text">
+                      <span class="account-item-title">Christensen's Physics of Diagnostic Radiology</span>
+                      <span class="account-item-desc">Direct PDF access &amp; chapter review companion</span>
+                    </div>
+                  </div>
+                  <span class="account-item-tag">Book Library</span>
+                </a>
+              </div>
+
+            </div>
+
+            <!-- Right Sidebar Column: Profile Details & Curriculum Track -->
+            <div class="account-sidebar-col">
+              
+              <!-- Profile Details Panel -->
+              <div class="account-panel">
+                <h3 class="account-panel-title">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                  <span>Account Security</span>
+                </h3>
+
+                <div class="account-details-table">
+                  <div class="account-detail-row">
+                    <span class="account-detail-label">Authentication</span>
+                    <span class="account-detail-value">Google SSO</span>
+                  </div>
+                  <div class="account-detail-row">
+                    <span class="account-detail-label">Status</span>
+                    <span class="account-detail-value" style="color: #22c55e;">Verified</span>
+                  </div>
+                  <div class="account-detail-row">
+                    <span class="account-detail-label">Subspecialty</span>
+                    <span class="account-detail-value">Radiology</span>
+                  </div>
+                  <div class="account-detail-row">
+                    <span class="account-detail-label">Curriculum</span>
+                    <span class="account-detail-value">ARRT 2026</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Modality Interests -->
+              <div class="account-panel">
+                <h3 class="account-panel-title">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m4.93 19.07 4.24-4.24"/></svg>
+                  <span>Active Modalities</span>
+                </h3>
+                <div class="account-tag-cloud">
+                  <span class="account-chip">MRI Neuro</span>
+                  <span class="account-chip">Chest CT</span>
+                  <span class="account-chip">ALARA Safety</span>
+                  <span class="account-chip">Cardiac MRI</span>
+                  <span class="account-chip">MSK Trauma</span>
+                  <span class="account-chip">Fluoroscopy</span>
+                </div>
+              </div>
+
+            </div>
+
           </div>
 
         </div>
+
+        <!-- Logged Out Prompt (If visited while not logged in) -->
+        <div class="account-logged-out-container is-hidden" id="account-logged-out-view">
+          <div class="account-logged-out-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
+          <h2 class="account-logged-out-title">Sign In Required</h2>
+          <p class="account-logged-out-desc">
+            Sign in with your Google account to access your personal radiology workspace, bookmarks, and clinical journal notes.
+          </p>
+          <a href="../login/index.html" class="account-btn-signout" style="padding: 10px 24px; font-size: 14px; background: var(--header-btn-bg);">
+            <span>Go to Sign In</span>
+          </a>
+        </div>
+
       </div>
     </main>
 
-    <!-- Site Footer: Exact Same Full-Width Footer Spanning All Columns -->
+    <!-- Global Website 5-Column Footer (Exact Match) -->
     <footer class="site-footer" id="site-footer" role="contentinfo" aria-label="Site Footer">
       <div class="footer-inner">
-        <!-- Top Main Footer Grid -->
         <div class="footer-grid">
           
-          <!-- Column 1: Brand Info & Mission Statement -->
+          <!-- Column 1: Brand Info -->
           <div class="footer-col footer-col-brand">
             <a href="../index.html" class="footer-brand-logo" aria-label="My Radiology Guide Home">
               <span class="footer-logo-box">
-                <svg
-                  class="footer-logo-svg"
-                  viewBox="0 0 512 512"
-                  width="20"
-                  height="20"
-                  fill="#000000"
-                  aria-hidden="true"
-                >
+                <svg class="footer-logo-svg" viewBox="0 0 512 512" width="20" height="20" fill="#000000" aria-hidden="true">
                   <g>
                     <path d="m208,239.893c0,26.508 21.468,48 48,48 26.484,0 48-21.492 48-48 0-26.509-21.516-48-48-48-26.532-2.84217e-14-48,21.491-48,48z"></path>
                     <path d="m384,19.339c-15.297-8.852-34.875-3.594-43.711,11.703l-55.578,96.227c-8.805,15.242-3.648,34.727 11.539,43.625 24.312,14.227 39.484,40.336 39.75,68.273-0.023,0.406-0.039,0.82-0.047,1.102-0.188,8.602 3.102,16.922 9.117,23.078 6.023,6.148 14.266,9.617 22.875,9.617h112.055c17.672,0 32-14.328 32-32 0-91.109-49.047-176.031-128-221.625z"></path>
@@ -710,7 +792,7 @@
               <li><a href="../index.html#privacy" class="footer-link">Privacy Policy</a></li>
               <li><a href="../index.html#terms" class="footer-link">Terms of Service</a></li>
               <li><a href="../index.html#arrt-standards" class="footer-link">ARRT Standards</a></li>
-              <li><a href="/login/" class="footer-link" style="color: var(--accent-color); font-weight: 600;">Sign In (Google)</a></li>
+              <li><a href="../index.html#contact" class="footer-link">Contact &amp; Feedback</a></li>
             </ul>
           </div>
 
@@ -722,28 +804,15 @@
         <div class="footer-bottom-inner">
           <p class="footer-copyright">
             <svg class="footer-copyright-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <g clip-path="url(#clip0_4418_9701_login_attr)">
+              <g clip-path="url(#clip0_4418_9701_attr_acc)">
                 <path d="M12 22C6.48 22 2 17.52 2 12C2 6.48 6.48 2 12 2C17.52 2 22 6.48 22 12C22 17.52 17.52 22 12 22Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                 <path d="M14.88 15C14.17 15.62 13.25 16 12.24 16C10.03 16 8.23999 14.21 8.23999 12C8.23999 9.79 10.03 8 12.24 8C13.25 8 14.17 8.38 14.88 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
               </g>
-              <defs>
-                <clipPath id="clip0_4418_9701_login_attr">
-                  <rect width="24" height="24" fill="white"/>
-                </clipPath>
-              </defs>
+              <defs><clipPath id="clip0_4418_9701_attr_acc"><rect width="24" height="24" fill="white"/></clipPath></defs>
             </svg>
             <span>2026</span>
             <span class="footer-dot-sep">‧</span>
-            <span class="footer-brand-name"><span>My Radiology Guide</span><svg class="footer-verified-badge" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-label="Verified">
-                <g clip-path="url(#clip0_4418_8618_login_attr)">
-                  <path d="M21.5599 10.7405L20.1999 9.16055C19.9399 8.86055 19.7299 8.30055 19.7299 7.90055V6.20055C19.7299 5.14055 18.8599 4.27055 17.7999 4.27055H16.0999C15.7099 4.27055 15.1399 4.06055 14.8399 3.80055L13.2599 2.44055C12.5699 1.85055 11.4399 1.85055 10.7399 2.44055L9.16988 3.81055C8.86988 4.06055 8.29988 4.27055 7.90988 4.27055H6.17988C5.11988 4.27055 4.24988 5.14055 4.24988 6.20055V7.91055C4.24988 8.30055 4.03988 8.86055 3.78988 9.16055L2.43988 10.7505C1.85988 11.4405 1.85988 12.5605 2.43988 13.2505L3.78988 14.8405C4.03988 15.1405 4.24988 15.7005 4.24988 16.0905V17.8005C4.24988 18.8605 5.11988 19.7305 6.17988 19.7305H7.90988C8.29988 19.7305 8.86988 19.9405 9.16988 20.2005L10.7499 21.5605C11.4399 22.1505 12.5699 22.1505 13.2699 21.5605L14.8499 20.2005C15.1499 19.9405 15.7099 19.7305 16.1099 19.7305H17.8099C18.8699 19.7305 19.7399 18.8605 19.7399 17.8005V16.1005C19.7399 15.7105 19.9499 15.1405 20.2099 14.8405L21.5699 13.2605C22.1499 12.5705 22.1499 11.4305 21.5599 10.7405ZM16.1599 10.1105L11.3299 14.9405C11.1899 15.0805 10.9999 15.1605 10.7999 15.1605C10.5999 15.1605 10.4099 15.0805 10.2699 14.9405L7.84988 12.5205C7.55988 12.2305 7.55988 11.7505 7.84988 11.4605C8.13988 11.1705 8.61988 11.1705 8.90988 11.4605L10.7999 13.3505L15.0999 9.05055C15.3899 8.76055 15.8699 8.76055 16.1599 9.05055C16.4499 9.34055 16.4499 9.82055 16.1599 10.1105Z" fill="currentColor"/>
-                </g>
-                <defs>
-                  <clipPath id="clip0_4418_8618_login_attr">
-                    <rect width="24" height="24" fill="white"/>
-                  </clipPath>
-                </defs>
-              </svg></span>
+            <span class="footer-brand-name"><span>My Radiology Guide</span><svg class="footer-verified-badge" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-label="Verified"><path d="M21.5599 10.7405L20.1999 9.16055C19.9399 8.86055 19.7299 8.30055 19.7299 7.90055V6.20055C19.7299 5.14055 18.8599 4.27055 17.7999 4.27055H16.0999C15.7099 4.27055 15.1399 4.06055 14.8399 3.80055L13.2599 2.44055C12.5699 1.85055 11.4399 1.85055 10.7399 2.44055L9.16988 3.81055C8.86988 4.06055 8.29988 4.27055 7.90988 4.27055H6.17988C5.11988 4.27055 4.24988 5.14055 4.24988 6.20055V7.91055C4.24988 8.30055 4.03988 8.86055 3.78988 9.16055L2.43988 10.7505C1.85988 11.4405 1.85988 12.5605 2.43988 13.2505L3.78988 14.8405C4.03988 15.1405 4.24988 15.7005 4.24988 16.0905V17.8005C4.24988 18.8605 5.11988 19.7305 6.17988 19.7305H7.90988C8.29988 19.7305 8.86988 19.9405 9.16988 20.2005L10.7499 21.5605C11.4399 22.1505 12.5699 22.1505 13.2699 21.5605L14.8499 20.2005C15.1499 19.9405 15.7099 19.7305 16.1099 19.7305H17.8099C18.8699 19.7305 19.7399 18.8605 19.7399 17.8005V16.1005C19.7399 15.7105 19.9499 15.1405 20.2099 14.8405L21.5699 13.2605C22.1499 12.5705 22.1499 11.4305 21.5599 10.7405ZM16.1599 10.1105L11.3299 14.9405C11.1899 15.0805 10.9999 15.1605 10.7999 15.1605C10.5999 15.1605 10.4099 15.0805 10.2699 14.9405L7.84988 12.5205C7.55988 12.2305 7.55988 11.7505 7.84988 11.4605C8.13988 11.1705 8.61988 11.1705 8.90988 11.4605L10.7999 13.3505L15.0999 9.05055C15.3899 8.76055 15.8699 8.76055 16.1599 9.05055C16.4499 9.34055 16.4499 9.82055 16.1599 10.1105Z" fill="currentColor"/></svg></span>
             <span class="footer-dot-sep">‧</span>
             <span>All rights reserved.</span>
           </p>
@@ -751,78 +820,31 @@
       </div>
     </footer>
 
-    <!-- Clean, Minimal Search Modal (Bottom Sheet on Mobile, Centered Modal on Desktop) -->
+    <!-- Clean, Minimal Search Modal (Working) -->
     <div class="search-modal-overlay" id="search-modal-overlay" aria-hidden="true">
       <div class="search-modal" id="search-modal" role="dialog" aria-modal="true" aria-labelledby="search-modal-title">
         <div class="bottom-sheet-handle" aria-hidden="true"></div>
-
-        <!-- Search Modal Header: Title on left, Close button on right -->
         <div class="search-modal-header">
           <h2 id="search-modal-title" class="search-modal-title">Search</h2>
-          <button
-            type="button"
-            class="header-btn search-close-btn"
-            id="search-close-btn"
-            aria-label="Close search modal"
-          >
-            <svg
-              class="close-svg"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <g clip-path="url(#clip0_4418_7386_search)">
-                <path d="M9.17011 15.5794C8.98011 15.5794 8.79011 15.5094 8.64011 15.3594C8.35011 15.0694 8.35011 14.5894 8.64011 14.2994L14.3001 8.63938C14.5901 8.34938 15.0701 8.34938 15.3601 8.63938C15.6501 8.92937 15.6501 9.40937 15.3601 9.69937L9.70011 15.3594C9.56011 15.5094 9.36011 15.5794 9.17011 15.5794Z" fill="white" style="fill: var(--fillg, currentColor);"/>
-                <path d="M14.8301 15.5794C14.6401 15.5794 14.4501 15.5094 14.3001 15.3594L8.64011 9.69937C8.35011 9.40937 8.35011 8.92937 8.64011 8.63938C8.93011 8.34938 9.41011 8.34938 9.70011 8.63938L15.3601 14.2994C15.6501 14.5894 15.6501 15.0694 15.3601 15.3594C15.2101 15.5094 15.0201 15.5794 14.8301 15.5794Z" fill="white" style="fill: var(--fillg, currentColor);"/>
-                <path d="M15 22.75H9C3.57 22.75 1.25 20.43 1.25 15V9C1.25 3.57 3.57 1.25 9 1.25H15C20.43 1.25 22.75 3.57 22.75 9V15C22.75 20.43 20.43 22.75 15 22.75ZM9 2.75C4.39 2.75 2.75 4.39 2.75 9V15C2.75 19.61 4.39 21.25 9 21.25H15C19.61 21.25 21.25 19.61 21.25 15V9C21.25 4.39 19.61 2.75 15 2.75H9Z" fill="white" style="fill: var(--fillg, currentColor);"/>
-              </g>
-              <defs>
-                <clipPath id="clip0_4418_7386_search">
-                  <rect width="24" height="24" fill="white"/>
-                </clipPath>
-              </defs>
+          <button type="button" class="header-btn search-close-btn" id="search-close-btn" aria-label="Close search modal">
+            <svg class="close-svg" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M9.17011 15.5794C8.98011 15.5794 8.79011 15.5094 8.64011 15.3594C8.35011 15.0694 8.35011 14.5894 8.64011 14.2994L14.3001 8.63938C14.5901 8.34938 15.0701 8.34938 15.3601 8.63938C15.6501 8.92937 15.6501 9.40937 15.3601 9.69937L9.70011 15.3594C9.56011 15.5094 9.36011 15.5794 9.17011 15.5794Z" fill="white" style="fill: var(--fillg, currentColor);"/>
+              <path d="M14.8301 15.5794C14.6401 15.5794 14.4501 15.5094 14.3001 15.3594L8.64011 9.69937C8.35011 9.40937 8.35011 8.92937 8.64011 8.63938C8.93011 8.34938 9.41011 8.34938 9.70011 8.63938L15.3601 14.2994C15.6501 14.5894 15.6501 15.0694 15.3601 15.3594C15.2101 15.5094 15.0201 15.5794 14.8301 15.5794Z" fill="white" style="fill: var(--fillg, currentColor);"/>
+              <path d="M15 22.75H9C3.57 22.75 1.25 20.43 1.25 15V9C1.25 3.57 3.57 1.25 9 1.25H15C20.43 1.25 22.75 3.57 22.75 9V15C22.75 20.43 20.43 22.75 15 22.75ZM9 2.75C4.39 2.75 2.75 4.39 2.75 9V15C2.75 19.61 4.39 21.25 9 21.25H15C19.61 21.25 21.25 19.61 21.25 15V9C21.25 4.39 19.61 2.75 15 2.75H9Z" fill="white" style="fill: var(--fillg, currentColor);"/>
             </svg>
           </button>
         </div>
 
         <form class="search-modal-field" id="search-form" role="search">
-          <svg
-            class="search-field-icon"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="#ffffff"
-            aria-hidden="true"
-          >
+          <svg class="search-field-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#ffffff" aria-hidden="true">
             <path d="M11.5 21.75C5.85 21.75 1.25 17.15 1.25 11.5C1.25 5.85 5.85 1.25 11.5 1.25C17.15 1.25 21.75 5.85 21.75 11.5C21.75 17.15 17.15 21.75 11.5 21.75ZM11.5 2.75C6.67 2.75 2.75 6.68 2.75 11.5C2.75 16.32 6.67 20.25 11.5 20.25C16.33 20.25 20.25 16.32 20.25 11.5C20.25 6.68 16.33 2.75 11.5 2.75Z" fill="white" style="fill: var(--fillg);"/>
             <path d="M21.9999 22.7499C21.8099 22.7499 21.6199 22.6799 21.4699 22.5299L19.4699 20.5299C19.1799 20.2399 19.1799 19.7599 19.4699 19.4699C19.7599 19.1799 20.2399 19.1799 20.5299 19.4699L22.5299 21.4699C22.8199 21.7599 22.8199 22.2399 22.5299 22.5299C22.3799 22.6799 22.1899 22.7499 21.9999 22.7499Z" fill="white" style="fill: var(--fillg);"/>
           </svg>
-          <input
-            type="search"
-            class="search-modal-input"
-            id="search-input"
-            placeholder="looking for notes?"
-            autocomplete="off"
-          />
-          <button
-            type="button"
-            class="search-clear-btn"
-            id="search-clear-btn"
-            aria-label="Clear query"
-          >
-            Clear
-          </button>
+          <input type="search" class="search-modal-input" id="search-input" placeholder="looking for notes?" autocomplete="off" />
+          <button type="button" class="search-clear-btn" id="search-clear-btn" aria-label="Clear query">Clear</button>
         </form>
 
-        <!-- Live Real-Time Multi-Field Search Results -->
-        <div class="search-modal-results" id="search-modal-results" role="region" aria-label="Search results" aria-live="polite">
-          <!-- Dynamically populated from POSTS_DATA -->
-        </div>
-
+        <div class="search-modal-results" id="search-modal-results" role="region" aria-label="Search results" aria-live="polite"></div>
         <div class="search-modal-footer">
           <span>Search or jump to...</span>
           <span class="search-kbd">ESC to close</span>
@@ -830,237 +852,85 @@
       </div>
     </div>
 
-    <!-- Clean, Minimal Theme & Palette Modal (Bottom Sheet on Mobile, Centered Modal on Desktop) -->
+    <!-- Theme & Palette Modal (Working) -->
     <div class="theme-modal-overlay" id="theme-modal-overlay" aria-hidden="true">
       <div class="theme-modal" id="theme-modal" role="dialog" aria-modal="true" aria-labelledby="theme-modal-title">
         <div class="bottom-sheet-handle" aria-hidden="true"></div>
         <div class="theme-modal-header">
           <h2 id="theme-modal-title" class="theme-modal-title">Theme &amp; Palette</h2>
-          <button
-            type="button"
-            class="header-btn"
-            id="theme-close-btn"
-            aria-label="Close theme modal"
-          >
-            <svg
-              class="close-svg"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <g clip-path="url(#clip0_4418_7386_theme)">
-                <path d="M9.17011 15.5794C8.98011 15.5794 8.79011 15.5094 8.64011 15.3594C8.35011 15.0694 8.35011 14.5894 8.64011 14.2994L14.3001 8.63938C14.5901 8.34938 15.0701 8.34938 15.3601 8.63938C15.6501 8.92937 15.6501 9.40937 15.3601 9.69937L9.70011 15.3594C9.56011 15.5094 9.36011 15.5794 9.17011 15.5794Z" fill="white" style="fill: var(--fillg, currentColor);"/>
-                <path d="M14.8301 15.5794C14.6401 15.5794 14.4501 15.5094 14.3001 15.3594L8.64011 9.69937C8.35011 9.40937 8.35011 8.92937 8.64011 8.63938C8.93011 8.34938 9.41011 8.34938 9.70011 8.63938L15.3601 14.2994C15.6501 14.5894 15.6501 15.0694 15.3601 15.3594C15.2101 15.5094 15.0201 15.5794 14.8301 15.5794Z" fill="white" style="fill: var(--fillg, currentColor);"/>
-                <path d="M15 22.75H9C3.57 22.75 1.25 20.43 1.25 15V9C1.25 3.57 3.57 1.25 9 1.25H15C20.43 1.25 22.75 3.57 22.75 9V15C22.75 20.43 20.43 22.75 15 22.75ZM9 2.75C4.39 2.75 2.75 4.39 2.75 9V15C2.75 19.61 4.39 21.25 9 21.25H15C19.61 21.25 21.25 19.61 21.25 15V9C21.25 4.39 19.61 2.75 15 2.75H9Z" fill="white" style="fill: var(--fillg, currentColor);"/>
-              </g>
-              <defs>
-                <clipPath id="clip0_4418_7386_theme">
-                  <rect width="24" height="24" fill="white"/>
-                </clipPath>
-              </defs>
+          <button type="button" class="header-btn" id="theme-close-btn" aria-label="Close theme modal">
+            <svg class="close-svg" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M9.17011 15.5794C8.98011 15.5794 8.79011 15.5094 8.64011 15.3594C8.35011 15.0694 8.35011 14.5894 8.64011 14.2994L14.3001 8.63938C14.5901 8.34938 15.0701 8.34938 15.3601 8.63938C15.6501 8.92937 15.6501 9.40937 15.3601 9.69937L9.70011 15.3594C9.56011 15.5094 9.36011 15.5794 9.17011 15.5794Z" fill="white" style="fill: var(--fillg, currentColor);"/>
+              <path d="M14.8301 15.5794C14.6401 15.5794 14.4501 15.5094 14.3001 15.3594L8.64011 9.69937C8.35011 9.40937 8.35011 8.92937 8.64011 8.63938C8.93011 8.34938 9.41011 8.34938 9.70011 8.63938L15.3601 14.2994C15.6501 14.5894 15.6501 15.0694 15.3601 15.3594C15.2101 15.5094 15.0201 15.5794 14.8301 15.5794Z" fill="white" style="fill: var(--fillg, currentColor);"/>
+              <path d="M15 22.75H9C3.57 22.75 1.25 20.43 1.25 15V9C1.25 3.57 3.57 1.25 9 1.25H15C20.43 1.25 22.75 3.57 22.75 9V15C22.75 20.43 20.43 22.75 15 22.75ZM9 2.75C4.39 2.75 2.75 4.39 2.75 9V15C2.75 19.61 4.39 21.25 9 21.25H15C19.61 21.25 21.25 19.61 21.25 15V9C21.25 4.39 19.61 2.75 15 2.75H9Z" fill="white" style="fill: var(--fillg, currentColor);"/>
             </svg>
           </button>
         </div>
 
-        <!-- Mode Selector (Light / Dark) -->
         <div class="theme-section">
           <span class="theme-section-label">Appearance</span>
           <div class="mode-toggle-group" role="radiogroup" aria-label="Theme mode selection">
-            <button
-              type="button"
-              class="mode-select-btn"
-              id="mode-select-light"
-              data-mode-val="light"
-              role="radio"
-              aria-checked="true"
-            >
-              <svg
-                class="mode-select-icon mode-select-sun"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <g clip-path="url(#clip0_4418_6721_modal)">
-                  <path d="M12 19.25C8 19.25 4.75 16 4.75 12C4.75 8 8 4.75 12 4.75C16 4.75 19.25 8 19.25 12C19.25 16 16 19.25 12 19.25ZM12 6.25C8.83 6.25 6.25 8.83 6.25 12C6.25 15.17 8.83 17.75 12 17.75C15.17 17.75 17.75 15.17 17.75 12C17.75 8.83 15.17 6.25 12 6.25Z" fill="white" style="fill: var(--fillg, currentColor);"/>
-                  <path d="M12 22.96C11.45 22.96 11 22.55 11 22V21.92C11 21.37 11.45 20.92 12 20.92C12.55 20.92 13 21.37 13 21.92C13 22.47 12.55 22.96 12 22.96ZM19.14 20.14C18.88 20.14 18.63 20.04 18.43 19.85L18.3 19.72C17.91 19.33 17.91 18.7 18.3 18.31C18.69 17.92 19.32 17.92 19.71 18.31L19.84 18.44C20.23 18.83 20.23 19.46 19.84 19.85C19.65 20.04 19.4 20.14 19.14 20.14ZM4.86 20.14C4.6 20.14 4.35 20.04 4.15 19.85C3.76 19.46 3.76 18.83 4.15 18.44L4.28 18.31C4.67 17.92 5.3 17.92 5.69 18.31C6.08 18.7 6.08 19.33 5.69 19.72L5.56 19.85C5.37 20.04 5.11 20.14 4.86 20.14ZM22 13H21.92C21.37 13 20.92 12.55 20.92 12C20.92 11.45 21.37 11 21.92 11C22.47 11 22.96 11.45 22.96 12C22.96 12.55 22.55 13 22 13ZM2.08 13H2C1.45 13 1 12.55 1 12C1 11.45 1.45 11 2 11C2.55 11 3.04 11.45 3.04 12C3.04 12.55 2.63 13 2.08 13ZM19.01 5.99C18.75 5.99 18.5 5.89 18.3 5.7C17.91 5.31 17.91 4.68 18.3 4.29L18.43 4.16C18.82 3.77 19.45 3.77 19.84 4.16C20.23 4.55 20.23 5.18 19.84 5.57L19.71 5.7C19.52 5.89 19.27 5.99 19.01 5.99ZM4.99 5.99C4.73 5.99 4.48 5.89 4.28 5.7L4.15 5.56C3.76 5.17 3.76 4.54 4.15 4.15C4.54 3.76 5.17 3.76 5.56 4.15L5.69 4.28C6.08 4.67 6.08 5.3 5.69 5.69C5.5 5.89 5.24 5.99 4.99 5.99ZM12 3.04C11.45 3.04 11 2.63 11 2.08V2C11 1.45 11.45 1 12 1C12.55 1 13 1.45 13 2C13 2.55 12.55 3.04 12 3.04Z" fill="white" style="fill: var(--fillg, currentColor);"/>
-                </g>
-                <defs>
-                  <clipPath id="clip0_4418_6721_modal">
-                    <rect width="24" height="24" fill="white"/>
-                  </clipPath>
-                </defs>
-              </svg>
+            <button type="button" class="mode-select-btn" id="mode-select-light" data-mode-val="light" role="radio" aria-checked="true">
               <span>Light</span>
             </button>
-            <button
-              type="button"
-              class="mode-select-btn"
-              id="mode-select-dark"
-              data-mode-val="dark"
-              role="radio"
-              aria-checked="false"
-            >
-              <svg
-                class="mode-select-icon mode-select-moon"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden="true"
-              >
-                <g clip-path="url(#clip0_4418_5497_modal)">
-                  <path d="M2.03009 12.42C2.39009 17.57 6.76009 21.76 11.9901 21.99C15.6801 22.15 18.9801 20.43 20.9601 17.72C21.7801 16.61 21.3401 15.87 19.9701 16.12C19.3001 16.24 18.6101 16.29 17.8901 16.26C13.0001 16.06 9.00009 11.97 8.98009 7.13996C8.97009 5.83996 9.24009 4.60996 9.73009 3.48996C10.2701 2.24996 9.62009 1.65996 8.37009 2.18996C4.41009 3.85996 1.70009 7.84996 2.03009 12.42Z" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                </g>
-                <defs>
-                  <clipPath id="clip0_4418_5497_modal">
-                    <rect width="24" height="24" fill="white"/>
-                  </clipPath>
-                </defs>
-              </svg>
+            <button type="button" class="mode-select-btn" id="mode-select-dark" data-mode-val="dark" role="radio" aria-checked="false">
               <span>Dark</span>
             </button>
-            <button
-              type="button"
-              class="mode-select-btn"
-              id="mode-select-extra-dark"
-              data-mode-val="extra-dark"
-              role="radio"
-              aria-checked="false"
-            >
-              <svg
-                class="mode-select-icon mode-select-extra-dark"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="#ffffff"
-                aria-hidden="true"
-              >
-                <g clip-path="url(#clip0_4418_7940)">
-                  <path d="M21.53 15.9304C21.37 15.6604 20.92 15.2404 19.8 15.4404C19.18 15.5504 18.55 15.6004 17.92 15.5704C15.59 15.4704 13.48 14.4004 12.01 12.7504C10.71 11.3004 9.90995 9.41036 9.89995 7.37036C9.89995 6.23036 10.12 5.13036 10.57 4.09036C11.01 3.08036 10.7 2.55036 10.48 2.33036C10.25 2.10036 9.70995 1.78036 8.64995 2.22036C4.55995 3.94036 2.02995 8.04036 2.32995 12.4304C2.62995 16.5604 5.52995 20.0904 9.36995 21.4204C10.29 21.7404 11.26 21.9304 12.26 21.9704C12.42 21.9804 12.58 21.9904 12.74 21.9904C16.09 21.9904 19.23 20.4104 21.21 17.7204C21.88 16.7904 21.7 16.2004 21.53 15.9304Z" fill="white" style="fill: var(--fillg);"/>
-                </g>
-                <defs>
-                  <clipPath id="clip0_4418_7940">
-                    <rect width="24" height="24" fill="white"/>
-                  </clipPath>
-                </defs>
-              </svg>
+            <button type="button" class="mode-select-btn" id="mode-select-extra-dark" data-mode-val="extra-dark" role="radio" aria-checked="false">
               <span>Extra Dark</span>
             </button>
           </div>
         </div>
 
-        <!-- Color Palette Selector (11 Tones: Default Black & White, Beige, Green, Orange, Blue, Teal, Brown, Pink, Purple, Magenta, Red) -->
         <div class="theme-section">
           <div class="theme-section-header">
             <span class="theme-section-label">Color Palette</span>
             <span class="theme-section-caption" id="current-palette-name">Default</span>
           </div>
           <div class="palette-grid" id="palette-grid" role="radiogroup" aria-label="Color palette selection">
-            <button type="button" class="palette-btn is-active" data-palette-val="default" role="radio" aria-checked="true">
-              <span class="palette-name">Default</span>
-              <span class="palette-dot dot-default" aria-hidden="true"></span>
-            </button>
-            <button type="button" class="palette-btn" data-palette-val="beige" role="radio" aria-checked="false">
-              <span class="palette-name">Beige</span>
-              <span class="palette-dot dot-beige" aria-hidden="true"></span>
-            </button>
-            <button type="button" class="palette-btn" data-palette-val="green" role="radio" aria-checked="false">
-              <span class="palette-name">Green</span>
-              <span class="palette-dot dot-green" aria-hidden="true"></span>
-            </button>
-            <button type="button" class="palette-btn" data-palette-val="orange" role="radio" aria-checked="false">
-              <span class="palette-name">Orange</span>
-              <span class="palette-dot dot-orange" aria-hidden="true"></span>
-            </button>
-            <button type="button" class="palette-btn" data-palette-val="blue" role="radio" aria-checked="false">
-              <span class="palette-name">Blue</span>
-              <span class="palette-dot dot-blue" aria-hidden="true"></span>
-            </button>
-            <button type="button" class="palette-btn" data-palette-val="teal" role="radio" aria-checked="false">
-              <span class="palette-name">Teal</span>
-              <span class="palette-dot dot-teal" aria-hidden="true"></span>
-            </button>
-            <button type="button" class="palette-btn" data-palette-val="brown" role="radio" aria-checked="false">
-              <span class="palette-name">Brown</span>
-              <span class="palette-dot dot-brown" aria-hidden="true"></span>
-            </button>
-            <button type="button" class="palette-btn" data-palette-val="pink" role="radio" aria-checked="false">
-              <span class="palette-name">Pink</span>
-              <span class="palette-dot dot-pink" aria-hidden="true"></span>
-            </button>
-            <button type="button" class="palette-btn" data-palette-val="purple" role="radio" aria-checked="false">
-              <span class="palette-name">Purple</span>
-              <span class="palette-dot dot-purple" aria-hidden="true"></span>
-            </button>
-            <button type="button" class="palette-btn" data-palette-val="magenta" role="radio" aria-checked="false">
-              <span class="palette-name">Magenta</span>
-              <span class="palette-dot dot-magenta" aria-hidden="true"></span>
-            </button>
-            <button type="button" class="palette-btn" data-palette-val="red" role="radio" aria-checked="false">
-              <span class="palette-name">Red</span>
-              <span class="palette-dot dot-red" aria-hidden="true"></span>
-            </button>
+            <button type="button" class="palette-btn is-active" data-palette-val="default" role="radio" aria-checked="true"><span class="palette-name">Default</span><span class="palette-dot dot-default"></span></button>
+            <button type="button" class="palette-btn" data-palette-val="beige" role="radio" aria-checked="false"><span class="palette-name">Beige</span><span class="palette-dot dot-beige"></span></button>
+            <button type="button" class="palette-btn" data-palette-val="green" role="radio" aria-checked="false"><span class="palette-name">Green</span><span class="palette-dot dot-green"></span></button>
+            <button type="button" class="palette-btn" data-palette-val="orange" role="radio" aria-checked="false"><span class="palette-name">Orange</span><span class="palette-dot dot-orange"></span></button>
+            <button type="button" class="palette-btn" data-palette-val="blue" role="radio" aria-checked="false"><span class="palette-name">Blue</span><span class="palette-dot dot-blue"></span></button>
+            <button type="button" class="palette-btn" data-palette-val="teal" role="radio" aria-checked="false"><span class="palette-name">Teal</span><span class="palette-dot dot-teal"></span></button>
+            <button type="button" class="palette-btn" data-palette-val="brown" role="radio" aria-checked="false"><span class="palette-name">Brown</span><span class="palette-dot dot-brown"></span></button>
+            <button type="button" class="palette-btn" data-palette-val="pink" role="radio" aria-checked="false"><span class="palette-name">Pink</span><span class="palette-dot dot-pink"></span></button>
+            <button type="button" class="palette-btn" data-palette-val="purple" role="radio" aria-checked="false"><span class="palette-name">Purple</span><span class="palette-dot dot-purple"></span></button>
+            <button type="button" class="palette-btn" data-palette-val="magenta" role="radio" aria-checked="false"><span class="palette-name">Magenta</span><span class="palette-dot dot-magenta"></span></button>
+            <button type="button" class="palette-btn" data-palette-val="red" role="radio" aria-checked="false"><span class="palette-name">Red</span><span class="palette-dot dot-red"></span></button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Navigation Drawer & Backdrop -->
+    <!-- Navigation Drawer & Backdrop (Working Sidebar) -->
     <div class="nav-backdrop" id="nav-backdrop"></div>
     <aside class="nav-drawer" id="nav-drawer" aria-label="Side navigation drawer">
       <div class="drawer-header">
         <span class="drawer-title">Navigation</span>
-        <button
-          type="button"
-          class="header-btn"
-          id="drawer-close-btn"
-          aria-label="Close navigation"
-        >
-          <svg
-            class="close-svg"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            aria-hidden="true"
-          >
-            <g clip-path="url(#clip0_4418_7386_drawer)">
-              <path d="M9.17011 15.5794C8.98011 15.5794 8.79011 15.5094 8.64011 15.3594C8.35011 15.0694 8.35011 14.5894 8.64011 14.2994L14.3001 8.63938C14.5901 8.34938 15.0701 8.34938 15.3601 8.63938C15.6501 8.92937 15.6501 9.40937 15.3601 9.69937L9.70011 15.3594C9.56011 15.5094 9.36011 15.5794 9.17011 15.5794Z" fill="white" style="fill: var(--fillg, currentColor);"/>
-              <path d="M14.8301 15.5794C14.6401 15.5794 14.4501 15.5094 14.3001 15.3594L8.64011 9.69937C8.35011 9.40937 8.35011 8.92937 8.64011 8.63938C8.93011 8.34938 9.41011 8.34938 9.70011 8.63938L15.3601 14.2994C15.6501 14.5894 15.6501 15.0694 15.3601 15.3594C15.2101 15.5094 15.0201 15.5794 14.8301 15.5794Z" fill="white" style="fill: var(--fillg, currentColor);"/>
-              <path d="M15 22.75H9C3.57 22.75 1.25 20.43 1.25 15V9C1.25 3.57 3.57 1.25 9 1.25H15C20.43 1.25 22.75 3.57 22.75 9V15C22.75 20.43 20.43 22.75 15 22.75ZM9 2.75C4.39 2.75 2.75 4.39 2.75 9V15C2.75 19.61 4.39 21.25 9 21.25H15C19.61 21.25 21.25 19.61 21.25 15V9C21.25 4.39 19.61 2.75 15 2.75H9Z" fill="white" style="fill: var(--fillg, currentColor);"/>
-            </g>
-            <defs>
-              <clipPath id="clip0_4418_7386_drawer">
-                <rect width="24" height="24" fill="white"/>
-              </clipPath>
-            </defs>
+        <button type="button" class="header-btn" id="drawer-close-btn" aria-label="Close navigation">
+          <svg class="close-svg" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M9.17011 15.5794C8.98011 15.5794 8.79011 15.5094 8.64011 15.3594C8.35011 15.0694 8.35011 14.5894 8.64011 14.2994L14.3001 8.63938C14.5901 8.34938 15.0701 8.34938 15.3601 8.63938C15.6501 8.92937 15.6501 9.40937 15.3601 9.69937L9.70011 15.3594C9.56011 15.5094 9.36011 15.5794 9.17011 15.5794Z" fill="white" style="fill: var(--fillg, currentColor);"/>
+            <path d="M14.8301 15.5794C14.6401 15.5794 14.4501 15.5094 14.3001 15.3594L8.64011 9.69937C8.35011 9.40937 8.35011 8.92937 8.64011 8.63938C8.93011 8.34938 9.41011 8.34938 9.70011 8.63938L15.3601 14.2994C15.6501 14.5894 15.6501 15.0694 15.3601 15.3594C15.2101 15.5094 15.0201 15.5794 14.8301 15.5794Z" fill="white" style="fill: var(--fillg, currentColor);"/>
+            <path d="M15 22.75H9C3.57 22.75 1.25 20.43 1.25 15V9C1.25 3.57 3.57 1.25 9 1.25H15C20.43 1.25 22.75 3.57 22.75 9V15C22.75 20.43 20.43 22.75 15 22.75ZM9 2.75C4.39 2.75 2.75 4.39 2.75 9V15C2.75 19.61 4.39 21.25 9 21.25H15C19.61 21.25 21.25 19.61 21.25 15V9C21.25 4.39 19.61 2.75 15 2.75H9Z" fill="white" style="fill: var(--fillg, currentColor);"/>
           </svg>
         </button>
       </div>
 
-      <!-- Expandable Tree Navigation -->
       <nav class="drawer-nav tree-nav" aria-label="Workspace tree navigation">
         <ul class="tree-root" role="tree" id="tree-root">
 
           <!-- Leaf: Home -->
           <li class="tree-item tree-leaf" role="none" data-tree-id="overview" data-title="Home">
-            <a href="../index.html#overview" class="tree-row tree-leaf-link" role="treeitem" tabindex="0">
+            <a href="../index.html" class="tree-row tree-leaf-link" role="treeitem" aria-selected="false" tabindex="0">
               <span class="tree-icon" aria-hidden="true">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#ffffff">
-                  <g clip-path="url(#clip_home)">
+                  <g clip-path="url(#clip_home_acc)">
                     <path d="M17.79 22.75H6.21C3.47 22.75 1.25 20.52 1.25 17.78V10.37C1.25 9.00997 2.09 7.29997 3.17 6.45997L8.56 2.25997C10.18 0.999974 12.77 0.939974 14.45 2.11997L20.63 6.44997C21.82 7.27997 22.75 9.05997 22.75 10.51V17.79C22.75 20.52 20.53 22.75 17.79 22.75ZM9.48 3.43997L4.09 7.63997C3.38 8.19997 2.75 9.46997 2.75 10.37V17.78C2.75 19.69 4.3 21.25 6.21 21.25H17.79C19.7 21.25 21.25 19.7 21.25 17.79V10.51C21.25 9.54997 20.56 8.21997 19.77 7.67997L13.59 3.34997C12.45 2.54997 10.57 2.58997 9.48 3.43997Z" fill="white" style="fill: var(--fillg);"/>
                     <path d="M12 18.75C11.59 18.75 11.25 18.41 11.25 18V15C11.25 14.59 11.59 14.25 12 14.25C12.41 14.25 12.75 14.59 12.75 15V18C12.75 18.41 12.41 18.75 12 18.75Z" fill="white" style="fill: var(--fillg);"/>
                   </g>
-                  <defs><clipPath id="clip_home"><rect width="24" height="24" fill="white"/></clipPath></defs>
+                  <defs><clipPath id="clip_home_acc"><rect width="24" height="24" fill="white"/></clipPath></defs>
                 </svg>
               </span>
               <span class="tree-label">Home</span>
@@ -1081,17 +951,17 @@
             </a>
           </li>
 
-          <!-- Parent: Workspace Notes (Collapsed by default) -->
+          <!-- Parent: Workspace Notes (Expandable) -->
           <li class="tree-item tree-parent" role="none" data-tree-id="workspace-notes">
             <div class="tree-row tree-parent-row" role="treeitem" aria-expanded="false" tabindex="0">
               <span class="tree-icon" aria-hidden="true">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#ffffff">
-                  <g clip-path="url(#clip_folder_notes)">
+                  <g clip-path="url(#clip_folder_notes_acc)">
                     <path d="M18.29 22.75H5.70995C2.30995 22.75 2.12995 20.88 1.97995 19.37L1.57995 14.36C1.48995 13.39 1.76995 12.42 2.38995 11.64C3.12995 10.74 4.17995 10.25 5.30995 10.25H18.69C19.8 10.25 20.85 10.74 21.5599 11.59L21.7299 11.82C22.27 12.56 22.51 13.46 22.42 14.37L22.02 19.36C21.87 20.88 21.69 22.75 18.29 22.75ZM5.30995 11.75C4.63995 11.75 3.99995 12.05 3.57995 12.57L3.50995 12.64C3.18995 13.05 3.01995 13.63 3.07995 14.23L3.47995 19.24C3.61995 20.7 3.67995 21.25 5.70995 21.25H18.29C20.33 21.25 20.38 20.7 20.52 19.23L20.92 14.22C20.9799 13.63 20.8099 13.04 20.42 12.58L20.32 12.46C19.8699 11.99 19.3 11.75 18.68 11.75H5.30995Z" fill="white" style="fill: var(--fillg);"/>
                     <path d="M20.5 12.2203C20.09 12.2203 19.75 11.8803 19.75 11.4703V9.68027C19.75 6.70027 19.23 6.18027 16.25 6.18027H13.7C12.57 6.18027 12.18 5.78027 11.75 5.21027L10.46 3.50027C10.02 2.92027 9.92 2.78027 9.02 2.78027H7.75C4.77 2.78027 4.25 3.30027 4.25 6.28027V11.4303C4.25 11.8403 3.91 12.1803 3.5 12.1803C3.09 12.1803 2.75 11.8403 2.75 11.4303V6.28027C2.75 2.45027 3.92 1.28027 7.75 1.28027H9.03C10.57 1.28027 11.05 1.78027 11.67 2.60027L12.95 4.30027C13.22 4.66027 13.24 4.68027 13.71 4.68027H16.26C20.09 4.68027 21.26 5.85027 21.26 9.68027V11.4703C21.25 11.8803 20.91 12.2203 20.5 12.2203Z" fill="white" style="fill: var(--fillg);"/>
                     <path d="M14.5699 17.75H9.42993C9.01993 17.75 8.67993 17.41 8.67993 17C8.67993 16.59 9.01993 16.25 9.42993 16.25H14.5699C14.9799 16.25 15.3199 16.59 15.3199 17C15.3199 17.41 14.9899 17.75 14.5699 17.75Z" fill="white" style="fill: var(--fillg);"/>
                   </g>
-                  <defs><clipPath id="clip_folder_notes"><rect width="24" height="24" fill="white"/></clipPath></defs>
+                  <defs><clipPath id="clip_folder_notes_acc"><rect width="24" height="24" fill="white"/></clipPath></defs>
                 </svg>
               </span>
               <span class="tree-label">Workspace Notes</span>
@@ -1105,51 +975,16 @@
               <ul class="tree-children" role="group">
                 <li class="tree-item tree-leaf" role="none" data-tree-id="daily-journal" data-title="Daily Journal">
                   <a href="../index.html#daily-journal" class="tree-row tree-leaf-link" role="treeitem" aria-selected="false" tabindex="0">
-                    <span class="tree-icon" aria-hidden="true">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#ffffff">
-                        <g clip-path="url(#clip_bm_journal)">
-                          <path d="M15.31 15.02C14.73 15.02 14.1 14.83 13.47 14.44L12.15 13.64C12.09 13.6 11.91 13.6 11.85 13.64L10.53 14.44C9.45 15.1 8.39 15.2 7.54 14.72C6.71 14.25 6.25 13.31 6.25 12.08V5.03C6.25 2.59 7.58 1.25 10 1.25H14C16.42 1.25 17.75 2.59 17.75 5.03V12.08C17.75 13.32 17.29 14.26 16.46 14.72C16.11 14.92 15.72 15.02 15.31 15.02ZM12 12.11C12.33 12.11 12.66 12.19 12.93 12.35L14.25 13.15C14.84 13.51 15.38 13.6 15.72 13.41C16.05 13.22 16.24 12.73 16.24 12.07V5.03C16.24 3.43 15.57 2.75 13.99 2.75H9.99C8.41 2.75 7.74 3.43 7.74 5.03V12.08C7.74 12.74 7.93 13.23 8.26 13.42C8.6 13.61 9.14 13.52 9.73 13.16L11.05 12.36C11.34 12.19 11.67 12.11 12 12.11Z" fill="white" style="fill: var(--fillg);"/>
-                          <path d="M15 22.749H9C3.57 22.749 1.25 20.409 1.25 14.929V11.899C1.25 7.23903 2.93 4.87903 6.69 4.24903C7.09 4.17903 7.48 4.45903 7.55 4.86903C7.62 5.27903 7.34 5.65903 6.93 5.72903C3.92 6.22903 2.74 7.95903 2.74 11.899V14.929C2.74 19.539 4.43 21.249 8.99 21.249H14.99C19.55 21.249 21.24 19.539 21.24 14.929V11.899C21.24 7.89903 20.02 6.16903 16.88 5.69903C16.47 5.63903 16.19 5.25903 16.25 4.84903C16.31 4.43903 16.69 4.15903 17.1 4.21903C21 4.79903 22.74 7.15903 22.74 11.899V14.929C22.75 20.409 20.43 22.749 15 22.749Z" fill="white" style="fill: var(--fillg);"/>
-                        </g>
-                        <defs><clipPath id="clip_bm_journal"><rect width="24" height="24" fill="white"/></clipPath></defs>
-                      </svg>
-                    </span>
                     <span class="tree-label">Daily Journal</span>
                   </a>
                 </li>
-                <!-- Child: Bookmarks -->
                 <li class="tree-item tree-leaf" role="none" data-tree-id="bookmarks" data-title="Bookmarks">
                   <a href="../index.html#bookmarks" class="tree-row tree-leaf-link" role="treeitem" aria-selected="false" tabindex="0">
-                    <span class="tree-icon" aria-hidden="true">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <g clip-path="url(#clip0_4418_9959_tree)">
-                          <path d="M14.5 10.6504H9.5" stroke="#ffffff" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                          <path d="M12 8.21094V13.2109" stroke="#ffffff" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                          <path d="M16.8199 2H7.17995C5.04995 2 3.31995 3.74 3.31995 5.86V19.95C3.31995 21.75 4.60995 22.51 6.18995 21.64L11.0699 18.93C11.5899 18.64 12.4299 18.64 12.9399 18.93L17.8199 21.64C19.3999 22.52 20.6899 21.76 20.6899 19.95V5.86C20.6799 3.74 18.9499 2 16.8199 2Z" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                        </g>
-                        <defs>
-                          <clipPath id="clip0_4418_9959_tree">
-                            <rect width="24" height="24" fill="white"/>
-                          </clipPath>
-                        </defs>
-                      </svg>
-                    </span>
                     <span class="tree-label">Bookmarks</span>
                   </a>
                 </li>
-                <!-- Nested Folder: Projects (Collapsed by default) -->
                 <li class="tree-item tree-parent" role="none" data-tree-id="projects">
                   <div class="tree-row tree-parent-row" role="treeitem" aria-expanded="false" tabindex="0">
-                    <span class="tree-icon" aria-hidden="true">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#ffffff">
-                        <g clip-path="url(#clip_folder_proj)">
-                          <path d="M18.29 22.75H5.70995C2.30995 22.75 2.12995 20.88 1.97995 19.37L1.57995 14.36C1.48995 13.39 1.76995 12.42 2.38995 11.64C3.12995 10.74 4.17995 10.25 5.30995 10.25H18.69C19.8 10.25 20.85 10.74 21.5599 11.59L21.7299 11.82C22.27 12.56 22.51 13.46 22.42 14.37L22.02 19.36C21.87 20.88 21.69 22.75 18.29 22.75ZM5.30995 11.75C4.63995 11.75 3.99995 12.05 3.57995 12.57L3.50995 12.64C3.18995 13.05 3.01995 13.63 3.07995 14.23L3.47995 19.24C3.61995 20.7 3.67995 21.25 5.70995 21.25H18.29C20.33 21.25 20.38 20.7 20.52 19.23L20.92 14.22C20.9799 13.63 20.8099 13.04 20.42 12.58L20.32 12.46C19.8699 11.99 19.3 11.75 18.68 11.75H5.30995Z" fill="white" style="fill: var(--fillg);"/>
-                          <path d="M20.5 12.2203C20.09 12.2203 19.75 11.8803 19.75 11.4703V9.68027C19.75 6.70027 19.23 6.18027 16.25 6.18027H13.7C12.57 6.18027 12.18 5.78027 11.75 5.21027L10.46 3.50027C10.02 2.92027 9.92 2.78027 9.02 2.78027H7.75C4.77 2.78027 4.25 3.30027 4.25 6.28027V11.4303C4.25 11.8403 3.91 12.1803 3.5 12.1803C3.09 12.1803 2.75 11.8403 2.75 11.4303V6.28027C2.75 2.45027 3.92 1.28027 7.75 1.28027H9.03C10.57 1.28027 11.05 1.78027 11.67 2.60027L12.95 4.30027C13.22 4.66027 13.24 4.68027 13.71 4.68027H16.26C20.09 4.68027 21.26 5.85027 21.26 9.68027V11.4703C21.25 11.8803 20.91 12.2203 20.5 12.2203Z" fill="white" style="fill: var(--fillg);"/>
-                          <path d="M14.5699 17.75H9.42993C9.01993 17.75 8.67993 17.41 8.67993 17C8.67993 16.59 9.01993 16.25 9.42993 16.25H14.5699C14.9799 16.25 15.3199 16.59 15.3199 17C15.3199 17.41 14.9899 17.75 14.5699 17.75Z" fill="white" style="fill: var(--fillg);"/>
-                        </g>
-                        <defs><clipPath id="clip_folder_proj"><rect width="24" height="24" fill="white"/></clipPath></defs>
-                      </svg>
-                    </span>
                     <span class="tree-label">Projects</span>
                     <button type="button" class="tree-chevron-btn" aria-label="Toggle Projects" aria-expanded="false" tabindex="-1">
                       <svg class="tree-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#ffffff" aria-hidden="true">
@@ -1161,29 +996,11 @@
                     <ul class="tree-children" role="group">
                       <li class="tree-item tree-leaf" role="none" data-tree-id="roadmap-2026" data-title="Product Roadmap 2026">
                         <a href="../index.html#roadmap-2026" class="tree-row tree-leaf-link" role="treeitem" aria-selected="false" tabindex="0">
-                          <span class="tree-icon" aria-hidden="true">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#ffffff">
-                              <g clip-path="url(#clip_bm_roadmap)">
-                                <path d="M15.31 15.02C14.73 15.02 14.1 14.83 13.47 14.44L12.15 13.64C12.09 13.6 11.91 13.6 11.85 13.64L10.53 14.44C9.45 15.1 8.39 15.2 7.54 14.72C6.71 14.25 6.25 13.31 6.25 12.08V5.03C6.25 2.59 7.58 1.25 10 1.25H14C16.42 1.25 17.75 2.59 17.75 5.03V12.08C17.75 13.32 17.29 14.26 16.46 14.72C16.11 14.92 15.72 15.02 15.31 15.02ZM12 12.11C12.33 12.11 12.66 12.19 12.93 12.35L14.25 13.15C14.84 13.51 15.38 13.6 15.72 13.41C16.05 13.22 16.24 12.73 16.24 12.07V5.03C16.24 3.43 15.57 2.75 13.99 2.75H9.99C8.41 2.75 7.74 3.43 7.74 5.03V12.08C7.74 12.74 7.93 13.23 8.26 13.42C8.6 13.61 9.14 13.52 9.73 13.16L11.05 12.36C11.34 12.19 11.67 12.11 12 12.11Z" fill="white" style="fill: var(--fillg);"/>
-                                <path d="M15 22.749H9C3.57 22.749 1.25 20.409 1.25 14.929V11.899C1.25 7.23903 2.93 4.87903 6.69 4.24903C7.09 4.17903 7.48 4.45903 7.55 4.86903C7.62 5.27903 7.34 5.65903 6.93 5.72903C3.92 6.22903 2.74 7.95903 2.74 11.899V14.929C2.74 19.539 4.43 21.249 8.99 21.249H14.99C19.55 21.249 21.24 19.539 21.24 14.929V11.899C21.24 7.89903 20.02 6.16903 16.88 5.69903C16.47 5.63903 16.19 5.25903 16.25 4.84903C16.31 4.43903 16.69 4.15903 17.1 4.21903C21 4.79903 22.74 7.15903 22.74 11.899V14.929C22.75 20.409 20.43 22.749 15 22.749Z" fill="white" style="fill: var(--fillg);"/>
-                              </g>
-                              <defs><clipPath id="clip_bm_roadmap"><rect width="24" height="24" fill="white"/></clipPath></defs>
-                            </svg>
-                          </span>
                           <span class="tree-label">Roadmap 2026</span>
                         </a>
                       </li>
                       <li class="tree-item tree-leaf" role="none" data-tree-id="architecture" data-title="System Architecture">
                         <a href="../index.html#architecture" class="tree-row tree-leaf-link" role="treeitem" aria-selected="false" tabindex="0">
-                          <span class="tree-icon" aria-hidden="true">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#ffffff">
-                              <g clip-path="url(#clip_bm_arch)">
-                                <path d="M15.31 15.02C14.73 15.02 14.1 14.83 13.47 14.44L12.15 13.64C12.09 13.6 11.91 13.6 11.85 13.64L10.53 14.44C9.45 15.1 8.39 15.2 7.54 14.72C6.71 14.25 6.25 13.31 6.25 12.08V5.03C6.25 2.59 7.58 1.25 10 1.25H14C16.42 1.25 17.75 2.59 17.75 5.03V12.08C17.75 13.32 17.29 14.26 16.46 14.72C16.11 14.92 15.72 15.02 15.31 15.02ZM12 12.11C12.33 12.11 12.66 12.19 12.93 12.35L14.25 13.15C14.84 13.51 15.38 13.6 15.72 13.41C16.05 13.22 16.24 12.73 16.24 12.07V5.03C16.24 3.43 15.57 2.75 13.99 2.75H9.99C8.41 2.75 7.74 3.43 7.74 5.03V12.08C7.74 12.74 7.93 13.23 8.26 13.42C8.6 13.61 9.14 13.52 9.73 13.16L11.05 12.36C11.34 12.19 11.67 12.11 12 12.11Z" fill="white" style="fill: var(--fillg);"/>
-                                <path d="M15 22.749H9C3.57 22.749 1.25 20.409 1.25 14.929V11.899C1.25 7.23903 2.93 4.87903 6.69 4.24903C7.09 4.17903 7.48 4.45903 7.55 4.86903C7.62 5.27903 7.34 5.65903 6.93 5.72903C3.92 6.22903 2.74 7.95903 2.74 11.899V14.929C2.74 19.539 4.43 21.249 8.99 21.249H14.99C19.55 21.249 21.24 19.539 21.24 14.929V11.899C21.24 7.89903 20.02 6.16903 16.88 5.69903C16.47 5.63903 16.19 5.25903 16.25 4.84903C16.31 4.43903 16.69 4.15903 17.1 4.21903C21 4.79903 22.74 7.15903 22.74 11.899V14.929C22.75 20.409 20.43 22.749 15 22.749Z" fill="white" style="fill: var(--fillg);"/>
-                              </g>
-                              <defs><clipPath id="clip_bm_arch"><rect width="24" height="24" fill="white"/></clipPath></defs>
-                            </svg>
-                          </span>
                           <span class="tree-label">Architecture</span>
                         </a>
                       </li>
@@ -1194,7 +1011,7 @@
             </div>
           </li>
 
-          <!-- Subtle Company Separator -->
+          <!-- Subtle Separator -->
           <li class="tree-divider" role="separator" aria-hidden="true"></li>
 
           <!-- Leaf: About -->
@@ -1202,13 +1019,13 @@
             <a href="../index.html#about" class="tree-row tree-leaf-link" role="treeitem" aria-selected="false" tabindex="0">
               <span class="tree-icon" aria-hidden="true">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#ffffff">
-                  <g clip-path="url(#clip_about)">
+                  <g clip-path="url(#clip_about_acc)">
                     <path d="M16.75 20.49C16.34 20.49 15.99 20.21 15.91 19.81L15.66 18.75C15.55 18.26 15.16 17.87 14.67 17.75L13.59 17.5C13.2 17.42 12.92 17.07 12.92 16.66C12.92 16.25 13.2 15.9 13.6 15.82L14.67 15.57C15.16 15.46 15.55 15.07 15.66 14.58L15.91 13.5C15.99 13.11 16.34 12.84 16.75 12.84C17.16 12.84 17.5 13.12 17.59 13.51L17.84 14.58C17.95 15.07 18.34 15.46 18.83 15.58L19.91 15.83C20.3 15.91 20.58 16.26 20.57 16.67C20.57 17.08 20.29 17.42 19.9 17.51L18.82 17.76C18.33 17.87 17.94 18.26 17.82 18.75L17.57 19.83C17.49 20.22 17.14 20.5 16.73 20.5L16.75 20.49ZM15.9 16.66C16.24 16.88 16.54 17.18 16.76 17.52C16.98 17.18 17.28 16.88 17.62 16.66C17.28 16.44 16.98 16.14 16.76 15.8C16.54 16.14 16.24 16.44 15.9 16.66Z" fill="white" style="fill: var(--fillg);"/>
                     <path d="M12 12.75C8.83 12.75 6.25 10.17 6.25 7C6.25 3.83 8.83 1.25 12 1.25C15.17 1.25 17.75 3.83 17.75 7C17.75 10.17 15.17 12.75 12 12.75ZM12 2.75C9.66 2.75 7.75 4.66 7.75 7C7.75 9.34 9.66 11.25 12 11.25C14.34 11.25 16.25 9.34 16.25 7C16.25 4.66 14.34 2.75 12 2.75Z" fill="white" style="fill: var(--fillg);"/>
                     <path d="M3.40997 22.75C2.99997 22.75 2.65997 22.41 2.65997 22C2.65997 17.73 6.84997 14.25 12 14.25C12.41 14.25 12.75 14.59 12.75 15C12.75 15.41 12.41 15.75 12 15.75C7.67997 15.75 4.15997 18.55 4.15997 22C4.15997 22.41 3.81997 22.75 3.40997 22.75Z" fill="white" style="fill: var(--fillg);"/>
                     <path d="M20.59 22.75C20.18 22.75 19.84 22.41 19.84 22C19.84 21.23 19.67 20.47 19.32 19.76C19.14 19.39 19.3 18.94 19.67 18.76C20.05 18.58 20.49 18.74 20.67 19.11C21.11 20.03 21.34 21 21.34 22C21.34 22.41 21 22.75 20.59 22.75Z" fill="white" style="fill: var(--fillg);"/>
                   </g>
-                  <defs><clipPath id="clip_about"><rect width="24" height="24" fill="white"/></clipPath></defs>
+                  <defs><clipPath id="clip_about_acc"><rect width="24" height="24" fill="white"/></clipPath></defs>
                 </svg>
               </span>
               <span class="tree-label">About</span>
@@ -1220,11 +1037,11 @@
             <a href="../index.html#contact" class="tree-row tree-leaf-link" role="treeitem" aria-selected="false" tabindex="0">
               <span class="tree-icon" aria-hidden="true">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#ffffff">
-                  <g clip-path="url(#clip_contact)">
+                  <g clip-path="url(#clip_contact_acc)">
                     <path d="M12 22.75H9C3.57 22.75 1.25 20.43 1.25 15V9C1.25 3.57 3.57 1.25 9 1.25H15C20.43 1.25 22.75 3.57 22.75 9V12C22.75 12.41 22.41 12.75 22 12.75C21.59 12.75 21.25 12.41 21.25 12V9C21.25 4.39 19.61 2.75 15 2.75H9C4.39 2.75 2.75 4.39 2.75 9V15C2.75 19.61 4.39 21.25 9 21.25H12C12.41 21.25 12.75 21.59 12.75 22C12.75 22.41 12.41 22.75 12 22.75Z" fill="white" style="fill: var(--fillg);"/>
                     <path d="M16.3702 22.7693C16.3602 22.7693 16.3602 22.7693 16.3502 22.7693C15.3402 22.7593 14.5002 22.1393 14.2002 21.1693L12.3502 15.2193C12.1002 14.3993 12.3102 13.5193 12.9202 12.9293C13.5202 12.3393 14.3902 12.1193 15.1902 12.3693L21.1502 14.2193C22.1102 14.5193 22.7402 15.3593 22.7502 16.3693C22.7602 17.3693 22.1502 18.2193 21.1902 18.5393L19.5602 19.0893C19.3302 19.1693 19.1502 19.3393 19.0802 19.5693L18.5202 21.2093C18.2102 22.1593 17.3702 22.7693 16.3702 22.7693ZM14.5102 13.7693C14.2402 13.7693 14.0602 13.9193 13.9802 13.9893C13.7702 14.1993 13.7002 14.4893 13.7902 14.7793L15.6402 20.7293C15.8002 21.2393 16.2202 21.2593 16.3802 21.2693C16.5202 21.2693 16.9502 21.2293 17.1102 20.7393L17.6702 19.0993C17.8902 18.4293 18.4302 17.8993 19.1002 17.6693L20.7302 17.1193C21.2302 16.9593 21.2602 16.5193 21.2602 16.3893C21.2602 16.2593 21.2202 15.8193 20.7202 15.6593L14.7602 13.8093C14.6602 13.7793 14.5802 13.7693 14.5102 13.7693Z" fill="white" style="fill: var(--fillg);"/>
                   </g>
-                  <defs><clipPath id="clip_contact"><rect width="24" height="24" fill="white"/></clipPath></defs>
+                  <defs><clipPath id="clip_contact_acc"><rect width="24" height="24" fill="white"/></clipPath></defs>
                 </svg>
               </span>
               <span class="tree-label">Contact</span>
@@ -1236,12 +1053,12 @@
             <a href="../index.html#privacy-policy" class="tree-row tree-leaf-link" role="treeitem" aria-selected="false" tabindex="0">
               <span class="tree-icon" aria-hidden="true">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#ffffff">
-                  <g clip-path="url(#clip_privacy)">
+                  <g clip-path="url(#clip_privacy_acc)">
                     <path d="M11.9998 22.7508C11.7598 22.7508 11.5199 22.7208 11.2899 22.6508C6.09986 21.2208 2.33984 16.3708 2.33984 11.1108V6.72076C2.33984 5.60076 3.14985 4.39081 4.18985 3.96081L9.75986 1.68078C11.2099 1.09078 12.7998 1.09078 14.2398 1.68078L19.8098 3.96081C20.8498 4.39081 21.6599 5.60076 21.6599 6.72076V11.1108C21.6599 16.3608 17.8898 21.2108 12.7098 22.6508C12.4798 22.7208 12.2398 22.7508 11.9998 22.7508ZM11.9998 2.75079C11.4298 2.75079 10.8698 2.86081 10.3298 3.08081L4.75986 5.36077C4.27986 5.56077 3.83984 6.21077 3.83984 6.73077V11.1208C3.83984 15.7108 7.13985 19.9508 11.6898 21.2108C11.8898 21.2708 12.1098 21.2708 12.3098 21.2108C16.8598 19.9508 20.1599 15.7108 20.1599 11.1208V6.73077C20.1599 6.21077 19.7198 5.56077 19.2398 5.36077L13.6699 3.08081C13.1299 2.86081 12.5698 2.75079 11.9998 2.75079Z" fill="white" style="fill: var(--fillg);"/>
                     <path d="M12 13.25C10.48 13.25 9.25 12.02 9.25 10.5C9.25 8.98 10.48 7.75 12 7.75C13.52 7.75 14.75 8.98 14.75 10.5C14.75 12.02 13.52 13.25 12 13.25ZM12 9.25C11.31 9.25 10.75 9.81 10.75 10.5C10.75 11.19 11.31 11.75 12 11.75C12.69 11.75 13.25 11.19 13.25 10.5C13.25 9.81 12.69 9.25 12 9.25Z" fill="white" style="fill: var(--fillg);"/>
                     <path d="M12 16.25C11.59 16.25 11.25 15.91 11.25 15.5V12.5C11.25 12.09 11.59 11.75 12 11.75C12.41 11.75 12.75 12.09 12.75 12.5V15.5C12.75 15.91 12.41 16.25 12 16.25Z" fill="white" style="fill: var(--fillg);"/>
                   </g>
-                  <defs><clipPath id="clip_privacy"><rect width="24" height="24" fill="white"/></clipPath></defs>
+                  <defs><clipPath id="clip_privacy_acc"><rect width="24" height="24" fill="white"/></clipPath></defs>
                 </svg>
               </span>
               <span class="tree-label">Privacy Policy</span>
@@ -1253,13 +1070,13 @@
             <a href="../index.html#terms-of-service" class="tree-row tree-leaf-link" role="treeitem" aria-selected="false" tabindex="0">
               <span class="tree-icon" aria-hidden="true">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#ffffff">
-                  <g clip-path="url(#clip_terms)">
+                  <g clip-path="url(#clip_terms_acc)">
                     <path d="M15 22.75H9C3.57 22.75 1.25 20.43 1.25 15V9C1.25 3.57 3.57 1.25 9 1.25H14C14.41 1.25 14.75 1.59 14.75 2C14.75 2.41 14.41 2.75 14 2.75H9C4.39 2.75 2.75 4.39 2.75 9V15C2.75 19.61 4.39 21.25 9 21.25H15C19.61 21.25 21.25 19.61 21.25 15V10C21.25 9.59 21.59 9.25 22 9.25C22.41 9.25 22.75 9.59 22.75 10V15C22.75 20.43 20.43 22.75 15 22.75Z" fill="white" style="fill: var(--fillg);"/>
                     <path d="M22 10.7505H18C14.58 10.7505 13.25 9.42048 13.25 6.00048V2.00048C13.25 1.70048 13.43 1.42048 13.71 1.31048C13.99 1.19048 14.31 1.26048 14.53 1.47048L22.53 9.47048C22.74 9.68048 22.81 10.0105 22.69 10.2905C22.57 10.5705 22.3 10.7505 22 10.7505ZM14.75 3.81048V6.00048C14.75 8.58048 15.42 9.25048 18 9.25048H20.19L14.75 3.81048Z" fill="white" style="fill: var(--fillg);"/>
                     <path d="M13 13.75H7C6.59 13.75 6.25 13.41 6.25 13C6.25 12.59 6.59 12.25 7 12.25H13C13.41 12.25 13.75 12.59 13.75 13C13.75 13.41 13.41 13.75 13 13.75Z" fill="white" style="fill: var(--fillg);"/>
                     <path d="M11 17.75H7C6.59 17.75 6.25 17.41 6.25 17C6.25 16.59 6.59 16.25 7 16.25H11C11.41 16.25 11.75 16.59 11.75 17C11.75 17.41 11.41 17.75 11 17.75Z" fill="white" style="fill: var(--fillg);"/>
                   </g>
-                  <defs><clipPath id="clip_terms"><rect width="24" height="24" fill="white"/></clipPath></defs>
+                  <defs><clipPath id="clip_terms_acc"><rect width="24" height="24" fill="white"/></clipPath></defs>
                 </svg>
               </span>
               <span class="tree-label">Terms of Service</span>
@@ -1268,7 +1085,7 @@
 
           <!-- Leaf: Sample Post -->
           <li class="tree-item tree-leaf" role="none" data-tree-id="sample-post" data-title="Sample Post">
-            <a href="/post/index.html" class="tree-row tree-leaf-link" role="treeitem" aria-selected="false" tabindex="0">
+            <a href="../post/index.html" class="tree-row tree-leaf-link" role="treeitem" aria-selected="false" tabindex="0">
               <span class="tree-icon" aria-hidden="true">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -1282,7 +1099,7 @@
             </a>
           </li>
 
-          <!-- Leaf: Admin CMS (Manage Posts) -->
+          <!-- Leaf: Admin CMS -->
           <li class="tree-item tree-leaf" role="none" data-tree-id="admin-cms" data-title="Admin CMS">
             <a href="/admin/index.html" class="tree-row tree-leaf-link" role="treeitem" aria-selected="false" tabindex="0">
               <span class="tree-icon" aria-hidden="true">
@@ -1291,33 +1108,29 @@
                   <circle cx="12" cy="12" r="3"/>
                 </svg>
               </span>
-              <span class="tree-label">Admin CMS (Manage Posts)</span>
+              <span class="tree-label">Admin CMS</span>
             </a>
           </li>
 
         </ul>
       </nav>
 
-      <!-- Drawer Footer with version and build info -->
+      <!-- Drawer Footer -->
       <div class="drawer-footer-tree">
         <span class="tree-status-pill">
           <span class="tree-status-icon" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#ffffff">
-              <g clip-path="url(#clip0_4418_7301)">
+              <g clip-path="url(#clip0_4418_7301_acc)">
                 <path d="M5 15.75C4.59 15.75 4.25 15.41 4.25 15V8C4.25 7.59 4.59 7.25 5 7.25C5.41 7.25 5.75 7.59 5.75 8V15C5.75 15.41 5.41 15.75 5 15.75Z" fill="white" style="fill: var(--fillg);"/>
                 <path d="M5.25 22.75C3.04 22.75 1.25 20.96 1.25 18.75C1.25 16.54 3.04 14.75 5.25 14.75C7.46 14.75 9.25 16.54 9.25 18.75C9.25 20.96 7.46 22.75 5.25 22.75ZM5.25 16.25C3.87 16.25 2.75 17.37 2.75 18.75C2.75 20.13 3.87 21.25 5.25 21.25C6.63 21.25 7.75 20.13 7.75 18.75C7.75 17.37 6.63 16.25 5.25 16.25Z" fill="white" style="fill: var(--fillg);"/>
                 <path d="M5 8.75C2.93 8.75 1.25 7.07 1.25 5C1.25 2.93 2.93 1.25 5 1.25C7.07 1.25 8.75 2.93 8.75 5C8.75 7.07 7.07 8.75 5 8.75ZM5 2.75C3.76 2.75 2.75 3.76 2.75 5C2.75 6.24 3.76 7.25 5 7.25C6.24 7.25 7.25 6.24 7.25 5C7.25 3.76 6.24 2.75 5 2.75Z" fill="white" style="fill: var(--fillg);"/>
                 <path d="M19 8.75C16.93 8.75 15.25 7.07 15.25 5C15.25 2.93 16.93 1.25 19 1.25C21.07 1.25 22.75 2.93 22.75 5C22.75 7.07 21.07 8.75 19 8.75ZM19 2.75C17.76 2.75 16.75 3.76 16.75 5C16.75 6.24 17.76 7.25 19 7.25C20.24 7.25 21.25 6.24 21.25 5C21.25 3.76 20.24 2.75 19 2.75Z" fill="white" style="fill: var(--fillg);"/>
                 <path d="M5.13011 15.7503C5.07011 15.7503 5.01011 15.7403 4.94011 15.7303C4.54011 15.6303 4.30011 15.2203 4.40011 14.8203C4.95011 12.7003 6.86011 11.2203 9.05011 11.2203C9.06011 11.2203 9.06011 11.2203 9.07011 11.2203L12.5001 11.2303C12.5101 11.2303 12.5101 11.2303 12.5201 11.2303C14.7401 11.2303 16.7301 9.82026 17.4601 7.72026C17.6001 7.33026 18.0201 7.12027 18.4101 7.26027C18.8001 7.40027 19.0101 7.82025 18.8701 8.21025C17.9301 10.9202 15.3401 12.7003 12.4901 12.7303L9.06011 12.7203H9.05011C7.54011 12.7203 6.23011 13.7403 5.85011 15.2003C5.77011 15.5303 5.46011 15.7503 5.13011 15.7503Z" fill="white" style="fill: var(--fillg);"/>
               </g>
-              <defs>
-                <clipPath id="clip0_4418_7301">
-                  <rect width="24" height="24" fill="white"/>
-                </clipPath>
-              </defs>
+              <defs><clipPath id="clip0_4418_7301_acc"><rect width="24" height="24" fill="white"/></clipPath></defs>
             </svg>
           </span>
-          <span>v1.4.2 : In Development</span>
+          <span>v1.4.2 : Radiology Guide</span>
         </span>
       </div>
     </aside>

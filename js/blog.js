@@ -846,7 +846,7 @@
               if (targetEl) {
                 targetEl.scrollIntoView({ behavior: 'smooth' });
               } else {
-                if (window.location.pathname.includes('/books') || window.location.pathname.includes('/admin')) {
+                if (window.location.pathname.includes('/books') || window.location.pathname.includes('/admin') || window.location.pathname.includes('/login')) {
                   window.location.href = `../index.html${targetUrl}`;
                 } else {
                   window.location.hash = targetUrl;

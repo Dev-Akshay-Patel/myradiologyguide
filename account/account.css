@@ -1,0 +1,492 @@
+/**
+ * ACCOUNT CSS
+ * Full-page left-to-right responsive layout for User Account & Workspace Dashboard
+ * Clean open architecture (no boxed card view)
+ */
+
+.account-main-body {
+  min-height: calc(100vh - var(--header-height) - 180px);
+  padding: 24px var(--page-gutter, 16px) 64px;
+  background-color: var(--color-bg-body);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.account-container {
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Breadcrumbs */
+.account-breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--text-xs, 12.5px);
+  color: var(--color-text-tertiary);
+  margin-bottom: 2px;
+}
+
+.account-breadcrumb-link {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.account-breadcrumb-link:hover {
+  color: var(--accent-color);
+  text-decoration: underline;
+}
+
+.account-breadcrumb-sep {
+  color: var(--color-border);
+  user-select: none;
+}
+
+.account-breadcrumb-current {
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+/* Full-Width Account View */
+.account-full-view {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+/* Full-Width Profile Hero Header (Spanning Left to Right) */
+.account-profile-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 24px 28px;
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg, 12px);
+  box-shadow: var(--header-shadow);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.account-hero-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.account-avatar-wrap {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+}
+
+.account-avatar-img {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-btn-subtle, 6px);
+  object-fit: cover;
+  display: block;
+  background-color: var(--color-bg-body);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.account-google-badge {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  border: 2px solid var(--color-bg-surface);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.account-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.account-name-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.account-name {
+  font-size: var(--text-2xl, 22px);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.account-role-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  font-size: var(--text-2xs, 11px);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-radius: 4px;
+  background-color: color-mix(in srgb, var(--accent-color) 12%, transparent);
+  color: var(--accent-color);
+  border: 1px solid color-mix(in srgb, var(--accent-color) 20%, transparent);
+}
+
+.account-email {
+  font-size: var(--text-sm, 13.5px);
+  color: var(--color-text-secondary);
+  font-family: var(--font-family-mono);
+}
+
+.account-meta-line {
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.account-hero-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}
+
+/* Custom Sign Out Button with user's SVG */
+.account-btn-signout {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: var(--radius-btn-subtle, 5px);
+  font-size: var(--text-xs, 13px);
+  font-weight: 600;
+  background-color: var(--header-btn-bg, var(--btn-subtle-bg));
+  border: 1px solid var(--header-btn-border, var(--btn-subtle-border));
+  color: var(--color-text-primary);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.account-btn-signout svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  stroke: currentColor;
+}
+
+.account-btn-signout svg path {
+  stroke: currentColor !important;
+}
+
+.account-btn-signout:hover {
+  background-color: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.35);
+  color: #ef4444;
+}
+
+.account-btn-signout:hover svg path {
+  stroke: #ef4444 !important;
+}
+
+/* Full-Page Multi-Column Layout Grid (Spanning Left to Right) */
+.account-dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .account-dashboard-grid {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.account-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.account-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 8px;
+}
+
+.account-section-title {
+  font-size: var(--text-base, 15px);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.account-section-badge {
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background-color: var(--header-btn-bg);
+  border: 1px solid var(--header-btn-border);
+  color: var(--color-text-secondary);
+}
+
+/* Full-Width Stats & Highlights Grid */
+.account-stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 14px;
+  width: 100%;
+}
+
+.account-stat-box {
+  padding: 18px 20px;
+  border-radius: var(--radius-md, 8px);
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-decoration: none;
+  transition: border-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.account-stat-box:hover {
+  border-color: var(--accent-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.account-stat-title {
+  font-size: var(--text-xs, 12px);
+  font-weight: 600;
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.account-stat-val {
+  font-size: var(--text-2xl, 22px);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: 1.2;
+}
+
+.account-stat-hint {
+  font-size: var(--text-2xs, 11.5px);
+  color: var(--color-text-secondary);
+}
+
+/* Items List in Account Dashboard */
+.account-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.account-item-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 18px;
+  border-radius: var(--radius-md, 8px);
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  text-decoration: none;
+  color: inherit;
+  transition: all var(--transition-fast);
+}
+
+.account-item-card:hover {
+  border-color: var(--accent-color);
+  transform: translateX(2px);
+}
+
+.account-item-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.account-item-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-btn-subtle, 5px);
+  background-color: var(--header-btn-bg);
+  border: 1px solid var(--header-btn-border);
+  color: var(--accent-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.account-item-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.account-item-title {
+  font-size: var(--text-sm, 13.5px);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.account-item-desc {
+  font-size: var(--text-2xs, 11.5px);
+  color: var(--color-text-secondary);
+}
+
+.account-item-tag {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background-color: var(--color-bg-body);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+}
+
+/* Sidebar Column in Dashboard */
+.account-sidebar-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.account-panel {
+  padding: 20px 22px;
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md, 8px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.account-panel-title {
+  font-size: var(--text-sm, 14px);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.account-details-table {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: var(--text-xs, 12.5px);
+}
+
+.account-detail-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-border-subtle, var(--color-border));
+}
+
+.account-detail-label {
+  color: var(--color-text-tertiary);
+}
+
+.account-detail-value {
+  color: var(--color-text-primary);
+  font-weight: 600;
+  font-family: var(--font-family-mono);
+}
+
+.account-tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.account-chip {
+  font-size: 11.5px;
+  padding: 4px 9px;
+  border-radius: 4px;
+  background-color: var(--color-bg-body);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+}
+
+/* Logged out prompt */
+.account-logged-out-container {
+  width: 100%;
+  padding: 64px 24px;
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg, 12px);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  box-sizing: border-box;
+}
+
+.account-logged-out-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-btn-subtle, 6px);
+  background-color: var(--header-btn-bg);
+  border: 1px solid var(--header-btn-border);
+  color: var(--accent-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.account-logged-out-title {
+  font-size: var(--text-2xl, 22px);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.account-logged-out-desc {
+  font-size: var(--text-sm, 14px);
+  color: var(--color-text-secondary);
+  max-width: 480px;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.is-hidden {
+  display: none !important;
+}

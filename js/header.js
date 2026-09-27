@@ -9,9 +9,13 @@
 (function () {
   'use strict';
 
-  document.addEventListener('DOMContentLoaded', () => {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      initHeader();
+    });
+  } else {
     initHeader();
-  });
+  }
 
   function initHeader() {
     // DOM Elements - Navigation Drawer
@@ -294,14 +298,32 @@
       const leafLink = leaf.querySelector('.tree-leaf-link');
       if (leafLink) {
         leafLink.addEventListener('click', (e) => {
-          e.preventDefault();
+          const href = leafLink.getAttribute('href');
           selectTreeItem(leaf);
+          if (href && href.startsWith('#')) {
+            const targetEl = document.querySelector(href);
+            if (targetEl) {
+              e.preventDefault();
+              targetEl.scrollIntoView({ behavior: 'smooth' });
+              history.pushState(null, '', href);
+            }
+          }
         });
 
         leafLink.addEventListener('keydown', (e) => {
           if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
+            const href = leafLink.getAttribute('href');
             selectTreeItem(leaf);
+            if (href && href.startsWith('#')) {
+              const targetEl = document.querySelector(href);
+              if (targetEl) {
+                e.preventDefault();
+                targetEl.scrollIntoView({ behavior: 'smooth' });
+                history.pushState(null, '', href);
+              }
+            } else if (href) {
+              window.location.href = href;
+            }
           }
         });
       }
@@ -610,6 +632,90 @@
         }
         resizeTimer = null;
       });
+    });
+
+    /* ------------------------------------------------------------------------
+       5. User Login / Account State Synchronizer in Header
+       ------------------------------------------------------------------------ */
+    function syncHeaderUserAuth() {
+      const userBtn = document.getElementById('header-user-btn');
+      const userIcon = document.getElementById('user-header-icon');
+      const userAvatar = document.getElementById('user-header-avatar');
+      if (!userBtn) return;
+
+      const STORAGE_KEY = 'my_radiology_user_session';
+      let session = null;
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) session = JSON.parse(raw);
+      } catch (e) {}
+
+      // Calculate path relative to subfolder
+      const pathname = window.location.pathname || '';
+      const isSubfolder = pathname.includes('/books') || 
+                          pathname.includes('/login') || 
+                          pathname.includes('/post') || 
+                          pathname.includes('/admin') ||
+                          pathname.includes('/account');
+
+      const loginHref = isSubfolder ? '../login/index.html' : 'login/index.html';
+      const accountHref = isSubfolder ? '../account/index.html' : 'account/index.html';
+
+      if (session && session.email) {
+        // User is signed in -> show avatar image & link to account page
+        userBtn.classList.add('has-avatar');
+        userBtn.href = accountHref;
+        userBtn.setAttribute('aria-label', `Account Profile: ${session.name || session.email}`);
+        userBtn.setAttribute('title', `Account Profile: ${session.name || session.email}`);
+
+        if (userIcon) userIcon.classList.add('is-hidden');
+
+        if (userAvatar) {
+          let avatarUrl = session.avatar;
+          const isOld = !session.seed || session.seed !== 'Glyphs' || !avatarUrl || (typeof avatarUrl === 'string' && (avatarUrl.includes('viewboxMask') || avatarUrl.includes('%3Cmask')));
+          if (isOld && window.DiceBear && typeof window.DiceBear.getRandomAvatar === 'function') {
+            avatarUrl = window.DiceBear.getRandomAvatar('Glyphs', 'shapes');
+            session.avatar = avatarUrl;
+            session.seed = 'Glyphs';
+            session.isDicebear = true;
+            try {
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
+            } catch (e) {}
+          }
+          if (avatarUrl) {
+            userAvatar.src = avatarUrl;
+            userAvatar.alt = session.name || 'User profile';
+            userAvatar.classList.remove('is-hidden');
+          } else {
+            // Fallback if avatar string missing
+            if (userIcon) userIcon.classList.remove('is-hidden');
+            userAvatar.classList.add('is-hidden');
+            userBtn.classList.remove('has-avatar');
+          }
+        }
+      } else {
+        // User is logged out -> show SVG icon & link to login page
+        userBtn.classList.remove('has-avatar');
+        userBtn.href = loginHref;
+        userBtn.setAttribute('aria-label', 'Sign In');
+        userBtn.setAttribute('title', 'Sign In');
+
+        if (userIcon) userIcon.classList.remove('is-hidden');
+        if (userAvatar) userAvatar.classList.add('is-hidden');
+      }
+    }
+
+    // Run initial auth state sync
+    syncHeaderUserAuth();
+
+    // Listen for custom and cross-tab storage events
+    window.addEventListener('auth-state-changed', () => {
+      syncHeaderUserAuth();
+    });
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'my_radiology_user_session') {
+        syncHeaderUserAuth();
+      }
     });
 
     // Remove preload class after page load to allow smooth user interactions with zero startup lag

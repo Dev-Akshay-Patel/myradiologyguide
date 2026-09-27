@@ -43,6 +43,8 @@
 
     <!-- Global Theme Controller -->
     <script src="js/global.js"></script>
+    <!-- DiceBear Self-Hosted Avatar Plugin (Privacy-Preserving & Local) -->
+    <script src="vendor/dicebear/dicebear.min.js"></script>
     <!-- Header Component Logic -->
     <script src="js/header.js" defer></script>
     <!-- Carousel Component Logic -->
@@ -545,6 +547,30 @@
             <!-- Active Palette Swatch Dot Indicator -->
             <span class="mode-palette-dot" aria-hidden="true"></span>
           </button>
+
+          <!-- User Login / Account Profile Action -->
+          <a
+            href="login/index.html"
+            class="header-btn user-btn"
+            id="header-user-btn"
+            aria-label="User Account"
+            title="Sign In / Account"
+          >
+            <svg
+              class="user-icon"
+              id="user-header-icon"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path d="M12 12C14.4853 12 16.5 9.98528 16.5 7.5C16.5 5.01472 14.4853 3 12 3C9.51472 3 7.5 5.01472 7.5 7.5C7.5 9.98528 9.51472 12 12 12Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M20 21C20 17.134 16.4183 14 12 14C7.58172 14 4 17.134 4 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <img class="user-header-avatar is-hidden" id="user-header-avatar" src="" alt="User profile" />
+          </a>
         </div>
       </div>
     </header>
