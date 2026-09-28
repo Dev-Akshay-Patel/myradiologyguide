@@ -380,6 +380,11 @@
 
     if (!overlay || !commentsListEl || !commentForm) return;
 
+    // State
+    let comments = [];
+    let activeReplyTarget = null; // { parentId: string, replyToAuthor: string, isReplyToReply: boolean }
+    let expandedReplyIds = new Set(); // Replies hidden by default
+
     function adjustTextareaHeight() {
       if (!commentInput) return;
       commentInput.style.height = 'auto';
@@ -604,10 +609,6 @@
       }
     ];
 
-    // State
-    let comments = [];
-    let activeReplyTarget = null; // { parentId: string, replyToAuthor: string, isReplyToReply: boolean }
-    let expandedReplyIds = new Set(); // Replies hidden by default
 
     // Load persisted comments
     try {
