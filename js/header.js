@@ -645,10 +645,14 @@
 
       const STORAGE_KEY = 'my_radiology_user_session';
       let session = null;
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (raw) session = JSON.parse(raw);
-      } catch (e) {}
+      if (window.RadiologyAuth && typeof window.RadiologyAuth.getSession === 'function') {
+        session = window.RadiologyAuth.getSession();
+      } else {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (raw) session = JSON.parse(raw);
+        } catch (e) {}
+      }
 
       // Calculate path relative to subfolder
       const pathname = window.location.pathname || '';
@@ -661,23 +665,21 @@
       const loginHref = isSubfolder ? '../login/index.html' : 'login/index.html';
       const accountHref = isSubfolder ? '../account/index.html' : 'account/index.html';
 
-      if (session && session.email) {
-        // User is signed in -> show avatar image & link to account page
+      if (session && (session.email || session.isLocal || session.name)) {
+        // User is signed in (either Local or Google) -> show avatar image & link to account page
         userBtn.classList.add('has-avatar');
         userBtn.href = accountHref;
-        userBtn.setAttribute('aria-label', `Account Profile: ${session.name || session.email}`);
-        userBtn.setAttribute('title', `Account Profile: ${session.name || session.email}`);
+        userBtn.setAttribute('aria-label', `Account Profile: ${session.name || session.email || 'Local User'}`);
+        userBtn.setAttribute('title', `Account Profile: ${session.name || session.email || 'Local User'}`);
 
         if (userIcon) userIcon.classList.add('is-hidden');
 
         if (userAvatar) {
           let avatarUrl = session.avatar;
-          const isOld = !session.seed || session.seed !== 'Glyphs' || !avatarUrl || (typeof avatarUrl === 'string' && (avatarUrl.includes('viewboxMask') || avatarUrl.includes('%3Cmask')));
-          if (isOld && window.DiceBear && typeof window.DiceBear.getRandomAvatar === 'function') {
-            avatarUrl = window.DiceBear.getRandomAvatar('Glyphs', 'shapes');
+          const userSeed = session.email || session.avatarSeed || session.name || 'radiology-user';
+          if (!avatarUrl && window.DiceBear && typeof window.DiceBear.getRandomAvatar === 'function') {
+            avatarUrl = window.DiceBear.getRandomAvatar(userSeed);
             session.avatar = avatarUrl;
-            session.seed = 'Glyphs';
-            session.isDicebear = true;
             try {
               localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
             } catch (e) {}

@@ -1,29 +1,31 @@
-import { createAvatar } from '@dicebear/core';
-import * as collection from '@dicebear/collection';
+import { Style, Avatar } from '@dicebear/core';
+import definition from '@dicebear/styles/glyphs.json' with { type: 'json' };
+
+export const glyphsStyle = new Style(definition);
 
 export interface DicebearOptions {
   seed?: string;
-  style?: string;
   size?: number;
-  radius?: number;
   backgroundColor?: string[];
+  [key: string]: any;
 }
 
-export function createDicebearAvatar(options: DicebearOptions = {}) {
-  const seed = options.seed || 'Glyphs';
-  let styleName = options.style || 'shapes';
-  if (styleName.toLowerCase() === 'glyphs') {
-    styleName = 'shapes';
+export function createDicebearAvatar(options: DicebearOptions | string = {}) {
+  const rawOpts = typeof options === 'string' ? { seed: options } : (options || {});
+  const seed = rawOpts.seed || 'default';
+  
+  const avatarOptions: Record<string, any> = { seed };
+
+  if (typeof rawOpts.size === 'number' && rawOpts.size > 0) {
+    avatarOptions.size = rawOpts.size;
   }
-  
-  const selectedStyle = (collection as any)[styleName] || (collection as any)['shapes'] || (collection as any)['thumbs'] || collection.personas;
-  
-  const avatar = createAvatar(selectedStyle as any, {
-    seed,
-    radius: options.radius !== undefined ? options.radius : 0,
-    backgroundColor: options.backgroundColor || ['b6e3f4', 'c0aede', 'd1d4f9', 'ffd5dc', 'ffdfbf'],
-    size: options.size,
-  });
+  if (Array.isArray(rawOpts.backgroundColor) && rawOpts.backgroundColor.length > 0) {
+    avatarOptions.backgroundColor = rawOpts.backgroundColor;
+  } else if (typeof rawOpts.backgroundColor === 'string' && rawOpts.backgroundColor) {
+    avatarOptions.backgroundColor = [rawOpts.backgroundColor];
+  }
+
+  const avatar = new Avatar(glyphsStyle, avatarOptions);
 
   return {
     svg: avatar.toString(),
@@ -32,13 +34,13 @@ export function createDicebearAvatar(options: DicebearOptions = {}) {
   };
 }
 
-export function getRandomAvatar(seed: string = 'Glyphs', style: string = 'shapes'): string {
-  const res = createDicebearAvatar({ seed: seed || 'Glyphs', style });
+export function getRandomAvatar(seed: string = 'default'): string {
+  const res = createDicebearAvatar({ seed });
   return res.dataUri;
 }
 
-export function getRandomAvatarSvg(seed: string = 'Glyphs', style: string = 'shapes'): string {
-  const res = createDicebearAvatar({ seed: seed || 'Glyphs', style });
+export function getRandomAvatarSvg(seed: string = 'default'): string {
+  const res = createDicebearAvatar({ seed });
   return res.svg;
 }
 
@@ -46,7 +48,10 @@ const api = {
   create: createDicebearAvatar,
   getRandomAvatar,
   getRandomAvatarSvg,
-  collection,
+  Style,
+  Avatar,
+  definition,
+  glyphsStyle,
 };
 
 const root: any = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof self !== 'undefined' ? self : {};

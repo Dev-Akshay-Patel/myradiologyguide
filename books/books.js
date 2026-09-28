@@ -58,7 +58,62 @@
   function start() {
     initDOMElements();
     initEvents();
+    initTopicsShowMore();
     loadBooks();
+  }
+
+  function initTopicsShowMore() {
+    const toggleBtn = document.getElementById('topics-toggle-btn');
+    const wrapper = document.getElementById('topics-expandable-wrapper');
+    if (!toggleBtn || !wrapper) return;
+
+    const toggleText = toggleBtn.querySelector('.topics-toggle-text');
+    const hiddenItems = Array.from(wrapper.querySelectorAll('.topic-item'));
+    const hiddenCount = hiddenItems.length;
+
+    hiddenItems.forEach((item) => {
+      item.setAttribute('tabindex', '-1');
+    });
+
+    const moreText = `Show More (+${hiddenCount})`;
+    const lessText = 'Show Less';
+
+    if (toggleText) {
+      toggleText.textContent = moreText;
+    }
+
+    toggleBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+      const willExpand = !isExpanded;
+
+      toggleBtn.setAttribute('aria-expanded', String(willExpand));
+      wrapper.setAttribute('aria-hidden', String(!willExpand));
+
+      if (willExpand) {
+        wrapper.classList.add('is-expanded');
+        if (toggleText) {
+          toggleText.textContent = lessText;
+        }
+        hiddenItems.forEach((item) => {
+          item.removeAttribute('tabindex');
+        });
+      } else {
+        wrapper.classList.remove('is-expanded');
+        if (toggleText) {
+          toggleText.textContent = moreText;
+        }
+        hiddenItems.forEach((item) => {
+          item.setAttribute('tabindex', '-1');
+        });
+      }
+
+      if (e.detail > 0) {
+        toggleBtn.blur();
+      }
+    });
   }
 
   if (document.readyState === 'loading') {
@@ -409,7 +464,25 @@
       }, 800);
     }
 
-    // 5. Restore Button State
+    // 5. Track download in User Downloads History
+    try {
+      const KEY = 'radiology_downloads_history_v1';
+      let list = JSON.parse(localStorage.getItem(KEY) || '[]');
+      list = list.filter(d => d.title !== bookTitle);
+      list.unshift({
+        id: 'dl-' + Date.now(),
+        title: bookTitle,
+        category: 'Reference Literature',
+        format: 'PDF',
+        size: btn.getAttribute('data-book-size') || '36 MB',
+        timestamp: Date.now(),
+        url: downloadUrl
+      });
+      localStorage.setItem(KEY, JSON.stringify(list));
+      window.dispatchEvent(new CustomEvent('downloads-updated', { detail: list }));
+    } catch (e) {}
+
+    // 6. Restore Button State
     btn.classList.remove('is-loading');
     btn.removeAttribute('aria-busy');
     btn.setAttribute('aria-label', `Save ${bookTitle}`);
@@ -522,7 +595,7 @@
           <div class="book-action-group">
             ${
               b.downloadLink
-                ? `<button type="button" class="book-download-btn" data-download-url="${escapeHtml(b.downloadLink)}" data-book-title="${escapeHtml(b.title)}" title="Save ${escapeHtml(b.title)}" aria-label="Save ${escapeHtml(b.title)}">
+                ? `<button type="button" class="book-download-btn" data-download-url="${escapeHtml(b.downloadLink)}" data-book-title="${escapeHtml(b.title)}" data-book-size="${escapeHtml(b.size)}" title="Save ${escapeHtml(b.title)}" aria-label="Save ${escapeHtml(b.title)}">
                     ${DOWNLOAD_ICON_SVG}
                   </button>`
                 : `<span class="book-no-download" title="No link available">--</span>`
@@ -565,7 +638,7 @@
           <div class="book-action-group">
             ${
               b.downloadLink
-                ? `<button type="button" class="book-download-btn" data-download-url="${escapeHtml(b.downloadLink)}" data-book-title="${escapeHtml(b.title)}" title="Save ${escapeHtml(b.title)}" aria-label="Save ${escapeHtml(b.title)}">
+                ? `<button type="button" class="book-download-btn" data-download-url="${escapeHtml(b.downloadLink)}" data-book-title="${escapeHtml(b.title)}" data-book-size="${escapeHtml(b.size)}" title="Save ${escapeHtml(b.title)}" aria-label="Save ${escapeHtml(b.title)}">
                     ${DOWNLOAD_ICON_SVG}
                   </button>`
                 : ''

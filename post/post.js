@@ -45,15 +45,18 @@
 
     const postId = 'stroke-cta-protocol';
 
-    // Read saved status
-    let savedList = [];
-    try {
-      savedList = JSON.parse(localStorage.getItem(STORAGE_KEY_SAVED) || '[]');
-    } catch (e) {
-      savedList = [];
+    // Read saved status from RadiologyAuth (Cookie-based)
+    let isSaved = false;
+    if (window.RadiologyAuth && typeof window.RadiologyAuth.isBookmarked === 'function') {
+      isSaved = window.RadiologyAuth.isBookmarked(postId);
+    } else {
+      try {
+        const savedList = JSON.parse(localStorage.getItem(STORAGE_KEY_SAVED) || '[]');
+        isSaved = savedList.includes(postId);
+      } catch (e) {
+        isSaved = false;
+      }
     }
-
-    let isSaved = savedList.includes(postId);
     updateSaveUI(isSaved);
 
     function updateSaveUI(saved) {
@@ -61,13 +64,13 @@
       if (saved) {
         saveBtn.classList.add('is-active');
         saveBtn.setAttribute('aria-pressed', 'true');
-        saveBtn.setAttribute('title', 'Saved');
+        saveBtn.setAttribute('title', 'Saved to Bookmarks (Cookie)');
         if (saveText) saveText.textContent = '';
         if (saveIcon) saveIcon.innerHTML = SVG_SAVE_CHECK;
       } else {
         saveBtn.classList.remove('is-active');
         saveBtn.setAttribute('aria-pressed', 'false');
-        saveBtn.setAttribute('title', 'Save');
+        saveBtn.setAttribute('title', 'Save to Bookmarks');
         if (saveText) saveText.textContent = '';
         if (saveIcon) saveIcon.innerHTML = SVG_SAVE_PLUS;
       }
@@ -75,19 +78,34 @@
 
     if (saveBtn) {
       saveBtn.addEventListener('click', () => {
-        isSaved = !isSaved;
-        try {
-          let list = JSON.parse(localStorage.getItem(STORAGE_KEY_SAVED) || '[]');
-          if (isSaved) {
-            if (!list.includes(postId)) list.push(postId);
-          } else {
-            list = list.filter((id) => id !== postId);
+        if (window.RadiologyAuth && typeof window.RadiologyAuth.toggleBookmark === 'function') {
+          isSaved = window.RadiologyAuth.toggleBookmark(postId);
+          updateSaveUI(isSaved);
+          if (window.RadiologyAuth.showToast) {
+            window.RadiologyAuth.showToast(isSaved ? 'Protocol bookmarked to your account (Cookie)' : 'Bookmark removed from account', isSaved ? 'success' : 'info');
           }
-          localStorage.setItem(STORAGE_KEY_SAVED, JSON.stringify(list));
-        } catch (e) {}
-        updateSaveUI(isSaved);
+        } else {
+          isSaved = !isSaved;
+          try {
+            let list = JSON.parse(localStorage.getItem(STORAGE_KEY_SAVED) || '[]');
+            if (isSaved) {
+              if (!list.includes(postId)) list.push(postId);
+            } else {
+              list = list.filter((id) => id !== postId);
+            }
+            localStorage.setItem(STORAGE_KEY_SAVED, JSON.stringify(list));
+          } catch (e) {}
+          updateSaveUI(isSaved);
+        }
       });
     }
+
+    window.addEventListener('bookmarks-updated', () => {
+      if (window.RadiologyAuth) {
+        isSaved = window.RadiologyAuth.isBookmarked(postId);
+        updateSaveUI(isSaved);
+      }
+    });
 
     if (shareBtn) {
       shareBtn.addEventListener('click', async () => {
@@ -429,6 +447,28 @@
         commentCurrentAvatarEl.innerHTML = `<img class="comment-current-avatar-img" src="${currentAvatar}" alt="${escapeHtml(userName)}" />`;
       } else {
         commentCurrentAvatarEl.innerHTML = `<span>${escapeHtml(userName.substring(0, 2))}</span>`;
+      }
+
+      // Check if user has a Local Account -> Restrict commenting
+      const isLocal = !!(session && (session.isLocal === true || session.provider === 'local'));
+      const restrictionEl = document.getElementById('comment-local-restriction');
+      if (restrictionEl) {
+        restrictionEl.classList.toggle('is-hidden', !isLocal);
+      }
+      if (commentInput) {
+        if (isLocal) {
+          commentInput.disabled = true;
+          commentInput.placeholder = 'Commenting is disabled for offline Local Accounts.';
+        } else {
+          commentInput.disabled = false;
+          if (!activeReplyTarget) {
+            commentInput.placeholder = 'Add to the discussion... (Shift+Enter for break)';
+          }
+        }
+      }
+      if (commentPostPill && isLocal) {
+        commentPostPill.disabled = true;
+        commentPostPill.classList.remove('is-visible');
       }
     }
 
@@ -874,6 +914,13 @@
 
     // Reply target management: No @ symbol in banner or placeholder
     function setReplyTarget(parentId, authorName, isReplyToReply = false) {
+      if (window.RadiologyAuth && typeof window.RadiologyAuth.isLocalAccount === 'function' && window.RadiologyAuth.isLocalAccount()) {
+        if (window.RadiologyAuth.showToast) {
+          window.RadiologyAuth.showToast('Public discussion replying is disabled for offline Local Accounts. Please connect Google.', 'info');
+        }
+        return;
+      }
+
       activeReplyTarget = { parentId, replyToAuthor: authorName, isReplyToReply };
       const authorTextEl = document.getElementById('replying-author-text');
       if (authorTextEl) {
@@ -907,6 +954,14 @@
     // Form Submission (Add Comment or Reply)
     commentForm.addEventListener('submit', (e) => {
       e.preventDefault();
+
+      if (window.RadiologyAuth && typeof window.RadiologyAuth.isLocalAccount === 'function' && window.RadiologyAuth.isLocalAccount()) {
+        if (window.RadiologyAuth.showToast) {
+          window.RadiologyAuth.showToast('Commenting is disabled for offline Local Accounts. Please connect a Google Account to post.', 'info');
+        }
+        return;
+      }
+
       if (!commentInput) return;
       const text = commentInput.value.trim();
       if (!text) return;
@@ -1069,6 +1124,60 @@
     renderComments();
   }
 
+  function initTopicsShowMore() {
+    const toggleBtn = document.getElementById('topics-toggle-btn');
+    const wrapper = document.getElementById('topics-expandable-wrapper');
+    if (!toggleBtn || !wrapper) return;
+
+    const toggleText = toggleBtn.querySelector('.topics-toggle-text');
+    const hiddenItems = Array.from(wrapper.querySelectorAll('.topic-item'));
+    const hiddenCount = hiddenItems.length;
+
+    hiddenItems.forEach((item) => {
+      item.setAttribute('tabindex', '-1');
+    });
+
+    const moreText = `Show More (+${hiddenCount})`;
+    const lessText = 'Show Less';
+
+    if (toggleText) {
+      toggleText.textContent = moreText;
+    }
+
+    toggleBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+      const willExpand = !isExpanded;
+
+      toggleBtn.setAttribute('aria-expanded', String(willExpand));
+      wrapper.setAttribute('aria-hidden', String(!willExpand));
+
+      if (willExpand) {
+        wrapper.classList.add('is-expanded');
+        if (toggleText) {
+          toggleText.textContent = lessText;
+        }
+        hiddenItems.forEach((item) => {
+          item.removeAttribute('tabindex');
+        });
+      } else {
+        wrapper.classList.remove('is-expanded');
+        if (toggleText) {
+          toggleText.textContent = moreText;
+        }
+        hiddenItems.forEach((item) => {
+          item.setAttribute('tabindex', '-1');
+        });
+      }
+
+      if (e.detail > 0) {
+        toggleBtn.blur();
+      }
+    });
+  }
+
   function init() {
     initPostActions();
     initPostTabs();
@@ -1077,6 +1186,7 @@
     initSmoothScroll();
     initMathAndChem();
     initCommentsModal();
+    initTopicsShowMore();
   }
 
   if (document.readyState === 'loading') {

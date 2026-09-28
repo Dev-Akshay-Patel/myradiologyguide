@@ -70,7 +70,7 @@
   function withoutTransitions(fn) {
     const css = document.createElement('style');
     css.setAttribute('type', 'text/css');
-    css.textContent = '*, *::before, *::after { -webkit-transition: none !important; -moz-transition: none !important; -ms-transition: none !important; -o-transition: none !important; transition: none !important; animation: none !important; }';
+    css.textContent = '*, *::before, *::after { -webkit-transition: none !important; -moz-transition: none !important; -ms-transition: none !important; -o-transition: none !important; transition: none !important; }';
     document.head.appendChild(css);
 
     try {

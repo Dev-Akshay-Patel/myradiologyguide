@@ -15,7 +15,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 
-    <!-- Instant Inline Theme & Palette State -->
+    <!-- Instant Inline Theme, Palette & Account Type State -->
     <script>
       (function() {
         try {
@@ -26,6 +26,17 @@
           document.documentElement.setAttribute('data-theme', t);
           var p = localStorage.getItem('app-palette-preference') || 'default';
           document.documentElement.setAttribute('data-palette', p);
+
+          // Instant Auth & Account Type State (Prevents any UI flicker for Local Accounts)
+          var sessionRaw = localStorage.getItem('my_radiology_user_session');
+          if (sessionRaw) {
+            var sess = JSON.parse(sessionRaw);
+            if (sess && (sess.isLocal === true || sess.provider === 'local')) {
+              document.documentElement.setAttribute('data-account-type', 'local');
+            } else if (sess && sess.provider === 'google') {
+              document.documentElement.setAttribute('data-account-type', 'google');
+            }
+          }
         } catch(e) {}
       })();
     </script>
@@ -39,6 +50,7 @@
 
     <!-- Global Scripts -->
     <script src="../js/global.js"></script>
+    <script src="../js/cookie-auth.js"></script>
     <script src="../vendor/dicebear/dicebear.min.js"></script>
     <script src="../js/header.js" defer></script>
     <script src="../js/posts-data.js" defer></script>
@@ -505,7 +517,7 @@
               <path d="M12 12C14.4853 12 16.5 9.98528 16.5 7.5C16.5 5.01472 14.4853 3 12 3C9.51472 3 7.5 5.01472 7.5 7.5C7.5 9.98528 9.51472 12 12 12Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
               <path d="M20 21C20 17.134 16.4183 14 12 14C7.58172 14 4 17.134 4 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
-            <img class="user-header-avatar is-hidden" id="user-header-avatar" src="" alt="User profile" />
+            <img class="user-header-avatar is-hidden" id="user-header-avatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23e2e8f0'/%3E%3Ccircle cx='50' cy='40' r='20' fill='%2394a3b8'/%3E%3Cpath d='M20,85 C20,68 35,62 50,62 C65,62 80,68 80,85' fill='%2394a3b8'/%3E%3C/svg%3E" alt="User profile" />
           </a>
         </div>
       </div>
@@ -525,134 +537,331 @@
         <!-- Signed In View (Full Width) -->
         <div class="account-full-view" id="account-signed-in-view">
           
-          <!-- Full-Width Hero Profile Header -->
-          <div class="account-profile-hero">
-            <div class="account-hero-left">
-              <div class="account-avatar-wrap">
-                <img class="account-avatar-img" id="account-avatar-img" src="" alt="User avatar" />
-                <span class="account-google-badge" title="Verified Google Account">
-                  <svg viewBox="0 0 24 24" width="13" height="13" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
-                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/>
+          <!-- Top Header Row: User Credential Box + Compact Right-Side Streak Box -->
+          <div class="account-top-header-row">
+
+            <!-- User Credential Box -->
+            <div class="account-profile-hero">
+              <div class="account-hero-left">
+                <div class="account-avatar-wrap">
+                  <img class="account-avatar-img" id="account-avatar-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23e2e8f0'/%3E%3Ccircle cx='50' cy='40' r='20' fill='%2394a3b8'/%3E%3Cpath d='M20,85 C20,68 35,62 50,62 C65,62 80,68 80,85' fill='%2394a3b8'/%3E%3C/svg%3E" alt="User avatar" />
+                  <span class="account-google-badge" id="account-provider-badge" title="Account Authentication Provider">
+                    <!-- Updated dynamically in account.js -->
+                    <svg viewBox="0 0 24 24" width="13" height="13" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
+                      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/>
+                    </svg>
+                  </span>
+                </div>
+
+                <div class="account-info">
+                  <div class="account-name-row">
+                    <h1 class="account-name" id="account-display-name">Akshay Patel</h1>
+                    <!-- Pencil Icon Button to Edit Profile (Exclusive to Local Account) -->
+                    <button type="button" class="account-edit-pencil-btn" id="account-edit-profile-btn" title="Edit Profile" aria-label="Edit Profile">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <g clip-path="url(#clip0_4418_9713_pencil)">
+                          <path d="M11 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22H15C20 22 22 20 22 15V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                          <path d="M16.04 3.01928L8.16 10.8993C7.86 11.1993 7.56 11.7893 7.5 12.2193L7.07 15.2293C6.91 16.3193 7.68 17.0793 8.77 16.9293L11.78 16.4993C12.2 16.4393 12.79 16.1393 13.1 15.8393L20.98 7.95928C22.34 6.59928 22.98 5.01928 20.98 3.01928C18.98 1.01928 17.4 1.65928 16.04 3.01928Z" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                          <path d="M14.91 4.15039C15.58 6.54039 17.45 8.41039 19.85 9.09039" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_4418_9713_pencil">
+                            <rect width="24" height="24" fill="white"/>
+                          </clipPath>
+                        </defs>
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="account-email" id="account-display-email">mr.akshaypatel05@gmail.com</div>
+                  <div class="account-meta-line">
+                    <span>Joined <strong id="account-member-date">September 25, 2026</strong></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="account-hero-right">
+                <!-- Sign Out Button -->
+                <button type="button" class="account-btn-signout" id="account-signout-btn" title="Sign Out of Session" aria-label="Sign Out">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path d="M17.4399 14.62L19.9999 12.06L17.4399 9.5" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M9.75977 12.0596H19.9298" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M11.7598 20C7.33977 20 3.75977 17 3.75977 12C3.75977 7 7.33977 4 11.7598 4" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
-                </span>
-              </div>
-
-              <div class="account-info">
-                <div class="account-name-row">
-                  <h1 class="account-name" id="account-display-name">Akshay Patel</h1>
-                  <span class="account-role-badge">Clinical Radiologist</span>
-                </div>
-                <div class="account-email" id="account-display-email">mr.akshaypatel05@gmail.com</div>
-                <div class="account-meta-line">
-                  <span>Member since <strong id="account-member-date">September 2026</strong></span>
-                  <span>‧</span>
-                  <span>Google Single Sign-On Active</span>
-                </div>
+                  <span class="account-btn-signout-text">Sign Out</span>
+                </button>
               </div>
             </div>
 
-            <div class="account-hero-right">
-              <!-- Sign Out Button with Exact User-Requested SVG -->
-              <button type="button" class="account-btn-signout" id="account-signout-btn" title="Sign Out of Session">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <path d="M17.4399 14.62L19.9999 12.06L17.4399 9.5" stroke="#ffffff" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                  <path d="M9.75977 12.0596H19.9298" stroke="#ffffff" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                  <path d="M11.7598 20C7.33977 20 3.75977 17 3.75977 12C3.75977 7 7.33977 4 11.7598 4" stroke="#ffffff" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-                <span>Sign Out</span>
-              </button>
+            <!-- Small Streak Box on the Right of Credential Box -->
+            <div class="account-streak-card" id="account-streak-card" aria-label="Daily Study Streak">
+              <span class="streak-text-heading">Streak</span>
+              <div class="streak-val-wrap">
+                <div class="streak-number" id="streak-count-num">14</div>
+                <span class="streak-text-sub">Days</span>
+              </div>
             </div>
+
           </div>
 
           <!-- Full-Width Multi-Column Grid (From Left to Right) -->
           <div class="account-dashboard-grid">
             
-            <!-- Left Main Column: Workspace Hub & Highlights -->
+            <!-- Left Main Column: Tabs for Bookmarks, Comments, Downloads -->
             <div class="account-section">
-              <div class="account-section-header">
-                <h2 class="account-section-title">
-                  <span>Clinical Learning Hub &amp; Workspaces</span>
-                </h2>
-                <span class="account-section-badge">Active Sync</span>
-              </div>
+              
+              <!-- Tab Navigation Switcher with Exact Requested SVGs -->
+              <div class="account-tabs-container">
+                <nav class="account-tab-nav" role="tablist" aria-label="Account Workspace Sections">
+                  
+                  <!-- 1. Bookmarks Button -->
+                  <button
+                    type="button"
+                    class="account-tab-btn is-active"
+                    id="tab-btn-bookmarks"
+                    data-tab="bookmarks"
+                    role="tab"
+                    aria-selected="true"
+                    aria-controls="tab-pane-bookmarks"
+                  >
+                    <span class="account-tab-icon" aria-hidden="true">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <g clip-path="url(#clip0_4418_9478_tab)">
+                          <path d="M14 2C16 2 17 3.01 17 5.03V12.08C17 14.07 15.59 14.84 13.86 13.8L12.54 13C12.24 12.82 11.76 12.82 11.46 13L10.14 13.8C8.41 14.84 7 14.07 7 12.08V5.03C7 3.01 8 2 10 2H14Z" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                          <path d="M6.82 4.99094C3.41 5.56094 2 7.66094 2 11.9009V14.9309C2 19.9809 4 22.0009 9 22.0009H15C20 22.0009 22 19.9809 22 14.9309V11.9009C22 7.59094 20.54 5.48094 17 4.96094" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_4418_9478_tab">
+                            <rect width="24" height="24" fill="white"/>
+                          </clipPath>
+                        </defs>
+                      </svg>
+                    </span>
+                    <span>Bookmarks</span>
+                    <span class="account-tab-count" id="tab-count-bookmarks">0</span>
+                  </button>
 
-              <!-- Quick Highlights Row -->
-              <div class="account-stats-row">
-                <a href="../index.html#bookmarks" class="account-stat-box">
-                  <span class="account-stat-title">Saved Bookmarks</span>
-                  <span class="account-stat-val">12</span>
-                  <span class="account-stat-hint">High-yield protocols &amp; pearls</span>
-                </a>
+                  <!-- 2. Comments Button -->
+                  <button
+                    type="button"
+                    class="account-tab-btn"
+                    id="tab-btn-comments"
+                    data-tab="comments"
+                    role="tab"
+                    aria-selected="false"
+                    aria-controls="tab-pane-comments"
+                  >
+                    <span class="account-tab-icon" aria-hidden="true">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <g clip-path="url(#clip0_4418_9426_tab)">
+                          <path d="M8.5 19H8C4 19 2 18 2 13V8C2 4 4 2 8 2H16C20 2 22 4 22 8V13C22 17 20 19 16 19H15.5C15.19 19 14.89 19.15 14.7 19.4L13.2 21.4C12.54 22.28 11.46 22.28 10.8 21.4L9.3 19.4C9.14 19.18 8.77 19 8.5 19Z" stroke="#ffffff" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                          <path d="M15.9965 11H16.0054" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                          <path d="M11.9955 11H12.0045" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                          <path d="M7.99451 11H8.00349" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_4418_9426_tab">
+                            <rect width="24" height="24" fill="white"/>
+                          </clipPath>
+                        </defs>
+                      </svg>
+                    </span>
+                    <span>Comments</span>
+                    <span class="account-tab-count" id="tab-count-comments">0</span>
+                  </button>
 
-                <a href="../index.html#daily-journal" class="account-stat-box">
-                  <span class="account-stat-title">Study Journal</span>
-                  <span class="account-stat-val">8 Logs</span>
-                  <span class="account-stat-hint">Clinical case entries &amp; notes</span>
-                </a>
+                  <!-- 3. Downloads Button -->
+                  <button
+                    type="button"
+                    class="account-tab-btn"
+                    id="tab-btn-downloads"
+                    data-tab="downloads"
+                    role="tab"
+                    aria-selected="false"
+                    aria-controls="tab-pane-downloads"
+                  >
+                    <span class="account-tab-icon" aria-hidden="true">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M16.44 8.90039C20.04 9.21039 21.51 11.0604 21.51 15.1104V15.2404C21.51 19.7104 19.72 21.5004 15.25 21.5004H8.73998C4.26998 21.5004 2.47998 19.7104 2.47998 15.2404V15.1104C2.47998 11.0904 3.92998 9.24039 7.46998 8.91039" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M12 2V14.88" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M15.3499 12.6504L11.9999 16.0004L8.6499 12.6504" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </span>
+                    <span>Downloads</span>
+                    <span class="account-tab-count" id="tab-count-downloads">0</span>
+                  </button>
 
-                <a href="/books/" class="account-stat-box">
-                  <span class="account-stat-title">Reference Books</span>
-                  <span class="account-stat-val">15 Books</span>
-                  <span class="account-stat-hint">Core physics &amp; diagnostic texts</span>
-                </a>
-              </div>
+                  <!-- 4. Account Button -->
+                  <button
+                    type="button"
+                    class="account-tab-btn"
+                    id="tab-btn-account"
+                    data-tab="account"
+                    role="tab"
+                    aria-selected="false"
+                    aria-controls="tab-pane-account"
+                  >
+                    <span class="account-tab-icon" aria-hidden="true">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <g clip-path="url(#clip0_3111_32739)">
+                          <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                          <path d="M20.5901 22C20.5901 18.13 16.7402 15 12.0002 15C7.26015 15 3.41016 18.13 3.41016 22" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_3111_32739">
+                            <rect width="24" height="24" fill="white"/>
+                          </clipPath>
+                        </defs>
+                      </svg>
+                    </span>
+                    <span>Account</span>
+                  </button>
+                </nav>
 
-              <!-- Interactive Saved Collections -->
-              <div class="account-section-header" style="margin-top: 12px;">
-                <h3 class="account-section-title">Recent Clinical Protocol Bookmarks</h3>
-                <a href="../index.html#bookmarks" class="account-breadcrumb-link" style="font-size: 12px;">View All</a>
-              </div>
-
-              <div class="account-items-list">
-                <a href="../post/index.html" class="account-item-card">
-                  <div class="account-item-left">
-                    <div class="account-item-icon">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/></svg>
-                    </div>
-                    <div class="account-item-text">
-                      <span class="account-item-title">Acute Stroke Protocol &amp; DWI-FLAIR Mismatch</span>
-                      <span class="account-item-desc">Ischemic penumbra triage &amp; rapid CT/MRI decision matrix</span>
-                    </div>
+                <!-- 1. Bookmarks Pane -->
+                <div class="account-tab-pane is-active" id="tab-pane-bookmarks" role="tabpanel" aria-labelledby="tab-btn-bookmarks">
+                  <div class="account-items-list" id="account-bookmarks-list">
+                    <!-- Bookmarks rendered dynamically by account.js -->
                   </div>
-                  <span class="account-item-tag">Neuroradiology</span>
-                </a>
+                </div>
 
-                <a href="../index.html#radiological-physics" class="account-item-card">
-                  <div class="account-item-left">
-                    <div class="account-item-icon">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                    </div>
-                    <div class="account-item-text">
-                      <span class="account-item-title">X-Ray Tube Rating Charts &amp; Heat Dissipation</span>
-                      <span class="account-item-desc">Anode cooling curves, HVL filtration &amp; grid dynamics</span>
-                    </div>
+                <!-- 2. Comments Pane -->
+                <div class="account-tab-pane" id="tab-pane-comments" role="tabpanel" aria-labelledby="tab-btn-comments">
+                  <div class="account-items-list" id="account-comments-list">
+                    <!-- Comments rendered dynamically by account.js -->
                   </div>
-                  <span class="account-item-tag">Physics</span>
-                </a>
+                </div>
 
-                <a href="/books/" class="account-item-card">
-                  <div class="account-item-left">
-                    <div class="account-item-icon">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-                    </div>
-                    <div class="account-item-text">
-                      <span class="account-item-title">Christensen's Physics of Diagnostic Radiology</span>
-                      <span class="account-item-desc">Direct PDF access &amp; chapter review companion</span>
-                    </div>
+                <!-- 3. Downloads Pane -->
+                <div class="account-tab-pane" id="tab-pane-downloads" role="tabpanel" aria-labelledby="tab-btn-downloads">
+                  <div class="account-items-list" id="account-downloads-list">
+                    <!-- Downloads rendered dynamically by account.js -->
                   </div>
-                  <span class="account-item-tag">Book Library</span>
-                </a>
+                </div>
+
+                <!-- 4. Account Settings Pane -->
+                <div class="account-tab-pane" id="tab-pane-account" role="tabpanel" aria-labelledby="tab-btn-account">
+                  <div class="account-settings-container" id="account-settings-content">
+                    
+                    <!-- Danger Zone Block -->
+                    <div class="account-settings-card account-danger-card" id="account-danger-card">
+                      <div class="account-danger-header">
+                        <div class="account-danger-header-inner">
+                          <svg class="danger-header-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none">
+                            <g clip-path="url(#clip0_4418_9824)">
+                              <path d="M12 9V14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                              <path d="M12.0001 21.4093H5.94005C2.47005 21.4093 1.02005 18.9293 2.70005 15.8993L5.82006 10.2793L8.76006 4.9993C10.5401 1.7893 13.4601 1.7893 15.2401 4.9993L18.1801 10.2893L21.3001 15.9093C22.9801 18.9393 21.5201 21.4193 18.0601 21.4193H12.0001V21.4093Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                              <path d="M11.9945 17H12.0035" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </g>
+                            <defs>
+                              <clipPath id="clip0_4418_9824">
+                                <rect width="24" height="24" fill="white"/>
+                              </clipPath>
+                            </defs>
+                          </svg>
+                          <h3 class="account-danger-title">DANGER ZONE</h3>
+                        </div>
+                      </div>
+
+                      <div class="danger-items-list">
+                        <!-- Danger Action 1: Reset Account -->
+                        <div class="account-settings-action-block danger-item-block">
+                          <div class="account-action-meta">
+                            <h4 class="account-action-name danger-name-alert" id="danger-reset-title">Reset account</h4>
+                            <p class="account-action-desc" id="danger-reset-desc">Resets your app data while keeping your profile.</p>
+                          </div>
+                          <div class="account-action-btn-wrap">
+                            <button type="button" class="account-btn-action account-btn-reset-danger" id="btn-reset-account">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                <path d="M9.11008 5.08039C9.98008 4.82039 10.9401 4.65039 12.0001 4.65039C16.7901 4.65039 20.6701 8.53039 20.6701 13.3204C20.6701 18.1104 16.7901 21.9904 12.0001 21.9904C7.21008 21.9904 3.33008 18.1104 3.33008 13.3204C3.33008 11.5404 3.87008 9.88039 4.79008 8.50039" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M7.87012 5.32L10.7601 2" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M7.87012 5.32031L11.2401 7.78031" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                              </svg>
+                              <span>Reset account</span>
+                            </button>
+                          </div>
+                        </div>
+
+                        <!-- Danger Action 2: Delete Account -->
+                        <div class="account-settings-action-block danger-item-block">
+                          <div class="account-action-meta">
+                            <h4 class="account-action-name danger-name-alert" id="danger-delete-title">Delete account</h4>
+                            <p class="account-action-desc" id="danger-delete-desc">Permanently deletes your account and all associated data.</p>
+                          </div>
+                          <div class="account-action-btn-wrap">
+                            <button type="button" class="account-btn-action account-btn-delete-danger" id="btn-delete-account">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                <g clip-path="url(#clip0_4418_9808)">
+                                  <path d="M21 5.98047C17.67 5.65047 14.32 5.48047 10.98 5.48047C9 5.48047 7.02 5.58047 5.04 5.78047L3 5.98047" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                  <path d="M8.5 4.97L8.72 3.66C8.88 2.71 9 2 10.69 2H13.31C15 2 15.13 2.75 15.28 3.67L15.5 4.97" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                  <path d="M18.85 9.14062L18.2 19.2106C18.09 20.7806 18 22.0006 15.21 22.0006H8.79002C6.00002 22.0006 5.91002 20.7806 5.80002 19.2106L5.15002 9.14062" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                  <path d="M10.33 16.5H13.66" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                  <path d="M9.5 12.5H14.5" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </g>
+                                <defs>
+                                  <clipPath id="clip0_4418_9808">
+                                    <rect width="24" height="24" fill="white"/>
+                                  </clipPath>
+                                </defs>
+                              </svg>
+                              <span>Delete account</span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
               </div>
 
             </div>
 
-            <!-- Right Sidebar Column: Profile Details & Curriculum Track -->
+            <!-- Right Sidebar Column: Notifications & Account Security -->
             <div class="account-sidebar-col">
               
-              <!-- Profile Details Panel -->
+              <!-- Notifications Panel (Moved to first position) -->
+              <div class="account-panel">
+                <div class="account-panel-header-row">
+                  <h3 class="account-panel-title">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                      <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                    <span>Notifications</span>
+                  </h3>
+                  <span class="account-panel-badge">3 New</span>
+                </div>
+
+                <div class="account-notifications-list">
+                  <div class="account-notification-item">
+                    <span class="account-notif-dot"></span>
+                    <div class="account-notif-body">
+                      <div class="account-notif-title">New Neuroradiology protocol published</div>
+                      <div class="account-notif-time">2 hours ago</div>
+                    </div>
+                  </div>
+                  <div class="account-notification-item">
+                    <span class="account-notif-dot"></span>
+                    <div class="account-notif-body">
+                      <div class="account-notif-title">Discussion reply on Stroke Collateral Atlas</div>
+                      <div class="account-notif-time">5 hours ago</div>
+                    </div>
+                  </div>
+                  <div class="account-notification-item">
+                    <span class="account-notif-dot"></span>
+                    <div class="account-notif-body">
+                      <div class="account-notif-title">ARRT 2026 Core Physics questions updated</div>
+                      <div class="account-notif-time">Yesterday</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Account Security Panel (Moved to place of active modalities) -->
               <div class="account-panel">
                 <h3 class="account-panel-title">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
@@ -679,22 +888,6 @@
                 </div>
               </div>
 
-              <!-- Modality Interests -->
-              <div class="account-panel">
-                <h3 class="account-panel-title">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m4.93 19.07 4.24-4.24"/></svg>
-                  <span>Active Modalities</span>
-                </h3>
-                <div class="account-tag-cloud">
-                  <span class="account-chip">MRI Neuro</span>
-                  <span class="account-chip">Chest CT</span>
-                  <span class="account-chip">ALARA Safety</span>
-                  <span class="account-chip">Cardiac MRI</span>
-                  <span class="account-chip">MSK Trauma</span>
-                  <span class="account-chip">Fluoroscopy</span>
-                </div>
-              </div>
-
             </div>
 
           </div>
@@ -716,6 +909,188 @@
           <a href="../login/index.html" class="account-btn-signout" style="padding: 10px 24px; font-size: 14px; background: var(--header-btn-bg);">
             <span>Go to Sign In</span>
           </a>
+        </div>
+
+        <!-- Edit Profile Modal (Exclusive to Local Accounts) -->
+        <div class="edit-profile-overlay" id="edit-profile-overlay" aria-hidden="true">
+          <div class="edit-profile-modal" id="edit-profile-modal" role="dialog" aria-modal="true" aria-labelledby="edit-profile-modal-title">
+            <div class="bottom-sheet-handle" aria-hidden="true"></div>
+            <div class="edit-profile-header">
+              <h3 id="edit-profile-modal-title" class="edit-profile-title">Edit Profile</h3>
+              <button type="button" class="header-btn edit-profile-close-btn" id="edit-profile-close-btn" aria-label="Close dialog">
+                <svg class="close-svg" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M9.17011 15.5794C8.98011 15.5794 8.79011 15.5094 8.64011 15.3594C8.35011 15.0694 8.35011 14.5894 8.64011 14.2994L14.3001 8.63938C14.5901 8.34938 15.0701 8.34938 15.3601 8.63938C15.6501 8.92937 15.6501 9.40937 15.3601 9.69937L9.70011 15.3594C9.56011 15.5094 9.36011 15.5794 9.17011 15.5794Z" fill="white" style="fill: var(--fillg, currentColor);"/>
+                  <path d="M14.8301 15.5794C14.6401 15.5794 14.4501 15.5094 14.3001 15.3594L8.64011 9.69937C8.35011 9.40937 8.35011 8.92937 8.64011 8.63938C8.93011 8.34938 9.41011 8.34938 9.70011 8.63938L15.3601 14.2994C15.6501 14.5894 15.6501 15.0694 15.3601 15.3594C15.2101 15.5094 15.0201 15.5794 14.8301 15.5794Z" fill="white" style="fill: var(--fillg, currentColor);"/>
+                  <path d="M15 22.75H9C3.57 22.75 1.25 20.43 1.25 15V9C1.25 3.57 3.57 1.25 9 1.25H15C20.43 1.25 22.75 3.57 22.75 9V15C22.75 20.43 20.43 22.75 15 22.75ZM9 2.75C4.39 2.75 2.75 4.39 2.75 9V15C2.75 19.61 4.39 21.25 9 21.25H15C19.61 21.25 21.25 19.61 21.25 15V9C21.25 4.39 19.61 2.75 15 2.75H9Z" fill="white" style="fill: var(--fillg, currentColor);"/>
+                </svg>
+              </button>
+            </div>
+            
+            <form class="edit-profile-form" id="edit-profile-form">
+              <!-- Avatar Preview & Actions -->
+              <div class="edit-avatar-section">
+                <div class="avatar-preview-box" id="edit-avatar-preview-box" style="position: relative; width: 68px; height: 68px; border-radius: 50%; border: none; flex-shrink: 0;">
+                  <img class="avatar-preview-img" id="edit-modal-avatar-preview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23e2e8f0'/%3E%3Ccircle cx='50' cy='40' r='20' fill='%2394a3b8'/%3E%3Cpath d='M20,85 C20,68 35,62 50,62 C65,62 80,68 80,85' fill='%2394a3b8'/%3E%3C/svg%3E" alt="Avatar Preview" style="width: 100%; height: 100%; border-radius: 50%; border: none;" />
+                  <!-- Circular Randomize Button -->
+                  <button type="button" class="avatar-randomize-btn" id="edit-btn-random-avatar" title="Randomize profile picture" aria-label="Randomize profile picture">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
+                      <path d="M21 3v5h-5"></path>
+                      <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
+                      <path d="M3 21v-5h5"></path>
+                    </svg>
+                  </button>
+                </div>
+                <div class="edit-avatar-actions">
+                  <div class="edit-tool-row">
+                    <label class="avatar-tool-btn avatar-upload-btn" title="Upload a photo from device">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M15.26 22.2503H8.73998C3.82998 22.2503 1.72998 20.1503 1.72998 15.2403V15.1103C1.72998 10.6703 3.47998 8.53027 7.39998 8.16027C7.79998 8.13027 8.17998 8.43027 8.21998 8.84027C8.25998 9.25027 7.95998 9.62027 7.53998 9.66027C4.39998 9.95027 3.22998 11.4303 3.22998 15.1203V15.2503C3.22998 19.3203 4.66998 20.7603 8.73998 20.7603H15.26C19.33 20.7603 20.77 19.3203 20.77 15.2503V15.1203C20.77 11.4103 19.58 9.93027 16.38 9.66027C15.97 9.62027 15.66 9.26027 15.7 8.85027C15.74 8.44027 16.09 8.13027 16.51 8.17027C20.49 8.51027 22.27 10.6603 22.27 15.1303V15.2603C22.27 20.1503 20.17 22.2503 15.26 22.2503Z" fill="currentColor"/>
+                        <path d="M12 15.7501C11.59 15.7501 11.25 15.4101 11.25 15.0001V3.62012C11.25 3.21012 11.59 2.87012 12 2.87012C12.41 2.87012 12.75 3.21012 12.75 3.62012V15.0001C12.75 15.4101 12.41 15.7501 12 15.7501Z" fill="currentColor"/>
+                        <path d="M15.3501 6.60043C15.1601 6.60043 14.9701 6.53043 14.8201 6.38043L12.0001 3.56043L9.18009 6.38043C8.89009 6.67043 8.41009 6.67043 8.12009 6.38043C7.83009 6.09043 7.83009 5.61043 8.12009 5.32043L11.4701 1.97043C11.7601 1.68043 12.2401 1.68043 12.5301 1.97043L15.8801 5.32043C16.1701 5.61043 16.1701 6.09043 15.8801 6.38043C15.7401 6.53043 15.5401 6.60043 15.3501 6.60043Z" fill="currentColor"/>
+                      </svg>
+                      <span>Upload Image</span>
+                      <input type="file" id="edit-modal-file-upload" accept="image/*" class="is-hidden" style="display:none;" />
+                    </label>
+                  </div>
+                  <div class="avatar-hint-text" style="font-size: 11.5px; color: var(--color-text-secondary); margin-top: 6px; text-align: left;">Click the refresh icon on preview to randomize, or upload your own photo.</div>
+                </div>
+              </div>
+
+              <!-- Display Name Input with Material Design Outlined Floating Label -->
+              <div class="form-group md-field-group">
+                <div class="md-field-box">
+                  <input type="text" class="form-input md-field-input" id="edit-modal-name-input" placeholder=" " maxlength="40" required autocomplete="name" />
+                  <label class="md-field-label" for="edit-modal-name-input">
+                    <span>Enter Your Name</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="edit-modal-footer">
+                <button type="submit" class="modal-footer-btn local-submit-btn edit-modal-save-btn">Save Changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Reset Account Confirmation Modal -->
+        <div class="edit-profile-overlay" id="modal-reset-account-overlay" aria-hidden="true">
+          <div class="edit-profile-modal confirm-dialog-modal" role="dialog" aria-modal="true" aria-labelledby="modal-reset-title">
+            <div class="bottom-sheet-handle" aria-hidden="true"></div>
+            <div class="edit-profile-header">
+              <div class="confirm-modal-title-row">
+                <div class="confirm-icon-badge badge-danger" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <path d="M9.11008 5.08039C9.98008 4.82039 10.9401 4.65039 12.0001 4.65039C16.7901 4.65039 20.6701 8.53039 20.6701 13.3204C20.6701 18.1104 16.7901 21.9904 12.0001 21.9904C7.21008 21.9904 3.33008 18.1104 3.33008 13.3204C3.33008 11.5404 3.87008 9.88039 4.79008 8.50039" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M7.87012 5.32L10.7601 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M7.87012 5.32031L11.2401 7.78031" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </div>
+                <h3 id="modal-reset-title" class="edit-profile-title" style="color: #ef4444;">Reset Account</h3>
+              </div>
+              <button type="button" class="header-btn edit-profile-close-btn" id="modal-reset-close-btn" aria-label="Close dialog">
+                <svg class="close-svg" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M9.17011 15.5794C8.98011 15.5794 8.79011 15.5094 8.64011 15.3594C8.35011 15.0694 8.35011 14.5894 8.64011 14.2994L14.3001 8.63938C14.5901 8.34938 15.0701 8.34938 15.3601 8.63938C15.6501 8.92937 15.6501 9.40937 15.3601 9.69937L9.70011 15.3594C9.56011 15.5094 9.36011 15.5794 9.17011 15.5794Z" fill="white" style="fill: var(--fillg, currentColor);"/>
+                  <path d="M14.8301 15.5794C14.6401 15.5794 14.4501 15.5094 14.3001 15.3594L8.64011 9.69937C8.35011 9.40937 8.35011 8.92937 8.64011 8.63938C8.93011 8.34938 9.41011 8.34938 9.70011 8.63938L15.3601 14.2994C15.6501 14.5894 15.6501 15.0694 15.3601 15.3594C15.2101 15.5094 15.0201 15.5794 14.8301 15.5794Z" fill="white" style="fill: var(--fillg, currentColor);"/>
+                  <path d="M15 22.75H9C3.57 22.75 1.25 20.43 1.25 15V9C1.25 3.57 3.57 1.25 9 1.25H15C20.43 1.25 22.75 3.57 22.75 9V15C22.75 20.43 20.43 22.75 15 22.75ZM9 2.75C4.39 2.75 2.75 4.39 2.75 9V15C2.75 19.61 4.39 21.25 9 21.25H15C19.61 21.25 21.25 19.61 21.25 15V9C21.25 4.39 19.61 2.75 15 2.75H9Z" fill="white" style="fill: var(--fillg, currentColor);"/>
+                </svg>
+              </button>
+            </div>
+            <div class="confirm-modal-body">
+              <p class="confirm-modal-desc">
+                Resets your app data while keeping your profile. This will reset your saved bookmarks, download history, and study streak to a fresh state.
+              </p>
+              <div class="confirm-modal-danger-box">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <g clip-path="url(#clip0_4418_9824_m)">
+                    <path d="M12 9V14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M12.0001 21.4093H5.94005C2.47005 21.4093 1.02005 18.9293 2.70005 15.8993L5.82006 10.2793L8.76006 4.9993C10.5401 1.7893 13.4601 1.7893 15.2401 4.9993L18.1801 10.2893L21.3001 15.9093C22.9801 18.9393 21.5201 21.4193 18.0601 21.4193H12.0001V21.4093Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M11.9945 17H12.0035" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+                  </g>
+                  <defs>
+                    <clipPath id="clip0_4418_9824_m">
+                      <rect width="24" height="24" fill="white"/>
+                    </clipPath>
+                  </defs>
+                </svg>
+                <span>You can't undo this action!</span>
+              </div>
+            </div>
+            <div class="edit-modal-footer">
+              <button type="button" class="modal-footer-btn account-btn-action account-btn-reset-danger" id="modal-reset-confirm-btn">
+                <span>Reset Account</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Delete Account Confirmation Modal -->
+        <div class="edit-profile-overlay" id="modal-delete-account-overlay" aria-hidden="true">
+          <div class="edit-profile-modal confirm-dialog-modal" role="dialog" aria-modal="true" aria-labelledby="modal-delete-title">
+            <div class="bottom-sheet-handle" aria-hidden="true"></div>
+            <div class="edit-profile-header">
+              <div class="confirm-modal-title-row">
+                <div class="confirm-icon-badge badge-danger" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <g clip-path="url(#clip0_4418_9808_m)">
+                      <path d="M21 5.98047C17.67 5.65047 14.32 5.48047 10.98 5.48047C9 5.48047 7.02 5.58047 5.04 5.78047L3 5.98047" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                      <path d="M8.5 4.97L8.72 3.66C8.88 2.71 9 2 10.69 2H13.31C15 2 15.13 2.75 15.28 3.67L15.5 4.97" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                      <path d="M18.85 9.14062L18.2 19.2106C18.09 20.7806 18 22.0006 15.21 22.0006H8.79002C6.00002 22.0006 5.91002 20.7806 5.80002 19.2106L5.15002 9.14062" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                      <path d="M10.33 16.5H13.66" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                      <path d="M9.5 12.5H14.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                    </g>
+                    <defs>
+                      <clipPath id="clip0_4418_9808_m">
+                        <rect width="24" height="24" fill="white"/>
+                      </clipPath>
+                    </defs>
+                  </svg>
+                </div>
+                <h3 id="modal-delete-title" class="edit-profile-title" style="color: #ef4444;">Delete Account</h3>
+              </div>
+              <button type="button" class="header-btn edit-profile-close-btn" id="modal-delete-close-btn" aria-label="Close dialog">
+                <svg class="close-svg" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M9.17011 15.5794C8.98011 15.5794 8.79011 15.5094 8.64011 15.3594C8.35011 15.0694 8.35011 14.5894 8.64011 14.2994L14.3001 8.63938C14.5901 8.34938 15.0701 8.34938 15.3601 8.63938C15.6501 8.92937 15.6501 9.40937 15.3601 9.69937L9.70011 15.3594C9.56011 15.5094 9.36011 15.5794 9.17011 15.5794Z" fill="white" style="fill: var(--fillg, currentColor);"/>
+                  <path d="M14.8301 15.5794C14.6401 15.5794 14.4501 15.5094 14.3001 15.3594L8.64011 9.69937C8.35011 9.40937 8.35011 8.92937 8.64011 8.63938C8.93011 8.34938 9.41011 8.34938 9.70011 8.63938L15.3601 14.2994C15.6501 14.5894 15.6501 15.0694 15.3601 15.3594C15.2101 15.5094 15.0201 15.5794 14.8301 15.5794Z" fill="white" style="fill: var(--fillg, currentColor);"/>
+                  <path d="M15 22.75H9C3.57 22.75 1.25 20.43 1.25 15V9C1.25 3.57 3.57 1.25 9 1.25H15C20.43 1.25 22.75 3.57 22.75 9V15C22.75 20.43 20.43 22.75 15 22.75ZM9 2.75C4.39 2.75 2.75 4.39 2.75 9V15C2.75 19.61 4.39 21.25 9 21.25H15C19.61 21.25 21.25 19.61 21.25 15V9C21.25 4.39 19.61 2.75 15 2.75H9Z" fill="white" style="fill: var(--fillg, currentColor);"/>
+                </svg>
+              </button>
+            </div>
+            <div class="confirm-modal-body">
+              <p class="confirm-modal-desc">
+                Permanently deletes your account and all associated data. Your personal preferences, session, and local account records will be permanently removed.
+              </p>
+              <div class="confirm-modal-danger-box">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <g clip-path="url(#clip0_4418_9824_m2)">
+                    <path d="M12 9V14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M12.0001 21.4093H5.94005C2.47005 21.4093 1.02005 18.9293 2.70005 15.8993L5.82006 10.2793L8.76006 4.9993C10.5401 1.7893 13.4601 1.7893 15.2401 4.9993L18.1801 10.2893L21.3001 15.9093C22.9801 18.9393 21.5201 21.4193 18.0601 21.4193H12.0001V21.4093Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M11.9945 17H12.0035" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+                  </g>
+                  <defs>
+                    <clipPath id="clip0_4418_9824_m2">
+                      <rect width="24" height="24" fill="white"/>
+                    </clipPath>
+                  </defs>
+                </svg>
+                <span>You can't undo this action!</span>
+              </div>
+            </div>
+            <div class="edit-modal-footer">
+              <button type="button" class="modal-footer-btn account-btn-action account-btn-delete-danger" id="modal-delete-confirm-btn">
+                <span>Delete Account</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Logging Out Overlay Modal -->
+        <div class="logging-out-overlay is-hidden" id="logging-out-overlay" aria-hidden="true" role="status">
+          <div class="logging-out-card">
+            <div class="logging-out-spinner" aria-hidden="true"></div>
+            <div class="logging-out-text">Logging Out .. ..</div>
+          </div>
         </div>
 
       </div>
@@ -907,17 +1282,6 @@
     <!-- Navigation Drawer & Backdrop (Working Sidebar) -->
     <div class="nav-backdrop" id="nav-backdrop"></div>
     <aside class="nav-drawer" id="nav-drawer" aria-label="Side navigation drawer">
-      <div class="drawer-header">
-        <span class="drawer-title">Navigation</span>
-        <button type="button" class="header-btn" id="drawer-close-btn" aria-label="Close navigation">
-          <svg class="close-svg" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M9.17011 15.5794C8.98011 15.5794 8.79011 15.5094 8.64011 15.3594C8.35011 15.0694 8.35011 14.5894 8.64011 14.2994L14.3001 8.63938C14.5901 8.34938 15.0701 8.34938 15.3601 8.63938C15.6501 8.92937 15.6501 9.40937 15.3601 9.69937L9.70011 15.3594C9.56011 15.5094 9.36011 15.5794 9.17011 15.5794Z" fill="white" style="fill: var(--fillg, currentColor);"/>
-            <path d="M14.8301 15.5794C14.6401 15.5794 14.4501 15.5094 14.3001 15.3594L8.64011 9.69937C8.35011 9.40937 8.35011 8.92937 8.64011 8.63938C8.93011 8.34938 9.41011 8.34938 9.70011 8.63938L15.3601 14.2994C15.6501 14.5894 15.6501 15.0694 15.3601 15.3594C15.2101 15.5094 15.0201 15.5794 14.8301 15.5794Z" fill="white" style="fill: var(--fillg, currentColor);"/>
-            <path d="M15 22.75H9C3.57 22.75 1.25 20.43 1.25 15V9C1.25 3.57 3.57 1.25 9 1.25H15C20.43 1.25 22.75 3.57 22.75 9V15C22.75 20.43 20.43 22.75 15 22.75ZM9 2.75C4.39 2.75 2.75 4.39 2.75 9V15C2.75 19.61 4.39 21.25 9 21.25H15C19.61 21.25 21.25 19.61 21.25 15V9C21.25 4.39 19.61 2.75 15 2.75H9Z" fill="white" style="fill: var(--fillg, currentColor);"/>
-          </svg>
-        </button>
-      </div>
-
       <nav class="drawer-nav tree-nav" aria-label="Workspace tree navigation">
         <ul class="tree-root" role="tree" id="tree-root">
 

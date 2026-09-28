@@ -9,6 +9,9 @@
   flex-direction: column;
   gap: var(--spacing-lg, 24px);
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* --------------------------------------------------------------------------
@@ -229,6 +232,10 @@
   border-radius: var(--radius-lg, 12px);
   padding: 24px 20px;
   box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 @media (min-width: 768px) {
@@ -243,6 +250,10 @@
   font-size: 16px;
   line-height: 1.75;
   letter-spacing: -0.005em;
+  min-width: 0;
+  max-width: 100%;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 /* Typography elements - Responsive Fluid Scale with Optical Balance */
@@ -1013,6 +1024,9 @@
   background: transparent;
   border: none;
   border-radius: 0;
+  overflow-x: auto;
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* References, Footnotes & Citations */
@@ -2182,6 +2196,76 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* Local Account restriction notice in discussion sheet */
+.comment-local-restriction {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  background-color: color-mix(in srgb, var(--accent-color) 7%, var(--color-bg-surface));
+  border: 1px solid color-mix(in srgb, var(--accent-color) 25%, var(--color-border));
+  border-radius: var(--radius-md, 8px);
+  margin-bottom: 8px;
+}
+
+.comment-local-restriction.is-hidden {
+  display: none !important;
+}
+
+.restriction-badge-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--accent-color) 15%, transparent);
+  color: var(--accent-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.restriction-text-col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.restriction-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  line-height: 1.25;
+}
+
+.restriction-desc {
+  font-size: 11.5px;
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+}
+
+.restriction-upgrade-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+  background: var(--accent-color);
+  border-radius: 6px;
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: opacity 0.15s ease;
+}
+
+.restriction-upgrade-btn:hover {
+  opacity: 0.9;
+}
+
 /* Form input row */
 .comment-input-form {
   margin: 0;
@@ -2323,4 +2407,79 @@
 #comment-post-pill.is-visible:active,
 .comment-post-pill.is-visible:active {
   transform: scale(0.96) !important;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive & Fluid Layout Safeguards
+   Prevents content touching screen edges or horizontal blowout across all viewports
+   -------------------------------------------------------------------------- */
+.post-prose img,
+.post-article-wrapper img,
+.post-figure img {
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 600px) {
+  .post-header-content {
+    padding: 20px 16px 0;
+  }
+
+  .post-meta-bar {
+    padding: 12px 16px;
+    margin-left: -16px;
+    margin-right: -16px;
+    gap: 10px;
+  }
+
+  .post-content-container {
+    padding: 20px 16px;
+  }
+
+  .post-breadcrumbs {
+    font-size: 12px;
+    gap: 6px;
+  }
+
+  .post-title {
+    font-size: clamp(21px, 6vw, 26px);
+    line-height: 1.28;
+  }
+
+  .post-lead-excerpt {
+    font-size: 14.5px;
+    line-height: 1.6;
+  }
+}
+
+@media (max-width: 420px) {
+  .post-header-content {
+    padding: 16px 14px 0;
+  }
+
+  .post-meta-bar {
+    padding: 10px 14px;
+    margin-left: -14px;
+    margin-right: -14px;
+  }
+
+  .post-content-container {
+    padding: 18px 14px;
+  }
+
+  .post-table-wrapper {
+    margin: 20px -14px;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+}
+
+/* Ensure right companion sidebar has smooth sticky scrolling when taller than viewport */
+@media (min-width: 860px) {
+  .layout-aside {
+    max-height: calc(100vh - var(--header-height, 60px) - (2 * var(--page-gutter, 12px)));
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
 }

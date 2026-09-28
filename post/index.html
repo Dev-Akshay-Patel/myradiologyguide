@@ -46,6 +46,7 @@
 
     <!-- Global Scripts -->
     <script src="../js/global.js"></script>
+    <script src="../js/cookie-auth.js"></script>
     <!-- DiceBear Self-Hosted Avatar Plugin (Privacy-Preserving & Local) -->
     <script src="../vendor/dicebear/dicebear.min.js"></script>
     <script src="../js/header.js" defer></script>
@@ -1974,6 +1975,21 @@
             </button>
           </div>
 
+          <!-- Local Account Comment Restriction Banner -->
+          <div class="comment-local-restriction is-hidden" id="comment-local-restriction">
+            <div class="restriction-badge-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+            </div>
+            <div class="restriction-text-col">
+              <div class="restriction-title">Commenting is disabled for Local Accounts</div>
+              <div class="restriction-desc">Local accounts are stored exclusively in your browser cookies. To join clinical discussions, connect a Google Account.</div>
+            </div>
+            <a href="../login/index.html?mode=google" class="restriction-upgrade-btn">Connect Google</a>
+          </div>
+
           <form class="comment-input-form" id="comment-form">
             <div class="comment-input-row">
               <div class="comment-current-avatar" id="comment-current-avatar" title="Click to randomize your avatar (DiceBear)">
@@ -2002,17 +2018,6 @@
     <!-- Navigation Drawer & Backdrop -->
     <div class="nav-backdrop" id="nav-backdrop"></div>
     <aside class="nav-drawer" id="nav-drawer" aria-label="Side navigation drawer">
-      <div class="drawer-header">
-        <span class="drawer-title">Navigation</span>
-        <button type="button" class="header-btn" id="drawer-close-btn" aria-label="Close navigation">
-          <svg class="close-svg" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M9.17011 15.5794C8.98011 15.5794 8.79011 15.5094 8.64011 15.3594C8.35011 15.0694 8.35011 14.5894 8.64011 14.2994L14.3001 8.63938C14.5901 8.34938 15.0701 8.34938 15.3601 8.63938C15.6501 8.92937 15.6501 9.40937 15.3601 9.69937L9.70011 15.3594C9.56011 15.5094 9.36011 15.5794 9.17011 15.5794Z" fill="white" style="fill: var(--fillg, currentColor);"/>
-            <path d="M14.8301 15.5794C14.6401 15.5794 14.4501 15.5094 14.3001 15.3594L8.64011 9.69937C8.35011 9.40937 8.35011 8.92937 8.64011 8.63938C8.93011 8.34938 9.41011 8.34938 9.70011 8.63938L15.3601 14.2994C15.6501 14.5894 15.6501 15.0694 15.3601 15.3594C15.2101 15.5094 15.0201 15.5794 14.8301 15.5794Z" fill="white" style="fill: var(--fillg, currentColor);"/>
-            <path d="M15 22.75H9C3.57 22.75 1.25 20.43 1.25 15V9C1.25 3.57 3.57 1.25 9 1.25H15C20.43 1.25 22.75 3.57 22.75 9V15C22.75 20.43 20.43 22.75 15 22.75ZM9 2.75C4.39 2.75 2.75 4.39 2.75 9V15C2.75 19.61 4.39 21.25 9 21.25H15C19.61 21.25 21.25 19.61 21.25 15V9C21.25 4.39 19.61 2.75 15 2.75H9Z" fill="white" style="fill: var(--fillg, currentColor);"/>
-          </svg>
-        </button>
-      </div>
-
       <nav class="drawer-nav tree-nav" aria-label="Workspace tree navigation">
         <ul class="tree-root" role="tree" id="tree-root">
           <li class="tree-item tree-leaf" role="none" data-tree-id="overview" data-title="Home">

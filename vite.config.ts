@@ -26,6 +26,8 @@ export default defineConfig(() => {
           admin: path.resolve(__dirname, 'admin/index.html'),
           books: path.resolve(__dirname, 'books/index.html'),
           post: path.resolve(__dirname, 'post/index.html'),
+          account: path.resolve(__dirname, 'account/index.html'),
+          login: path.resolve(__dirname, 'login/index.html'),
         },
       },
     },

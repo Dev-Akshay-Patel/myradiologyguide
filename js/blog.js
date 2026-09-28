@@ -48,19 +48,28 @@
     <path d="M16.8199 2H7.17995C5.04995 2 3.31995 3.74 3.31995 5.86V19.95C3.31995 21.75 4.60995 22.51 6.18995 21.64L11.0699 18.93C11.5899 18.64 12.4299 18.64 12.9399 18.93L17.8199 21.64C19.3999 22.52 20.6899 21.76 20.6899 19.95V5.86C20.6799 3.74 18.9499 2 16.8199 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
   </svg>`;
 
-  // Local storage bookmarks
+  // Cookie & Local Storage Bookmarks Sync
   let savedPosts = new Set();
-  try {
-    const stored = localStorage.getItem('radiology_saved_protocols');
-    if (stored) {
-      const parsed = JSON.parse(stored);
-      if (Array.isArray(parsed)) {
-        savedPosts = new Set(parsed);
+  function syncSavedPostsFromStorage() {
+    if (window.RadiologyAuth && typeof window.RadiologyAuth.getBookmarks === 'function') {
+      savedPosts = new Set(window.RadiologyAuth.getBookmarks());
+    } else {
+      try {
+        const stored = localStorage.getItem('radiology_saved_protocols') || localStorage.getItem('radiology_saved_posts');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed)) {
+            savedPosts = new Set(parsed);
+          }
+        }
+      } catch (err) {
+        savedPosts = new Set();
       }
     }
-  } catch (err) {
-    savedPosts = new Set();
   }
+  syncSavedPostsFromStorage();
+  window.addEventListener('bookmarks-updated', syncSavedPostsFromStorage);
+
 
   /**
    * Helper: Format ISO date string (YYYY-MM-DD) into readable format
@@ -597,26 +606,49 @@
     const labelSpan = btn.querySelector('.blog-card-save-text');
     const iconSpan = btn.querySelector('.blog-card-save-icon');
 
-    if (savedPosts.has(postId)) {
-      savedPosts.delete(postId);
-      btn.classList.remove('is-saved');
-      btn.setAttribute('aria-label', 'Save protocol');
-      btn.setAttribute('title', 'Save');
-      if (labelSpan) labelSpan.textContent = 'Save';
-      if (iconSpan) iconSpan.innerHTML = SVG_BOOKMARK_PLUS;
+    if (window.RadiologyAuth && typeof window.RadiologyAuth.toggleBookmark === 'function') {
+      const isSaved = window.RadiologyAuth.toggleBookmark(postId);
+      if (isSaved) {
+        savedPosts.add(postId);
+        btn.classList.add('is-saved');
+        btn.setAttribute('aria-label', 'Remove saved protocol');
+        btn.setAttribute('title', 'Saved');
+        if (labelSpan) labelSpan.textContent = 'Saved';
+        if (iconSpan) iconSpan.innerHTML = SVG_BOOKMARK_MINUS;
+        if (window.RadiologyAuth.showToast) {
+          window.RadiologyAuth.showToast('Bookmark saved to your account (Cookie)', 'success');
+        }
+      } else {
+        savedPosts.delete(postId);
+        btn.classList.remove('is-saved');
+        btn.setAttribute('aria-label', 'Save protocol');
+        btn.setAttribute('title', 'Save');
+        if (labelSpan) labelSpan.textContent = 'Save';
+        if (iconSpan) iconSpan.innerHTML = SVG_BOOKMARK_PLUS;
+        if (window.RadiologyAuth.showToast) {
+          window.RadiologyAuth.showToast('Bookmark removed from your account', 'info');
+        }
+      }
     } else {
-      savedPosts.add(postId);
-      btn.classList.add('is-saved');
-      btn.setAttribute('aria-label', 'Remove saved protocol');
-      btn.setAttribute('title', 'Saved');
-      if (labelSpan) labelSpan.textContent = 'Saved';
-      if (iconSpan) iconSpan.innerHTML = SVG_BOOKMARK_MINUS;
-    }
+      if (savedPosts.has(postId)) {
+        savedPosts.delete(postId);
+        btn.classList.remove('is-saved');
+        btn.setAttribute('aria-label', 'Save protocol');
+        btn.setAttribute('title', 'Save');
+        if (labelSpan) labelSpan.textContent = 'Save';
+        if (iconSpan) iconSpan.innerHTML = SVG_BOOKMARK_PLUS;
+      } else {
+        savedPosts.add(postId);
+        btn.classList.add('is-saved');
+        btn.setAttribute('aria-label', 'Remove saved protocol');
+        btn.setAttribute('title', 'Saved');
+        if (labelSpan) labelSpan.textContent = 'Saved';
+        if (iconSpan) iconSpan.innerHTML = SVG_BOOKMARK_MINUS;
+      }
 
-    try {
-      localStorage.setItem('radiology_saved_protocols', JSON.stringify([...savedPosts]));
-    } catch (err) {
-      // Ignore
+      try {
+        localStorage.setItem('radiology_saved_protocols', JSON.stringify([...savedPosts]));
+      } catch (err) {}
     }
   }
 

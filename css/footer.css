@@ -8,7 +8,7 @@
   background-color: var(--color-bg-surface);
   border-top: 1px solid var(--color-border);
   margin-top: 8px;
-  padding: 44px 0 28px 0;
+  padding: 44px 0 0 0;
   box-sizing: border-box;
   transition: background-color var(--transition-normal), border-color var(--transition-normal);
 }
@@ -23,7 +23,7 @@
 
 @media (min-width: 768px) {
   .site-footer {
-    padding: 48px 0 32px 0;
+    padding: 48px 0 0 0;
   }
 }
 
@@ -194,7 +194,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   Footer Bottom Bar: Attribution (Left-Aligned, Full-Width Border)
+   Footer Bottom Bar: Attribution (Left-Aligned, Vertically Centered)
    -------------------------------------------------------------------------- */
 .footer-bottom {
   width: 100%;
@@ -207,7 +207,7 @@
   width: 100%;
   max-width: 100%;
   margin: 0;
-  padding: 22px var(--page-gutter, 12px) 0 var(--page-gutter, 12px);
+  padding: 24px var(--page-gutter, 12px);
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -236,9 +236,10 @@
   height: 15px;
   color: var(--color-text-secondary);
   flex-shrink: 0;
-  margin-right: 2px;
+  margin: 0;
   position: relative;
-  top: -1px;
+  top: 0;
+  vertical-align: middle;
 }
 
 .footer-copyright-icon path {
