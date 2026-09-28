@@ -1361,17 +1361,6 @@
   transition: transform 0.26s cubic-bezier(0.2, 0, 0, 1);
 }
 
-/* Mobile Bottom Sheet Grab Handle (Matches Search & Mode Modals Exactly) */
-.edit-profile-modal .bottom-sheet-handle {
-  display: block;
-  width: 40px;
-  height: 4px;
-  border-radius: 2px;
-  background-color: var(--color-border);
-  margin: 2px auto 14px auto;
-  opacity: 0.8;
-  cursor: grab;
-}
 
 /* Modal Header - Fully joined edge-to-edge border from left to right */
 .edit-profile-header {
@@ -1472,9 +1461,6 @@
     max-width: 540px !important; /* Spacious on PC */
   }
 
-  .edit-profile-modal .bottom-sheet-handle {
-    display: none;
-  }
 
   .edit-profile-overlay.is-active .edit-profile-modal {
     opacity: 1;

@@ -1083,18 +1083,20 @@
    Logging Out Transition Overlay
    -------------------------------------------------------------------------- */
 .logging-out-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  min-height: 380px;
-  background-color: var(--color-bg-body, #0f172a);
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  background-color: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 50;
-  padding: 16px;
+  z-index: 99999;
+  padding: 20px;
+  box-sizing: border-box;
   animation: fadeInLogout 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -1105,14 +1107,17 @@
 .logging-out-card {
   background-color: var(--color-bg-surface);
   border: 1px solid var(--color-border);
-  border-radius: 16px;
-  padding: 24px 32px;
+  border-radius: 14px;
+  padding: 20px 28px;
   display: flex;
   align-items: center;
-  gap: 16px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
+  justify-content: center;
+  gap: 14px;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.4);
   color: var(--color-text-primary);
-  max-width: 90vw;
+  max-width: min(92vw, 440px);
+  width: auto;
+  box-sizing: border-box;
 }
 
 .logging-out-spinner {

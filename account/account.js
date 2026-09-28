@@ -376,8 +376,8 @@
           avatarImg.alt = session.name || 'User avatar';
         }
       } else {
-        if (signedInView) signedInView.classList.add('is-hidden');
-        if (loggedOutView) loggedOutView.classList.remove('is-hidden');
+        window.location.href = '../login/index.html';
+        return;
       }
 
       // Update counters
@@ -1368,6 +1368,98 @@
             }, 500);
           });
         }
+      }
+
+      // Mobile Touch Drag Swipe-Down Dismiss for Reset Modal
+      if (resetModal) {
+        let touchStartY = 0;
+        let touchCurrentY = 0;
+        let isDraggingSheet = false;
+        let sheetRafId = null;
+
+        resetModal.addEventListener('touchstart', (e) => {
+          if (window.innerWidth >= 640) return;
+          touchStartY = e.touches[0].clientY;
+          touchCurrentY = touchStartY;
+          isDraggingSheet = true;
+        }, { passive: true });
+
+        resetModal.addEventListener('touchmove', (e) => {
+          if (!isDraggingSheet || window.innerWidth >= 640) return;
+          touchCurrentY = e.touches[0].clientY;
+          const deltaY = touchCurrentY - touchStartY;
+          if (deltaY > 0) {
+            if (!sheetRafId) {
+              sheetRafId = requestAnimationFrame(() => {
+                resetModal.style.transition = 'none';
+                resetModal.style.transform = `translate3d(0, ${deltaY}px, 0)`;
+                sheetRafId = null;
+              });
+            }
+          }
+        }, { passive: true });
+
+        resetModal.addEventListener('touchend', () => {
+          if (!isDraggingSheet || window.innerWidth >= 640) return;
+          isDraggingSheet = false;
+          if (sheetRafId) {
+            cancelAnimationFrame(sheetRafId);
+            sheetRafId = null;
+          }
+          const deltaY = touchCurrentY - touchStartY;
+          resetModal.style.transition = '';
+          if (deltaY > 50) {
+            closeAllModals();
+          } else {
+            resetModal.style.transform = '';
+          }
+        });
+      }
+
+      // Mobile Touch Drag Swipe-Down Dismiss for Delete Modal
+      if (deleteModal) {
+        let touchStartY = 0;
+        let touchCurrentY = 0;
+        let isDraggingSheet = false;
+        let sheetRafId = null;
+
+        deleteModal.addEventListener('touchstart', (e) => {
+          if (window.innerWidth >= 640) return;
+          touchStartY = e.touches[0].clientY;
+          touchCurrentY = touchStartY;
+          isDraggingSheet = true;
+        }, { passive: true });
+
+        deleteModal.addEventListener('touchmove', (e) => {
+          if (!isDraggingSheet || window.innerWidth >= 640) return;
+          touchCurrentY = e.touches[0].clientY;
+          const deltaY = touchCurrentY - touchStartY;
+          if (deltaY > 0) {
+            if (!sheetRafId) {
+              sheetRafId = requestAnimationFrame(() => {
+                deleteModal.style.transition = 'none';
+                deleteModal.style.transform = `translate3d(0, ${deltaY}px, 0)`;
+                sheetRafId = null;
+              });
+            }
+          }
+        }, { passive: true });
+
+        deleteModal.addEventListener('touchend', () => {
+          if (!isDraggingSheet || window.innerWidth >= 640) return;
+          isDraggingSheet = false;
+          if (sheetRafId) {
+            cancelAnimationFrame(sheetRafId);
+            sheetRafId = null;
+          }
+          const deltaY = touchCurrentY - touchStartY;
+          deleteModal.style.transition = '';
+          if (deltaY > 50) {
+            closeAllModals();
+          } else {
+            deleteModal.style.transform = '';
+          }
+        });
       }
 
       // Global Escape handler for modals
