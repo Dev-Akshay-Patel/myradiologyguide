@@ -82,7 +82,7 @@
           isSaved = window.RadiologyAuth.toggleBookmark(postId);
           updateSaveUI(isSaved);
           if (window.RadiologyAuth.showToast) {
-            window.RadiologyAuth.showToast(isSaved ? 'Protocol bookmarked to your account (Cookie)' : 'Bookmark removed from account', isSaved ? 'success' : 'info');
+            window.RadiologyAuth.showToast(isSaved ? 'Saved to bookmarks' : 'Removed from bookmarks', isSaved ? 'success' : 'info');
           }
         } else {
           isSaved = !isSaved;
@@ -172,6 +172,9 @@
    * Code Block Copy Buttons
    */
   function initCodeCopy() {
+    const copySVG = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 12.9V17.1C16 20.6 14.6 22 11.1 22H6.9C3.4 22 2 20.6 2 17.1V12.9C2 9.4 3.4 8 6.9 8H11.1C14.6 8 16 9.4 16 12.9Z"></path><path d="M22 6.9V11.1C22 14.6 20.6 16 17.1 16H16V12.9C16 9.4 14.6 8 11.1 8H8V6.9C8 3.4 9.4 2 12.9 2H17.1C20.6 2 22 3.4 22 6.9Z"></path></svg>`;
+    const checkSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.1V6.9C22 3.4 20.6 2 17.1 2H12.9C9.4 2 8 3.4 8 6.9V8H11.1C14.6 8 16 9.4 16 12.9V16H17.1C20.6 16 22 14.6 22 11.1Z"></path><path d="M16 17.1V12.9C16 9.4 14.6 8 11.1 8H6.9C3.4 8 2 9.4 2 12.9V17.1C2 20.6 3.4 22 6.9 22H11.1C14.6 22 16 20.6 16 17.1Z"></path><path d="M6.08008 15.0008L8.03008 16.9508L11.9201 13.0508"></path></svg>`;
+
     const copyBtns = document.querySelectorAll('.code-copy-btn');
     copyBtns.forEach((btn) => {
       btn.addEventListener('click', async () => {
@@ -182,16 +185,30 @@
         const textToCopy = codeElement.innerText;
         try {
           await navigator.clipboard.writeText(textToCopy);
-          const originalHTML = btn.innerHTML;
-          btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Copied!`;
-          btn.style.borderColor = 'var(--accent-color)';
-          btn.style.color = 'var(--accent-color)';
+          btn.innerHTML = checkSVG;
+          btn.classList.add('is-copied');
           setTimeout(() => {
-            btn.innerHTML = originalHTML;
-            btn.style.borderColor = '';
-            btn.style.color = '';
+            btn.innerHTML = copySVG;
+            btn.classList.remove('is-copied');
           }, 2000);
-        } catch (e) {}
+        } catch (e) {
+          try {
+            const textarea = document.createElement('textarea');
+            textarea.value = textToCopy;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            btn.innerHTML = checkSVG;
+            btn.classList.add('is-copied');
+            setTimeout(() => {
+              btn.innerHTML = copySVG;
+              btn.classList.remove('is-copied');
+            }, 2000);
+            document.body.removeChild(textarea);
+          } catch (err) {}
+        }
       });
     });
   }
@@ -318,8 +335,8 @@
     }
 
     // 4. Formula LaTeX Copy Interaction
-    const copySVG = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg><span>LaTeX</span>`;
-    const checkSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span style="color:var(--color-success,#16a34a)">Copied!</span>`;
+    const copySVG = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 12.9V17.1C16 20.6 14.6 22 11.1 22H6.9C3.4 22 2 20.6 2 17.1V12.9C2 9.4 3.4 8 6.9 8H11.1C14.6 8 16 9.4 16 12.9Z"></path><path d="M22 6.9V11.1C22 14.6 20.6 16 17.1 16H16V12.9C16 9.4 14.6 8 11.1 8H8V6.9C8 3.4 9.4 2 12.9 2H17.1C20.6 2 22 3.4 22 6.9Z"></path></svg>`;
+    const checkSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.1V6.9C22 3.4 20.6 2 17.1 2H12.9C9.4 2 8 3.4 8 6.9V8H11.1C14.6 8 16 9.4 16 12.9V16H17.1C20.6 16 22 14.6 22 11.1Z"></path><path d="M16 17.1V12.9C16 9.4 14.6 8 11.1 8H6.9C3.4 8 2 9.4 2 12.9V17.1C2 20.6 3.4 22 6.9 22H11.1C14.6 22 16 20.6 16 17.1Z"></path><path d="M6.08008 15.0008L8.03008 16.9508L11.9201 13.0508"></path></svg>`;
 
     document.querySelectorAll('.formula-copy-btn').forEach((btn) => {
       btn.addEventListener('click', async function () {
@@ -454,16 +471,27 @@
         commentCurrentAvatarEl.innerHTML = `<span>${escapeHtml(userName.substring(0, 2))}</span>`;
       }
 
-      // Check if user has a Local Account -> Restrict commenting
-      const isLocal = !!(session && (session.isLocal === true || session.provider === 'local'));
+      // Check if user is authenticated with Google -> Only Google users can post comments!
+      const isGoogle = !!(window.RadiologyAuth && typeof window.RadiologyAuth.isGoogleUser === 'function' ? window.RadiologyAuth.isGoogleUser() : (session && session.provider === 'google'));
       const restrictionEl = document.getElementById('comment-local-restriction');
       if (restrictionEl) {
-        restrictionEl.classList.toggle('is-hidden', !isLocal);
+        restrictionEl.classList.toggle('is-hidden', isGoogle);
+      }
+      const restrictionLoginBtn = document.getElementById('btn-restriction-google-login');
+      if (restrictionLoginBtn && !restrictionLoginBtn.hasAttribute('data-bound')) {
+        restrictionLoginBtn.setAttribute('data-bound', 'true');
+        restrictionLoginBtn.addEventListener('click', () => {
+          if (window.RadiologyAuth && typeof window.RadiologyAuth.signInWithGoogle === 'function') {
+            window.RadiologyAuth.signInWithGoogle(window.location.href);
+          } else {
+            window.location.href = '../login/index.html';
+          }
+        });
       }
       if (commentInput) {
-        if (isLocal) {
+        if (!isGoogle) {
           commentInput.disabled = true;
-          commentInput.placeholder = 'Commenting is disabled for offline Local Accounts.';
+          commentInput.placeholder = 'Sign in with Google to comment.';
         } else {
           commentInput.disabled = false;
           if (!activeReplyTarget) {
@@ -471,7 +499,7 @@
           }
         }
       }
-      if (commentPostPill && isLocal) {
+      if (commentPostPill && !isGoogle) {
         commentPostPill.disabled = true;
         commentPostPill.classList.remove('is-visible');
       }
@@ -915,9 +943,13 @@
 
     // Reply target management: No @ symbol in banner or placeholder
     function setReplyTarget(parentId, authorName, isReplyToReply = false) {
-      if (window.RadiologyAuth && typeof window.RadiologyAuth.isLocalAccount === 'function' && window.RadiologyAuth.isLocalAccount()) {
-        if (window.RadiologyAuth.showToast) {
-          window.RadiologyAuth.showToast('Public discussion replying is disabled for offline Local Accounts. Please connect Google.', 'info');
+      const isGoogle = !!(window.RadiologyAuth && typeof window.RadiologyAuth.isGoogleUser === 'function' ? window.RadiologyAuth.isGoogleUser() : false);
+      if (!isGoogle) {
+        if (window.RadiologyAuth && window.RadiologyAuth.showToast) {
+          window.RadiologyAuth.showToast('Sign in with Google to comment.', 'info');
+        }
+        if (window.RadiologyAuth && typeof window.RadiologyAuth.signInWithGoogle === 'function') {
+          window.RadiologyAuth.signInWithGoogle(window.location.href);
         }
         return;
       }
@@ -956,9 +988,13 @@
     commentForm.addEventListener('submit', (e) => {
       e.preventDefault();
 
-      if (window.RadiologyAuth && typeof window.RadiologyAuth.isLocalAccount === 'function' && window.RadiologyAuth.isLocalAccount()) {
-        if (window.RadiologyAuth.showToast) {
-          window.RadiologyAuth.showToast('Commenting is disabled for offline Local Accounts. Please connect a Google Account to post.', 'info');
+      const isGoogle = !!(window.RadiologyAuth && typeof window.RadiologyAuth.isGoogleUser === 'function' ? window.RadiologyAuth.isGoogleUser() : false);
+      if (!isGoogle) {
+        if (window.RadiologyAuth && window.RadiologyAuth.showToast) {
+          window.RadiologyAuth.showToast('Sign in with Google to comment.', 'warning');
+        }
+        if (window.RadiologyAuth && typeof window.RadiologyAuth.signInWithGoogle === 'function') {
+          window.RadiologyAuth.signInWithGoogle(window.location.href);
         }
         return;
       }

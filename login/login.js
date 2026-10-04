@@ -431,8 +431,9 @@
           window.dispatchEvent(new CustomEvent('auth-state-changed', { detail: sessionData }));
         }
 
-        // Immediately redirect user to account dashboard
-        window.location.href = '../account/index.html';
+        // Immediately redirect user to destination or Workspace
+        const returnUrl = urlParams.get('redirect') || '../account/index.html';
+        window.location.href = returnUrl;
       }, 500);
     }
   }

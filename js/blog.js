@@ -12,23 +12,8 @@
 (function () {
   'use strict';
 
-  // Load posts: check admin draft in localStorage first, then fallback to window.POSTS_DATA
-  let POSTS = [];
-  try {
-    const draft = localStorage.getItem('radiology_admin_draft_posts');
-    if (draft) {
-      const parsed = JSON.parse(draft);
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        POSTS = parsed;
-      }
-    }
-  } catch (e) {
-    console.warn('Could not load admin draft posts', e);
-  }
-
-  if (POSTS.length === 0 && typeof window !== 'undefined' && Array.isArray(window.POSTS_DATA)) {
-    POSTS = window.POSTS_DATA;
-  }
+  // Load posts from central POSTS_DATA
+  let POSTS = (typeof window !== 'undefined' && Array.isArray(window.POSTS_DATA)) ? window.POSTS_DATA : [];
 
   const ITEMS_PER_PAGE = 6;
   let activePosts = [...POSTS];
@@ -878,7 +863,7 @@
               if (targetEl) {
                 targetEl.scrollIntoView({ behavior: 'smooth' });
               } else {
-                if (window.location.pathname.includes('/books') || window.location.pathname.includes('/admin') || window.location.pathname.includes('/login')) {
+                if (window.location.pathname.includes('/books') || window.location.pathname.includes('/login') || window.location.pathname.includes('/post')) {
                   window.location.href = `../index.html${targetUrl}`;
                 } else {
                   window.location.hash = targetUrl;

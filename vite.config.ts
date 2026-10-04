@@ -1,11 +1,10 @@
 import tailwindcss from '@tailwindcss/vite';
-import react from '@vitejs/plugin-react';
 import path from 'path';
 import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
-    plugins: [react(), tailwindcss()],
+    plugins: [tailwindcss()],
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
@@ -23,7 +22,6 @@ export default defineConfig(() => {
       rollupOptions: {
         input: {
           main: path.resolve(__dirname, 'index.html'),
-          admin: path.resolve(__dirname, 'admin/index.html'),
           books: path.resolve(__dirname, 'books/index.html'),
           post: path.resolve(__dirname, 'post/index.html'),
           account: path.resolve(__dirname, 'account/index.html'),

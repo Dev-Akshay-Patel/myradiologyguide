@@ -69,6 +69,126 @@
   width: 100%;
 }
 
+/* Workspace Sync Hero (Anonymous / Local Browser State) */
+.workspace-sync-hero {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 22px 28px;
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg, 12px);
+  box-shadow: var(--header-shadow, 0 1px 3px rgba(0, 0, 0, 0.04));
+  box-sizing: border-box;
+  position: relative;
+}
+
+.sync-hero-content {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex: 1;
+  min-width: 0;
+}
+
+.sync-hero-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background-color: color-mix(in srgb, var(--accent-color, #2563eb) 10%, var(--color-bg-body));
+  color: var(--accent-color, #2563eb);
+  border: 1px solid color-mix(in srgb, var(--accent-color, #2563eb) 22%, transparent);
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.sync-hero-text-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.sync-hero-title {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+  margin: 0;
+}
+
+.sync-hero-desc {
+  font-size: 13.5px;
+  color: var(--color-text-secondary);
+  line-height: 1.45;
+  margin: 0;
+}
+
+.sync-hero-action {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* Dark mode adjustments for sync hero */
+[data-theme="dark"] .workspace-sync-hero,
+.dark .workspace-sync-hero {
+  background-color: var(--color-bg-surface);
+  border-color: var(--color-border);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .sync-hero-badge,
+.dark .sync-hero-badge {
+  background-color: color-mix(in srgb, var(--accent-color, #3b82f6) 16%, var(--color-bg-surface));
+  color: #60a5fa;
+  border-color: color-mix(in srgb, var(--accent-color, #3b82f6) 30%, transparent);
+}
+
+@media (max-width: 768px) {
+  .workspace-sync-hero {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 18px;
+    padding: 20px;
+  }
+  .sync-hero-action {
+    width: 100%;
+  }
+  .sync-hero-action .account-btn-google-hero {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .sync-hero-content {
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .sync-hero-badge {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+  }
+  .sync-hero-badge svg {
+    width: 20px;
+    height: 20px;
+  }
+  .sync-hero-title {
+    font-size: 17px;
+  }
+  .sync-hero-desc {
+    font-size: 13px;
+  }
+}
+
 /* Profile Hero Header */
 .account-profile-hero {
   flex: 1;
@@ -169,12 +289,108 @@
   font-weight: 600;
 }
 
+.account-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #22c55e;
+  display: inline-block;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 2px color-mix(in srgb, #22c55e 25%, transparent);
+}
+
 .account-hero-right {
   display: flex;
-  align-items: flex-start;
-  align-self: flex-start;
+  align-items: center;
+  align-self: center;
   gap: 12px;
   flex-shrink: 0;
+}
+
+/* ==========================================================================
+   AUTHENTIC GOOGLE SSO BUTTON
+   ========================================================================== */
+.account-btn-google-hero {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 18px;
+  height: 42px;
+  border-radius: var(--radius-btn-subtle, 8px);
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  user-select: none;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+.account-btn-google-hero:hover {
+  background-color: color-mix(in srgb, var(--color-text-primary) 5%, var(--color-bg-surface));
+  border-color: color-mix(in srgb, var(--color-text-primary) 22%, var(--color-border));
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.account-btn-google-hero:active {
+  background-color: color-mix(in srgb, var(--color-text-primary) 8%, var(--color-bg-surface));
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.account-btn-google-hero .google-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.account-btn-google-hero .google-icon-wrapper svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+
+.account-btn-google-hero .btn-google-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+/* Dark mode adjustments for Continue with Google button */
+[data-theme="dark"] .account-btn-google-hero,
+.dark .account-btn-google-hero {
+  background-color: color-mix(in srgb, var(--color-bg-surface) 92%, #ffffff 4%);
+  border-color: var(--color-border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .account-btn-google-hero:hover,
+.dark .account-btn-google-hero:hover {
+  background-color: color-mix(in srgb, var(--color-bg-surface) 86%, #ffffff 10%);
+  border-color: color-mix(in srgb, #ffffff 22%, var(--color-border));
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .account-btn-google-hero:active,
+.dark .account-btn-google-hero:active {
+  background-color: color-mix(in srgb, var(--color-bg-surface) 80%, #ffffff 14%);
+}
+
+@media (max-width: 640px) {
+  .account-btn-google-hero {
+    width: 100%;
+    height: 42px;
+  }
 }
 
 .account-btn-signout {
@@ -260,6 +476,57 @@
   letter-spacing: 0.08em;
   color: var(--color-text-secondary);
   line-height: 1;
+}
+
+/* ==========================================================================
+   CURRENT DATE BOX (LOCAL ACCOUNT)
+   ========================================================================== */
+.account-date-card,
+.account-clock-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 24px;
+  min-width: 120px;
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg, 12px);
+  box-shadow: var(--header-shadow);
+  text-align: center;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+[data-account-type="google"] #account-date-card,
+[data-account-type="google"] #account-clock-card,
+.account-date-card.is-hidden,
+.account-clock-card.is-hidden {
+  display: none !important;
+}
+
+.date-display {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 6px;
+  line-height: 1;
+  font-family: var(--font-family-mono, monospace);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+
+.date-day,
+.date-month {
+  font-family: var(--font-family-mono, monospace) !important;
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.date-month {
+  text-transform: uppercase;
 }
 
 /* ==========================================================================
@@ -1093,16 +1360,29 @@
     align-items: center;
     padding: 12px 18px;
   }
+  .account-date-card,
+  .account-clock-card {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 14px 18px;
+  }
   .streak-val-wrap {
     display: flex;
     flex-direction: row;
     align-items: baseline;
-    gap: 6px;
+    gap: 8px;
   }
   .streak-number {
     font-size: 24px;
     margin-top: 0;
     margin-bottom: 0;
+  }
+  .date-day,
+  .date-month {
+    font-size: 24px;
+    font-weight: 800;
   }
 }
 
@@ -1147,39 +1427,24 @@
 }
 
 /* --------------------------------------------------------------------------
-   Local Account Badges & Hero Actions
+   Local Account & Header Clean Styling (No Pills, No Shield for Local)
    -------------------------------------------------------------------------- */
 .account-type-tag {
-  display: inline-flex;
-  align-items: center;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 9999px;
-  letter-spacing: 0.02em;
+  display: none !important;
 }
 
-.account-type-tag.tag-local {
-  background-color: color-mix(in srgb, var(--accent-color) 16%, transparent);
-  color: var(--accent-color);
-  border: 1px solid color-mix(in srgb, var(--accent-color) 35%, transparent);
+/* Hide streak box on local/anonymous account */
+[data-account-type="anonymous"] #account-streak-card,
+[data-account-type="local"] #account-streak-card,
+#account-streak-card.is-hidden {
+  display: none !important;
 }
 
-.account-type-tag.tag-google {
-  background-color: rgba(34, 197, 94, 0.12);
-  color: #22c55e;
-  border: 1px solid rgba(34, 197, 94, 0.3);
-}
-
-.account-google-badge.badge-local {
-  background-color: var(--accent-color);
-  color: #ffffff;
-}
-
-[data-theme="dark"] .account-google-badge.badge-local,
-.dark .account-google-badge.badge-local {
-  background-color: var(--accent-color);
-  color: #121214 !important;
+/* Hide provider badge (shield icon) on local/anonymous account */
+[data-account-type="anonymous"] #account-provider-badge,
+[data-account-type="local"] #account-provider-badge,
+#account-provider-badge.is-hidden {
+  display: none !important;
 }
 
 .account-google-badge.badge-google {
@@ -1194,13 +1459,13 @@
   flex-wrap: wrap;
 }
 
-/* Pencil Button - Without BG Pill (Naked clean icon button, no hover movement) */
+/* Pencil Button next to Name - Clean icon button for editing profile */
 .account-edit-pencil-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
@@ -1209,36 +1474,36 @@
   box-sizing: border-box;
   padding: 0;
   margin-left: 2px;
-  border-radius: 0;
-  transition: none !important;
-  transform: none !important;
+  border-radius: 6px;
+  transition: color 0.18s ease, background-color 0.18s ease;
   flex-shrink: 0;
   line-height: 0;
   outline: none;
 }
 
 .account-edit-pencil-btn svg {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   display: block;
   flex-shrink: 0;
-  transform: none !important;
-  transition: none !important;
+  transition: transform 0.18s ease;
 }
 
 .account-edit-pencil-btn svg path {
   stroke: currentColor !important;
 }
 
-.account-edit-pencil-btn:hover,
-.account-edit-pencil-btn:focus,
+.account-edit-pencil-btn:hover {
+  color: var(--accent-color, #2563eb);
+  background-color: color-mix(in srgb, var(--accent-color, #2563eb) 10%, transparent) !important;
+}
+
+.account-edit-pencil-btn:hover svg {
+  transform: scale(1.08);
+}
+
 .account-edit-pencil-btn:active {
-  color: var(--color-text-tertiary);
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  transform: none !important;
-  outline: none !important;
+  transform: scale(0.95);
 }
 
 .account-edit-pencil-btn.is-hidden {
@@ -1361,6 +1626,58 @@
   transition: transform 0.26s cubic-bezier(0.2, 0, 0, 1);
 }
 
+/* Grab handle for bottom sheet on mobile - identical to search-modal & theme-modal */
+.bottom-sheet-handle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding-top: 6px;
+  padding-bottom: 12px;
+  cursor: grab;
+  touch-action: none;
+}
+
+.bottom-sheet-handle::after {
+  content: '';
+  display: block;
+  width: 44px;
+  height: 5px;
+  border-radius: 9999px;
+  background-color: rgba(255, 255, 255, 0.28);
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.bottom-sheet-handle:hover::after {
+  background-color: rgba(255, 255, 255, 0.45);
+}
+
+.bottom-sheet-handle:active {
+  cursor: grabbing;
+}
+
+.bottom-sheet-handle:active::after {
+  transform: scaleX(1.1);
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+[data-theme="light"] .bottom-sheet-handle::after {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="light"] .bottom-sheet-handle:hover::after {
+  background-color: rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="light"] .bottom-sheet-handle:active::after {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+@media (min-width: 640px) {
+  .bottom-sheet-handle {
+    display: none !important;
+  }
+}
 
 /* Modal Header - Fully joined edge-to-edge border from left to right */
 .edit-profile-header {
@@ -2243,5 +2560,355 @@ svg.danger-header-icon path,
   .account-action-btn-wrap .account-btn-action {
     width: 100%;
   }
+}
+
+/* ==========================================================================
+   WORKSPACE ENHANCEMENTS: ACCOUNT TAB
+   ========================================================================== */
+
+/* Account Tab: Anonymous Card */
+.workspace-anon-account-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px;
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg, 12px);
+  box-shadow: var(--header-shadow, 0 1px 3px rgba(0, 0, 0, 0.04));
+  box-sizing: border-box;
+}
+
+.workspace-account-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.workspace-section-headline {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.workspace-anon-subhead {
+  font-size: 13.5px;
+  color: var(--color-text-secondary);
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* ==========================================================================
+   MINIMAL COMPARISON TABLE (PC)
+   ========================================================================== */
+.acc-compare-table-wrap {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md, 8px);
+  overflow: hidden;
+  background-color: var(--color-bg-surface);
+}
+
+.acc-compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13.5px;
+}
+
+.acc-compare-table thead th {
+  padding: 14px 18px;
+  background-color: color-mix(in srgb, var(--color-text-primary) 3%, var(--color-bg-surface));
+  border-bottom: 1px solid var(--color-border);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.acc-compare-table th.acc-col-account {
+  text-align: center;
+  width: 210px;
+}
+
+.acc-th-name {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.acc-compare-table tbody td {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+}
+
+.acc-compare-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.acc-compare-table tbody tr:hover td {
+  background-color: color-mix(in srgb, var(--color-text-primary) 1.5%, var(--color-bg-surface));
+}
+
+.acc-cell-feature {
+  min-width: 180px;
+}
+
+.acc-feature-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 2px;
+}
+
+.acc-feature-desc {
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+  line-height: 1.35;
+}
+
+.acc-cell-status {
+  text-align: center;
+}
+
+.acc-cell-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.acc-feature-icon-tick {
+  display: block;
+  flex-shrink: 0;
+}
+
+.acc-feature-icon-cross {
+  display: block;
+  flex-shrink: 0;
+}
+
+.acc-status-text {
+  font-size: 11.5px;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.acc-text-dim {
+  color: var(--color-text-tertiary);
+}
+
+/* ==========================================================================
+   CLEAN UNCONFINED MOBILE VIEW
+   ========================================================================== */
+.acc-compare-mobile-view {
+  display: none;
+}
+
+.acc-mobile-block {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.acc-mobile-heading {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  letter-spacing: -0.01em;
+}
+
+.acc-mobile-subgroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.acc-mobile-sublabel {
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.acc-label-adv {
+  color: #16a34a;
+}
+
+[data-theme="dark"] .acc-label-adv,
+.dark .acc-label-adv {
+  color: #4ade80;
+}
+
+.acc-label-dis {
+  color: #dc2626;
+}
+
+[data-theme="dark"] .acc-label-dis,
+.dark .acc-label-dis {
+  color: #f87171;
+}
+
+.acc-mobile-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.acc-mobile-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  color: var(--color-text-primary);
+}
+
+.acc-mobile-divider {
+  height: 1px;
+  background-color: var(--color-border);
+  margin: 6px 0;
+}
+
+@media (min-width: 641px) {
+  .acc-compare-table-wrap {
+    display: block;
+  }
+  .acc-compare-mobile-view {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .acc-compare-table-wrap {
+    display: none;
+  }
+  .acc-compare-mobile-view {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
+/* Account Tab: Google User Card */
+.workspace-google-account-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px;
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg, 10px);
+  box-shadow: var(--header-shadow);
+}
+
+.workspace-google-profile-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.workspace-google-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--accent-color);
+}
+
+.workspace-google-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.workspace-google-name {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.workspace-google-email {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.workspace-google-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #22c55e;
+  margin-top: 2px;
+}
+
+.workspace-divider {
+  height: 1px;
+  background-color: var(--color-border);
+  margin: 4px 0;
+}
+
+.workspace-sync-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 18px;
+  background-color: var(--color-bg-body);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.workspace-sync-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.workspace-sync-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.workspace-sync-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.workspace-sync-item svg {
+  color: #22c55e;
+  flex-shrink: 0;
+}
+
+.workspace-btn-signout {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 18px;
+  border-radius: 6px;
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  width: fit-content;
+}
+
+.workspace-btn-signout:hover {
+  background-color: color-mix(in srgb, #ef4444 8%, transparent);
+  border-color: #ef4444;
+  color: #ef4444;
 }
 

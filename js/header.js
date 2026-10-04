@@ -635,7 +635,7 @@
     });
 
     /* ------------------------------------------------------------------------
-       5. User Login / Account State Synchronizer in Header
+       5. User Header Icon: Entry point to Workspace (Anonymous or Google)
        ------------------------------------------------------------------------ */
     function syncHeaderUserAuth() {
       const userBtn = document.getElementById('header-user-btn');
@@ -659,24 +659,25 @@
       const isSubfolder = pathname.includes('/books') || 
                           pathname.includes('/login') || 
                           pathname.includes('/post') || 
-                          pathname.includes('/admin') ||
-                          pathname.includes('/account');
+                          pathname.includes('/account') ||
+                          pathname.includes('/workspace');
 
-      const loginHref = isSubfolder ? '../login/index.html' : 'login/index.html';
-      const accountHref = isSubfolder ? '../account/index.html' : 'account/index.html';
+      const workspaceHref = isSubfolder ? '../account/index.html' : 'account/index.html';
 
-      if (session && (session.email || session.isLocal || session.name)) {
-        // User is signed in (either Local or Google) -> show avatar image & link to account page
+      // Clicking the user icon ALWAYS opens/navigates to Workspace
+      userBtn.href = workspaceHref;
+
+      if (session && session.email && (session.provider === 'google' || !session.isLocal)) {
+        // User is signed in with Google -> show Google avatar
         userBtn.classList.add('has-avatar');
-        userBtn.href = accountHref;
-        userBtn.setAttribute('aria-label', `Account Profile: ${session.name || session.email || 'Local User'}`);
-        userBtn.setAttribute('title', `Account Profile: ${session.name || session.email || 'Local User'}`);
+        userBtn.setAttribute('aria-label', `Workspace: ${session.name || session.email}`);
+        userBtn.setAttribute('title', `Workspace: ${session.name || session.email}`);
 
         if (userIcon) userIcon.classList.add('is-hidden');
 
         if (userAvatar) {
           let avatarUrl = session.avatar;
-          const userSeed = session.email || session.avatarSeed || session.name || 'radiology-user';
+          const userSeed = session.email || session.name || 'radiology-user';
           if (!avatarUrl && window.DiceBear && typeof window.DiceBear.getRandomAvatar === 'function') {
             avatarUrl = window.DiceBear.getRandomAvatar(userSeed);
             session.avatar = avatarUrl;
@@ -689,18 +690,16 @@
             userAvatar.alt = session.name || 'User profile';
             userAvatar.classList.remove('is-hidden');
           } else {
-            // Fallback if avatar string missing
             if (userIcon) userIcon.classList.remove('is-hidden');
             userAvatar.classList.add('is-hidden');
             userBtn.classList.remove('has-avatar');
           }
         }
       } else {
-        // User is logged out -> show SVG icon & link to login page
+        // Anonymous user -> show SVG icon & still navigate directly to Workspace
         userBtn.classList.remove('has-avatar');
-        userBtn.href = loginHref;
-        userBtn.setAttribute('aria-label', 'Sign In');
-        userBtn.setAttribute('title', 'Sign In');
+        userBtn.setAttribute('aria-label', 'Workspace');
+        userBtn.setAttribute('title', 'Workspace');
 
         if (userIcon) userIcon.classList.remove('is-hidden');
         if (userAvatar) userAvatar.classList.add('is-hidden');

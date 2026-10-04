@@ -44,8 +44,13 @@
     <script src="../vendor/katex/katex.min.js" defer></script>
     <script src="../vendor/katex/contrib/auto-render.min.js" defer></script>
 
+    <!-- Prism JS Syntax Highlighting (Self-Hosted Open Source Plugin) -->
+    <link rel="stylesheet" href="../vendor/prism/prism.css" />
+    <script src="../vendor/prism/prism.js" defer></script>
+
     <!-- Global Scripts -->
     <script src="../js/global.js"></script>
+    <script src="../js/toast.js"></script>
     <script src="../js/cookie-auth.js"></script>
     <!-- DiceBear Self-Hosted Avatar Plugin (Privacy-Preserving & Local) -->
     <script src="../vendor/dicebear/dicebear.min.js"></script>
@@ -466,12 +471,6 @@
               </a>
             </li>
 
-            <!-- 7. Direct Link: Admin CMS -->
-            <li class="desktop-nav-item">
-              <a href="/admin/index.html" class="desktop-nav-btn direct-link" role="menuitem" title="Visual Post & Metadata Manager">
-                <span class="desktop-nav-text">Admin CMS</span>
-              </a>
-            </li>
           </ul>
         </nav>
 
@@ -903,7 +902,7 @@
                       <strong>Inline Contextual Link:</strong> A natural reference seamlessly embedded in prose, such as our curated <a href="../books/index.html">Radiology Books &amp; Core Exam Curriculum</a> with interactive hover underlines.
                     </li>
                     <li>
-                      <strong>External Authority Link:</strong> Accompanied by a dedicated external vector arrow opening securely in a new tab: <a href="https://pubs.rsna.org/journal/radiology" target="_blank" rel="noopener noreferrer" class="post-external-link">Radiology (RSNA Journal) <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a>.
+                      <strong>External Authority Link:</strong> Accompanied by a dedicated external vector arrow opening securely in a new tab: <a href="https://pubs.rsna.org/journal/radiology" target="_blank" rel="noopener noreferrer" class="post-external-link">Radiology (RSNA Journal) <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M13 10.9998L21.2 2.7998" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M22 6.8V2H17.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M11 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22H15C20 22 22 20 22 15V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg></a>.
                     </li>
                     <li>
                       <strong>Internal Anchor Jump:</strong> Instantly glides to in-page diagnostic sections like <a href="#sec-callouts" class="post-internal-link">Section 11: Clinical Callouts</a> or <a href="#sec-interactive" class="post-internal-link">Section 12: Interactive Widgets</a>.
@@ -1041,12 +1040,10 @@
                   <div class="post-formula-card">
                     <div class="post-formula-header">
                       <div class="post-formula-title">
-                        <span class="formula-badge">EQ. 01</span>
-                        <span>Inverse Square Law for Radiation Protection</span>
+                        <span>EQ. 01 · Inverse Square Law for Radiation Protection</span>
                       </div>
                       <button type="button" class="formula-copy-btn" data-latex="\frac{I_1}{I_2} = \frac{d_2^2}{d_1^2} \iff I_2 = I_1 \cdot \left(\frac{d_1}{d_2}\right)^2" aria-label="Copy LaTeX formula" title="Copy LaTeX">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-                        <span>LaTeX</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 12.9V17.1C16 20.6 14.6 22 11.1 22H6.9C3.4 22 2 20.6 2 17.1V12.9C2 9.4 3.4 8 6.9 8H11.1C14.6 8 16 9.4 16 12.9Z"></path><path d="M22 6.9V11.1C22 14.6 20.6 16 17.1 16H16V12.9C16 9.4 14.6 8 11.1 8H8V6.9C8 3.4 9.4 2 12.9 2H17.1C20.6 2 22 3.4 22 6.9Z"></path></svg>
                       </button>
                     </div>
                     <div class="post-formula-math katex-render" data-display="true" data-latex="\frac{I_1}{I_2} = \frac{d_2^2}{d_1^2} \quad \Longleftrightarrow \quad I_2 = I_1 \times \left(\frac{d_1}{d_2}\right)^2">
@@ -1073,12 +1070,10 @@
                   <div class="post-formula-card">
                     <div class="post-formula-header">
                       <div class="post-formula-title">
-                        <span class="formula-badge">EQ. 02</span>
-                        <span>Volumetric CT Dose Index (CTDIvol)</span>
+                        <span>EQ. 02 · Volumetric CT Dose Index (CTDIvol)</span>
                       </div>
                       <button type="button" class="formula-copy-btn" data-latex="\text{CTDI}_{\text{vol}} = \frac{\text{CTDI}_w}{\text{Pitch}} = \frac{\frac{1}{3}\,\text{CTDI}_{\text{center}} + \frac{2}{3}\,\text{CTDI}_{\text{periphery}}}{\text{Pitch}}" aria-label="Copy LaTeX formula" title="Copy LaTeX">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-                        <span>LaTeX</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 12.9V17.1C16 20.6 14.6 22 11.1 22H6.9C3.4 22 2 20.6 2 17.1V12.9C2 9.4 3.4 8 6.9 8H11.1C14.6 8 16 9.4 16 12.9Z"></path><path d="M22 6.9V11.1C22 14.6 20.6 16 17.1 16H16V12.9C16 9.4 14.6 8 11.1 8H8V6.9C8 3.4 9.4 2 12.9 2H17.1C20.6 2 22 3.4 22 6.9Z"></path></svg>
                       </button>
                     </div>
                     <div class="post-formula-math katex-render" data-display="true" data-latex="\text{CTDI}_{\text{vol}} = \frac{\text{CTDI}_w}{\text{Pitch}} = \frac{\frac{1}{3}\,\text{CTDI}_{\text{center}} + \frac{2}{3}\,\text{CTDI}_{\text{periphery}}}{\text{Pitch}}">
@@ -1105,12 +1100,10 @@
                   <div class="post-formula-card">
                     <div class="post-formula-header">
                       <div class="post-formula-title">
-                        <span class="formula-badge">EQ. 03</span>
-                        <span>Dose-Length Product (DLP) &amp; Effective Dose (E)</span>
+                        <span>EQ. 03 · Dose-Length Product (DLP) &amp; Effective Dose (E)</span>
                       </div>
                       <button type="button" class="formula-copy-btn" data-latex="\text{DLP} = \text{CTDI}_{\text{vol}} \times L \quad [\text{mGy}\cdot\text{cm}], \qquad E = k \times \text{DLP} \quad [\text{mSv}]" aria-label="Copy LaTeX formula" title="Copy LaTeX">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-                        <span>LaTeX</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 12.9V17.1C16 20.6 14.6 22 11.1 22H6.9C3.4 22 2 20.6 2 17.1V12.9C2 9.4 3.4 8 6.9 8H11.1C14.6 8 16 9.4 16 12.9Z"></path><path d="M22 6.9V11.1C22 14.6 20.6 16 17.1 16H16V12.9C16 9.4 14.6 8 11.1 8H8V6.9C8 3.4 9.4 2 12.9 2H17.1C20.6 2 22 3.4 22 6.9Z"></path></svg>
                       </button>
                     </div>
                     <div class="post-formula-math katex-render" data-display="true" data-latex="\text{DLP} = \text{CTDI}_{\text{vol}} \times L \quad [\text{mGy}\cdot\text{cm}], \qquad E = k \times \text{DLP} \quad [\text{mSv}]">
@@ -1137,12 +1130,10 @@
                   <div class="post-formula-card">
                     <div class="post-formula-header">
                       <div class="post-formula-title">
-                        <span class="formula-badge">EQ. 04</span>
-                        <span>Hounsfield Unit (HU) Physical Attenuation Equation</span>
+                        <span>EQ. 04 · Hounsfield Unit (HU) Physical Attenuation Equation</span>
                       </div>
                       <button type="button" class="formula-copy-btn" data-latex="\text{HU} = 1000 \times \left( \frac{\mu_{\text{tissue}} - \mu_{\text{water}}}{\mu_{\text{water}}} \right)" aria-label="Copy LaTeX formula" title="Copy LaTeX">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-                        <span>LaTeX</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 12.9V17.1C16 20.6 14.6 22 11.1 22H6.9C3.4 22 2 20.6 2 17.1V12.9C2 9.4 3.4 8 6.9 8H11.1C14.6 8 16 9.4 16 12.9Z"></path><path d="M22 6.9V11.1C22 14.6 20.6 16 17.1 16H16V12.9C16 9.4 14.6 8 11.1 8H8V6.9C8 3.4 9.4 2 12.9 2H17.1C20.6 2 22 3.4 22 6.9Z"></path></svg>
                       </button>
                     </div>
                     <div class="post-formula-math katex-render" data-display="true" data-latex="\text{HU} = 1000 \times \left( \frac{\mu_{\text{tissue}} - \mu_{\text{water}}}{\mu_{\text{water}}} \right)">
@@ -1188,12 +1179,11 @@
                   <div class="post-code-block">
                     <div class="code-block-header">
                       <span class="code-block-title">mCTA_Scanner_Protocol.json</span>
-                      <button type="button" class="code-copy-btn" data-target="code-snippet-1" aria-label="Copy code snippet">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                        Copy Snippet
+                      <button type="button" class="code-copy-btn" data-target="code-snippet-1" aria-label="Copy code snippet" title="Copy Code">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 12.9V17.1C16 20.6 14.6 22 11.1 22H6.9C3.4 22 2 20.6 2 17.1V12.9C2 9.4 3.4 8 6.9 8H11.1C14.6 8 16 9.4 16 12.9Z"></path><path d="M22 6.9V11.1C22 14.6 20.6 16 17.1 16H16V12.9C16 9.4 14.6 8 11.1 8H8V6.9C8 3.4 9.4 2 12.9 2H17.1C20.6 2 22 3.4 22 6.9Z"></path></svg>
                       </button>
                     </div>
-                    <pre><code id="code-snippet-1">{
+                    <pre class="language-json"><code id="code-snippet-1" class="language-json">{
   "modality": "CT",
   "seriesDescription": "HEAD_NECK_mCTA_STROKE",
   "acquisition": {
@@ -1794,7 +1784,6 @@
               <li><a href="../index.html#about" class="footer-link">About Us</a></li>
               <li><a href="../index.html#privacy" class="footer-link">Privacy Policy</a></li>
               <li><a href="../index.html#terms" class="footer-link">Terms of Service</a></li>
-              <li><a href="/admin/index.html" class="footer-link">Admin CMS</a></li>
               <li><a href="../index.html#contact" class="footer-link">Contact &amp; Feedback</a></li>
             </ul>
           </div>
@@ -1975,7 +1964,7 @@
             </button>
           </div>
 
-          <!-- Local Account Comment Restriction Banner -->
+          <!-- Comment Authentication Restriction Banner -->
           <div class="comment-local-restriction is-hidden" id="comment-local-restriction">
             <div class="restriction-badge-icon">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1984,10 +1973,10 @@
               </svg>
             </div>
             <div class="restriction-text-col">
-              <div class="restriction-title">Commenting is disabled for Local Accounts</div>
-              <div class="restriction-desc">Local accounts are stored exclusively in your browser cookies. To join clinical discussions, connect a Google Account.</div>
+              <div class="restriction-title">Sign in with Google to comment.</div>
+              <div class="restriction-desc">Public clinical discussions require verified identity. Connect with Google to post questions and replies.</div>
             </div>
-            <a href="../login/index.html?mode=google" class="restriction-upgrade-btn">Connect Google</a>
+            <button type="button" class="restriction-upgrade-btn" id="btn-restriction-google-login">Continue with Google</button>
           </div>
 
           <form class="comment-input-form" id="comment-form">
@@ -2057,21 +2046,6 @@
                 </svg>
               </span>
               <span class="tree-label">Sample Post</span>
-            </a>
-          </li>
-
-
-          <li class="tree-divider" role="separator" aria-hidden="true"></li>
-
-          <li class="tree-item tree-leaf" role="none" data-tree-id="admin-cms" data-title="Admin CMS">
-            <a href="/admin/index.html" class="tree-row tree-leaf-link" role="treeitem" aria-selected="false" tabindex="0">
-              <span class="tree-icon" aria-hidden="true">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
-                  <circle cx="12" cy="12" r="3"/>
-                </svg>
-              </span>
-              <span class="tree-label">Admin CMS</span>
             </a>
           </li>
         </ul>

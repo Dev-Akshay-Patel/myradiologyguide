@@ -1,13 +1,20 @@
 /**
- * COOKIE AUTH & BOOKMARKS ENGINE
+ * COOKIE AUTH & WORKSPACE ENGINE
  * Clinical Radiology Guide - Universal Auth & Storage Controller
  * 
- * Supports:
- * 1. 100% Cookie-based Local Account (Zero server upload, private, customizable name & avatar)
- * 2. Google Account authentication (Ready for future Firebase integration)
- * 3. Cookie-based Bookmark system synced across the entire site and reflected in User Account
- * 4. Local Downloads tracking
- * 5. Permission checks (Local accounts cannot comment; Google accounts can comment)
+ * Architecture:
+ * 1. Anonymous First: Users can use the website without an account.
+ *    - Save bookmarks locally (cookies & localStorage)
+ *    - Track download history locally
+ *    - Save theme and local preferences
+ *    - No complicated "Local Account" terminology - simply browser storage
+ * 2. Optional Google Authentication:
+ *    - Cross-device synchronization of bookmarks, downloads, and preferences
+ *    - Merges local data into Google account without overwriting or duplicates
+ *    - Required ONLY for identity features (commenting)
+ * 3. Theme Synchronization:
+ *    - Current local theme is preserved upon Google sign-in
+ *    - Local theme remains intact upon sign-out
  */
 
 (function () {
@@ -17,12 +24,14 @@
   const COOKIE_SESSION = 'radiology_session';
   const COOKIE_BOOKMARKS = 'radiology_bookmarks';
   
-  // Storage Keys for backward compatibility and fast cache
+  // Storage Keys
   const STORAGE_SESSION = 'my_radiology_user_session';
   const STORAGE_BOOKMARKS_PRIMARY = 'radiology_saved_posts';
   const STORAGE_BOOKMARKS_SECONDARY = 'radiology_saved_protocols';
   const STORAGE_DOWNLOADS = 'radiology_downloads_history_v1';
-  const STORAGE_LOCAL_ACCOUNTS_VAULT = 'radiology_local_accounts_vault_v1';
+  const STORAGE_COMMENTS = 'radiology_post_comments_v1';
+  const STORAGE_STREAK = 'radiology_study_streak';
+  const STORAGE_THEME = 'app-theme-preference';
 
   // Cookie Utilities
   function setCookie(name, value, days = 365) {
@@ -64,85 +73,9 @@
   }
 
   /* ==========================================================================
-     PERMANENT LOCAL ACCOUNTS VAULT (Separation of Account vs Session)
-     Account = Permanent user identity + profile + saved data
-     Session = Temporary state indicating that the user is currently logged in
+     BOOKMARK MANAGEMENT (Browser Storage - Works Anonymously)
      ========================================================================== */
 
-  function getVault() {
-    try {
-      const raw = localStorage.getItem(STORAGE_LOCAL_ACCOUNTS_VAULT);
-      if (raw) return JSON.parse(raw) || {};
-    } catch (e) {}
-    return {};
-  }
-
-  function saveVault(vault) {
-    try {
-      localStorage.setItem(STORAGE_LOCAL_ACCOUNTS_VAULT, JSON.stringify(vault || {}));
-    } catch (e) {}
-  }
-
-  function normalizeAccountKey(name) {
-    return (name || '').trim().toLowerCase();
-  }
-
-  function findStoredAccount(name) {
-    if (!name) return null;
-    const vault = getVault();
-    const key = normalizeAccountKey(name);
-    return vault[key] || null;
-  }
-
-  function saveCurrentActiveStateToVault() {
-    const session = getSession();
-    if (!session || (!session.isLocal && session.provider !== 'local') || !session.name) {
-      return;
-    }
-
-    const vault = getVault();
-    const key = normalizeAccountKey(session.name);
-
-    const bookmarks = getBookmarks();
-    let downloads = [];
-    try {
-      const dlRaw = localStorage.getItem(STORAGE_DOWNLOADS);
-      if (dlRaw) downloads = JSON.parse(dlRaw);
-    } catch (e) {}
-
-    let comments = [];
-    try {
-      const cmRaw = localStorage.getItem('radiology_post_comments_v1');
-      if (cmRaw) comments = JSON.parse(cmRaw);
-    } catch (e) {}
-
-    let streak = 14;
-    try {
-      const stRaw = localStorage.getItem('radiology_study_streak');
-      if (stRaw !== null) streak = parseInt(stRaw, 10);
-    } catch (e) {}
-
-    vault[key] = {
-      name: session.name,
-      avatar: session.avatar || '',
-      avatarType: session.avatarType || 'preset',
-      avatarSeed: session.avatarSeed || 'radiology',
-      joinedDate: session.joinedDate || 'September 25, 2026',
-      timestamp: session.timestamp || Date.now(),
-      bookmarks: bookmarks,
-      downloads: downloads,
-      comments: comments,
-      streak: isNaN(streak) ? 14 : streak
-    };
-
-    saveVault(vault);
-  }
-
-  /* ==========================================================================
-     BOOKMARK MANAGEMENT (Cookie-Based)
-     ========================================================================== */
-
-  // Initial seed IDs to showcase bookmarks if none exist
   const DEFAULT_INITIAL_BOOKMARKS = [
     'stroke-cta-protocol',
     'chest-hrct-interstitial',
@@ -167,15 +100,15 @@
 
       ids = Array.from(new Set(ids));
 
-      const session = getSession();
-      if (session && ids.length === 0) {
+      // Seed initial defaults if completely empty
+      if (ids.length === 0) {
         ids = [...DEFAULT_INITIAL_BOOKMARKS];
       }
 
       setCookie(COOKIE_BOOKMARKS, ids, 365);
     }
 
-    // Mirror to localStorage for existing script compatibility
+    // Mirror to localStorage for script compatibility
     try {
       localStorage.setItem(STORAGE_BOOKMARKS_PRIMARY, JSON.stringify(ids));
       localStorage.setItem(STORAGE_BOOKMARKS_SECONDARY, JSON.stringify(ids));
@@ -194,7 +127,15 @@
         localStorage.setItem(STORAGE_BOOKMARKS_PRIMARY, JSON.stringify(current));
         localStorage.setItem(STORAGE_BOOKMARKS_SECONDARY, JSON.stringify(current));
       } catch (e) {}
-      saveCurrentActiveStateToVault();
+      
+      // If user is signed in with Google, also sync to cloud copy
+      const session = getSession();
+      if (session && session.email) {
+        try {
+          localStorage.setItem('radiology_cloud_bookmarks_' + session.email, JSON.stringify(current));
+        } catch (e) {}
+      }
+
       dispatchBookmarkEvent();
     }
   }
@@ -209,7 +150,15 @@
         localStorage.setItem(STORAGE_BOOKMARKS_PRIMARY, JSON.stringify(current));
         localStorage.setItem(STORAGE_BOOKMARKS_SECONDARY, JSON.stringify(current));
       } catch (e) {}
-      saveCurrentActiveStateToVault();
+
+      // If user is signed in with Google, also sync to cloud copy
+      const session = getSession();
+      if (session && session.email) {
+        try {
+          localStorage.setItem('radiology_cloud_bookmarks_' + session.email, JSON.stringify(current));
+        } catch (e) {}
+      }
+
       dispatchBookmarkEvent();
     }
   }
@@ -236,14 +185,116 @@
   }
 
   /* ==========================================================================
-     SESSION & LOCAL ACCOUNT MANAGEMENT (Cookie-Based)
+     DOWNLOADS TRACKING (Browser Storage - Works Anonymously)
      ========================================================================== */
 
+  const DEFAULT_INITIAL_DOWNLOADS = [
+    {
+      id: 'dl-physics-4th-ed',
+      title: 'The Essential Physics of Medical Imaging (4th Edition Reference)',
+      category: 'Diagnostic Physics',
+      format: 'PDF',
+      size: '48.2 MB',
+      timestamp: Date.now() - 1000 * 60 * 60 * 24 * 2,
+      url: '/books/'
+    },
+    {
+      id: 'dl-stroke-aspects-card',
+      title: 'Acute Ischemic Stroke ASPECTS Multi-Phase CTA Quick Triage Card',
+      category: 'Neuroradiology',
+      format: 'PDF',
+      size: '4.2 MB',
+      timestamp: Date.now() - 1000 * 60 * 60 * 24 * 5,
+      url: '/post/index.html'
+    },
+    {
+      id: 'dl-chest-ct-ild-atlas',
+      title: 'High-Resolution Chest CT Interstitial Lung Disease Pattern Atlas',
+      category: 'Thoracic Imaging',
+      format: 'PDF',
+      size: '32.6 MB',
+      timestamp: Date.now() - 1000 * 60 * 60 * 24 * 9,
+      url: '/books/'
+    },
+    {
+      id: 'dl-msk-ultrasound-pocket',
+      title: 'Dynamic Musculoskeletal Ultrasound & Rotator Cuff Pocket Companion',
+      category: 'MSK Ultrasound',
+      format: 'EPUB',
+      size: '18.4 MB',
+      timestamp: Date.now() - 1000 * 60 * 60 * 24 * 12,
+      url: '/books/'
+    }
+  ];
+
+  function getDownloads() {
+    let list = [];
+    try {
+      const raw = localStorage.getItem(STORAGE_DOWNLOADS);
+      if (raw) list = JSON.parse(raw);
+    } catch (e) {}
+
+    if (!Array.isArray(list) || list.length === 0) {
+      list = [...DEFAULT_INITIAL_DOWNLOADS];
+      try {
+        localStorage.setItem(STORAGE_DOWNLOADS, JSON.stringify(list));
+      } catch (e) {}
+    }
+    return list;
+  }
+
+  function saveDownload(item) {
+    if (!item || !item.id) return;
+    const current = getDownloads();
+    const existingIndex = current.findIndex(d => d.id === item.id);
+    if (existingIndex >= 0) {
+      current[existingIndex] = { ...current[existingIndex], ...item, timestamp: Date.now() };
+    } else {
+      current.unshift({ ...item, timestamp: Date.now() });
+    }
+    try {
+      localStorage.setItem(STORAGE_DOWNLOADS, JSON.stringify(current));
+    } catch (e) {}
+
+    // If user is signed in with Google, also sync to cloud copy
+    const session = getSession();
+    if (session && session.email) {
+      try {
+        localStorage.setItem('radiology_cloud_downloads_' + session.email, JSON.stringify(current));
+      } catch (e) {}
+    }
+
+    window.dispatchEvent(new CustomEvent('downloads-updated', { detail: { downloads: current, count: current.length } }));
+  }
+
+  function removeDownload(id) {
+    if (!id) return;
+    let current = getDownloads();
+    current = current.filter(d => d.id !== id);
+    try {
+      localStorage.setItem(STORAGE_DOWNLOADS, JSON.stringify(current));
+    } catch (e) {}
+
+    const session = getSession();
+    if (session && session.email) {
+      try {
+        localStorage.setItem('radiology_cloud_downloads_' + session.email, JSON.stringify(current));
+      } catch (e) {}
+    }
+
+    window.dispatchEvent(new CustomEvent('downloads-updated', { detail: { downloads: current, count: current.length } }));
+  }
+
+  /* ==========================================================================
+     AUTHENTICATION & GOOGLE SYNCHRONIZATION
+     ========================================================================== */
+
+  /**
+   * Retrieves active Google session, or null if user is anonymous.
+   */
   function getSession() {
-    // 1. Try reading session from cookie
     let session = getCookie(COOKIE_SESSION);
     
-    // 2. Fallback to localStorage if cookie empty
     if (!session || typeof session !== 'object') {
       try {
         const raw = localStorage.getItem(STORAGE_SESSION);
@@ -251,8 +302,8 @@
       } catch (e) {}
     }
 
-    // If session exists in either, keep both in sync
-    if (session && typeof session === 'object') {
+    // Only recognize valid Google sessions (anonymous users have null session)
+    if (session && typeof session === 'object' && (session.provider === 'google' || session.email)) {
       setCookie(COOKIE_SESSION, session, 365);
       try {
         localStorage.setItem(STORAGE_SESSION, JSON.stringify(session));
@@ -264,147 +315,62 @@
   }
 
   /**
-   * Login or restore a local account:
-   * 1. If username exists: find existing account and restore profile & saved data without creating new account.
-   * 2. If username is new: create a new account in vault.
-   */
-  function loginOrRestoreLocalAccount({ name, avatar, avatarType = 'preset', avatarSeed = 'local-user' }) {
-    const cleanName = (name && name.trim()) ? name.trim() : 'Clinical Radiologist';
-    const existing = findStoredAccount(cleanName);
-
-    let sessionData = null;
-
-    if (existing) {
-      // Restore existing account profile and saved data
-      sessionData = {
-        provider: 'local',
-        isLocal: true,
-        name: existing.name || cleanName,
-        email: '',
-        avatar: existing.avatar || avatar || (window.DiceBear && typeof window.DiceBear.getRandomAvatar === 'function' ? window.DiceBear.getRandomAvatar(cleanName) : ''),
-        avatarType: existing.avatarType || avatarType,
-        avatarSeed: existing.avatarSeed || avatarSeed,
-        canComment: false,
-        joinedDate: existing.joinedDate || new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
-        timestamp: existing.timestamp || Date.now()
-      };
-
-      // Restore saved application data (Bookmarks, Downloads, Comments, Streak)
-      const restoredBookmarks = Array.isArray(existing.bookmarks) ? existing.bookmarks : [...DEFAULT_INITIAL_BOOKMARKS];
-      setCookie(COOKIE_BOOKMARKS, restoredBookmarks, 365);
-      try {
-        localStorage.setItem(STORAGE_BOOKMARKS_PRIMARY, JSON.stringify(restoredBookmarks));
-        localStorage.setItem(STORAGE_BOOKMARKS_SECONDARY, JSON.stringify(restoredBookmarks));
-      } catch (e) {}
-
-      if (Array.isArray(existing.downloads)) {
-        try {
-          localStorage.setItem(STORAGE_DOWNLOADS, JSON.stringify(existing.downloads));
-        } catch (e) {}
-      }
-
-      if (Array.isArray(existing.comments)) {
-        try {
-          localStorage.setItem('radiology_post_comments_v1', JSON.stringify(existing.comments));
-        } catch (e) {}
-      }
-
-      if (existing.streak !== undefined) {
-        try {
-          localStorage.setItem('radiology_study_streak', String(existing.streak));
-        } catch (e) {}
-      }
-    } else {
-      // Create a brand new account in the vault
-      const finalAvatar = avatar || (window.DiceBear && typeof window.DiceBear.getRandomAvatar === 'function' ? window.DiceBear.getRandomAvatar(cleanName) : '');
-      const initialBookmarks = [...DEFAULT_INITIAL_BOOKMARKS];
-      const initialDownloads = [
-        {
-          id: 'dl-physics-4th-ed',
-          title: 'The Essential Physics of Medical Imaging (4th Edition Reference)',
-          category: 'Diagnostic Physics',
-          format: 'PDF',
-          size: '48.2 MB',
-          timestamp: Date.now() - 1000 * 60 * 60 * 24 * 2,
-          url: '/books/'
-        },
-        {
-          id: 'dl-stroke-aspects-card',
-          title: 'Acute Ischemic Stroke ASPECTS Multi-Phase CTA Quick Triage Card',
-          category: 'Neuroradiology',
-          format: 'PDF',
-          size: '4.2 MB',
-          timestamp: Date.now() - 1000 * 60 * 60 * 24 * 5,
-          url: '/post/index.html'
-        }
-      ];
-
-      sessionData = {
-        provider: 'local',
-        isLocal: true,
-        name: cleanName,
-        email: '',
-        avatar: finalAvatar,
-        avatarType: avatarType,
-        avatarSeed: avatarSeed,
-        canComment: false,
-        joinedDate: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
-        timestamp: Date.now()
-      };
-
-      setCookie(COOKIE_BOOKMARKS, initialBookmarks, 365);
-      try {
-        localStorage.setItem(STORAGE_BOOKMARKS_PRIMARY, JSON.stringify(initialBookmarks));
-        localStorage.setItem(STORAGE_BOOKMARKS_SECONDARY, JSON.stringify(initialBookmarks));
-        localStorage.setItem(STORAGE_DOWNLOADS, JSON.stringify(initialDownloads));
-        localStorage.setItem('radiology_study_streak', '14');
-      } catch (e) {}
-
-      // Save initial account in vault
-      const vault = getVault();
-      vault[normalizeAccountKey(cleanName)] = {
-        name: cleanName,
-        avatar: finalAvatar,
-        avatarType: avatarType,
-        avatarSeed: avatarSeed,
-        joinedDate: sessionData.joinedDate,
-        timestamp: sessionData.timestamp,
-        bookmarks: initialBookmarks,
-        downloads: initialDownloads,
-        comments: [],
-        streak: 14
-      };
-      saveVault(vault);
-    }
-
-    // Set active session
-    setCookie(COOKIE_SESSION, sessionData, 365);
-    try {
-      localStorage.setItem(STORAGE_SESSION, JSON.stringify(sessionData));
-    } catch (e) {}
-
-    window.dispatchEvent(new CustomEvent('bookmarks-updated', { detail: { bookmarks: getBookmarks(), count: getBookmarks().length } }));
-    window.dispatchEvent(new CustomEvent('downloads-updated', { detail: { count: 0 } }));
-    window.dispatchEvent(new CustomEvent('auth-state-changed', { detail: sessionData }));
-
-    return { session: sessionData, isExisting: !!existing };
-  }
-
-  /**
-   * Alias for createLocalAccount to ensure existing code works seamlessly
-   */
-  function createLocalAccount(params) {
-    const result = loginOrRestoreLocalAccount(params);
-    return result.session;
-  }
-
-  /**
-   * Save a Google Account session (for future Firebase integration)
+   * Google Sign-In & Synchronization
+   * Merges:
+   * - Bookmarks (no duplicates)
+   * - Download history (no duplicates)
+   * - Preserves current local theme as user's pending preference
    */
   function setGoogleAccount({ name, email, avatar, seed }) {
     const userEmail = email || 'mr.akshaypatel05@gmail.com';
     const userName = name || 'Akshay Patel';
-    const userAvatar = avatar || (window.DiceBear && typeof window.DiceBear.getRandomAvatar === 'function' ? window.DiceBear.getRandomAvatar(userEmail) : '');
+    const userAvatar = avatar || (window.DiceBear && typeof window.DiceBear.getRandomAvatar === 'function' 
+      ? window.DiceBear.getRandomAvatar(userEmail) 
+      : '');
+
+    // 1. Read existing local bookmarks
+    const localBookmarks = getBookmarks();
+
+    // 2. Read cloud bookmarks for this user if any
+    let cloudBookmarks = [];
+    try {
+      const rawCloud = localStorage.getItem('radiology_cloud_bookmarks_' + userEmail);
+      if (rawCloud) cloudBookmarks = JSON.parse(rawCloud);
+    } catch (e) {}
+
+    // Merge bookmarks (union, avoid duplicates)
+    const mergedBookmarks = Array.from(new Set([...cloudBookmarks, ...localBookmarks]));
+    setCookie(COOKIE_BOOKMARKS, mergedBookmarks, 365);
+    try {
+      localStorage.setItem(STORAGE_BOOKMARKS_PRIMARY, JSON.stringify(mergedBookmarks));
+      localStorage.setItem(STORAGE_BOOKMARKS_SECONDARY, JSON.stringify(mergedBookmarks));
+      localStorage.setItem('radiology_cloud_bookmarks_' + userEmail, JSON.stringify(mergedBookmarks));
+    } catch (e) {}
+
+    // 3. Read and merge download history
+    const localDownloads = getDownloads();
+    let cloudDownloads = [];
+    try {
+      const rawCloudDl = localStorage.getItem('radiology_cloud_downloads_' + userEmail);
+      if (rawCloudDl) cloudDownloads = JSON.parse(rawCloudDl);
+    } catch (e) {}
+
+    const dlMap = new Map();
+    cloudDownloads.forEach(d => { if (d && d.id) dlMap.set(d.id, d); });
+    localDownloads.forEach(d => { if (d && d.id) dlMap.set(d.id, d); });
+    const mergedDownloads = Array.from(dlMap.values());
+    try {
+      localStorage.setItem(STORAGE_DOWNLOADS, JSON.stringify(mergedDownloads));
+      localStorage.setItem('radiology_cloud_downloads_' + userEmail, JSON.stringify(mergedDownloads));
+    } catch (e) {}
+
+    // 4. Preserve pending local theme preference
+    let currentTheme = 'light';
+    try {
+      currentTheme = localStorage.getItem(STORAGE_THEME) || 
+        ((window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light');
+      localStorage.setItem('radiology_cloud_theme_' + userEmail, currentTheme);
+    } catch (e) {}
 
     const sessionData = {
       provider: 'google',
@@ -414,10 +380,10 @@
       seed: seed || userEmail,
       avatar: userAvatar,
       isDicebear: true,
-      style: 'glyphs',
       canComment: true,
       joinedDate: 'September 25, 2026',
-      timestamp: Date.now()
+      timestamp: Date.now(),
+      theme: currentTheme
     };
 
     setCookie(COOKIE_SESSION, sessionData, 365);
@@ -425,121 +391,75 @@
       localStorage.setItem(STORAGE_SESSION, JSON.stringify(sessionData));
     } catch (e) {}
 
-    getBookmarks();
-
     window.dispatchEvent(new CustomEvent('auth-state-changed', { detail: sessionData }));
+    window.dispatchEvent(new CustomEvent('bookmarks-updated', { detail: { bookmarks: mergedBookmarks, count: mergedBookmarks.length } }));
+    window.dispatchEvent(new CustomEvent('downloads-updated', { detail: { downloads: mergedDownloads, count: mergedDownloads.length } }));
+
     return sessionData;
   }
 
   /**
-   * Update current profile details (for local account avatar/name updates)
+   * One-click Google Sign-In helper
    */
-  function updateProfile({ name, avatar, avatarType, avatarSeed }) {
-    const current = getSession();
-    if (!current) return null;
-
-    const oldName = current.name;
-
-    if (name !== undefined && name.trim()) {
-      current.name = name.trim();
-    }
-    if (avatar !== undefined) {
-      current.avatar = avatar;
-    }
-    if (avatarType !== undefined) {
-      current.avatarType = avatarType;
-    }
-    if (avatarSeed !== undefined) {
-      current.avatarSeed = avatarSeed;
-    }
-
-    setCookie(COOKIE_SESSION, current, 365);
-    try {
-      localStorage.setItem(STORAGE_SESSION, JSON.stringify(current));
-    } catch (e) {}
-
-    // Update vault
-    if (current.isLocal || current.provider === 'local') {
-      const vault = getVault();
-      const oldKey = normalizeAccountKey(oldName);
-      const newKey = normalizeAccountKey(current.name);
-
-      const existingRecord = vault[oldKey] || {};
-      if (oldKey !== newKey && oldKey) {
-        delete vault[oldKey];
-      }
-
-      vault[newKey] = {
-        ...existingRecord,
-        name: current.name,
-        avatar: current.avatar,
-        avatarType: current.avatarType,
-        avatarSeed: current.avatarSeed
-      };
-      saveVault(vault);
-    }
-
-    window.dispatchEvent(new CustomEvent('auth-state-changed', { detail: current }));
-    return current;
+  function signInWithGoogle(options = {}) {
+    return setGoogleAccount({
+      name: options.name || 'Akshay Patel',
+      email: options.email || 'mr.akshaypatel05@gmail.com',
+      avatar: options.avatar,
+      seed: options.seed
+    });
   }
 
   /**
-   * Clear session (Logout)
-   * MUST ONLY end the current login/session.
-   * MUST NOT delete the account, username, profile picture, saved data, progress, or settings.
+   * Sign out (ends active Google session)
+   * Keeps current local theme intact
+   * Preserves local bookmarks and download history in browser
    */
   function clearSession() {
-    // 1. Save all current state to the persistent account vault before destroying the session
-    saveCurrentActiveStateToVault();
+    const session = getSession();
+    if (session && session.email) {
+      try {
+        localStorage.setItem('radiology_cloud_bookmarks_' + session.email, JSON.stringify(getBookmarks()));
+        localStorage.setItem('radiology_cloud_downloads_' + session.email, JSON.stringify(getDownloads()));
+      } catch (e) {}
+    }
 
-    // 2. Clear ONLY the active session token/cookies
+    // Preserve the current local theme
+    const currentTheme = localStorage.getItem(STORAGE_THEME);
+
     deleteCookie(COOKIE_SESSION);
     try {
       localStorage.removeItem(STORAGE_SESSION);
+      if (currentTheme) {
+        localStorage.setItem(STORAGE_THEME, currentTheme);
+      }
     } catch (e) {}
 
     window.dispatchEvent(new CustomEvent('auth-state-changed', { detail: null }));
   }
 
   /**
-   * Check if current user is permitted to comment
-   * Rule: Local accounts CANNOT comment. Only Google accounts can comment.
+   * Permissions: Only Google-authenticated users can comment.
+   * Anonymous users cannot comment.
    */
   function canComment() {
     const session = getSession();
-    if (!session) return false;
-    if (session.isLocal === true || session.provider === 'local') return false;
-    return session.canComment === true || session.provider === 'google';
-  }
-
-  function isLocalAccount() {
-    const session = getSession();
-    return !!(session && (session.isLocal === true || session.provider === 'local'));
+    return !!(session && session.provider === 'google' && session.email);
   }
 
   function isLoggedIn() {
     const session = getSession();
-    return !!(session && (session.name || session.email));
+    return !!(session && session.provider === 'google' && session.email);
+  }
+
+  function isAnonymous() {
+    return !isLoggedIn();
   }
 
   /**
-   * Revoke all tokens & active sessions
-   */
-  function revokeAllTokens() {
-    deleteCookie(COOKIE_SESSION);
-    deleteCookie('radiology_token');
-    deleteCookie('radiology_refresh_token');
-    try {
-      localStorage.removeItem(STORAGE_SESSION);
-      localStorage.removeItem('radiology_auth_token');
-      localStorage.removeItem('radiology_token_timestamp');
-    } catch (e) {}
-    window.dispatchEvent(new CustomEvent('auth-state-changed', { detail: null }));
-  }
-
-  /**
-   * Reset account:
-   * Resets your app data while keeping your profile.
+   * Reset Account (Danger Action 1):
+   * Clears saved application data (bookmarks, downloads, comments, streak)
+   * while keeping profile intact.
    */
   function resetAccount() {
     // Clear bookmarks
@@ -548,124 +468,124 @@
       localStorage.setItem(STORAGE_BOOKMARKS_PRIMARY, JSON.stringify([]));
       localStorage.setItem(STORAGE_BOOKMARKS_SECONDARY, JSON.stringify([]));
     } catch (e) {}
-    dispatchBookmarkEvent();
 
     // Clear downloads
     try {
       localStorage.setItem(STORAGE_DOWNLOADS, JSON.stringify([]));
     } catch (e) {}
-    window.dispatchEvent(new CustomEvent('downloads-updated', { detail: { downloads: [], count: 0 } }));
 
     // Clear comments
     try {
-      localStorage.setItem('radiology_post_comments_v1', JSON.stringify([]));
+      localStorage.setItem(STORAGE_COMMENTS, JSON.stringify([]));
     } catch (e) {}
 
-    // Reset streak
+    // Reset study streak
     try {
-      localStorage.setItem('radiology_study_streak', '0');
+      localStorage.setItem(STORAGE_STREAK, '0');
     } catch (e) {}
 
-    // Keep profile intact in session and vault
-    const current = getSession();
-    if (current && (current.isLocal || current.provider === 'local')) {
-      const vault = getVault();
-      const key = normalizeAccountKey(current.name);
-      if (vault[key]) {
-        vault[key].bookmarks = [];
-        vault[key].downloads = [];
-        vault[key].comments = [];
-        vault[key].streak = 0;
-        saveVault(vault);
-      }
+    // If Google user, also reset their cloud data copy
+    const session = getSession();
+    if (session && session.email) {
+      try {
+        localStorage.setItem('radiology_cloud_bookmarks_' + session.email, JSON.stringify([]));
+        localStorage.setItem('radiology_cloud_downloads_' + session.email, JSON.stringify([]));
+      } catch (e) {}
     }
 
+    dispatchBookmarkEvent();
+    window.dispatchEvent(new CustomEvent('downloads-updated', { detail: { downloads: [], count: 0 } }));
     return true;
   }
 
   /**
-   * Delete account:
-   * Permanently deletes your account and all associated data.
+   * Delete Google Account (Danger Action 2):
+   * Permanently deletes Google-connected user data and ends Google session.
+   * Reverts user to clean anonymous browser mode.
    */
-  function deleteAccount() {
-    const current = getSession();
-    if (current && (current.isLocal || current.provider === 'local') && current.name) {
-      const vault = getVault();
-      const key = normalizeAccountKey(current.name);
-      delete vault[key];
-      saveVault(vault);
+  function deleteGoogleAccount() {
+    const session = getSession();
+    if (session && session.email) {
+      try {
+        localStorage.removeItem('radiology_cloud_bookmarks_' + session.email);
+        localStorage.removeItem('radiology_cloud_downloads_' + session.email);
+        localStorage.removeItem('radiology_cloud_theme_' + session.email);
+      } catch (e) {}
     }
 
+    // Keep current theme preference locally
+    const currentTheme = localStorage.getItem(STORAGE_THEME);
+
     deleteCookie(COOKIE_SESSION);
-    deleteCookie(COOKIE_BOOKMARKS);
-    deleteCookie('radiology_token');
-    deleteCookie('radiology_refresh_token');
     try {
       localStorage.removeItem(STORAGE_SESSION);
-      localStorage.removeItem(STORAGE_BOOKMARKS_PRIMARY);
-      localStorage.removeItem(STORAGE_BOOKMARKS_SECONDARY);
-      localStorage.removeItem(STORAGE_DOWNLOADS);
-      localStorage.removeItem('radiology_post_comments_v1');
-      localStorage.removeItem('radiology_study_streak');
-      localStorage.removeItem('radiology_auth_token');
+      if (currentTheme) {
+        localStorage.setItem(STORAGE_THEME, currentTheme);
+      }
     } catch (e) {}
 
     window.dispatchEvent(new CustomEvent('auth-state-changed', { detail: null }));
-    window.dispatchEvent(new CustomEvent('bookmarks-updated', { detail: { bookmarks: [], count: 0 } }));
-    window.dispatchEvent(new CustomEvent('downloads-updated', { detail: { downloads: [], count: 0 } }));
     return true;
   }
 
-  // Toast Notification Helper
-  function showToast(message, type = 'info') {
-    let toast = document.getElementById('mrg-global-toast');
-    if (!toast) {
-      toast = document.createElement('div');
-      toast.id = 'mrg-global-toast';
-      toast.className = 'mrg-toast';
-      document.body.appendChild(toast);
+  // Toast Notification Helper (Delegates to unified Toast module)
+  function showToast(message, type = 'info', options = {}) {
+    if (window.Toast && typeof window.Toast.show === 'function') {
+      return window.Toast.show(message, type, options);
     }
-
-    toast.textContent = message;
-    toast.className = `mrg-toast mrg-toast-${type} is-visible`;
-
-    clearTimeout(toast._timeout);
-    toast._timeout = setTimeout(() => {
-      toast.classList.remove('is-visible');
-    }, 3200);
+    if (window.showToast && window.showToast !== showToast) {
+      return window.showToast(message, type, options);
+    }
+    // Fallback if toast module hasn't loaded yet
+    console.log(`[Toast ${type}]:`, message);
   }
 
-  // Expose global API
+  // Backwards compatibility shim for any existing code calling old local methods
+  function createLocalAccount() {
+    return null;
+  }
+  function loginOrRestoreLocalAccount() {
+    return { session: null, isExisting: false };
+  }
+  function findStoredAccount() {
+    return null;
+  }
+
+  // Expose universal API
   window.RadiologyAuth = {
     // Cookie Helpers
     setCookie,
     getCookie,
     deleteCookie,
 
-    // Vault & Accounts Store
-    findStoredAccount,
-    getStoredAccounts: getVault,
-    loginOrRestoreLocalAccount,
-
-    // Bookmark API (Cookie-based)
+    // Bookmarks API (Local / Cookie)
     getBookmarks,
     saveBookmark,
     removeBookmark,
     isBookmarked,
     toggleBookmark,
 
-    // Session & Account API
+    // Downloads API (Local)
+    getDownloads,
+    saveDownload,
+    removeDownload,
+
+    // Authentication & Google Sync API
     getSession,
-    createLocalAccount,
+    signInWithGoogle,
     setGoogleAccount,
-    updateProfile,
     clearSession,
-    revokeAllTokens,
     resetAccount,
-    deleteAccount,
+    deleteGoogleAccount,
+    deleteAccount: deleteGoogleAccount, // alias for backwards compatibility
     isLoggedIn,
-    isLocalAccount,
+    isAnonymous,
     canComment,
+
+    // Backwards compatibility
+    createLocalAccount,
+    loginOrRestoreLocalAccount,
+    findStoredAccount,
 
     // UI Helper
     showToast
@@ -674,6 +594,7 @@
   // Sync initial bookmarks on boot
   document.addEventListener('DOMContentLoaded', () => {
     getBookmarks();
+    getDownloads();
   });
 
 })();

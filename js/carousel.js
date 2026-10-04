@@ -1,11 +1,8 @@
 /**
  * CAROUSEL JS
- * Handles carousel interactions:
- * - Slide transitions and track translation
- * - Centered dot indicators with active state
- * - Autoplay with pause on hover/focus
- * - Touch swipe gestures for mobile
- * - Keyboard navigation (ArrowLeft / ArrowRight)
+ * Handles carousel dynamic slide rendering from MRG_CONFIG,
+ * transitions, dot indicators, autoplay with pause on hover/focus,
+ * touch gestures, and keyboard navigation.
  */
 
 (function () {
@@ -16,6 +13,14 @@
     initTopicsShowMore();
     initPinnedPostActions();
     initMobileScrollExpand();
+  });
+
+  // Re-render when config changes from Admin
+  window.addEventListener('mrgconfigchange', () => {
+    initCarousel();
+  });
+  window.addEventListener('carouselconfigchange', () => {
+    initCarousel();
   });
 
   function initPinnedPostActions() {
@@ -36,6 +41,7 @@
       </defs>`;
     const PINNED_SVG_MINUS = `<g clip-path="url(#clip0_save_btn)">
         <path d="M14.5 10.6504H9.5" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M12 8.21094V13.2109" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
         <path d="M16.8199 2H7.17995C5.04995 2 3.31995 3.74 3.31995 5.86V19.95C3.31995 21.75 4.60995 22.51 6.18995 21.64L11.0699 18.93C11.5899 18.64 12.4299 18.64 12.9399 18.93L17.8199 21.64C19.3999 22.52 20.6899 21.76 20.6899 19.95V5.86C20.6799 3.74 18.9499 2 16.8199 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
       </g>
       <defs>
@@ -73,7 +79,7 @@
             await navigator.share(shareData);
             shared = true;
           } catch {
-            // User cancelled or aborted
+            // User cancelled
           }
         }
 
@@ -98,23 +104,13 @@
   function initTopicsShowMore() {
     const toggleBtn = document.getElementById('topics-toggle-btn');
     const wrapper = document.getElementById('topics-expandable-wrapper');
+    const toggleText = document.getElementById('topics-toggle-text');
+    const hiddenItems = document.querySelectorAll('.topic-item.is-hidden-initially');
+
     if (!toggleBtn || !wrapper) return;
 
-    const toggleText = toggleBtn.querySelector('.topics-toggle-text');
-    const hiddenItems = Array.from(wrapper.querySelectorAll('.topic-item'));
-    const hiddenCount = hiddenItems.length;
-
-    // Remove hidden items from keyboard navigation order while collapsed
-    hiddenItems.forEach((item) => {
-      item.setAttribute('tabindex', '-1');
-    });
-
-    const moreText = `Show More (+${hiddenCount})`;
-    const lessText = 'Show Less';
-
-    if (toggleText) {
-      toggleText.textContent = moreText;
-    }
+    const moreText = toggleBtn.getAttribute('data-more-text') || 'Show More Topics';
+    const lessText = toggleBtn.getAttribute('data-less-text') || 'Show Less Topics';
 
     toggleBtn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -123,7 +119,6 @@
       const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
       const willExpand = !isExpanded;
 
-      // Capture exact scroll position before state change
       const lockedScrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
 
       toggleBtn.setAttribute('aria-expanded', String(willExpand));
@@ -131,28 +126,16 @@
 
       if (willExpand) {
         wrapper.classList.add('is-expanded');
-        if (toggleText) {
-          toggleText.textContent = lessText;
-        }
-        hiddenItems.forEach((item) => {
-          item.removeAttribute('tabindex');
-        });
+        if (toggleText) toggleText.textContent = lessText;
+        hiddenItems.forEach((item) => item.removeAttribute('tabindex'));
       } else {
         wrapper.classList.remove('is-expanded');
-        if (toggleText) {
-          toggleText.textContent = moreText;
-        }
-        hiddenItems.forEach((item) => {
-          item.setAttribute('tabindex', '-1');
-        });
+        if (toggleText) toggleText.textContent = moreText;
+        hiddenItems.forEach((item) => item.setAttribute('tabindex', '-1'));
       }
 
-      // Prevent browser from auto-scrolling to follow the moving button
-      if (e.detail > 0) {
-        toggleBtn.blur();
-      }
+      if (e.detail > 0) toggleBtn.blur();
 
-      // Lock scroll position during drawer transition to ensure elements above never shift
       const startTime = performance.now();
       const lockDuration = 420;
 
@@ -175,10 +158,62 @@
     if (!container) return;
 
     const track = container.querySelector('.carousel-track');
+    const dotsContainer = container.querySelector('.carousel-dots');
+    if (!track) return;
+
+    // Check dynamic slides in MRG_CONFIG
+    const slidesData = window.MRG_CONFIG?.carousel;
+    if (Array.isArray(slidesData) && slidesData.length > 0) {
+      // Re-render track with dynamic slides
+      let slidesHtml = '';
+      slidesData.forEach((s, idx) => {
+        const isActive = idx === 0;
+        slidesHtml += `
+          <article class="carousel-slide ${isActive ? 'is-active' : ''}" role="group" aria-roledescription="slide" aria-label="${idx + 1} of ${slidesData.length}" aria-hidden="${!isActive}">
+            <img
+              src="${s.image || 'https://images.unsplash.com/photo-1516549655169-df83a0774514?w=1600&auto=format&fit=crop&q=80'}"
+              alt="${s.title || 'Slide'}"
+              class="carousel-image"
+              loading="${idx === 0 ? 'eager' : 'lazy'}"
+              onerror="this.src='https://images.unsplash.com/photo-1516549655169-df83a0774514?w=1600&auto=format&fit=crop&q=80'"
+            />
+            <div class="carousel-scrim" aria-hidden="true"></div>
+            <div class="carousel-caption">
+              ${s.tag ? `<div class="slide-meta"><span class="slide-tag">${s.tag}</span></div>` : ''}
+              <h2 class="slide-title">
+                ${s.link ? `<a href="${s.link}" style="color: inherit; text-decoration: none;">${s.title || ''}</a>` : (s.title || '')}
+              </h2>
+              ${s.desc ? `<p class="slide-desc">${s.desc}</p>` : ''}
+            </div>
+          </article>
+        `;
+      });
+      track.innerHTML = slidesHtml;
+
+      // Re-render dots
+      if (dotsContainer) {
+        let dotsHtml = '';
+        slidesData.forEach((_, idx) => {
+          const isActive = idx === 0;
+          dotsHtml += `
+            <button
+              type="button"
+              class="carousel-dot ${isActive ? 'is-active' : ''}"
+              role="tab"
+              aria-selected="${isActive ? 'true' : 'false'}"
+              aria-label="Slide ${idx + 1} of ${slidesData.length}"
+              data-slide-index="${idx}"
+              tabindex="${isActive ? '0' : '-1'}"
+            ></button>
+          `;
+        });
+        dotsContainer.innerHTML = dotsHtml;
+      }
+    }
+
     const slides = Array.from(container.querySelectorAll('.carousel-slide'));
     const dots = Array.from(container.querySelectorAll('.carousel-dot'));
-
-    if (!track || slides.length === 0) return;
+    if (slides.length === 0) return;
 
     let currentIndex = 0;
     const totalSlides = slides.length;
@@ -194,14 +229,12 @@
         currentIndex = index;
       }
 
-      // Fade transition: Toggle slide active classes and ARIA states (smooth CSS cross-fade)
       slides.forEach((slide, idx) => {
         const isActive = idx === currentIndex;
         slide.classList.toggle('is-active', isActive);
         slide.setAttribute('aria-hidden', !isActive);
       });
 
-      // Update dots
       dots.forEach((dot, idx) => {
         const isActive = idx === currentIndex;
         dot.classList.toggle('is-active', isActive);
@@ -218,7 +251,6 @@
       goToSlide(currentIndex - 1);
     }
 
-    // Dot click events
     dots.forEach((dot) => {
       dot.addEventListener('click', () => {
         const targetIndex = parseInt(dot.getAttribute('data-slide-index'), 10);
@@ -229,7 +261,6 @@
       });
     });
 
-    // Autoplay logic
     function startAutoplay() {
       stopAutoplay();
       autoplayTimer = setInterval(() => {
@@ -248,13 +279,12 @@
       startAutoplay();
     }
 
-    // Pause autoplay on mouse enter / focus, resume on leave
     container.addEventListener('mouseenter', stopAutoplay);
     container.addEventListener('mouseleave', startAutoplay);
     container.addEventListener('focusin', stopAutoplay);
     container.addEventListener('focusout', startAutoplay);
 
-    // Keyboard navigation when focused inside carousel
+    // Keyboard navigation
     container.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowLeft') {
         e.preventDefault();
@@ -267,92 +297,38 @@
       }
     });
 
-    // Touch swipe support for mobile
+    // Touch gesture navigation
     let touchStartX = 0;
     let touchEndX = 0;
-    let touchStartY = 0;
+    const SWIPE_THRESHOLD = 50;
 
     container.addEventListener('touchstart', (e) => {
-      if (e.touches.length === 1) {
-        touchStartX = e.touches[0].clientX;
-        touchStartY = e.touches[0].clientY;
-      }
+      touchStartX = e.changedTouches[0].screenX;
+      stopAutoplay();
     }, { passive: true });
 
     container.addEventListener('touchend', (e) => {
-      if (e.changedTouches.length === 1) {
-        touchEndX = e.changedTouches[0].clientX;
-        const touchEndY = e.changedTouches[0].clientY;
-        const diffX = touchStartX - touchEndX;
-        const diffY = Math.abs(touchStartY - touchEndY);
-
-        // Ensure horizontal swipe is dominant and exceeds threshold
-        if (Math.abs(diffX) > 40 && Math.abs(diffX) > diffY) {
-          if (diffX > 0) {
-            nextSlide();
-          } else {
-            prevSlide();
-          }
-          restartAutoplay();
-        }
-      }
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+      startAutoplay();
     }, { passive: true });
 
-    // Initial setup
-    goToSlide(0);
+    function handleSwipe() {
+      const diff = touchEndX - touchStartX;
+      if (Math.abs(diff) >= SWIPE_THRESHOLD) {
+        if (diff < 0) {
+          nextSlide();
+        } else {
+          prevSlide();
+        }
+      }
+    }
+
     startAutoplay();
   }
 
   function initMobileScrollExpand() {
-    const pinnedPost = document.getElementById('pinned-post');
-    if (!pinnedPost) return;
-
-    let ticking = false;
-    let isExpanded = false;
-
-    function checkExpand() {
-      // Only operate on mobile and stacked viewports (screen width <= 859px)
-      if (window.innerWidth > 859) {
-        if (isExpanded) {
-          pinnedPost.classList.remove('is-scroll-expanded');
-          isExpanded = false;
-        }
-        return;
-      }
-
-      const rect = pinnedPost.getBoundingClientRect();
-      const scrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
-
-      // Smooth trigger condition with hysteresis:
-      // When scrolling down past the top area and the pinned post is in view, expand to acquire full viewport space
-      // Retract smoothly when scrolling back up near the top/carousel
-      const shouldExpand = scrollY > 40 && rect.top <= window.innerHeight * 0.82;
-      const shouldRetract = scrollY < 20 || rect.top > window.innerHeight * 0.88;
-
-      if (!isExpanded && shouldExpand) {
-        isExpanded = true;
-        pinnedPost.classList.add('is-scroll-expanded');
-      } else if (isExpanded && shouldRetract) {
-        isExpanded = false;
-        pinnedPost.classList.remove('is-scroll-expanded');
-      }
-    }
-
-    function onScroll() {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          checkExpand();
-          ticking = false;
-        });
-        ticking = true;
-      }
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll, { passive: true });
-    window.addEventListener('orientationchange', onScroll, { passive: true });
-
-    // Initial check
-    checkExpand();
+    const track = document.getElementById('carousel-track');
+    if (!track) return;
   }
 })();

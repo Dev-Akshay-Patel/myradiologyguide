@@ -3,6 +3,7 @@
    ========================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700;800&display=swap');
+@import '../assets/css/icons.css';
 
 /* Plus Jakarta Sans font is loaded with preconnect in index.html to eliminate CLS */
 
@@ -1569,50 +1570,237 @@ blockquote p + p {
 }
 
 /* --------------------------------------------------------------------------
-   Global Floating Toast Notification
+   Modern Minimalist Themed Toast Notification System
    -------------------------------------------------------------------------- */
-.mrg-toast {
+:root {
+  --Mainbg: var(--color-bg-surface, #ffffff);
+  --color: var(--color-text-primary, #191816);
+  --border: 1px solid var(--color-border, #e2e2e5);
+}
+
+[data-theme="dark"],
+[data-theme="extra-dark"] {
+  --Mainbg: var(--color-bg-surface, #18181b);
+  --color: var(--color-text-primary, #f4f4f5);
+  --border: 1px solid var(--color-border, #27272a);
+}
+
+#toast-container,
+.mrg-toast-container {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 999999;
-  background-color: var(--color-bg-surface);
-  color: var(--color-text-primary);
-  border: 1px solid var(--color-border);
-  padding: 12px 18px;
-  border-radius: 10px;
-  font-size: 13.5px;
-  font-weight: 500;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15), 0 2px 6px rgba(0, 0, 0, 0.08);
-  opacity: 0;
-  transform: translateY(16px) scale(0.96);
+  right: 20px;
+  bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 99999;
   pointer-events: none;
-  transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.toast,
+.mrg-toast {
+  min-width: 280px;
+  max-width: 360px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: var(--Mainbg);
+  color: var(--color);
+  font: 500 14px/1.5 "Outfit", var(--font-family-base, sans-serif);
   display: flex;
   align-items: center;
-  gap: 10px;
-  max-width: calc(100vw - 48px);
-}
-
-.mrg-toast.is-visible {
-  opacity: 1;
-  transform: translateY(0) scale(1);
+  gap: 12px;
+  border: var(--border);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   pointer-events: auto;
+  animation: toastIn 0.25s ease;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 10px -2px rgba(0, 0, 0, 0.04);
+  box-sizing: border-box;
 }
 
-.mrg-toast-success {
-  border-left: 3.5px solid #10b981;
+.toast i,
+.toast svg.toast-icon,
+.mrg-toast i,
+.mrg-toast svg.toast-icon {
+  font-size: 18px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
-.mrg-toast-info {
-  border-left: 3.5px solid var(--accent-color);
+.toast.success i,
+.toast.success svg.toast-icon,
+.toast.tick i,
+.toast.tick svg.toast-icon,
+.mrg-toast.success i,
+.mrg-toast.mrg-toast-success svg {
+  color: #22c55e;
 }
 
-.mrg-toast-warning {
-  border-left: 3.5px solid #f59e0b;
+.toast.error i,
+.toast.error svg.toast-icon,
+.toast.cross i,
+.toast.cross svg.toast-icon,
+.mrg-toast.error i,
+.mrg-toast.mrg-toast-error svg {
+  color: #ef4444;
 }
 
-.mrg-toast-error {
-  border-left: 3.5px solid #ef4444;
+.toast.info i,
+.toast.info svg.toast-icon,
+.mrg-toast.info i,
+.mrg-toast.mrg-toast-info svg {
+  color: #3b82f6;
+}
+
+.toast.warning i,
+.toast.warning svg.toast-icon,
+.toast.warn i,
+.toast.warn svg.toast-icon,
+.mrg-toast.warning i,
+.mrg-toast.mrg-toast-warning svg {
+  color: #f59e0b;
+}
+
+.toast.question i,
+.toast.question svg.toast-icon,
+.toast.help i,
+.toast.help svg.toast-icon {
+  color: #8b5cf6;
+}
+
+.toast.delete i,
+.toast.delete svg.toast-icon,
+.toast.trash i,
+.toast.trash svg.toast-icon {
+  color: #ef4444;
+}
+
+.toast.wifi i,
+.toast.wifi svg.toast-icon,
+.toast.online i,
+.toast.online svg.toast-icon,
+.toast.network i,
+.toast.network svg.toast-icon {
+  color: #22c55e;
+}
+
+.toast.offline i,
+.toast.offline svg.toast-icon,
+.toast.nowifi i,
+.toast.nowifi svg.toast-icon,
+.toast.no-network i,
+.toast.no-network svg.toast-icon,
+.toast.wifi-off i,
+.toast.wifi-off svg.toast-icon {
+  color: #ef4444;
+}
+
+.toast.loading i,
+.toast.loading svg,
+.mrg-toast.loading i,
+.mrg-toast.loading svg {
+  color: var(--accent-color, #18181b);
+}
+
+.toast.hide,
+.mrg-toast.hide {
+  animation: toastOut 0.2s ease forwards;
+}
+
+/* Default animations - slide from bottom */
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes toastOut {
+  to {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+/* Mobile styles - centered at top, slide from top */
+@media (max-width: 768px) {
+  #toast-container,
+  .mrg-toast-container {
+    top: 70px;
+    bottom: auto;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%); /* Center horizontally */
+    width: 90%; /* Takes 90% of screen width */
+    max-width: 400px; /* Optional max width */
+  }
+
+  .toast,
+  .mrg-toast {
+    max-width: none;
+    min-width: 0;
+    width: 100%; /* Full width of container */
+    animation: toastInMobile 0.3s ease;
+  }
+
+  .toast.hide,
+  .mrg-toast.hide {
+    animation: toastOutMobile 0.2s ease forwards;
+  }
+}
+
+/* Mobile slide in from top */
+@keyframes toastInMobile {
+  from {
+    opacity: 0;
+    transform: translateY(-100%); /* Start from above screen */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile slide out to top */
+@keyframes toastOutMobile {
+  to {
+    opacity: 0;
+    transform: translateY(-100%); /* Exit to top */
+  }
+}
+
+.toast-loader {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  overflow: visible;
+  transform-origin: center;
+  animation: toastLoaderRotate 0.8s linear infinite;
+}
+
+.toast-loader-track {
+  stroke: currentColor;
+  opacity: 0.15;
+}
+
+.toast-loader-car {
+  stroke: currentColor;
+  stroke-dasharray: 25 75;
+  stroke-dashoffset: 0;
+  stroke-linecap: round;
+}
+
+@keyframes toastLoaderRotate {
+  to {
+    transform: rotate(360deg);
+  }
 }
 

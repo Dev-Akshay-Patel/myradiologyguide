@@ -351,7 +351,7 @@
       });
     }
 
-    // Cross-tab and admin storage updates
+    // Cross-tab storage updates
     window.addEventListener('storage', (e) => {
       if (e.key === STORAGE_KEY && e.newValue) {
         try {

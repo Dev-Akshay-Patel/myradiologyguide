@@ -1,0 +1,173 @@
+/* ==========================================================================
+   PRISM JS SYNTAX HIGHLIGHTING THEME (Local Self-Hosted)
+   Adapts cleanly to Light, Dark, Extra-Dark and Theme Palettes
+   ========================================================================== */
+
+code[class*="language-"],
+pre[class*="language-"] {
+  color: var(--color-text-primary, #24292f);
+  background: transparent;
+  font-family: var(--font-family-mono, 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace);
+  font-size: 14px;
+  line-height: 1.65;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  tab-size: 2;
+  hyphens: none;
+}
+
+/* Tokens */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #6e7781;
+  font-style: italic;
+}
+
+.token.punctuation {
+  color: var(--color-text-secondary, #57606a);
+}
+
+.token.namespace {
+  opacity: 0.7;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: #0550ae;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+  color: #0a3069;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+  color: #cf222e;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  color: #cf222e;
+  font-weight: 600;
+}
+
+.token.function,
+.token.class-name {
+  color: #8250df;
+  font-weight: 600;
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+  color: #953800;
+}
+
+.token.important,
+.token.bold {
+  font-weight: bold;
+}
+
+.token.italic {
+  font-style: italic;
+}
+
+.token.entity {
+  cursor: help;
+}
+
+/* Dark Theme Syntax Colors */
+[data-theme="dark"] code[class*="language-"],
+[data-theme="dark"] pre[class*="language-"],
+[data-theme="extra-dark"] code[class*="language-"],
+[data-theme="extra-dark"] pre[class*="language-"] {
+  color: #c9d1d9;
+}
+
+[data-theme="dark"] .token.comment,
+[data-theme="dark"] .token.prolog,
+[data-theme="dark"] .token.doctype,
+[data-theme="dark"] .token.cdata,
+[data-theme="extra-dark"] .token.comment,
+[data-theme="extra-dark"] .token.prolog,
+[data-theme="extra-dark"] .token.doctype,
+[data-theme="extra-dark"] .token.cdata {
+  color: #8b949e;
+}
+
+[data-theme="dark"] .token.punctuation,
+[data-theme="extra-dark"] .token.punctuation {
+  color: #8b949e;
+}
+
+[data-theme="dark"] .token.property,
+[data-theme="dark"] .token.tag,
+[data-theme="dark"] .token.boolean,
+[data-theme="dark"] .token.number,
+[data-theme="dark"] .token.constant,
+[data-theme="dark"] .token.symbol,
+[data-theme="dark"] .token.deleted,
+[data-theme="extra-dark"] .token.property,
+[data-theme="extra-dark"] .token.tag,
+[data-theme="extra-dark"] .token.boolean,
+[data-theme="extra-dark"] .token.number,
+[data-theme="extra-dark"] .token.constant,
+[data-theme="extra-dark"] .token.symbol,
+[data-theme="extra-dark"] .token.deleted {
+  color: #79c0ff;
+}
+
+[data-theme="dark"] .token.string,
+[data-theme="dark"] .token.char,
+[data-theme="dark"] .token.attr-value,
+[data-theme="extra-dark"] .token.string,
+[data-theme="extra-dark"] .token.char,
+[data-theme="extra-dark"] .token.attr-value {
+  color: #a5d6ff;
+}
+
+[data-theme="dark"] .token.operator,
+[data-theme="dark"] .token.entity,
+[data-theme="dark"] .token.url,
+[data-theme="dark"] .token.keyword,
+[data-theme="extra-dark"] .token.operator,
+[data-theme="extra-dark"] .token.entity,
+[data-theme="extra-dark"] .token.url,
+[data-theme="extra-dark"] .token.keyword {
+  color: #ff7b72;
+}
+
+[data-theme="dark"] .token.function,
+[data-theme="dark"] .token.class-name,
+[data-theme="extra-dark"] .token.function,
+[data-theme="extra-dark"] .token.class-name {
+  color: #d2a8ff;
+}
+
+[data-theme="dark"] .token.regex,
+[data-theme="dark"] .token.important,
+[data-theme="dark"] .token.variable,
+[data-theme="extra-dark"] .token.regex,
+[data-theme="extra-dark"] .token.important,
+[data-theme="extra-dark"] .token.variable {
+  color: #ffa657;
+}

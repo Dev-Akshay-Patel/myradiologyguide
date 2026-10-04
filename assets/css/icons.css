@@ -1,0 +1,132 @@
+/* ==========================================================================
+   CENTRALIZED SVG ICON SPRITE STYLES (icons.css)
+   Clean, accessible, light/dark theme adaptive, scalable vector icons
+   ========================================================================== */
+
+/* Base Icon Class */
+.icon {
+  display: inline-block;
+  width: 1.25rem; /* Default 20px */
+  height: 1.25rem;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+  flex-shrink: 0;
+  vertical-align: -0.125em;
+  pointer-events: none;
+  line-height: 1;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+/* Sizing Utilities */
+.icon-2xs {
+  width: 0.625rem; /* 10px */
+  height: 0.625rem;
+}
+
+.icon-xs {
+  width: 0.75rem; /* 12px */
+  height: 0.75rem;
+}
+
+.icon-sm {
+  width: 0.875rem; /* 14px */
+  height: 0.875rem;
+}
+
+.icon-md {
+  width: 1.125rem; /* 18px */
+  height: 1.125rem;
+}
+
+.icon-base {
+  width: 1.25rem; /* 20px */
+  height: 1.25rem;
+}
+
+.icon-lg {
+  width: 1.5rem; /* 24px */
+  height: 1.5rem;
+}
+
+.icon-xl {
+  width: 1.75rem; /* 28px */
+  height: 1.75rem;
+}
+
+.icon-2xl {
+  width: 2rem; /* 32px */
+  height: 2rem;
+}
+
+.icon-3xl {
+  width: 2.5rem; /* 40px */
+  height: 2.5rem;
+}
+
+/* Theme & Semantic Color Modifiers */
+.icon-inherit {
+  color: inherit;
+}
+
+.icon-primary {
+  color: var(--color-text-primary, #191816);
+}
+
+.icon-secondary {
+  color: var(--color-text-secondary, #52525b);
+}
+
+.icon-muted,
+.icon-tertiary {
+  color: var(--color-text-tertiary, #71717a);
+}
+
+.icon-accent {
+  color: var(--accent-color, #18181b);
+}
+
+.icon-success {
+  color: #22c55e;
+}
+
+.icon-error,
+.icon-danger {
+  color: #ef4444;
+}
+
+.icon-warning {
+  color: #f59e0b;
+}
+
+.icon-info {
+  color: #3b82f6;
+}
+
+/* Animation Utilities */
+.icon-spin {
+  animation: icon-spin-animation 1s linear infinite;
+  transform-origin: center;
+}
+
+.icon-pulse {
+  animation: icon-pulse-animation 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes icon-spin-animation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes icon-pulse-animation {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
