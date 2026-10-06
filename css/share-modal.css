@@ -345,20 +345,16 @@
   border-radius: 10px;
   background-color: var(--color-bg-body);
   border: 1px solid var(--color-border);
-  transition: border-color var(--transition-fast);
+  box-shadow: none !important;
+  outline: none !important;
 }
 
+.share-copy-box:focus,
 .share-copy-box:focus-within,
-.share-copy-box:focus {
+.share-copy-box:focus-visible {
   outline: none !important;
   box-shadow: none !important;
-}
-
-.share-url-input:focus,
-.share-url-input:focus-visible {
-  outline: none !important;
-  border: none !important;
-  box-shadow: none !important;
+  border-color: var(--color-border) !important;
 }
 
 .share-link-icon {
@@ -385,8 +381,12 @@
   flex: 1 1 auto;
   min-width: 0;
   background: transparent;
-  border: none;
-  outline: none;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
   font-family: var(--font-family-mono, monospace);
   font-size: 13.5px;
   color: var(--color-text-primary);
@@ -394,6 +394,17 @@
   white-space: nowrap;
   overflow: hidden;
   padding: 6px 0;
+}
+
+.share-url-input:focus,
+.share-url-input:focus-within,
+.share-url-input:focus-visible,
+.share-url-input:active {
+  outline: none !important;
+  outline-offset: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
 }
 
 /* Big icon-only copy button with clear visibility in both light & dark mode - ZERO box shadow */
@@ -472,11 +483,28 @@
   stroke: var(--accent-contrast, #121214) !important;
 }
 
-/* Copied state: Icon changes to tick, button maintains normal background (NO green) */
+/* Copied state: Icon changes to tick, button maintains normal background (NEVER green) */
 .share-copy-btn.is-copied,
-[data-theme="dark"] .share-copy-btn.is-copied,
-[data-theme="extra-dark"] .share-copy-btn.is-copied {
+.share-copy-btn.is-copied:hover,
+.share-copy-btn.is-copied:active {
+  background-color: var(--accent-color, #18181b) !important;
+  color: var(--accent-contrast, #ffffff) !important;
+  border: none !important;
   box-shadow: none !important;
+  transform: none !important;
+}
+
+[data-theme="dark"] .share-copy-btn.is-copied,
+[data-theme="dark"] .share-copy-btn.is-copied:hover,
+[data-theme="dark"] .share-copy-btn.is-copied:active,
+[data-theme="extra-dark"] .share-copy-btn.is-copied,
+[data-theme="extra-dark"] .share-copy-btn.is-copied:hover,
+[data-theme="extra-dark"] .share-copy-btn.is-copied:active {
+  background-color: var(--accent-color, #f4f4f5) !important;
+  color: var(--accent-contrast, #121214) !important;
+  border: none !important;
+  box-shadow: none !important;
+  transform: none !important;
 }
 
 .share-copy-btn.is-copied svg path {

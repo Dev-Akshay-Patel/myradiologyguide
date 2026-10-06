@@ -127,6 +127,21 @@ const ICONS = {
       <circle class="toast-loader-track" cx="20" cy="20" r="17.5" pathLength="100" stroke-width="5" fill="none"></circle>
       <circle class="toast-loader-car" cx="20" cy="20" r="17.5" pathLength="100" stroke-width="5" fill="none"></circle>
     </svg>
+  `,
+
+  // Copy (Neutral confirmation without green)
+  copy: `
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="toast-icon" aria-hidden="true">
+      <g clip-path="url(#clip0_toast_tick)">
+        <path d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M7.75 11.9999L10.58 14.8299L16.25 9.16992" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+      </g>
+      <defs>
+        <clipPath id="clip0_toast_tick">
+          <rect width="24" height="24" fill="white"/>
+        </clipPath>
+      </defs>
+    </svg>
   `
 };
 
@@ -143,9 +158,199 @@ ICONS.help = ICONS.question;
 ICONS.trash = ICONS.delete;
 
 /**
+ * Modern tactile swipe-to-close with elastic rubber band resistance.
+ * - PC: User can only swipe RIGHT to dismiss. Swiping LEFT creates an elastic rubber band effect and snaps back.
+ * - Mobile: User can swipe UP, LEFT, and RIGHT to dismiss. Swiping DOWN creates an elastic rubber band effect and snaps back.
+ */
+function setupSwipeGestures(toast, onDismiss, onPauseTimer, onResumeTimer) {
+  let isDragging = false;
+  let startX = 0;
+  let startY = 0;
+  let currentDeltaX = 0;
+  let currentDeltaY = 0;
+  let activePointerId = null;
+
+  // Elastic damper calculation (asymptotic soft resistance towards maxStretch)
+  function calculateElastic(delta, maxStretch = 34) {
+    const sign = delta < 0 ? -1 : 1;
+    const abs = Math.abs(delta);
+    const stretch = maxStretch * (1 - Math.exp(-abs / (maxStretch * 2.2)));
+    return sign * stretch;
+  }
+
+  function handlePointerDown(e) {
+    if (e.button !== 0 && e.pointerType === 'mouse') return;
+    isDragging = true;
+    activePointerId = e.pointerId;
+    startX = e.clientX;
+    startY = e.clientY;
+    currentDeltaX = 0;
+    currentDeltaY = 0;
+
+    toast.classList.add("is-swiping");
+    toast.style.transition = "none";
+    if (toast.setPointerCapture) {
+      try {
+        toast.setPointerCapture(e.pointerId);
+      } catch (err) {}
+    }
+
+    if (typeof onPauseTimer === 'function') onPauseTimer();
+  }
+
+  function handlePointerMove(e) {
+    if (!isDragging || e.pointerId !== activePointerId) return;
+
+    const rawDeltaX = e.clientX - startX;
+    const rawDeltaY = e.clientY - startY;
+    const isMobile = window.innerWidth <= 768 || e.pointerType === 'touch';
+
+    let displayX = 0;
+    let displayY = 0;
+    let opacity = 1;
+
+    if (!isMobile) {
+      // -------------------------------------------------------------
+      // PC / Desktop: User can ONLY swipe RIGHT to close.
+      // Left swipe triggers an elastic rubber band effect and never dismisses.
+      // -------------------------------------------------------------
+      if (rawDeltaX > 0) {
+        displayX = rawDeltaX;
+        opacity = Math.max(0.2, 1 - (rawDeltaX / 300));
+      } else {
+        displayX = calculateElastic(rawDeltaX, 35);
+        opacity = 1;
+      }
+      displayY = 0;
+    } else {
+      // -------------------------------------------------------------
+      // Mobile: User can swipe UP, LEFT, and RIGHT to close.
+      // DOWN swipe triggers an elastic rubber band effect and never dismisses.
+      // -------------------------------------------------------------
+      const absX = Math.abs(rawDeltaX);
+      const absY = Math.abs(rawDeltaY);
+
+      if (absX >= absY) {
+        // Horizontal swipe (LEFT or RIGHT) - both dismiss on mobile
+        displayX = rawDeltaX;
+        opacity = Math.max(0.2, 1 - (absX / 280));
+        displayY = rawDeltaY < 0 ? rawDeltaY * 0.2 : calculateElastic(rawDeltaY, 14);
+      } else {
+        // Vertical swipe
+        displayX = rawDeltaX * 0.25;
+        if (rawDeltaY < 0) {
+          // Swiping UP (dismissible)
+          displayY = rawDeltaY;
+          opacity = Math.max(0.2, 1 - (absY / 220));
+        } else {
+          // Swiping DOWN (elastic rubber band effect)
+          displayY = calculateElastic(rawDeltaY, 35);
+          opacity = 1;
+        }
+      }
+    }
+
+    currentDeltaX = rawDeltaX;
+    currentDeltaY = rawDeltaY;
+
+    toast.style.transform = `translate3d(${displayX.toFixed(1)}px, ${displayY.toFixed(1)}px, 0)`;
+    toast.style.opacity = opacity.toFixed(2);
+  }
+
+  function handlePointerUp(e) {
+    if (!isDragging || e.pointerId !== activePointerId) return;
+    isDragging = false;
+    activePointerId = null;
+    toast.classList.remove("is-swiping");
+
+    if (toast.releasePointerCapture) {
+      try {
+        toast.releasePointerCapture(e.pointerId);
+      } catch (err) {}
+    }
+
+    const isMobile = window.innerWidth <= 768 || e.pointerType === 'touch';
+    const THRESHOLD_X = isMobile ? 65 : 75;
+    const THRESHOLD_Y = 55;
+
+    let shouldDismiss = false;
+    let dismissDirection = null;
+
+    if (!isMobile) {
+      // PC: ONLY dismiss if swiped RIGHT past threshold
+      if (currentDeltaX > THRESHOLD_X) {
+        shouldDismiss = true;
+        dismissDirection = "right";
+      }
+    } else {
+      // Mobile: Dismiss if swiped RIGHT, LEFT, or UP past threshold. NEVER down!
+      const absX = Math.abs(currentDeltaX);
+      const absY = Math.abs(currentDeltaY);
+
+      if (absX >= absY) {
+        if (currentDeltaX > THRESHOLD_X) {
+          shouldDismiss = true;
+          dismissDirection = "right";
+        } else if (currentDeltaX < -THRESHOLD_X) {
+          shouldDismiss = true;
+          dismissDirection = "left";
+        }
+      } else {
+        if (currentDeltaY < -THRESHOLD_Y) {
+          shouldDismiss = true;
+          dismissDirection = "up";
+        }
+      }
+    }
+
+    if (shouldDismiss && dismissDirection) {
+      toast.style.transition = "transform 0.22s cubic-bezier(0.2, 0, 0, 1), opacity 0.2s ease";
+      if (dismissDirection === "right") {
+        toast.style.transform = "translate3d(130%, 0, 0)";
+      } else if (dismissDirection === "left") {
+        toast.style.transform = "translate3d(-130%, 0, 0)";
+      } else if (dismissDirection === "up") {
+        toast.style.transform = "translate3d(0, -130%, 0)";
+      }
+      toast.style.opacity = "0";
+
+      setTimeout(() => {
+        if (typeof onDismiss === 'function') onDismiss();
+      }, 200);
+    } else {
+      // Elastic snap back with spring overshoot curve
+      toast.style.transition = "transform 0.36s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.24s ease";
+      toast.style.transform = "translate3d(0, 0, 0)";
+      toast.style.opacity = "1";
+
+      setTimeout(() => {
+        if (!isDragging) {
+          toast.style.transition = "";
+          toast.style.transform = "";
+          toast.style.opacity = "";
+        }
+      }, 380);
+
+      if (typeof onResumeTimer === 'function') onResumeTimer();
+    }
+  }
+
+  function handlePointerCancel(e) {
+    if (isDragging) {
+      handlePointerUp(e);
+    }
+  }
+
+  toast.addEventListener("pointerdown", handlePointerDown);
+  toast.addEventListener("pointermove", handlePointerMove);
+  toast.addEventListener("pointerup", handlePointerUp);
+  toast.addEventListener("pointercancel", handlePointerCancel);
+}
+
+/**
  * Global showToast function with deduplication and active stack management
  * @param {string} message - Message text
- * @param {string} [type="success"] - "success"|"tick"|"error"|"cross"|"warning"|"info"|"question"|"delete"|"wifi"|"no-network"|"loading"
+ * @param {string} [type="success"] - "success"|"tick"|"error"|"cross"|"warning"|"info"|"question"|"delete"|"wifi"|"no-network"|"loading"|"copy"
  * @param {number} [duration=8000] - Auto-dismiss delay in ms (0 for infinite)
  * @param {string} [id=`${type}:${message}`] - Unique key for deduplication
  */
@@ -212,7 +417,13 @@ function showToast(
 
   function dismiss(delay = duration) {
     clearTimeout(timer);
-    if (delay === 0) return;
+    if (delay === 0) {
+      activeToasts.delete(id);
+      if (toast.parentNode) {
+        toast.remove();
+      }
+      return;
+    }
 
     timer = setTimeout(() => {
       activeToasts.delete(id);
@@ -244,6 +455,26 @@ function showToast(
       dismiss(remaining);
     });
   }
+
+  // Setup modern swipe-to-close with elastic rubber band gestures
+  setupSwipeGestures(
+    toast,
+    () => {
+      // Swipe dismissed
+      dismiss(0);
+    },
+    () => {
+      // Pause timer while dragging
+      clearTimeout(timer);
+      const elapsed = Date.now() - startedAt;
+      remaining = Math.max(0, remaining - elapsed);
+    },
+    () => {
+      // Resume timer on release if not dismissed
+      startedAt = Date.now();
+      dismiss(remaining);
+    }
+  );
 
   const api = {
     element: toast,
@@ -299,7 +530,8 @@ const Toast = {
   online: (msg, dur, id) => showToast(msg, "online", dur, id),
   offline: (msg, dur, id) => showToast(msg, "offline", dur, id),
   noNetwork: (msg, dur, id) => showToast(msg, "no-network", dur, id),
-  loading: (msg, dur, id) => showToast(msg, "loading", dur, id)
+  loading: (msg, dur, id) => showToast(msg, "loading", dur, id),
+  copy: (msg, dur, id) => showToast(msg, "copy", dur, id)
 };
 
 // Global Attachments for Browser Environment

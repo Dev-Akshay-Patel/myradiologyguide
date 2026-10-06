@@ -1155,7 +1155,7 @@ input:-webkit-autofill:active {
 }
 
 
-/* Exclude search inputs and fields from any focus rings or focus borders */
+/* Exclude search inputs, fields, and share modal link input from any focus rings or focus borders */
 input[type="search"]:focus,
 input[type="search"]:focus-visible,
 .search-modal-input,
@@ -1164,9 +1164,20 @@ input[type="search"]:focus-visible,
 .search-modal-field,
 .search-modal-field:focus,
 .search-modal-field:focus-within,
-.search-modal-field:focus-visible {
+.search-modal-field:focus-visible,
+.share-copy-box,
+.share-copy-box:focus,
+.share-copy-box:focus-within,
+.share-copy-box:focus-visible,
+.share-url-input,
+.share-url-input:focus,
+.share-url-input:focus-within,
+.share-url-input:focus-visible,
+.share-url-input:active {
   outline: none !important;
+  outline-offset: 0 !important;
   box-shadow: none !important;
+  -webkit-box-shadow: none !important;
 }
 
 button {
@@ -1617,6 +1628,20 @@ blockquote p + p {
   animation: toastIn 0.25s ease;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 10px -2px rgba(0, 0, 0, 0.04);
   box-sizing: border-box;
+  touch-action: none; /* Crucial for swipe tracking without window scroll conflict */
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: grab;
+  position: relative;
+  will-change: transform, opacity;
+}
+
+.toast:active,
+.toast.is-swiping,
+.mrg-toast:active,
+.mrg-toast.is-swiping {
+  cursor: grabbing !important;
+  animation: none !important;
 }
 
 .toast i,
@@ -1630,6 +1655,13 @@ blockquote p + p {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+}
+
+.toast.copy i,
+.toast.copy svg.toast-icon,
+.mrg-toast.copy i,
+.mrg-toast.copy svg.toast-icon {
+  color: var(--color-text-primary);
 }
 
 .toast.success i,

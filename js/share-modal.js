@@ -274,7 +274,7 @@
           if (iconSpan) iconSpan.innerHTML = CHECK_SVG;
 
           if (window.RadiologyAuth && typeof window.RadiologyAuth.showToast === 'function') {
-            window.RadiologyAuth.showToast('Link copied to clipboard', 'success');
+            window.RadiologyAuth.showToast('Link copied to clipboard', 'copy');
           }
 
           setTimeout(() => {
