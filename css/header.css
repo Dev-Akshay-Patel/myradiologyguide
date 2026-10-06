@@ -1076,26 +1076,29 @@
               visibility 0.26s cubic-bezier(0.2, 0, 0, 1);
 }
 
-/* Bottom Sheet Grab Handle (Mobile only - Enriched Touch Area) */
+/* Bottom Sheet Grab Handle (Mobile only - Sleek, Refined, Unified) */
 .bottom-sheet-handle {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 28px;
-  margin: -4px auto 8px auto;
-  padding: 8px 0;
+  height: 20px;
+  margin: 0 auto 6px auto;
+  padding: 6px 0;
   cursor: grab;
   touch-action: none;
   -webkit-user-select: none;
   user-select: none;
+  background: transparent !important;
+  border: none !important;
+  flex-shrink: 0;
 }
 
 .bottom-sheet-handle::after {
   content: '';
-  width: 44px;
-  height: 4.5px;
-  border-radius: 3px;
+  width: 38px;
+  height: 3.5px;
+  border-radius: 9999px;
   background-color: var(--color-border);
   opacity: 0.85;
   transition: background-color var(--transition-fast), opacity var(--transition-fast);

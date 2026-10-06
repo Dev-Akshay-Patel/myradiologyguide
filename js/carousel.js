@@ -12,15 +12,14 @@
     initCarousel();
     initTopicsShowMore();
     initPinnedPostActions();
-    initMobileScrollExpand();
   });
 
   // Re-render when config changes from Admin
   window.addEventListener('mrgconfigchange', () => {
-    initCarousel();
+    initCarousel(true);
   });
   window.addEventListener('carouselconfigchange', () => {
-    initCarousel();
+    initCarousel(true);
   });
 
   function initPinnedPostActions() {
@@ -65,37 +64,15 @@
     }
 
     if (shareBtn) {
-      shareBtn.addEventListener('click', async () => {
-        const shareUrl = window.location.href.split('#')[0] + '#stroke-cta-protocol';
-        const shareData = {
-          title: 'Acute Ischemic Stroke: Multiphase CTA Collateral Atlas & ASPECTS Triage Protocol',
-          text: 'Check out this clinical reference protocol on RADPULSE.',
-          url: shareUrl,
-        };
-
-        let shared = false;
-        if (navigator.share) {
-          try {
-            await navigator.share(shareData);
-            shared = true;
-          } catch {
-            // User cancelled
-          }
-        }
-
-        if (!shared && navigator.clipboard) {
-          try {
-            await navigator.clipboard.writeText(shareUrl);
-            if (shareText) {
-              const prev = shareText.textContent;
-              shareText.textContent = 'Copied!';
-              setTimeout(() => {
-                shareText.textContent = prev || 'Share';
-              }, 2000);
-            }
-          } catch {
-            // Clipboard write failed
-          }
+      shareBtn.addEventListener('click', () => {
+        if (typeof window.openShareModal === 'function') {
+          const pinnedTitleEl = document.getElementById('pinned-title-link');
+          const pinnedDescEl = document.getElementById('pinned-post-desc');
+          const title = pinnedTitleEl ? pinnedTitleEl.textContent.trim() : 'Acute Ischemic Stroke: Multiphase CTA Collateral Atlas & ASPECTS Triage Protocol';
+          const description = pinnedDescEl ? pinnedDescEl.textContent.trim() : 'Comprehensive acute neurovascular imaging pathway covering rapid collateral grading, early ischemic core mapping, and standardized acute triage.';
+          const url = window.location.origin + '/post/?id=neuroradiology-stroke-cta';
+          const image = 'https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=600&q=80';
+          window.openShareModal({ title, description, url, image });
         }
       });
     }
@@ -153,7 +130,7 @@
     });
   }
 
-  function initCarousel() {
+  function initCarousel(forceReRender = false) {
     const container = document.getElementById('featured-carousel');
     if (!container) return;
 
@@ -161,53 +138,71 @@
     const dotsContainer = container.querySelector('.carousel-dots');
     if (!track) return;
 
-    // Check dynamic slides in MRG_CONFIG
-    const slidesData = window.MRG_CONFIG?.carousel;
-    if (Array.isArray(slidesData) && slidesData.length > 0) {
-      // Re-render track with dynamic slides
-      let slidesHtml = '';
-      slidesData.forEach((s, idx) => {
-        const isActive = idx === 0;
-        slidesHtml += `
-          <article class="carousel-slide ${isActive ? 'is-active' : ''}" role="group" aria-roledescription="slide" aria-label="${idx + 1} of ${slidesData.length}" aria-hidden="${!isActive}">
-            <img
-              src="${s.image || 'https://images.unsplash.com/photo-1516549655169-df83a0774514?w=1600&auto=format&fit=crop&q=80'}"
-              alt="${s.title || 'Slide'}"
-              class="carousel-image"
-              loading="${idx === 0 ? 'eager' : 'lazy'}"
-              onerror="this.src='https://images.unsplash.com/photo-1516549655169-df83a0774514?w=1600&auto=format&fit=crop&q=80'"
-            />
-            <div class="carousel-scrim" aria-hidden="true"></div>
-            <div class="carousel-caption">
-              ${s.tag ? `<div class="slide-meta"><span class="slide-tag">${s.tag}</span></div>` : ''}
-              <h2 class="slide-title">
-                ${s.link ? `<a href="${s.link}" style="color: inherit; text-decoration: none;">${s.title || ''}</a>` : (s.title || '')}
-              </h2>
-              ${s.desc ? `<p class="slide-desc">${s.desc}</p>` : ''}
-            </div>
-          </article>
-        `;
-      });
-      track.innerHTML = slidesHtml;
+    const existingSlides = track.querySelectorAll('.carousel-slide');
 
-      // Re-render dots
-      if (dotsContainer) {
-        let dotsHtml = '';
-        slidesData.forEach((_, idx) => {
+    // Check dynamic slides in MRG_CONFIG only if forceReRender is true or if track is empty
+    const slidesData = window.MRG_CONFIG?.carousel;
+    if (forceReRender || existingSlides.length === 0) {
+      if (Array.isArray(slidesData) && slidesData.length > 0) {
+        // Re-render track with dynamic slides maintaining full rich markup
+        let slidesHtml = '';
+        slidesData.forEach((s, idx) => {
           const isActive = idx === 0;
-          dotsHtml += `
-            <button
-              type="button"
-              class="carousel-dot ${isActive ? 'is-active' : ''}"
-              role="tab"
-              aria-selected="${isActive ? 'true' : 'false'}"
-              aria-label="Slide ${idx + 1} of ${slidesData.length}"
-              data-slide-index="${idx}"
-              tabindex="${isActive ? '0' : '-1'}"
-            ></button>
+          const rawTags = Array.isArray(s.tags) ? s.tags : (s.tag ? [s.tag] : ['Clinical Reference']);
+          const tagsHtml = rawTags.map(tag => `
+            <span class="slide-tag">
+              <svg class="slide-tag-hash-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M10 3L8 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M16 3L14 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M3.5 9H21.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M2.5 15H20.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>${tag}
+            </span>
+          `).join('');
+
+          slidesHtml += `
+            <article class="carousel-slide ${isActive ? 'is-active' : ''}" role="group" aria-roledescription="slide" aria-label="${idx + 1} of ${slidesData.length}" aria-hidden="${!isActive}">
+              <img
+                src="${s.image || 'https://images.unsplash.com/photo-1516549655169-df83a0774514?w=1600&auto=format&fit=crop&q=80'}"
+                alt="${s.title || 'Slide'}"
+                class="carousel-slide-img"
+                loading="${idx === 0 ? 'eager' : 'lazy'}"
+                referrerpolicy="no-referrer"
+                onerror="this.src='https://images.unsplash.com/photo-1516549655169-df83a0774514?w=1600&auto=format&fit=crop&q=80'"
+              />
+              <div class="carousel-overlay">
+                <div class="slide-tags">
+                  ${tagsHtml}
+                </div>
+                <h2 class="slide-title">
+                  ${s.link ? `<a href="${s.link}" style="color: inherit; text-decoration: none;">${s.title || ''}</a>` : (s.title || '')}
+                </h2>
+                ${s.desc ? `<p class="slide-desc">${s.desc}</p>` : ''}
+              </div>
+            </article>
           `;
         });
-        dotsContainer.innerHTML = dotsHtml;
+        track.innerHTML = slidesHtml;
+
+        // Re-render dots
+        if (dotsContainer) {
+          let dotsHtml = '';
+          slidesData.forEach((s, idx) => {
+            const isActive = idx === 0;
+            dotsHtml += `
+              <button
+                type="button"
+                class="carousel-dot ${isActive ? 'is-active' : ''}"
+                role="tab"
+                aria-selected="${isActive ? 'true' : 'false'}"
+                aria-label="Slide ${idx + 1} of ${slidesData.length}: ${s.title || ''}"
+                data-slide-index="${idx}"
+                tabindex="${isActive ? '0' : '-1'}"
+              ></button>
+            `;
+          });
+          dotsContainer.innerHTML = dotsHtml;
+        }
       }
     }
 
@@ -325,10 +320,5 @@
     }
 
     startAutoplay();
-  }
-
-  function initMobileScrollExpand() {
-    const track = document.getElementById('carousel-track');
-    if (!track) return;
   }
 })();

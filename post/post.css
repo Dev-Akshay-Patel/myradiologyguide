@@ -1657,14 +1657,15 @@
   border-left: none;
   border-right: none;
   border-bottom: none;
-  border-radius: 18px 18px 0 0;
-  box-shadow: 0 -12px 36px rgba(0, 0, 0, 0.25);
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.22);
   transform: translate3d(0, 100%, 0);
   transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform;
   touch-action: pan-y;
   position: relative;
   overflow: hidden;
+  padding-top: 4px;
 }
 
 .comments-modal-overlay.is-active .comments-modal {
@@ -1678,7 +1679,8 @@
     padding: 24px 16px;
   }
 
-  .comments-sheet-handle {
+  .comments-sheet-handle,
+  .bottom-sheet-handle {
     display: none !important;
   }
 
@@ -1688,12 +1690,13 @@
     height: 75vh;
     max-height: 700px;
     border: 1px solid var(--modal-border, var(--color-border));
-    border-radius: 16px;
+    border-radius: 12px;
     box-shadow: 0 24px 50px -12px rgba(0, 0, 0, 0.32), 0 0 0 1px rgba(255, 255, 255, 0.05);
     transform: translate3d(0, 14px, 0) scale(0.96);
     opacity: 0;
     transition: transform 0.26s cubic-bezier(0.16, 1, 0.3, 1),
                 opacity 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+    padding-top: 0;
   }
 
   .comments-modal-overlay.is-active .comments-modal {
@@ -1708,7 +1711,7 @@
     max-width: 740px;
     height: 78vh;
     max-height: 760px;
-    border-radius: 18px;
+    border-radius: 12px;
   }
 }
 
@@ -1720,17 +1723,40 @@
   }
 }
 
-/* Grab handle for bottom sheet */
-.comments-sheet-handle {
-  display: block;
-  width: 38px;
-  height: 4px;
-  border-radius: 2px;
-  background-color: var(--color-border);
-  margin: 8px auto 6px auto;
-  opacity: 0.85;
+/* Grab handle for bottom sheet - Matches site-wide sheet handles */
+.comments-sheet-handle,
+.bottom-sheet-handle {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 20px;
+  margin: 0 auto 6px auto;
+  padding: 6px 0;
   cursor: grab;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  background: transparent !important;
+  border: none !important;
   flex-shrink: 0;
+}
+
+.comments-sheet-handle::after,
+.bottom-sheet-handle::after {
+  content: '';
+  width: 38px;
+  height: 3.5px;
+  border-radius: 9999px;
+  background-color: var(--color-border);
+  opacity: 0.85;
+  transition: background-color var(--transition-fast), opacity var(--transition-fast);
+}
+
+.comments-sheet-handle:active::after,
+.bottom-sheet-handle:active::after {
+  background-color: var(--accent-color);
+  opacity: 1;
 }
 
 /* Header */

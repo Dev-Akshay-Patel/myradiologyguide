@@ -178,7 +178,8 @@
   z-index: 2;
 }
 
-.carousel-slide-img {
+.carousel-slide-img,
+.carousel-image {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -191,7 +192,8 @@
 /* --------------------------------------------------------------------------
    Text Overlay - Positioned on the Left of Images with Smooth Fade-in
    -------------------------------------------------------------------------- */
-.carousel-overlay {
+.carousel-overlay,
+.carousel-caption {
   position: absolute;
   inset: 0;
   display: flex;
@@ -212,17 +214,22 @@
   z-index: 2;
   max-width: 76%;
   opacity: 0;
+  visibility: hidden;
   transform: none;
-  transition: opacity 500ms ease-out 100ms;
+  transition: opacity 500ms ease-out 100ms, visibility 500ms ease-out 100ms;
 }
 
-.carousel-slide.is-active .carousel-overlay {
+.carousel-slide.is-active .carousel-overlay,
+.carousel-slide.is-active .carousel-caption {
   opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
   transform: none;
 }
 
 @media (max-width: 768px) {
-  .carousel-overlay {
+  .carousel-overlay,
+  .carousel-caption {
     max-width: 94%;
     padding: 24px 22px 48px 22px;
     background: linear-gradient(
@@ -238,7 +245,8 @@
 /* --------------------------------------------------------------------------
    Multiple Tags per Slide (Min 1, Max 3) with Refined Proportions
    -------------------------------------------------------------------------- */
-.slide-tags {
+.slide-tags,
+.slide-meta {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -1008,11 +1016,7 @@
   box-shadow: none;
   display: flex;
   flex-direction: column;
-  transition: border-color var(--transition-fast),
-              margin 0.32s cubic-bezier(0.16, 1, 0.3, 1),
-              border-radius 0.32s cubic-bezier(0.16, 1, 0.3, 1),
-              border-left-color 0.32s ease,
-              border-right-color 0.32s ease;
+  transition: border-color var(--transition-fast);
 }
 
 .pinned-post:hover {
@@ -1398,64 +1402,6 @@
 
   .pinned-btn-label-mobile {
     display: inline;
-  }
-}
-
-/* --------------------------------------------------------------------------
-   Mobile Scroll Expansion: Smooth edge-to-edge transition on scroll
-   Acquires the full viewport space so it doesn't look like a card or div.
-   Lightweight, GPU-less, silky 60fps CSS transitions without layout shifts.
-   -------------------------------------------------------------------------- */
-@media (max-width: 859px) {
-  /* Targeted element from focus-mode: Pinned Header and its sections */
-  main#main-content:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > article:nth-of-type(1) > div:nth-of-type(1),
-  .pinned-header {
-    transition: padding 0.32s cubic-bezier(0.16, 1, 0.3, 1),
-                border-color 0.25s ease;
-  }
-
-  .pinned-post {
-    transition: margin 0.32s cubic-bezier(0.16, 1, 0.3, 1),
-                border-radius 0.32s cubic-bezier(0.16, 1, 0.3, 1),
-                border-color 0.25s ease,
-                border-left-color 0.32s ease,
-                border-right-color 0.32s ease,
-                background-color 0.25s ease;
-  }
-
-  .pinned-body,
-  .pinned-footer {
-    transition: padding 0.32s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  /* When expanded during mobile scroll: acquires screen margin space, drops card borders/radii */
-  .pinned-post.is-scroll-expanded {
-    margin-left: calc(-1 * var(--page-gutter, 12px));
-    margin-right: calc(-1 * var(--page-gutter, 12px));
-    width: calc(100% + (2 * var(--page-gutter, 12px)));
-    max-width: calc(100% + (2 * var(--page-gutter, 12px)));
-    border-radius: 0;
-    border-left-color: transparent;
-    border-right-color: transparent;
-    border-top: 1px solid var(--color-border);
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  /* Pinned Header (Targeted element) expands seamlessly and aligns internal contents */
-  .pinned-post.is-scroll-expanded > div:nth-of-type(1),
-  .pinned-post.is-scroll-expanded .pinned-header {
-    padding-left: calc(var(--page-gutter, 12px) + 8px);
-    padding-right: calc(var(--page-gutter, 12px) + 8px);
-  }
-
-  .pinned-post.is-scroll-expanded .pinned-body {
-    padding-left: calc(var(--page-gutter, 12px) + 8px);
-    padding-right: calc(var(--page-gutter, 12px) + 8px);
-  }
-
-  .pinned-post.is-scroll-expanded .pinned-footer {
-    padding-left: calc(var(--page-gutter, 12px) + 8px);
-    padding-right: calc(var(--page-gutter, 12px) + 8px);
   }
 }
 

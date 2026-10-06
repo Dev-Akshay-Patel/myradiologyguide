@@ -108,27 +108,10 @@
     });
 
     if (shareBtn) {
-      shareBtn.addEventListener('click', async () => {
-        const shareUrl = window.location.href;
-        if (navigator.share) {
-          try {
-            await navigator.share({
-              title: document.title,
-              url: shareUrl,
-            });
-            return;
-          } catch (e) {}
+      shareBtn.addEventListener('click', () => {
+        if (typeof window.openShareModal === 'function') {
+          window.openShareModal();
         }
-
-        try {
-          await navigator.clipboard.writeText(shareUrl);
-          shareBtn.setAttribute('title', 'Link Copied!');
-          shareBtn.classList.add('is-active');
-          setTimeout(() => {
-            shareBtn.setAttribute('title', 'Share');
-            shareBtn.classList.remove('is-active');
-          }, 2000);
-        } catch (e) {}
       });
     }
 
@@ -495,7 +478,7 @@
         } else {
           commentInput.disabled = false;
           if (!activeReplyTarget) {
-            commentInput.placeholder = 'Add to the discussion... (Shift+Enter for break)';
+            commentInput.placeholder = 'Add to the discussion...';
           }
         }
       }
@@ -976,7 +959,7 @@
         replyingBanner.classList.add('is-hidden');
       }
       if (commentInput) {
-        commentInput.placeholder = 'Add to the discussion... (Shift+Enter for break)';
+        commentInput.placeholder = 'Add to the discussion...';
       }
     }
 

@@ -4,6 +4,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700;800&display=swap');
 @import '../assets/css/icons.css';
+@import './share-modal.css';
 
 /* Plus Jakarta Sans font is loaded with preconnect in index.html to eliminate CLS */
 
