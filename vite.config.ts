@@ -26,6 +26,7 @@ export default defineConfig(() => {
           post: path.resolve(__dirname, 'post/index.html'),
           account: path.resolve(__dirname, 'account/index.html'),
           login: path.resolve(__dirname, 'login/index.html'),
+          notFound: path.resolve(__dirname, '404.html'),
         },
       },
     },

@@ -1,0 +1,858 @@
+<!doctype html>
+<html lang="en" class="preload">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404 Scan Slice Not Found | My Radiology Guide</title>
+    <meta name="description" content="Diagnostic Artifact 404: The requested radiological protocol, study, or digital reference slice was not found in the PACS archive." />
+    <meta property="og:title" content="404 Scan Slice Not Found | My Radiology Guide" />
+    <meta property="og:description" content="Diagnostic Artifact 404: The requested radiological protocol, study, or digital reference slice was not found in the PACS archive." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary" />
+
+    <!-- Google Fonts Preconnect & Loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Instant Inline Theme & Palette State -->
+    <script>
+      (function() {
+        try {
+          var t = localStorage.getItem('app-theme-preference');
+          if (!t) {
+            t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+          }
+          document.documentElement.setAttribute('data-theme', t);
+          var p = localStorage.getItem('app-palette-preference') || 'default';
+          document.documentElement.setAttribute('data-palette', p);
+        } catch(e) {}
+      })();
+    </script>
+
+    <!-- Global Stylesheets -->
+    <link rel="stylesheet" href="/css/global.css" />
+    <link rel="stylesheet" href="/css/header.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
+    <!-- 404 Diagnostic Workstation Stylesheet -->
+    <link rel="stylesheet" href="/css/404.css" />
+
+    <!-- Global Scripts -->
+    <script src="/js/global.js"></script>
+    <script src="/js/toast.js"></script>
+    <script src="/js/cookie-auth.js"></script>
+    <script src="/vendor/dicebear/dicebear.min.js"></script>
+    <script src="/js/header.js" defer></script>
+    <script src="/js/posts-data.js" defer></script>
+    <script src="/js/404.js" defer></script>
+  </head>
+  <body class="not-found-page">
+    <!-- Fullscreen Site Header -->
+    <header class="site-header" id="site-header">
+      <div class="header-inner">
+        <!-- Left Section: Hamburger & Text Logo -->
+        <div class="header-left">
+          <button
+            type="button"
+            class="header-btn hamburger-btn"
+            id="hamburger-btn"
+            aria-label="Toggle navigation menu"
+            aria-expanded="false"
+            aria-controls="nav-drawer"
+          >
+            <span class="hamburger-box">
+              <span class="hamburger-line"></span>
+              <span class="hamburger-line"></span>
+              <span class="hamburger-line"></span>
+            </span>
+          </button>
+
+          <a href="/index.html" class="header-logo" id="site-logo" aria-label="My Radiology Guide" title="My Radiology Guide">
+            <svg
+              class="header-logo-svg"
+              viewBox="0 0 512 512"
+              width="26"
+              height="26"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <g>
+                <path d="m208,239.893c0,26.508 21.468,48 48,48 26.484,0 48-21.492 48-48 0-26.509-21.516-48-48-48-26.532-2.84217e-14-48,21.491-48,48z"></path>
+                <path d="m384,19.339c-15.297-8.852-34.875-3.594-43.711,11.703l-55.578,96.227c-8.805,15.242-3.648,34.727 11.539,43.625 24.312,14.227 39.484,40.336 39.75,68.273-0.023,0.406-0.039,0.82-0.047,1.102-0.188,8.602 3.102,16.922 9.117,23.078 6.023,6.148 14.266,9.617 22.875,9.617h112.055c17.672,0 32-14.328 32-32 0-91.109-49.047-176.031-128-221.625z"></path>
+                <path d="m339.219,321.058c-8.82-15.258-28.289-20.523-43.617-11.758-24.406,13.984-54.906,13.953-79.227,0.016-15.297-8.734-34.773-3.492-43.609,11.773l-56.476,97.789c-8.813,15.258-3.625,34.773 11.601,43.648 38.664,22.531 82.961,34.438 128.109,34.438 45.148,0 89.445-11.906 128.109-34.438 15.227-8.875 20.414-28.391 11.602-43.656l-56.492-97.812z"></path>
+                <path d="m166.93,263.347c6.016-6.156 9.305-14.477 9.117-23.078-0.008-0.266-0.023-0.68-0.047-1.086 0.258-27.977 15.43-54.094 39.719-68.313 15.195-8.883 20.359-28.375 11.555-43.625l-55.563-96.203c-8.836-15.297-28.406-20.562-43.711-11.703-78.953,45.594-128,130.516-128,221.625 0,17.672 14.328,32 32,32h112.055c8.609,0 16.851-3.469 22.875-9.617z"></path>
+              </g>
+            </svg>
+          </a>
+        </div>
+
+        <!-- Desktop Navigation Menu -->
+        <nav class="header-desktop-nav" id="header-desktop-nav" aria-label="Primary Desktop Navigation">
+          <ul class="desktop-nav-list" role="menubar">
+            <!-- 1. Mega Menu: Resources -->
+            <li class="desktop-nav-item has-dropdown has-megamenu" data-dropdown="curriculum">
+              <button
+                type="button"
+                class="desktop-nav-btn"
+                id="nav-btn-curriculum"
+                aria-haspopup="true"
+                aria-expanded="false"
+                aria-controls="megamenu-curriculum"
+              >
+                <span class="desktop-nav-text">Resources</span>
+                <svg class="nav-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M19.9201 8.9502L13.4001 15.4702C12.6301 16.2402 11.3701 16.2402 10.6001 15.4702L4.08008 8.9502" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+
+              <div class="desktop-dropdown-panel megamenu-panel" id="megamenu-curriculum" role="menu" aria-labelledby="nav-btn-curriculum">
+                <div class="megamenu-inner">
+                  <div class="megamenu-topbar">
+                    <div class="megamenu-title-group">
+                      <span class="megamenu-badge">Curriculum</span>
+                      <h3 class="megamenu-main-title">Core Radiologic Sciences &amp; Clinical Modules</h3>
+                    </div>
+                    <div class="megamenu-topbar-meta">
+                      <span class="megamenu-count-pill">6 Core Modules</span>
+                      <span class="megamenu-guide-hint">Standardized ARRT &amp; ACR Clinical Guidelines</span>
+                    </div>
+                  </div>
+
+                  <div class="megamenu-grid-6">
+                    <a href="/index.html#anatomy-physiology" class="megamenu-card" role="menuitem">
+                      <div class="megamenu-card-header">
+                        <div class="megamenu-card-icon" aria-hidden="true">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-5.04z"/>
+                            <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-5.04z"/>
+                          </svg>
+                        </div>
+                        <span class="megamenu-card-tag">01 · Structural</span>
+                      </div>
+                      <h4 class="megamenu-card-title">Anatomy &amp; Physiology</h4>
+                      <p class="megamenu-card-desc">Systemic organ anatomy, cross-sectional landmarks &amp; normal radiographic variants.</p>
+                      <div class="megamenu-tags-row">
+                        <span class="megamenu-chip">Neurovascular</span>
+                        <span class="megamenu-chip">Skeletal</span>
+                        <span class="megamenu-chip">Visceral</span>
+                      </div>
+                    </a>
+
+                    <a href="/index.html#basic-physics" class="megamenu-card" role="menuitem">
+                      <div class="megamenu-card-header">
+                        <div class="megamenu-card-icon" aria-hidden="true">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M12 2v3m0 14v3M2 12h3m14 0h3m-3.5-6.5-2.1 2.1m-8.8 8.8-2.1 2.1m0-13 2.1 2.1m8.8 8.8 2.1 2.1"/>
+                          </svg>
+                        </div>
+                        <span class="megamenu-card-tag">02 · Biophysics</span>
+                      </div>
+                      <h4 class="megamenu-card-title">Basic Physics</h4>
+                      <p class="megamenu-card-desc">X-ray tube physics, photon interactions, bremsstrahlung emission &amp; beam quality.</p>
+                      <div class="megamenu-tags-row">
+                        <span class="megamenu-chip">Compton</span>
+                        <span class="megamenu-chip">Photoelectric</span>
+                        <span class="megamenu-chip">kVp/mAs</span>
+                      </div>
+                    </a>
+
+                    <a href="/index.html#radiation-protection" class="megamenu-card" role="menuitem">
+                      <div class="megamenu-card-header">
+                        <div class="megamenu-card-icon" aria-hidden="true">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                          </svg>
+                        </div>
+                        <span class="megamenu-card-tag">03 · Safety</span>
+                      </div>
+                      <h4 class="megamenu-card-title">Radiation Protection</h4>
+                      <p class="megamenu-card-desc">ALARA principles, patient shielding, occupational dosimetry &amp; regulatory dose limits.</p>
+                      <div class="megamenu-tags-row">
+                        <span class="megamenu-chip">ALARA</span>
+                        <span class="megamenu-chip">Dosimetry</span>
+                        <span class="megamenu-chip">DLP/CTDI</span>
+                      </div>
+                    </a>
+
+                    <a href="/index.html#special-procedures" class="megamenu-card" role="menuitem">
+                      <div class="megamenu-card-header">
+                        <div class="megamenu-card-icon" aria-hidden="true">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                          </svg>
+                        </div>
+                        <span class="megamenu-card-tag">04 · Interventional</span>
+                      </div>
+                      <h4 class="megamenu-card-title">Special Procedures</h4>
+                      <p class="megamenu-card-desc">Fluoroscopic studies, angiography, catheterization protocols &amp; contrast administration.</p>
+                      <div class="megamenu-tags-row">
+                        <span class="megamenu-chip">Angiography</span>
+                        <span class="megamenu-chip">DSA</span>
+                        <span class="megamenu-chip">Fluoroscopy</span>
+                      </div>
+                    </a>
+
+                    <a href="/index.html#ct-mri-imaging" class="megamenu-card" role="menuitem">
+                      <div class="megamenu-card-header">
+                        <div class="megamenu-card-icon" aria-hidden="true">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                            <line x1="8" y1="21" x2="16" y2="21"/>
+                            <line x1="12" y1="17" x2="12" y2="21"/>
+                          </svg>
+                        </div>
+                        <span class="megamenu-card-tag">05 · Cross-Sectional</span>
+                      </div>
+                      <h4 class="megamenu-card-title">CT &amp; MRI Imaging</h4>
+                      <p class="megamenu-card-desc">Helical CT reconstruction, multiplanar reformats, pulse sequences &amp; relaxation times.</p>
+                      <div class="megamenu-tags-row">
+                        <span class="megamenu-chip">Hounsfield</span>
+                        <span class="megamenu-chip">T1/T2 Flair</span>
+                        <span class="megamenu-chip">DWI</span>
+                      </div>
+                    </a>
+
+                    <a href="/index.html#ultrasound-principles" class="megamenu-card" role="menuitem">
+                      <div class="megamenu-card-header">
+                        <div class="megamenu-card-icon" aria-hidden="true">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 12h2m16 0h2m-10-8v2m0 12v2m-5.6-3.6 1.4-1.4m8.4-8.4 1.4-1.4m-11.2 0 1.4 1.4m8.4 8.4 1.4 1.4"/>
+                            <circle cx="12" cy="12" r="4"/>
+                          </svg>
+                        </div>
+                        <span class="megamenu-card-tag">06 · Sonography</span>
+                      </div>
+                      <h4 class="megamenu-card-title">Ultrasound Principles</h4>
+                      <p class="megamenu-card-desc">Piezoelectric transducers, acoustic impedance, Doppler shift &amp; artifact mitigation.</p>
+                      <div class="megamenu-tags-row">
+                        <span class="megamenu-chip">Color Doppler</span>
+                        <span class="megamenu-chip">Echogenicity</span>
+                        <span class="megamenu-chip">Gain</span>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <!-- 2. Standard Dropdown: Study Tools -->
+            <li class="desktop-nav-item has-dropdown" data-dropdown="tools">
+              <button
+                type="button"
+                class="desktop-nav-btn"
+                id="nav-btn-tools"
+                aria-haspopup="true"
+                aria-expanded="false"
+                aria-controls="dropdown-tools"
+              >
+                <span class="desktop-nav-text">Study Tools</span>
+                <svg class="nav-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M19.9201 8.9502L13.4001 15.4702C12.6301 16.2402 11.3701 16.2402 10.6001 15.4702L4.08008 8.9502" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+              <div class="desktop-dropdown-panel standard-dropdown-panel" id="dropdown-tools" role="menu" aria-labelledby="nav-btn-tools">
+                <ul class="dropdown-list" role="none">
+                  <li role="none"><a href="/index.html#flashcards" class="dropdown-link" role="menuitem">Interactive Flashcards</a></li>
+                  <li role="none"><a href="/index.html#calculators" class="dropdown-link" role="menuitem">Dose Calculators</a></li>
+                  <li role="none"><a href="/index.html#quizzes" class="dropdown-link" role="menuitem">ARRT Practice Exams</a></li>
+                  <li role="none"><a href="/index.html#positioning" class="dropdown-link" role="menuitem">Positioning Guide</a></li>
+                </ul>
+              </div>
+            </li>
+
+            <!-- 3. Direct Link: Best Books -->
+            <li class="desktop-nav-item">
+              <a href="/books/" class="desktop-nav-link">Best Books</a>
+            </li>
+
+            <!-- 4. Direct Link: Workspace -->
+            <li class="desktop-nav-item">
+              <a href="/account/" class="desktop-nav-link">Workspace</a>
+            </li>
+          </ul>
+        </nav>
+
+        <!-- Right Section: Palette, Theme, Search, Profile -->
+        <div class="header-right">
+          <!-- Palette Trigger -->
+          <div class="header-palette-dropdown-wrapper">
+            <button
+              type="button"
+              class="header-btn palette-toggle-btn"
+              id="palette-toggle-btn"
+              aria-label="Select accent color palette"
+              aria-haspopup="true"
+              aria-expanded="false"
+              title="Color Palette"
+            >
+              <span class="active-palette-preview" id="header-palette-preview"></span>
+            </button>
+
+            <!-- Palette Dropdown Panel -->
+            <div class="palette-dropdown" id="palette-dropdown" role="dialog" aria-label="Color palette selector">
+              <div class="palette-dropdown-header">
+                <span class="palette-dropdown-title">Accent Palette</span>
+              </div>
+              <div class="palette-grid" role="radiogroup" aria-label="Color options">
+                <button type="button" class="palette-btn is-active" data-palette-val="default" role="radio" aria-checked="true">
+                  <span class="palette-name">Default</span>
+                  <span class="palette-dot dot-default"></span>
+                </button>
+                <button type="button" class="palette-btn" data-palette-val="beige" role="radio" aria-checked="false">
+                  <span class="palette-name">Beige</span>
+                  <span class="palette-dot dot-beige"></span>
+                </button>
+                <button type="button" class="palette-btn" data-palette-val="green" role="radio" aria-checked="false">
+                  <span class="palette-name">Green</span>
+                  <span class="palette-dot dot-green"></span>
+                </button>
+                <button type="button" class="palette-btn" data-palette-val="orange" role="radio" aria-checked="false">
+                  <span class="palette-name">Orange</span>
+                  <span class="palette-dot dot-orange"></span>
+                </button>
+                <button type="button" class="palette-btn" data-palette-val="blue" role="radio" aria-checked="false">
+                  <span class="palette-name">Blue</span>
+                  <span class="palette-dot dot-blue"></span>
+                </button>
+                <button type="button" class="palette-btn" data-palette-val="teal" role="radio" aria-checked="false">
+                  <span class="palette-name">Teal</span>
+                  <span class="palette-dot dot-teal"></span>
+                </button>
+                <button type="button" class="palette-btn" data-palette-val="brown" role="radio" aria-checked="false">
+                  <span class="palette-name">Brown</span>
+                  <span class="palette-dot dot-brown"></span>
+                </button>
+                <button type="button" class="palette-btn" data-palette-val="pink" role="radio" aria-checked="false">
+                  <span class="palette-name">Pink</span>
+                  <span class="palette-dot dot-pink"></span>
+                </button>
+                <button type="button" class="palette-btn" data-palette-val="purple" role="radio" aria-checked="false">
+                  <span class="palette-name">Purple</span>
+                  <span class="palette-dot dot-purple"></span>
+                </button>
+                <button type="button" class="palette-btn" data-palette-val="magenta" role="radio" aria-checked="false">
+                  <span class="palette-name">Magenta</span>
+                  <span class="palette-dot dot-magenta"></span>
+                </button>
+                <button type="button" class="palette-btn" data-palette-val="red" role="radio" aria-checked="false">
+                  <span class="palette-name">Red</span>
+                  <span class="palette-dot dot-red"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Theme Toggle -->
+          <button
+            type="button"
+            class="header-btn theme-toggle-btn"
+            id="theme-toggle-btn"
+            aria-label="Toggle dark mode"
+            title="Toggle Theme"
+          >
+            <svg class="theme-icon icon-sun" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg class="theme-icon icon-moon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+
+          <!-- User Account / Sign In Badge -->
+          <div class="header-profile-wrapper" id="header-profile-wrapper">
+            <a href="/login/" class="header-login-btn" id="header-login-link">
+              <span class="desktop-login-text">Sign In</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                <polyline points="10 17 15 12 10 7"></polyline>
+                <line x1="15" y1="12" x2="3" y2="12"></line>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="not-found-main" id="main-content">
+      <!-- 1. Triage Header -->
+      <section class="nf-hero" aria-labelledby="nf-page-title">
+        <div class="nf-badge-row">
+          <div class="nf-status-tag">
+            <span class="nf-status-dot" aria-hidden="true"></span>
+            <span>ACR PROTOCOL ERROR</span>
+          </div>
+          <span class="nf-meta-divider" aria-hidden="true">/</span>
+          <span class="nf-err-code">MISSING_VOXEL_GRID · 404</span>
+        </div>
+
+        <h1 class="nf-title" id="nf-page-title">
+          Diagnostic Artifact: <span class="highlight">Scan Slice Not Found</span>
+        </h1>
+        <p class="nf-subtitle">
+          The requested radiological protocol, clinical case study, or anatomical slice could not be reconstructed in the PACS cache. It may have been re-indexed, archived, or moved.
+        </p>
+
+        <!-- Live Clinical Search Bar -->
+        <div class="nf-search-wrapper" role="search">
+          <form class="nf-search-form" onsubmit="return false;">
+            <span class="nf-search-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </span>
+            <input
+              type="text"
+              id="nf-search-input"
+              class="nf-search-input"
+              placeholder="Search clinical protocols, CT/MRI guides, books, or topics..."
+              autocomplete="off"
+              aria-label="Search clinical radiology content"
+            />
+            <button type="button" id="nf-search-clear" class="nf-search-clear" aria-label="Clear search query">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </form>
+
+          <!-- Search Results Dropdown -->
+          <div class="nf-search-results" id="nf-search-results" role="region" aria-live="polite">
+            <div class="nf-result-header">Clinical Database Matches</div>
+            <ul class="nf-result-list" id="nf-result-list"></ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. Asymmetric Two-Column Workstation Grid -->
+      <div class="nf-grid-layout">
+        <!-- Left: PACS Diagnostic Workstation Simulator -->
+        <section class="pacs-workstation" aria-label="PACS Diagnostic Workstation">
+          <!-- Top Telemetry Ribbon -->
+          <div class="pacs-ribbon">
+            <div class="pacs-ribbon-left">
+              <span class="pacs-hud-dot" aria-hidden="true"></span>
+              <span class="pacs-ribbon-tag">PACS RECON WORKSTATION</span>
+            </div>
+            <div class="pacs-ribbon-right">
+              <span id="pacs-hud-series">SERIES: CT-BRAIN-AXIAL</span>
+              <span>·</span>
+              <span class="pacs-hud-fps">60 FPS</span>
+            </div>
+          </div>
+
+          <!-- Modality Selector -->
+          <div class="pacs-modality-bar" role="tablist" aria-label="Radiological Imaging Modality">
+            <button type="button" class="pacs-modality-btn is-active" data-modality="ct" role="tab" aria-selected="true">
+              Axial CT
+            </button>
+            <button type="button" class="pacs-modality-btn" data-modality="mri" role="tab" aria-selected="false">
+              T2-FLAIR MRI
+            </button>
+            <button type="button" class="pacs-modality-btn" data-modality="xray" role="tab" aria-selected="false">
+              Chest X-Ray
+            </button>
+            <button type="button" class="pacs-modality-btn" data-modality="angio" role="tab" aria-selected="false">
+              Carotid Angio
+            </button>
+          </div>
+
+          <!-- Interactive Screen Stage -->
+          <div class="pacs-screen-wrapper" id="pacs-screen-wrapper">
+            <!-- HUD Overlays -->
+            <div class="pacs-hud-corner pacs-hud-tl">
+              <div>PATIENT: ANONYMIZED</div>
+              <div>ID: ARCH-404-ERR</div>
+              <div id="pacs-hud-matrix">512 x 512 · 12-bit</div>
+            </div>
+            <div class="pacs-hud-corner pacs-hud-tr">
+              <div class="pacs-hud-alert">ERR: VOXEL 404 NULL</div>
+              <div id="pacs-hud-thick">THICK: 1.25 mm</div>
+              <div>FOV: 250 mm</div>
+            </div>
+            <div class="pacs-hud-corner pacs-hud-bl">
+              <div>KV: 120 · MA: 300</div>
+              <div>ROT: 0.5s · PITCH: 0.98</div>
+              <div>FILTER: STANDARD</div>
+            </div>
+            <div class="pacs-hud-corner pacs-hud-br">
+              <div>WINDOW: <span id="pacs-window-val">80</span></div>
+              <div>LEVEL: <span id="pacs-level-val">40</span></div>
+              <div id="pacs-slice-val">Slice 04/24</div>
+            </div>
+
+            <!-- Animated Scout Laser Beam -->
+            <div class="pacs-scout-beam" aria-hidden="true"></div>
+
+            <!-- Interactive Crosshair -->
+            <div class="pacs-crosshair-h" id="pacs-crosshair-h" aria-hidden="true"></div>
+            <div class="pacs-crosshair-v" id="pacs-crosshair-v" aria-hidden="true"></div>
+            <div class="pacs-crosshair-box" id="pacs-crosshair-box" aria-hidden="true"></div>
+
+            <!-- Central 404 Diagnostic Stamp -->
+            <div class="pacs-anomaly-stamp" aria-hidden="true">
+              <span class="pacs-stamp-code">404</span>
+              <span class="pacs-stamp-label">Missing Anatomical Voxel</span>
+            </div>
+
+            <!-- SVG Scan Canvas -->
+            <svg
+              id="pacs-svg-canvas"
+              class="pacs-svg-canvas"
+              viewBox="0 0 512 512"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-label="Simulated radiological cross-sectional scan"
+            ></svg>
+          </div>
+
+          <!-- Bottom Workstation Control Board -->
+          <div class="pacs-controls">
+            <!-- Windowing Presets -->
+            <div class="pacs-preset-row">
+              <span class="pacs-control-label">Windowing Presets</span>
+              <div class="pacs-preset-buttons">
+                <button type="button" class="pacs-preset-btn is-active" data-preset="brain">Brain (80/40)</button>
+                <button type="button" class="pacs-preset-btn" data-preset="bone">Bone (2000/350)</button>
+                <button type="button" class="pacs-preset-btn" data-preset="lung">Lung (1500/-600)</button>
+                <button type="button" class="pacs-preset-btn" data-preset="soft">Soft Tissue (350/50)</button>
+              </div>
+            </div>
+
+            <!-- Sliders Grid -->
+            <div class="pacs-sliders-grid">
+              <div class="pacs-slider-item">
+                <div class="pacs-slider-header">
+                  <span>Window Width (Contrast)</span>
+                </div>
+                <input type="range" id="pacs-window-slider" class="pacs-range" min="40" max="2500" value="80" aria-label="Window Width" />
+              </div>
+              <div class="pacs-slider-item">
+                <div class="pacs-slider-header">
+                  <span>Window Level (Brightness)</span>
+                </div>
+                <input type="range" id="pacs-level-slider" class="pacs-range" min="-700" max="500" value="40" aria-label="Window Level" />
+              </div>
+            </div>
+
+            <!-- Slice Scrubber -->
+            <div class="pacs-slider-item">
+              <div class="pacs-slider-header">
+                <span>Axial Slice Navigation</span>
+                <span class="pacs-slider-val">Slice 01 - 24</span>
+              </div>
+              <input type="range" id="pacs-slice-slider" class="pacs-range" min="1" max="24" value="4" aria-label="Slice Navigation" />
+            </div>
+
+            <!-- Action Bar -->
+            <div class="pacs-actions-row">
+              <button type="button" id="pacs-recon-btn" class="pacs-recon-btn">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                  <path d="M3 3v5h5"></path>
+                  <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path>
+                  <path d="M16 21h5v-5"></path>
+                </svg>
+                <span>Trigger Scout Sweep</span>
+              </button>
+              <div class="pacs-coord-readout" id="pacs-coord-readout">
+                X: 256px · Y: 256px · HU: -404
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Right: Recovery Pathways & Triage Navigation -->
+        <aside class="nf-recovery-column" aria-label="Clinical Recovery Pathways">
+          <!-- Primary Pathways Card -->
+          <div class="nf-card-section">
+            <div class="nf-section-header">
+              <h2 class="nf-section-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                  <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                <span>Triage Pathways</span>
+              </h2>
+              <p class="nf-section-desc">Recommended diagnostic routes to quickly locate the study or reference material you need.</p>
+            </div>
+
+            <div class="nf-pathways-grid">
+              <a href="/index.html" class="nf-pathway-card">
+                <div class="nf-pathway-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="7" height="7" x="3" y="3" rx="1"></rect>
+                    <rect width="7" height="7" x="14" y="3" rx="1"></rect>
+                    <rect width="7" height="7" x="14" y="14" rx="1"></rect>
+                    <rect width="7" height="7" x="3" y="14" rx="1"></rect>
+                  </svg>
+                </div>
+                <div class="nf-pathway-content">
+                  <span class="nf-pathway-title">Main Portal</span>
+                  <span class="nf-pathway-desc">Latest protocols &amp; carousel</span>
+                </div>
+              </a>
+
+              <a href="/books/" class="nf-pathway-card">
+                <div class="nf-pathway-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path>
+                    <path d="M6 6h10"></path>
+                    <path d="M6 10h10"></path>
+                  </svg>
+                </div>
+                <div class="nf-pathway-content">
+                  <span class="nf-pathway-title">Best Books</span>
+                  <span class="nf-pathway-desc">Digital radiology library</span>
+                </div>
+              </a>
+
+              <a href="/account/" class="nf-pathway-card">
+                <div class="nf-pathway-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                </div>
+                <div class="nf-pathway-content">
+                  <span class="nf-pathway-title">My Workspace</span>
+                  <span class="nf-pathway-desc">Saved bookmarks &amp; notes</span>
+                </div>
+              </a>
+
+              <a href="/login/" class="nf-pathway-card">
+                <div class="nf-pathway-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                    <polyline points="10 17 15 12 10 7"></polyline>
+                    <line x1="15" y1="12" x2="3" y2="12"></line>
+                  </svg>
+                </div>
+                <div class="nf-pathway-content">
+                  <span class="nf-pathway-title">User Sign In</span>
+                  <span class="nf-pathway-desc">Access clinical workspace</span>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <!-- Curriculum Hub Card -->
+          <div class="nf-card-section">
+            <div class="nf-section-header">
+              <h2 class="nf-section-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                  <polyline points="2 17 12 22 22 17"></polyline>
+                  <polyline points="2 12 12 17 22 12"></polyline>
+                </svg>
+                <span>Core Curriculum Modules</span>
+              </h2>
+              <p class="nf-section-desc">Direct links to ARRT standard curriculum sections.</p>
+            </div>
+
+            <div class="nf-curriculum-chips">
+              <a href="/index.html#anatomy-physiology" class="nf-curriculum-chip">
+                <span class="nf-chip-num">01</span>
+                <span>Anatomy &amp; Physiology</span>
+              </a>
+              <a href="/index.html#basic-physics" class="nf-curriculum-chip">
+                <span class="nf-chip-num">02</span>
+                <span>Basic Physics</span>
+              </a>
+              <a href="/index.html#radiation-protection" class="nf-curriculum-chip">
+                <span class="nf-chip-num">03</span>
+                <span>Radiation Protection</span>
+              </a>
+              <a href="/index.html#special-procedures" class="nf-curriculum-chip">
+                <span class="nf-chip-num">04</span>
+                <span>Special Procedures</span>
+              </a>
+              <a href="/index.html#ct-mri-imaging" class="nf-curriculum-chip">
+                <span class="nf-chip-num">05</span>
+                <span>CT &amp; MRI Imaging</span>
+              </a>
+              <a href="/index.html#ultrasound-principles" class="nf-curriculum-chip">
+                <span class="nf-chip-num">06</span>
+                <span>Ultrasound Principles</span>
+              </a>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <!-- 3. Suggested High-Yield Clinical Protocols -->
+      <section class="nf-suggested-section" aria-labelledby="nf-suggested-title">
+        <div class="nf-suggested-header">
+          <h2 class="nf-suggested-title" id="nf-suggested-title">Featured Clinical Cases &amp; Protocols</h2>
+          <a href="/index.html" class="nf-suggested-link">
+            <span>View All Clinical Protocols</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14"></path>
+              <path d="m12 5 7 7-7 7"></path>
+            </svg>
+          </a>
+        </div>
+
+        <div class="nf-posts-grid" id="nf-posts-grid">
+          <!-- Populated dynamically via js/404.js -->
+        </div>
+      </section>
+    </main>
+
+    <!-- Navigation Drawer & Backdrop -->
+    <div class="nav-backdrop" id="nav-backdrop"></div>
+    <aside class="nav-drawer" id="nav-drawer" aria-label="Side navigation drawer">
+      <nav class="drawer-nav tree-nav" aria-label="Workspace tree navigation">
+        <ul class="tree-root" role="tree" id="tree-root">
+          <!-- Leaf: Home -->
+          <li class="tree-item tree-leaf" role="none" data-tree-id="overview" data-title="Home">
+            <a href="/index.html" class="tree-row tree-leaf-link" role="treeitem" tabindex="0">
+              <span class="tree-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#ffffff">
+                  <path d="M17.79 22.75H6.21C3.47 22.75 1.25 20.52 1.25 17.78V10.37C1.25 9.00997 2.09 7.29997 3.17 6.45997L8.56 2.25997C10.18 0.999974 12.77 0.939974 14.45 2.11997L20.63 6.44997C21.82 7.27997 22.75 9.05997 22.75 10.51V17.79C22.75 20.52 20.53 22.75 17.79 22.75ZM9.48 3.43997L4.09 7.63997C3.38 8.19997 2.75 9.46997 2.75 10.37V17.78C2.75 19.69 4.3 21.25 6.21 21.25H17.79C19.7 21.25 21.25 19.7 21.25 17.79V10.51C21.25 9.54997 20.56 8.21997 19.77 7.67997L13.59 3.34997C12.45 2.54997 10.57 2.58997 9.48 3.43997Z" fill="white" style="fill: var(--fillg);"/>
+                  <path d="M12 18.75C11.59 18.75 11.25 18.41 11.25 18V15C11.25 14.59 11.59 14.25 12 14.25C12.41 14.25 12.75 14.59 12.75 15V18C12.75 18.41 12.41 18.75 12 18.75Z" fill="white" style="fill: var(--fillg);"/>
+                </svg>
+              </span>
+              <span class="tree-label">Home</span>
+            </a>
+          </li>
+
+          <!-- Leaf: Best Books -->
+          <li class="tree-item tree-leaf" role="none" data-tree-id="best-books" data-title="Best Books">
+            <a href="/books/" class="tree-row tree-leaf-link" role="treeitem" tabindex="0">
+              <span class="tree-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path>
+                  <path d="M6 6h10"></path>
+                  <path d="M6 10h10"></path>
+                </svg>
+              </span>
+              <span class="tree-label">Best Books</span>
+            </a>
+          </li>
+
+          <!-- Leaf: Workspace -->
+          <li class="tree-item tree-leaf" role="none" data-tree-id="workspace" data-title="Workspace">
+            <a href="/account/" class="tree-row tree-leaf-link" role="treeitem" tabindex="0">
+              <span class="tree-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </span>
+              <span class="tree-label">Workspace</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Drawer Footer -->
+      <div class="drawer-footer-tree">
+        <span class="tree-status-pill">
+          <span>v1.4.2 : Radiology Guide</span>
+        </span>
+      </div>
+    </aside>
+
+    <!-- Full-Width Site Footer -->
+    <footer class="site-footer" id="site-footer">
+      <div class="footer-inner">
+        <div class="footer-grid">
+          <!-- Brand Column -->
+          <div class="footer-col footer-col-brand">
+            <a href="/index.html" class="footer-brand-logo" aria-label="My Radiology Guide Home">
+              <svg class="footer-logo-svg" viewBox="0 0 512 512" width="28" height="28" fill="currentColor" aria-hidden="true">
+                <g>
+                  <path d="m208,239.893c0,26.508 21.468,48 48,48 26.484,0 48-21.492 48-48 0-26.509-21.516-48-48-48-26.532-2.84217e-14-48,21.491-48,48z"></path>
+                  <path d="m384,19.339c-15.297-8.852-34.875-3.594-43.711,11.703l-55.578,96.227c-8.805,15.242-3.648,34.727 11.539,43.625 24.312,14.227 39.484,40.336 39.75,68.273-0.023,0.406-0.039,0.82-0.047,1.102-0.188,8.602 3.102,16.922 9.117,23.078 6.023,6.148 14.266,9.617 22.875,9.617h112.055c17.672,0 32-14.328 32-32 0-91.109-49.047-176.031-128-221.625z"></path>
+                  <path d="m339.219,321.058c-8.82-15.258-28.289-20.523-43.617-11.758-24.406,13.984-54.906,13.953-79.227,0.016-15.297-8.734-34.773-3.492-43.609,11.773l-56.476,97.789c-8.813,15.258-3.625,34.773 11.601,43.648 38.664,22.531 82.961,34.438 128.109,34.438 45.148,0 89.445-11.906 128.109-34.438 15.227-8.875 20.414-28.391 11.602-43.656l-56.492-97.812z"></path>
+                  <path d="m166.93,263.347c6.016-6.156 9.305-14.477 9.117-23.078-0.008-0.266-0.023-0.68-0.047-1.086 0.258-27.977 15.43-54.094 39.719-68.313 15.195-8.883 20.359-28.375 11.555-43.625l-55.563-96.203c-8.836-15.297-28.406-20.562-43.711-11.703-78.953,45.594-128,130.516-128,221.625 0,17.672 14.328,32 32,32h112.055c8.609,0 16.851-3.469 22.875-9.617z"></path>
+                </g>
+              </svg>
+              <span class="footer-brand-name">My Radiology Guide</span>
+            </a>
+            <p class="footer-brand-tagline">
+              Clinical radiology protocols, diagnostic imaging physics, and evidence-based reference guidelines for radiologists and technologists.
+            </p>
+            <div class="footer-badges-row">
+              <span class="footer-badge">ACR Guidelines</span>
+              <span class="footer-badge">ARRT Core</span>
+            </div>
+          </div>
+
+          <!-- Column 2: Curriculum -->
+          <div class="footer-col">
+            <h4 class="footer-col-title">Curriculum</h4>
+            <ul class="footer-links">
+              <li><a href="/index.html#anatomy-physiology">Anatomy &amp; Physiology</a></li>
+              <li><a href="/index.html#basic-physics">Basic Physics</a></li>
+              <li><a href="/index.html#radiation-protection">Radiation Protection</a></li>
+              <li><a href="/index.html#special-procedures">Special Procedures</a></li>
+              <li><a href="/index.html#ct-mri-imaging">CT &amp; MRI Imaging</a></li>
+              <li><a href="/index.html#ultrasound-principles">Ultrasound Principles</a></li>
+            </ul>
+          </div>
+
+          <!-- Column 3: Resources -->
+          <div class="footer-col">
+            <h4 class="footer-col-title">Resources</h4>
+            <ul class="footer-links">
+              <li><a href="/books/">Best Radiology Books</a></li>
+              <li><a href="/index.html#flashcards">Interactive Flashcards</a></li>
+              <li><a href="/index.html#calculators">Dose Calculators</a></li>
+              <li><a href="/index.html#quizzes">ARRT Practice Exams</a></li>
+              <li><a href="/account/">Personal Workspace</a></li>
+            </ul>
+          </div>
+
+          <!-- Column 4: Modalities -->
+          <div class="footer-col">
+            <h4 class="footer-col-title">Modalities</h4>
+            <ul class="footer-links">
+              <li><a href="/index.html">Computed Tomography</a></li>
+              <li><a href="/index.html">Magnetic Resonance</a></li>
+              <li><a href="/index.html">Digital Radiography</a></li>
+              <li><a href="/index.html">Fluoroscopy &amp; DSA</a></li>
+              <li><a href="/index.html">Diagnostic Ultrasound</a></li>
+            </ul>
+          </div>
+
+          <!-- Column 5: Legal & System -->
+          <div class="footer-col">
+            <h4 class="footer-col-title">Platform</h4>
+            <ul class="footer-links">
+              <li><a href="/login/">Google Sign In</a></li>
+              <li><a href="/account/">Account Settings</a></li>
+              <li><a href="/index.html#about">About the Guide</a></li>
+              <li><a href="/index.html#privacy">Privacy Policy</a></li>
+              <li><a href="/index.html#terms">Terms of Service</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <div class="footer-bottom-left">
+            <p class="footer-copy">&copy; 2026 My Radiology Guide. All rights reserved. For educational and clinical reference.</p>
+          </div>
+          <div class="footer-bottom-right">
+            <span class="footer-pill">
+              <span class="footer-pill-dot" aria-hidden="true"></span>
+              <span>Online Reference</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
