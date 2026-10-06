@@ -1305,3 +1305,58 @@
   box-shadow: none;
 }
 
+/* --------------------------------------------------------------------------
+   Sidebar Links & Resources Widget (Configurable in Blogger Layout)
+   -------------------------------------------------------------------------- */
+.sidebar-links-column {
+  margin-top: 24px;
+}
+
+.sidebar-links-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.sidebar-links-title {
+  font-family: var(--font-family-base);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.sidebar-links-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sidebar-link-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  font-size: 13.5px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.sidebar-link-item:hover {
+  background-color: color-mix(in srgb, var(--accent-color) 8%, var(--color-bg-surface));
+  border-color: color-mix(in srgb, var(--accent-color) 30%, var(--color-border));
+  color: var(--accent-color);
+}
+
+.sidebar-link-bullet {
+  color: var(--accent-color);
+  font-weight: 700;
+}
+

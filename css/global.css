@@ -1625,7 +1625,6 @@ blockquote p + p {
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   pointer-events: auto;
-  animation: toastIn 0.25s ease;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 10px -2px rgba(0, 0, 0, 0.04);
   box-sizing: border-box;
   touch-action: none; /* Crucial for swipe tracking without window scroll conflict */
@@ -1636,12 +1635,24 @@ blockquote p + p {
   will-change: transform, opacity;
 }
 
+.toast.toast-enter,
+.mrg-toast.toast-enter {
+  animation: toastIn 0.25s ease forwards;
+}
+
 .toast:active,
 .toast.is-swiping,
 .mrg-toast:active,
-.mrg-toast.is-swiping {
+.mrg-toast.is-swiping,
+.toast.is-dismissing,
+.mrg-toast.is-dismissing {
   cursor: grabbing !important;
   animation: none !important;
+}
+
+.toast.is-dismissing,
+.mrg-toast.is-dismissing {
+  pointer-events: none !important;
 }
 
 .toast i,
@@ -1739,8 +1750,8 @@ blockquote p + p {
   color: var(--accent-color, #18181b);
 }
 
-.toast.hide,
-.mrg-toast.hide {
+.toast.hide:not(.is-dismissing),
+.mrg-toast.hide:not(.is-dismissing) {
   animation: toastOut 0.2s ease forwards;
 }
 
@@ -1781,11 +1792,15 @@ blockquote p + p {
     max-width: none;
     min-width: 0;
     width: 100%; /* Full width of container */
-    animation: toastInMobile 0.3s ease;
   }
 
-  .toast.hide,
-  .mrg-toast.hide {
+  .toast.toast-enter,
+  .mrg-toast.toast-enter {
+    animation: toastInMobile 0.3s ease forwards;
+  }
+
+  .toast.hide:not(.is-dismissing),
+  .mrg-toast.hide:not(.is-dismissing) {
     animation: toastOutMobile 0.2s ease forwards;
   }
 }

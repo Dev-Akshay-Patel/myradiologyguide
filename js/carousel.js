@@ -138,10 +138,22 @@
     const dotsContainer = container.querySelector('.carousel-dots');
     if (!track) return;
 
-    const existingSlides = track.querySelectorAll('.carousel-slide');
-
-    // Check dynamic slides in MRG_CONFIG only if forceReRender is true or if track is empty
-    const slidesData = window.MRG_CONFIG?.carousel;
+    // Check dynamic slides from Blogger Layout widget or MRG_CONFIG
+    let bloggerSlides = null;
+    const bloggerSource = document.getElementById('blogger-carousel-source');
+    if (bloggerSource) {
+      const items = bloggerSource.querySelectorAll('.carousel-slide-item');
+      if (items.length > 0) {
+        bloggerSlides = Array.from(items).map(item => ({
+          image: item.getAttribute('data-image') || '',
+          tag: item.getAttribute('data-tag') || 'Clinical Reference',
+          title: item.getAttribute('data-title') || '',
+          desc: item.getAttribute('data-desc') || '',
+          link: item.getAttribute('data-url') || item.getAttribute('data-link') || '#'
+        }));
+      }
+    }
+    const slidesData = bloggerSlides || window.MRG_CONFIG?.carousel;
     if (forceReRender || existingSlides.length === 0) {
       if (Array.isArray(slidesData) && slidesData.length > 0) {
         // Re-render track with dynamic slides maintaining full rich markup

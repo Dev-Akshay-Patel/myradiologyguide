@@ -42,6 +42,70 @@
     const modeSelectButtons = document.querySelectorAll('.mode-select-btn');
     const paletteButtons = document.querySelectorAll('.palette-btn');
 
+    // Check Blogger Layout mode switcher toggle setting
+    const modeConfigEl = document.getElementById('mode-changer-config');
+    if (modeConfigEl) {
+      const modeVal = (modeConfigEl.getAttribute('data-content') || modeConfigEl.textContent || '').toLowerCase().trim();
+      if (modeVal.includes('disable') || modeVal.includes('false') || modeVal.includes('off') || modeVal === '0') {
+        const modeButtons = document.querySelectorAll('#mode-btn, .mode-btn, .header-btn.mode-btn');
+        modeButtons.forEach(btn => btn.style.display = 'none');
+      }
+    }
+
+    // Process Blogger Layout navigation sublinks (links starting with _ or -)
+    const desktopList = document.querySelector('#header-desktop-nav .desktop-nav-list');
+    if (desktopList) {
+      const items = Array.from(desktopList.querySelectorAll(':scope > .desktop-nav-item'));
+      let currentParent = null;
+      let currentSubmenu = null;
+
+      items.forEach(item => {
+        const link = item.querySelector('a');
+        if (!link) return;
+        const text = link.textContent.trim();
+        if (text.startsWith('_') || text.startsWith('-')) {
+          const cleanText = text.replace(/^[_-\s]+/, '');
+          link.textContent = cleanText;
+          if (currentParent && currentSubmenu) {
+            link.className = 'dropdown-link-item';
+            const li = document.createElement('li');
+            li.appendChild(link);
+            currentSubmenu.appendChild(li);
+            item.remove();
+          }
+        } else {
+          currentParent = item;
+          currentSubmenu = null;
+          const next = item.nextElementSibling;
+          const nextLink = next ? next.querySelector('a') : null;
+          const nextText = nextLink ? nextLink.textContent.trim() : '';
+          if (nextText.startsWith('_') || nextText.startsWith('-')) {
+            currentParent.classList.add('has-dropdown');
+            const origHref = link.getAttribute('href') || '#';
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'desktop-nav-btn';
+            btn.setAttribute('aria-haspopup', 'true');
+            btn.setAttribute('aria-expanded', 'false');
+            btn.innerHTML = `<span class="desktop-nav-text">${text}</span><svg class="nav-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19.9201 8.9502L13.4001 15.4702C12.6301 16.2402 11.3701 16.2402 10.6001 15.4702L4.08008 8.9502" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" /></svg>`;
+            
+            const panel = document.createElement('div');
+            panel.className = 'desktop-dropdown-panel standard-dropdown-panel';
+            panel.setAttribute('role', 'menu');
+            
+            const ul = document.createElement('ul');
+            ul.className = 'dropdown-list';
+            panel.appendChild(ul);
+            
+            currentParent.innerHTML = '';
+            currentParent.appendChild(btn);
+            currentParent.appendChild(panel);
+            currentSubmenu = ul;
+          }
+        }
+      });
+    }
+
     // DOM Elements - Desktop Navigation
     const desktopNav = document.getElementById('header-desktop-nav');
     const allDesktopNavItems = document.querySelectorAll('.desktop-nav-item');

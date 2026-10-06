@@ -8,6 +8,8 @@
   flex-direction: column;
   gap: var(--spacing-lg, 24px);
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
 }
 
 /* --------------------------------------------------------------------------
@@ -837,7 +839,7 @@
   }
 }
 
-@media (max-width: 680px) {
+@media (max-width: 768px) {
   .books-table-wrapper {
     overflow-x: hidden;
     border-radius: var(--radius-md, 8px);

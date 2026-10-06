@@ -159,15 +159,21 @@ ICONS.trash = ICONS.delete;
 
 /**
  * Modern tactile swipe-to-close with elastic rubber band resistance.
- * - PC: User can only swipe RIGHT to dismiss. Swiping LEFT creates an elastic rubber band effect and snaps back.
- * - Mobile: User can swipe UP, LEFT, and RIGHT to dismiss. Swiping DOWN creates an elastic rubber band effect and snaps back.
+ * - PC: User can only swipe/throw RIGHT to dismiss. Swiping LEFT creates an elastic rubber band effect and snaps back.
+ * - Mobile: User can swipe/throw UP, LEFT, and RIGHT to dismiss. Swiping DOWN creates an elastic rubber band effect and snaps back.
  */
-function setupSwipeGestures(toast, onDismiss, onPauseTimer, onResumeTimer) {
+function setupSwipeGestures(toast, onDismissStart, onDismissComplete, onPauseTimer, onResumeTimer) {
   let isDragging = false;
+  let isDismissing = false;
   let startX = 0;
   let startY = 0;
+  let lastX = 0;
+  let lastY = 0;
+  let lastTime = 0;
   let currentDeltaX = 0;
   let currentDeltaY = 0;
+  let velocityX = 0;
+  let velocityY = 0;
   let activePointerId = null;
 
   // Elastic damper calculation (asymptotic soft resistance towards maxStretch)
@@ -179,13 +185,19 @@ function setupSwipeGestures(toast, onDismiss, onPauseTimer, onResumeTimer) {
   }
 
   function handlePointerDown(e) {
+    if (isDismissing) return;
     if (e.button !== 0 && e.pointerType === 'mouse') return;
     isDragging = true;
     activePointerId = e.pointerId;
     startX = e.clientX;
     startY = e.clientY;
+    lastX = e.clientX;
+    lastY = e.clientY;
+    lastTime = Date.now();
     currentDeltaX = 0;
     currentDeltaY = 0;
+    velocityX = 0;
+    velocityY = 0;
 
     toast.classList.add("is-swiping");
     toast.style.transition = "none";
@@ -199,10 +211,22 @@ function setupSwipeGestures(toast, onDismiss, onPauseTimer, onResumeTimer) {
   }
 
   function handlePointerMove(e) {
-    if (!isDragging || e.pointerId !== activePointerId) return;
+    if (!isDragging || isDismissing || e.pointerId !== activePointerId) return;
 
     const rawDeltaX = e.clientX - startX;
     const rawDeltaY = e.clientY - startY;
+
+    // Track instant throw/flick velocity
+    const now = Date.now();
+    const dt = now - lastTime;
+    if (dt > 8) {
+      velocityX = (e.clientX - lastX) / dt;
+      velocityY = (e.clientY - lastY) / dt;
+      lastX = e.clientX;
+      lastY = e.clientY;
+      lastTime = now;
+    }
+
     const isMobile = window.innerWidth <= 768 || e.pointerType === 'touch';
 
     let displayX = 0;
@@ -216,7 +240,7 @@ function setupSwipeGestures(toast, onDismiss, onPauseTimer, onResumeTimer) {
       // -------------------------------------------------------------
       if (rawDeltaX > 0) {
         displayX = rawDeltaX;
-        opacity = Math.max(0.2, 1 - (rawDeltaX / 300));
+        opacity = Math.max(0.15, 1 - (rawDeltaX / 320));
       } else {
         displayX = calculateElastic(rawDeltaX, 35);
         opacity = 1;
@@ -233,7 +257,7 @@ function setupSwipeGestures(toast, onDismiss, onPauseTimer, onResumeTimer) {
       if (absX >= absY) {
         // Horizontal swipe (LEFT or RIGHT) - both dismiss on mobile
         displayX = rawDeltaX;
-        opacity = Math.max(0.2, 1 - (absX / 280));
+        opacity = Math.max(0.15, 1 - (absX / 280));
         displayY = rawDeltaY < 0 ? rawDeltaY * 0.2 : calculateElastic(rawDeltaY, 14);
       } else {
         // Vertical swipe
@@ -241,7 +265,7 @@ function setupSwipeGestures(toast, onDismiss, onPauseTimer, onResumeTimer) {
         if (rawDeltaY < 0) {
           // Swiping UP (dismissible)
           displayY = rawDeltaY;
-          opacity = Math.max(0.2, 1 - (absY / 220));
+          opacity = Math.max(0.15, 1 - (absY / 220));
         } else {
           // Swiping DOWN (elastic rubber band effect)
           displayY = calculateElastic(rawDeltaY, 35);
@@ -258,10 +282,9 @@ function setupSwipeGestures(toast, onDismiss, onPauseTimer, onResumeTimer) {
   }
 
   function handlePointerUp(e) {
-    if (!isDragging || e.pointerId !== activePointerId) return;
+    if (!isDragging || isDismissing || e.pointerId !== activePointerId) return;
     isDragging = false;
     activePointerId = null;
-    toast.classList.remove("is-swiping");
 
     if (toast.releasePointerCapture) {
       try {
@@ -270,33 +293,32 @@ function setupSwipeGestures(toast, onDismiss, onPauseTimer, onResumeTimer) {
     }
 
     const isMobile = window.innerWidth <= 768 || e.pointerType === 'touch';
-    const THRESHOLD_X = isMobile ? 65 : 75;
-    const THRESHOLD_Y = 55;
 
     let shouldDismiss = false;
     let dismissDirection = null;
 
     if (!isMobile) {
-      // PC: ONLY dismiss if swiped RIGHT past threshold
-      if (currentDeltaX > THRESHOLD_X) {
+      // PC: ONLY dismiss if swiped/thrown RIGHT
+      // Throw detection: distance > 40px OR fast rightward flick (> 15px with velocityX > 0.22)
+      if (currentDeltaX > 40 || (currentDeltaX > 15 && velocityX > 0.22)) {
         shouldDismiss = true;
         dismissDirection = "right";
       }
     } else {
-      // Mobile: Dismiss if swiped RIGHT, LEFT, or UP past threshold. NEVER down!
+      // Mobile: Dismiss if swiped/thrown RIGHT, LEFT, or UP. NEVER down!
       const absX = Math.abs(currentDeltaX);
       const absY = Math.abs(currentDeltaY);
 
       if (absX >= absY) {
-        if (currentDeltaX > THRESHOLD_X) {
+        if (currentDeltaX > 40 || (currentDeltaX > 15 && velocityX > 0.22)) {
           shouldDismiss = true;
           dismissDirection = "right";
-        } else if (currentDeltaX < -THRESHOLD_X) {
+        } else if (currentDeltaX < -40 || (currentDeltaX < -15 && velocityX < -0.22)) {
           shouldDismiss = true;
           dismissDirection = "left";
         }
       } else {
-        if (currentDeltaY < -THRESHOLD_Y) {
+        if (currentDeltaY < -35 || (currentDeltaY < -15 && velocityY < -0.22)) {
           shouldDismiss = true;
           dismissDirection = "up";
         }
@@ -304,34 +326,50 @@ function setupSwipeGestures(toast, onDismiss, onPauseTimer, onResumeTimer) {
     }
 
     if (shouldDismiss && dismissDirection) {
-      toast.style.transition = "transform 0.22s cubic-bezier(0.2, 0, 0, 1), opacity 0.2s ease";
+      isDismissing = true;
+      toast.classList.remove("is-swiping");
+      toast.classList.add("is-dismissing");
+
+      // Inform caller immediately to permanently cancel timers and delete active record
+      if (typeof onDismissStart === "function") {
+        onDismissStart();
+      }
+
+      // Smoothly fling the toast off-screen in the throw direction
+      toast.style.transition = "transform 0.24s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease";
       if (dismissDirection === "right") {
-        toast.style.transform = "translate3d(130%, 0, 0)";
+        toast.style.transform = "translate3d(150%, 0, 0)";
       } else if (dismissDirection === "left") {
-        toast.style.transform = "translate3d(-130%, 0, 0)";
+        toast.style.transform = "translate3d(-150%, 0, 0)";
       } else if (dismissDirection === "up") {
-        toast.style.transform = "translate3d(0, -130%, 0)";
+        toast.style.transform = "translate3d(0, -150%, 0)";
       }
       toast.style.opacity = "0";
 
+      // After fling animation completes, remove cleanly from DOM
       setTimeout(() => {
-        if (typeof onDismiss === 'function') onDismiss();
-      }, 200);
+        if (typeof onDismissComplete === "function") {
+          onDismissComplete();
+        }
+      }, 240);
     } else {
-      // Elastic snap back with spring overshoot curve
-      toast.style.transition = "transform 0.36s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.24s ease";
+      // Clean, linear elastic return directly to initial position from wherever it was dragged
+      toast.classList.remove("is-swiping");
+      toast.style.transition = "transform 0.22s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.2s ease";
       toast.style.transform = "translate3d(0, 0, 0)";
       toast.style.opacity = "1";
 
       setTimeout(() => {
-        if (!isDragging) {
+        if (!isDragging && !isDismissing) {
           toast.style.transition = "";
-          toast.style.transform = "";
+          toast.style.transform = "translate3d(0, 0, 0)";
           toast.style.opacity = "";
         }
-      }, 380);
+      }, 230);
 
-      if (typeof onResumeTimer === 'function') onResumeTimer();
+      if (typeof onResumeTimer === "function") {
+        onResumeTimer();
+      }
     }
   }
 
@@ -396,11 +434,12 @@ function showToast(
   }
 
   const toast = document.createElement("div");
-  toast.className = `toast ${normalizedType}`;
+  toast.className = `toast ${normalizedType} toast-enter`;
 
   function render(text, toastType) {
     const safeType = String(toastType || "success").toLowerCase().trim();
-    toast.className = `toast ${safeType}`;
+    const hasEnter = toast.classList.contains("toast-enter");
+    toast.className = `toast ${safeType}${hasEnter ? " toast-enter" : ""}`;
     const iconHtml = ICONS[safeType] || ICONS.success;
     toast.innerHTML = `
       <i>${iconHtml}</i>
@@ -411,13 +450,30 @@ function showToast(
   render(message, normalizedType);
   container.appendChild(toast);
 
+  // Remove toast-enter once initial entrance animation finishes so it NEVER replays during drag/snap-back
+  toast.addEventListener(
+    "animationend",
+    (e) => {
+      if (e.animationName === "toastIn" || e.animationName === "toastInMobile") {
+        toast.classList.remove("toast-enter");
+      }
+    },
+    { once: true }
+  );
+  setTimeout(() => {
+    toast.classList.remove("toast-enter");
+  }, 350);
+
   let timer;
   let remaining = duration;
   let startedAt = Date.now();
+  let isDismissed = false;
 
   function dismiss(delay = duration) {
+    if (isDismissed) return;
     clearTimeout(timer);
     if (delay === 0) {
+      isDismissed = true;
       activeToasts.delete(id);
       if (toast.parentNode) {
         toast.remove();
@@ -426,6 +482,8 @@ function showToast(
     }
 
     timer = setTimeout(() => {
+      if (isDismissed) return;
+      isDismissed = true;
       activeToasts.delete(id);
       toast.classList.add("hide");
       toast.addEventListener(
@@ -445,12 +503,14 @@ function showToast(
   // Pause on hover
   if (duration > 0) {
     toast.addEventListener("mouseenter", () => {
+      if (isDismissed) return;
       clearTimeout(timer);
       const elapsed = Date.now() - startedAt;
       remaining = Math.max(0, remaining - elapsed);
     });
 
     toast.addEventListener("mouseleave", () => {
+      if (isDismissed) return;
       startedAt = Date.now();
       dismiss(remaining);
     });
@@ -460,17 +520,27 @@ function showToast(
   setupSwipeGestures(
     toast,
     () => {
-      // Swipe dismissed
-      dismiss(0);
+      // Swipe dismiss started: cancel timer permanently, delete from active toasts
+      isDismissed = true;
+      clearTimeout(timer);
+      activeToasts.delete(id);
+    },
+    () => {
+      // Swipe dismiss complete: remove from DOM cleanly
+      if (toast.parentNode) {
+        toast.remove();
+      }
     },
     () => {
       // Pause timer while dragging
+      if (isDismissed) return;
       clearTimeout(timer);
       const elapsed = Date.now() - startedAt;
       remaining = Math.max(0, remaining - elapsed);
     },
     () => {
       // Resume timer on release if not dismissed
+      if (isDismissed) return;
       startedAt = Date.now();
       dismiss(remaining);
     }
@@ -479,6 +549,7 @@ function showToast(
   const api = {
     element: toast,
     update(newMessage, newType = "success", newDuration = 8000) {
+      if (isDismissed) return api;
       render(newMessage, newType);
       toast.classList.remove("hide");
       remaining = newDuration;
@@ -487,6 +558,8 @@ function showToast(
       return api;
     },
     dismiss() {
+      if (isDismissed) return;
+      isDismissed = true;
       clearTimeout(timer);
       activeToasts.delete(id);
       toast.classList.add("hide");
