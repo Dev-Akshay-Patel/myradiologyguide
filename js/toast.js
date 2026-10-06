@@ -464,21 +464,16 @@ function showToast(
     toast.classList.remove("toast-enter");
   }, 350);
 
-  let timer;
+  let timer = null;
   let remaining = duration;
   let startedAt = Date.now();
   let isDismissed = false;
 
-  function dismiss(delay = duration) {
+  function scheduleAutoDismiss(delay = remaining) {
     if (isDismissed) return;
     clearTimeout(timer);
-    if (delay === 0) {
-      isDismissed = true;
-      activeToasts.delete(id);
-      if (toast.parentNode) {
-        toast.remove();
-      }
-      return;
+    if (!delay || delay <= 0) {
+      return; // Persistent toast (e.g. offline indicator) - stays visible until swiped or updated
     }
 
     timer = setTimeout(() => {
@@ -498,7 +493,10 @@ function showToast(
     }, delay);
   }
 
-  dismiss();
+  // Only schedule auto-dismiss if positive duration provided
+  if (duration > 0) {
+    scheduleAutoDismiss(duration);
+  }
 
   // Pause on hover
   if (duration > 0) {
@@ -512,7 +510,7 @@ function showToast(
     toast.addEventListener("mouseleave", () => {
       if (isDismissed) return;
       startedAt = Date.now();
-      dismiss(remaining);
+      scheduleAutoDismiss(remaining);
     });
   }
 
@@ -535,14 +533,18 @@ function showToast(
       // Pause timer while dragging
       if (isDismissed) return;
       clearTimeout(timer);
-      const elapsed = Date.now() - startedAt;
-      remaining = Math.max(0, remaining - elapsed);
+      if (duration > 0) {
+        const elapsed = Date.now() - startedAt;
+        remaining = Math.max(0, remaining - elapsed);
+      }
     },
     () => {
-      // Resume timer on release if not dismissed
+      // Resume timer on release if not dismissed and duration > 0
       if (isDismissed) return;
       startedAt = Date.now();
-      dismiss(remaining);
+      if (duration > 0 && remaining > 0) {
+        scheduleAutoDismiss(remaining);
+      }
     }
   );
 
@@ -554,14 +556,23 @@ function showToast(
       toast.classList.remove("hide");
       remaining = newDuration;
       startedAt = Date.now();
-      dismiss(newDuration);
+      clearTimeout(timer);
+      if (newDuration > 0) {
+        scheduleAutoDismiss(newDuration);
+      }
       return api;
     },
-    dismiss() {
+    dismiss(immediate = false) {
       if (isDismissed) return;
       isDismissed = true;
       clearTimeout(timer);
       activeToasts.delete(id);
+      if (immediate) {
+        if (toast.parentNode) {
+          toast.remove();
+        }
+        return;
+      }
       toast.classList.add("hide");
       toast.addEventListener(
         "animationend",

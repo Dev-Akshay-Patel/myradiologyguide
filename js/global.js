@@ -422,8 +422,12 @@
   /* --------------------------------------------------------------------------
      Internet Connectivity Status (Online / Offline)
      -------------------------------------------------------------------------- */
+  let wasOffline = typeof navigator !== 'undefined' ? !navigator.onLine : false;
+
   function handleNetworkChange(isOnline) {
+    // If toast system is still loading, retry after brief delay
     if (typeof window.showToast !== 'function' && typeof window.Toast?.show !== 'function') {
+      setTimeout(() => handleNetworkChange(isOnline), 150);
       return;
     }
 
@@ -433,12 +437,16 @@
     };
 
     if (isOnline) {
-      toastFn.online(
-        "Internet connection restored. You're back online.",
-        4500,
-        "internet-connection-status"
-      );
+      if (wasOffline) {
+        wasOffline = false;
+        toastFn.online(
+          "Internet connection restored. You're back online.",
+          4500,
+          "internet-connection-status"
+        );
+      }
     } else {
+      wasOffline = true;
       toastFn.offline(
         "No internet connection. You are currently browsing offline.",
         0,
@@ -458,11 +466,15 @@
 
   document.addEventListener('DOMContentLoaded', () => {
     if (typeof navigator !== 'undefined' && navigator.onLine === false) {
-      setTimeout(() => handleNetworkChange(false), 500);
+      wasOffline = true;
+      setTimeout(() => handleNetworkChange(false), 300);
     }
   });
 
   window.NetworkStatus = {
     isOnline: () => typeof navigator !== 'undefined' ? navigator.onLine : true,
+    check: () => handleNetworkChange(typeof navigator !== 'undefined' ? navigator.onLine : true),
+    test: (online) => handleNetworkChange(Boolean(online))
   };
+  window.testNetworkStatus = (online) => handleNetworkChange(Boolean(online));
 })();
