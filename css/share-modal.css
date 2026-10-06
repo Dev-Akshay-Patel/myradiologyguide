@@ -156,26 +156,47 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: var(--radius-btn-subtle, 5px);
-  background-color: var(--header-btn-bg, var(--btn-subtle-bg));
-  border: 1px solid var(--header-btn-border, var(--btn-subtle-border));
-  color: var(--btn-icon-color, var(--color-text-secondary));
+  width: 32px;
+  height: 32px;
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  color: var(--color-text-secondary);
   cursor: pointer;
-  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+  padding: 0;
+  margin: 0;
+  transition: color var(--transition-fast), transform var(--transition-fast), opacity var(--transition-fast);
   flex-shrink: 0;
 }
 
 .share-close-btn:hover {
-  background-color: var(--header-btn-hover-bg, var(--btn-subtle-hover-bg));
-  border-color: var(--header-btn-hover-border, var(--btn-subtle-hover-border));
-  color: var(--btn-icon-hover-color, var(--color-text-primary));
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: var(--color-text-primary);
+  transform: none !important;
 }
 
 .share-close-btn:active {
-  background-color: var(--header-btn-active-bg, var(--btn-subtle-active-bg));
-  transform: scale(0.96);
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.share-close-btn .close-svg {
+  width: 24px;
+  height: 24px;
+  display: block;
+  color: inherit;
+}
+
+.share-close-btn .close-svg path {
+  fill: currentColor !important;
 }
 
 /* --------------------------------------------------------------------------
@@ -273,14 +294,14 @@
   justify-content: flex-start;
 }
 
-/* Border-less Round Social Platform Pill Button (Big round circular pill, no text) */
+/* Border-less Social Platform Pill Button (17px border-radius, no text, no hover effects) */
 .share-platform-pill {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 52px;
   height: 52px;
-  border-radius: 9999px; /* Round circular pill */
+  border-radius: 17px; /* Decreased border radius to 17px as instructed */
   border: none !important; /* Border-less pill as explicitly instructed */
   outline: none;
   background-color: color-mix(in srgb, var(--color-text-primary) 8%, var(--color-bg-surface));
@@ -289,19 +310,14 @@
   user-select: none;
   flex-shrink: 0;
   padding: 0;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-  transition: background-color var(--transition-fast), transform var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast);
+  box-shadow: none !important;
+  transition: none !important;
 }
 
-.share-platform-pill:hover {
-  background-color: color-mix(in srgb, var(--accent-color) 20%, var(--color-bg-surface));
-  color: var(--accent-color);
-  transform: translateY(-2px) scale(1.06);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
-}
-
+.share-platform-pill:hover,
 .share-platform-pill:active {
-  transform: translateY(0) scale(0.96);
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 .share-platform-icon {
@@ -332,8 +348,17 @@
   transition: border-color var(--transition-fast);
 }
 
-.share-copy-box:focus-within {
-  border-color: var(--accent-color);
+.share-copy-box:focus-within,
+.share-copy-box:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.share-url-input:focus,
+.share-url-input:focus-visible {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 .share-link-icon {
@@ -371,7 +396,7 @@
   padding: 6px 0;
 }
 
-/* Big icon-only copy button with clear visibility in both light & dark mode */
+/* Big icon-only copy button with clear visibility in both light & dark mode - ZERO box shadow */
 .share-copy-btn {
   display: inline-flex;
   align-items: center;
@@ -379,67 +404,87 @@
   width: 44px;
   height: 44px;
   border-radius: 9px;
-  border: none;
-  background-color: var(--accent-color, #2563eb);
-  color: #ffffff;
+  border: none !important;
+  background-color: var(--accent-color, #18181b);
+  color: var(--accent-contrast, #ffffff);
   cursor: pointer;
   flex-shrink: 0;
   padding: 0;
-  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.28);
-  transition: opacity var(--transition-fast), background-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+  box-shadow: none !important;
+  transition: opacity var(--transition-fast), background-color var(--transition-fast);
 }
 
 .share-copy-btn:hover {
-  filter: brightness(1.12);
-  transform: scale(1.04);
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.38);
+  opacity: 0.88;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 .share-copy-btn:active {
-  transform: scale(0.96);
-}
-
-.share-copy-btn.is-copied {
-  background-color: #10b981 !important;
-  color: #ffffff !important;
-  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.38);
-}
-
-.share-copy-btn.is-copied svg {
-  stroke: #ffffff !important;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 .share-copy-btn-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
+  color: inherit;
 }
 
 .share-copy-btn-icon svg {
   width: 22px;
   height: 22px;
   display: block;
-  stroke: #ffffff !important;
+}
+
+.share-copy-btn-icon svg path,
+.share-copy-btn-icon svg rect {
+  stroke: var(--accent-contrast, #ffffff) !important;
 }
 
 /* Dark mode explicit high-contrast rule (fixes white-on-white visibility) */
-[data-theme="dark"] .share-copy-box {
-  background-color: var(--color-bg-surface, #1e293b);
-  border-color: var(--color-border, #334155);
+[data-theme="dark"] .share-copy-box,
+[data-theme="extra-dark"] .share-copy-box {
+  background-color: var(--color-bg-surface, #1a1a1d);
+  border-color: var(--color-border, #2e2e34);
 }
 
-[data-theme="dark"] .share-copy-btn {
-  background-color: var(--accent-color, #3b82f6);
-  color: #ffffff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+[data-theme="dark"] .share-copy-btn,
+[data-theme="extra-dark"] .share-copy-btn {
+  background-color: var(--accent-color, #f4f4f5);
+  color: var(--accent-contrast, #121214);
+  box-shadow: none !important;
 }
 
-[data-theme="dark"] .share-copy-btn:hover {
-  filter: brightness(1.15);
+[data-theme="dark"] .share-copy-btn:hover,
+[data-theme="extra-dark"] .share-copy-btn:hover {
+  box-shadow: none !important;
 }
 
-[data-theme="dark"] .share-copy-btn-icon svg {
-  stroke: #ffffff !important;
+/* In dark mode: SVG stroke is dark (#121214) on light/white button background - NEVER both white */
+[data-theme="dark"] .share-copy-btn-icon svg,
+[data-theme="dark"] .share-copy-btn-icon svg path,
+[data-theme="dark"] .share-copy-btn-icon svg rect,
+[data-theme="extra-dark"] .share-copy-btn-icon svg,
+[data-theme="extra-dark"] .share-copy-btn-icon svg path,
+[data-theme="extra-dark"] .share-copy-btn-icon svg rect {
+  stroke: var(--accent-contrast, #121214) !important;
+}
+
+/* Copied state: Icon changes to tick, button maintains normal background (NO green) */
+.share-copy-btn.is-copied,
+[data-theme="dark"] .share-copy-btn.is-copied,
+[data-theme="extra-dark"] .share-copy-btn.is-copied {
+  box-shadow: none !important;
+}
+
+.share-copy-btn.is-copied svg path {
+  stroke: var(--accent-contrast, #ffffff) !important;
+}
+
+[data-theme="dark"] .share-copy-btn.is-copied svg path,
+[data-theme="extra-dark"] .share-copy-btn.is-copied svg path {
+  stroke: var(--accent-contrast, #121214) !important;
 }
 
