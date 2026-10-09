@@ -5,10 +5,80 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Responsive Header</title>
     <meta name="description" content="A responsive clinical radiology portal featuring a rich multi-column mega menu, interactive hero carousel, pinned post, compact 3-column clinical articles grid with custom SVG pagination, dedicated Browse by Subject curriculum hub in the left column, and popular posts and topics in the right sidebar." />
-    <meta property="og:title" content="Responsive Header" />
-    <meta property="og:description" content="A responsive clinical radiology portal featuring a rich multi-column mega menu, interactive hero carousel, pinned post, compact 3-column clinical articles grid with custom SVG pagination, dedicated Browse by Subject curriculum hub in the left column, and popular posts and topics in the right sidebar." />
+
+    <!-- Favicon & Touch Icons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/assets/favicon/favicon-96x96.png" />
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="/assets/favicon/site.webmanifest" />
+
+    <!-- Mobile & PWA Optimization -->
+    <meta name="theme-color" content="#000000" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="MRG" />
+    <meta name="application-name" content="My Radiology Guide" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://myradiologyguide.web.app/" />
+
+    <!-- OpenGraph Social Metadata -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="My Radiology Guide" />
+    <meta property="og:title" content="My Radiology Guide" />
+    <meta property="og:description" content="A responsive clinical radiology portal featuring a rich multi-column mega menu, interactive hero carousel, pinned post, compact 3-column clinical articles grid with custom SVG pagination, dedicated Browse by Subject curriculum hub in the left column, and popular posts and topics in the right sidebar." />
+    <meta property="og:url" content="https://myradiologyguide.web.app/" />
+    <meta property="og:image" content="https://myradiologyguide.web.app/assets/favicon/web-app-manifest-512x512.png" />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter / X Cards -->
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="My Radiology Guide" />
+    <meta name="twitter:description" content="A responsive clinical radiology portal featuring interactive hero carousel, pinned diagnostic protocols, curriculum hub, and digital book library." />
+    <meta name="twitter:image" content="https://myradiologyguide.web.app/assets/favicon/web-app-manifest-512x512.png" />
+
+    <!-- Schema.org JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://myradiologyguide.web.app/#website",
+          "url": "https://myradiologyguide.web.app/",
+          "name": "My Radiology Guide",
+          "alternateName": "MRG",
+          "description": "Clinical radiology portal featuring diagnostic cases, curriculum hub, and digital textbook library.",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://myradiologyguide.web.app/?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "MedicalWebPage",
+          "@id": "https://myradiologyguide.web.app/#webpage",
+          "url": "https://myradiologyguide.web.app/",
+          "name": "My Radiology Guide",
+          "isPartOf": {
+            "@id": "https://myradiologyguide.web.app/#website"
+          },
+          "about": [
+            {
+              "@type": "MedicalSpecialty",
+              "name": "Radiology"
+            }
+          ],
+          "description": "Comprehensive clinical radiology portal featuring interactive hero carousel, pinned diagnostic protocols, curriculum hubs, and reference manuals."
+        }
+      ]
+    }
+    </script>
 
     <!-- Google Fonts Preconnect & Optimized Loading to eliminate CLS -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
