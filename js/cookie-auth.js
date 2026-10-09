@@ -73,10 +73,11 @@
   }
 
   /* ==========================================================================
-     BOOKMARK MANAGEMENT (Browser Storage - Works Anonymously)
+     BOOKMARK MANAGEMENT (Browser Storage - Real User Saves Only)
      ========================================================================== */
 
-  const DEFAULT_INITIAL_BOOKMARKS = [
+  // Dummy IDs to clean up from legacy initial seeding
+  const LEGACY_DUMMY_BOOKMARKS = [
     'stroke-cta-protocol',
     'chest-hrct-interstitial',
     'physics-tube-rating'
@@ -99,14 +100,12 @@
       } catch (e) {}
 
       ids = Array.from(new Set(ids));
-
-      // Seed initial defaults if completely empty
-      if (ids.length === 0) {
-        ids = [...DEFAULT_INITIAL_BOOKMARKS];
-      }
-
       setCookie(COOKIE_BOOKMARKS, ids, 365);
     }
+
+    // Filter out any legacy seeded dummy bookmarks
+    ids = ids.filter(d => !LEGACY_DUMMY_BOOKMARKS.includes(d));
+    setCookie(COOKIE_BOOKMARKS, ids, 365);
 
     // Mirror to localStorage for script compatibility
     try {
@@ -185,46 +184,14 @@
   }
 
   /* ==========================================================================
-     DOWNLOADS TRACKING (Browser Storage - Works Anonymously)
+     DOWNLOADS TRACKING (Browser Storage - Real User Downloads Only)
      ========================================================================== */
 
-  const DEFAULT_INITIAL_DOWNLOADS = [
-    {
-      id: 'dl-physics-4th-ed',
-      title: 'The Essential Physics of Medical Imaging (4th Edition Reference)',
-      category: 'Diagnostic Physics',
-      format: 'PDF',
-      size: '48.2 MB',
-      timestamp: Date.now() - 1000 * 60 * 60 * 24 * 2,
-      url: '/books/'
-    },
-    {
-      id: 'dl-stroke-aspects-card',
-      title: 'Acute Ischemic Stroke ASPECTS Multi-Phase CTA Quick Triage Card',
-      category: 'Neuroradiology',
-      format: 'PDF',
-      size: '4.2 MB',
-      timestamp: Date.now() - 1000 * 60 * 60 * 24 * 5,
-      url: '/post/index.html'
-    },
-    {
-      id: 'dl-chest-ct-ild-atlas',
-      title: 'High-Resolution Chest CT Interstitial Lung Disease Pattern Atlas',
-      category: 'Thoracic Imaging',
-      format: 'PDF',
-      size: '32.6 MB',
-      timestamp: Date.now() - 1000 * 60 * 60 * 24 * 9,
-      url: '/books/'
-    },
-    {
-      id: 'dl-msk-ultrasound-pocket',
-      title: 'Dynamic Musculoskeletal Ultrasound & Rotator Cuff Pocket Companion',
-      category: 'MSK Ultrasound',
-      format: 'EPUB',
-      size: '18.4 MB',
-      timestamp: Date.now() - 1000 * 60 * 60 * 24 * 12,
-      url: '/books/'
-    }
+  const LEGACY_DUMMY_DOWNLOAD_IDS = [
+    'dl-physics-4th-ed',
+    'dl-stroke-aspects-card',
+    'dl-chest-ct-ild-atlas',
+    'dl-msk-ultrasound-pocket'
   ];
 
   function getDownloads() {
@@ -234,12 +201,17 @@
       if (raw) list = JSON.parse(raw);
     } catch (e) {}
 
-    if (!Array.isArray(list) || list.length === 0) {
-      list = [...DEFAULT_INITIAL_DOWNLOADS];
-      try {
-        localStorage.setItem(STORAGE_DOWNLOADS, JSON.stringify(list));
-      } catch (e) {}
+    if (!Array.isArray(list)) {
+      list = [];
     }
+
+    // Filter out legacy dummy downloads
+    list = list.filter(d => !LEGACY_DUMMY_DOWNLOAD_IDS.includes(d.id));
+
+    try {
+      localStorage.setItem(STORAGE_DOWNLOADS, JSON.stringify(list));
+    } catch (e) {}
+
     return list;
   }
 
@@ -302,13 +274,22 @@
       } catch (e) {}
     }
 
-    // Only recognize valid Google sessions (anonymous users have null session)
-    if (session && typeof session === 'object' && (session.provider === 'google' || session.email)) {
-      setCookie(COOKIE_SESSION, session, 365);
-      try {
-        localStorage.setItem(STORAGE_SESSION, JSON.stringify(session));
-      } catch (e) {}
-      return session;
+    // Recognize valid Google sessions and Local accounts
+    if (session && typeof session === 'object') {
+      if (session.provider === 'google' || session.email) {
+        setCookie(COOKIE_SESSION, session, 365);
+        try {
+          localStorage.setItem(STORAGE_SESSION, JSON.stringify(session));
+        } catch (e) {}
+        return session;
+      }
+      if (session.isLocal || session.provider === 'local') {
+        setCookie(COOKIE_SESSION, session, 365);
+        try {
+          localStorage.setItem(STORAGE_SESSION, JSON.stringify(session));
+        } catch (e) {}
+        return session;
+      }
     }
 
     return null;
@@ -540,14 +521,43 @@
     console.log(`[Toast ${type}]:`, message);
   }
 
-  // Backwards compatibility shim for any existing code calling old local methods
-  function createLocalAccount() {
-    return null;
+  // Real Local Account Support (Saved in browser storage & cookies)
+  function createLocalAccount(data = {}) {
+    const sessionData = {
+      provider: 'local',
+      isLocal: true,
+      name: data.name || 'Local Physician',
+      avatar: data.avatar || '',
+      avatarType: data.avatarType || 'dicebear',
+      avatarSeed: data.avatarSeed || data.name || 'physician',
+      canComment: false,
+      joinedDate: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+      timestamp: Date.now()
+    };
+    setCookie(COOKIE_SESSION, sessionData, 365);
+    try {
+      localStorage.setItem(STORAGE_SESSION, JSON.stringify(sessionData));
+      localStorage.setItem('radiology_local_profile', JSON.stringify({ name: sessionData.name, avatar: sessionData.avatar }));
+    } catch (e) {}
+    window.dispatchEvent(new CustomEvent('auth-state-changed', { detail: sessionData }));
+    return sessionData;
   }
-  function loginOrRestoreLocalAccount() {
-    return { session: null, isExisting: false };
+
+  function loginOrRestoreLocalAccount(data) {
+    const session = createLocalAccount(data);
+    return { session, isExisting: true };
   }
-  function findStoredAccount() {
+
+  function findStoredAccount(name) {
+    try {
+      const raw = localStorage.getItem('radiology_local_profile');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && parsed.name && (!name || parsed.name.toLowerCase() === name.toLowerCase())) {
+          return parsed;
+        }
+      }
+    } catch (e) {}
     return null;
   }
 

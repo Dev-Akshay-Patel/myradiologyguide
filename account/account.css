@@ -1074,6 +1074,26 @@
   color: #ef4444;
 }
 
+.toolbar-action-btn svg,
+.account-action-primary-btn svg,
+.account-action-delete-btn svg {
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px !important;
+  min-height: 16px !important;
+  max-width: 16px !important;
+  max-height: 16px !important;
+  flex-shrink: 0;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.toolbar-action-btn svg path,
+.account-action-primary-btn svg path,
+.account-action-delete-btn svg path {
+  stroke: currentColor;
+}
+
 /* Empty State */
 .account-empty-state {
   display: flex;

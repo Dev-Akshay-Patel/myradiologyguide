@@ -483,4 +483,47 @@
     test: (online) => handleNetworkChange(Boolean(online), true)
   };
   window.testNetworkStatus = (online) => handleNetworkChange(Boolean(online), true);
+
+  /* ==========================================================================
+     REAL ACCOUNT ACTIVE TIME & VISIT TRACKER (NO FAKE DATA)
+     ========================================================================== */
+  (function initActiveTimeTracker() {
+    const STORAGE_ACTIVE_SECONDS = 'radiology_active_seconds_v1';
+    const STORAGE_LAST_ACTIVE = 'radiology_account_last_active_timestamp';
+    const STORAGE_FIRST_SEEN = 'radiology_account_created_timestamp';
+    const STORAGE_LAST_LOGIN = 'radiology_account_last_login_timestamp';
+
+    try {
+      const now = Date.now();
+      if (!localStorage.getItem(STORAGE_FIRST_SEEN)) {
+        localStorage.setItem(STORAGE_FIRST_SEEN, String(now));
+      }
+      if (!localStorage.getItem(STORAGE_LAST_LOGIN)) {
+        localStorage.setItem(STORAGE_LAST_LOGIN, String(now));
+      }
+    } catch (e) {}
+
+    let lastTick = Date.now();
+    function trackElapsed() {
+      const now = Date.now();
+      const elapsed = (now - lastTick) / 1000;
+      lastTick = now;
+
+      // Only accumulate if tab is visible and interval is reasonable
+      if (document.visibilityState === 'visible' && elapsed > 0 && elapsed < 60) {
+        try {
+          const current = parseFloat(localStorage.getItem(STORAGE_ACTIVE_SECONDS) || '0') || 0;
+          const updated = current + elapsed;
+          localStorage.setItem(STORAGE_ACTIVE_SECONDS, String(updated));
+          localStorage.setItem(STORAGE_LAST_ACTIVE, String(now));
+        } catch (e) {}
+      }
+    }
+
+    setInterval(trackElapsed, 5000);
+    document.addEventListener('visibilitychange', () => {
+      lastTick = Date.now();
+    });
+    window.addEventListener('beforeunload', trackElapsed);
+  })();
 })();

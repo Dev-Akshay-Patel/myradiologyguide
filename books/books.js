@@ -1,16 +1,28 @@
 /**
  * books.js
  * Best Books & Clinical Literature Controller
- * Direct catalog of high-yield radiology books.
- * Displays Book Title, Size, and Download (all left-aligned).
- * Icon-only Download button with SVG and animated background fetch loader.
- * Fully responsive for mobile devices.
+ * Direct catalog of books provided by the user.
+ * - All books folderized under their Author name.
+ * - Folders start collapsed by default.
+ * - In card grid view: NO numbers added.
+ * - In table view: Clean numbered items.
+ * - Zero CLS accordion architecture: targeted in-place DOM toggle that NEVER
+ *   wipes out or disturbs other folders, scroll position, or table layout.
+ * - Shows calculated total size of books for folders in the Size position.
+ * - Author folder titles:
+ *     XYZ
+ *     Contains X books (or Contains 1 book)
+ * - Expand uses down arrow SVG, Collapse uses up arrow SVG.
+ * - Mobile removes "Expand" / "Collapse" text, showing clean icon button.
+ * - No left border next to numbers.
+ * - Light smooth CSS animation on folder expansion.
+ * - Full dark mode contrast fix.
  */
 
 (function () {
   'use strict';
 
-  const STORAGE_KEY = 'radiology_books_data';
+  const STORAGE_KEY = 'radiology_books_data_v9';
 
   const DOWNLOAD_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
 <path d="M16.44 8.90039C20.04 9.21039 21.51 11.0604 21.51 15.1104V15.2404C21.51 19.7104 19.72 21.5004 15.25 21.5004H8.73998C4.26998 21.5004 2.47998 19.7104 2.47998 15.2404V15.1104C2.47998 11.0904 3.92998 9.24039 7.46998 8.91039" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -23,12 +35,29 @@
   <circle class="car" cx="20" cy="20" r="17.5" pathlength="100" stroke-width="5px" fill="none" />
 </svg>`;
 
+  // User-requested Down Arrow SVG for Expand
+  const EXPAND_ARROW_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+<path d="M19.9201 8.9502L13.4001 15.4702C12.6301 16.2402 11.3701 16.2402 10.6001 15.4702L4.08008 8.9502" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+</svg>`;
+
+  // User-requested Up Arrow SVG for Collapse
+  const COLLAPSE_ARROW_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+<path d="M19.9201 15.0496L13.4001 8.52965C12.6301 7.75965 11.3701 7.75965 10.6001 8.52965L4.08008 15.0496" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+</svg>`;
+
+  const FOLDER_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none">
+<path d="M22 19C22 19.5304 21.7893 20.0391 21.4142 20.4142C21.0391 20.7893 20.5304 21 20 21H4C3.46957 21 2.96086 20.7893 2.58579 20.4142C2.21071 20.0391 2 19.5304 2 19V5C2 4.46957 2.21071 3.96086 2.58579 3.58579C2.96086 3.21071 3.46957 3 4 3H9L11 6H20C20.5304 6 21.0391 6.21071 21.4142 6.58579C21.7893 6.96086 22 7.46957 22 8V19Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`;
+
   // State
   let booksData = [];
   let parsedBooks = [];
   let searchQuery = '';
+  let groupByAuthor = true;
   let sortBy = 'title-asc';
   let viewMode = localStorage.getItem('books-view-mode') || 'table';
+  // Folders start collapsed by default
+  let expandedAuthors = new Set();
 
   // DOM Elements
   let booksContainer;
@@ -41,6 +70,7 @@
   let sortSelectedText;
   let viewTableBtn;
   let viewGridBtn;
+  let groupToggleBtn;
 
   function initDOMElements() {
     booksContainer = document.getElementById('books-content-area');
@@ -53,6 +83,7 @@
     sortSelectedText = document.getElementById('books-sort-selected-text');
     viewTableBtn = document.getElementById('view-table-btn');
     viewGridBtn = document.getElementById('view-grid-btn');
+    groupToggleBtn = document.getElementById('books-group-toggle-btn');
   }
 
   function start() {
@@ -94,25 +125,15 @@
 
       if (willExpand) {
         wrapper.classList.add('is-expanded');
-        if (toggleText) {
-          toggleText.textContent = lessText;
-        }
-        hiddenItems.forEach((item) => {
-          item.removeAttribute('tabindex');
-        });
+        if (toggleText) toggleText.textContent = lessText;
+        hiddenItems.forEach((item) => item.removeAttribute('tabindex'));
       } else {
         wrapper.classList.remove('is-expanded');
-        if (toggleText) {
-          toggleText.textContent = moreText;
-        }
-        hiddenItems.forEach((item) => {
-          item.setAttribute('tabindex', '-1');
-        });
+        if (toggleText) toggleText.textContent = moreText;
+        hiddenItems.forEach((item) => item.setAttribute('tabindex', '-1'));
       }
 
-      if (e.detail > 0) {
-        toggleBtn.blur();
-      }
+      if (e.detail > 0) toggleBtn.blur();
     });
   }
 
@@ -139,14 +160,27 @@
     return val * 1024 * 1024;
   }
 
+  function formatSizeBytes(bytes) {
+    if (!bytes || bytes <= 0) return '--';
+    const gb = 1024 * 1024 * 1024;
+    const mb = 1024 * 1024;
+    const kb = 1024;
+    if (bytes >= gb) {
+      const val = (bytes / gb).toFixed(1);
+      return val.endsWith('.0') ? val.slice(0, -2) + ' GB' : val + ' GB';
+    }
+    if (bytes >= mb) {
+      const val = (bytes / mb).toFixed(1);
+      return val.endsWith('.0') ? val.slice(0, -2) + ' MB' : val + ' MB';
+    }
+    return Math.round(bytes / kb) + ' KB';
+  }
+
   function cleanTitle(rawTitle) {
     if (!rawTitle) return 'Untitled Book';
-    // Remove standalone format tokens like [PDF], (EPUB), - PDF, .pdf, etc.
     let title = String(rawTitle).trim();
     title = title.replace(/\[\s*(pdf|epub)\s*\]/gi, '');
     title = title.replace(/\(\s*(pdf|epub)\s*\)/gi, '');
-    title = title.replace(/\b(pdf|epub)\b$/gi, '');
-    title = title.replace(/\s+-\s+(pdf|epub)\s*$/gi, '');
     return title.trim() || rawTitle;
   }
 
@@ -159,6 +193,10 @@
         id: b.id || 'book-' + (idx + 1),
         title: cleanTitle(b.title),
         rawTitle: b.title || 'Untitled Book',
+        author: b.author || 'General Medical Literature',
+        authorGroup: b.authorGroup || b.author || 'Medical Literature',
+        category: b.category || 'General',
+        bookType: b.bookType || 'PDF',
         size: b.size || '--',
         sizeBytes: parseSizeBytes(b.size),
         downloadLink: directDownload
@@ -172,6 +210,15 @@
   async function loadBooks() {
     renderLoadingShimmer();
     try {
+      const res = await fetch('/data/books.json');
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      booksData = Array.isArray(data) ? data : [];
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(booksData));
+      parsedBooks = processBooksData(booksData);
+      applyFilterAndRender();
+    } catch (err) {
+      console.warn('Network fetch error, trying cache fallback:', err);
       const cached = localStorage.getItem(STORAGE_KEY);
       if (cached) {
         try {
@@ -182,21 +229,8 @@
             applyFilterAndRender();
             return;
           }
-        } catch (e) {
-          console.warn('Failed to parse cached books, fetching default json', e);
-        }
+        } catch (e) {}
       }
-
-      // Fetch from /data/books.json
-      const res = await fetch('/data/books.json');
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      const data = await res.json();
-      booksData = Array.isArray(data) ? data : [];
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(booksData));
-      parsedBooks = processBooksData(booksData);
-      applyFilterAndRender();
-    } catch (err) {
-      console.error('Error loading books:', err);
       renderErrorState(err.message);
     }
   }
@@ -228,6 +262,19 @@
       });
     }
 
+    // Group By Author toggle button
+    if (groupToggleBtn) {
+      groupToggleBtn.classList.toggle('is-active', groupByAuthor);
+      groupToggleBtn.setAttribute('aria-pressed', String(groupByAuthor));
+
+      groupToggleBtn.addEventListener('click', () => {
+        groupByAuthor = !groupByAuthor;
+        groupToggleBtn.classList.toggle('is-active', groupByAuthor);
+        groupToggleBtn.setAttribute('aria-pressed', String(groupByAuthor));
+        applyFilterAndRender();
+      });
+    }
+
     // Custom Sort Dropdown Handler
     if (sortTrigger && sortMenu) {
       const sortOptions = sortMenu.querySelectorAll('.books-sort-option');
@@ -247,11 +294,8 @@
       sortTrigger.addEventListener('click', (e) => {
         e.stopPropagation();
         const isOpen = sortMenu.classList.contains('is-open');
-        if (isOpen) {
-          closeSortMenu();
-        } else {
-          openSortMenu();
-        }
+        if (isOpen) closeSortMenu();
+        else openSortMenu();
       });
 
       sortOptions.forEach((option) => {
@@ -271,9 +315,7 @@
             sortSelectedText.innerHTML = labelSpan.innerHTML.trim();
           }
 
-          if (sortSelect) {
-            sortSelect.value = val;
-          }
+          if (sortSelect) sortSelect.value = val;
 
           closeSortMenu();
           sortTrigger.focus();
@@ -304,14 +346,10 @@
         });
       });
 
-      // Close on click outside
       document.addEventListener('click', (e) => {
-        if (sortDropdown && !sortDropdown.contains(e.target)) {
-          closeSortMenu();
-        }
+        if (sortDropdown && !sortDropdown.contains(e.target)) closeSortMenu();
       });
 
-      // Close on Escape
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && sortMenu.classList.contains('is-open')) {
           closeSortMenu();
@@ -320,7 +358,6 @@
       });
     }
 
-    // Sort selector fallback
     if (sortSelect) {
       sortSelect.addEventListener('change', (e) => {
         sortBy = e.target.value;
@@ -328,26 +365,53 @@
       });
     }
 
-    // View toggles
     if (viewTableBtn) {
-      viewTableBtn.addEventListener('click', () => {
-        setViewMode('table');
-      });
+      viewTableBtn.addEventListener('click', () => setViewMode('table'));
     }
 
     if (viewGridBtn) {
-      viewGridBtn.addEventListener('click', () => {
-        setViewMode('grid');
-      });
+      viewGridBtn.addEventListener('click', () => setViewMode('grid'));
     }
 
-    // Event delegation for download buttons (both table and grid view)
+    // Event delegation for clicks in booksContainer
     if (booksContainer) {
       booksContainer.addEventListener('click', (e) => {
-        const btn = e.target.closest('.book-download-btn');
-        if (!btn) return;
-        e.preventDefault();
-        handleDownloadWithLoader(btn);
+        // 1. Download button
+        const dlBtn = e.target.closest('.book-download-btn');
+        if (dlBtn) {
+          e.preventDefault();
+          e.stopPropagation();
+          handleDownloadWithLoader(dlBtn);
+          return;
+        }
+
+        // 2. Folder row or collapse button click -> targeted zero-CLS toggle
+        const folderTarget = e.target.closest('.author-folder-row, .author-grid-group-header, .author-collapse-btn');
+        if (folderTarget) {
+          e.preventDefault();
+          e.stopPropagation();
+          const folderId = folderTarget.getAttribute('data-folder-id') || folderTarget.closest('[data-folder-id]')?.getAttribute('data-folder-id');
+          const authorGroupKey = folderTarget.getAttribute('data-author-group') || folderTarget.closest('[data-author-group]')?.getAttribute('data-author-group');
+          if (authorGroupKey) {
+            toggleAuthorCollapse(authorGroupKey, folderId);
+          }
+        }
+      });
+
+      // Keyboard support for folder rows
+      booksContainer.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          if (e.target.closest('button, a')) return; // Native click will handle buttons and links without duplicate toggle
+          const folderRow = e.target.closest('.author-folder-row, .author-grid-group-header');
+          if (folderRow) {
+            e.preventDefault();
+            const folderId = folderRow.getAttribute('data-folder-id');
+            const authorGroupKey = folderRow.getAttribute('data-author-group');
+            if (authorGroupKey) {
+              toggleAuthorCollapse(authorGroupKey, folderId);
+            }
+          }
+        }
       });
     }
 
@@ -364,7 +428,6 @@
       }
     });
 
-    // Handle viewport resize: ensure mobile view is consistently table view
     let resizeTimer;
     window.addEventListener('resize', () => {
       clearTimeout(resizeTimer);
@@ -376,6 +439,97 @@
     });
   }
 
+  /**
+   * Targeted in-place DOM Accordion Toggle.
+   * Completely eliminates CLS and prevents affecting any other folder or scroll position!
+   */
+  function toggleAuthorCollapse(authorKey, folderId) {
+    const isCurrentlyExpanded = expandedAuthors.has(authorKey);
+    const willExpand = !isCurrentlyExpanded;
+
+    if (willExpand) {
+      expandedAuthors.add(authorKey);
+    } else {
+      expandedAuthors.delete(authorKey);
+    }
+
+    if (!booksContainer) return;
+
+    // 1. Table Mode targeted toggle
+    const folderRow = (folderId ? booksContainer.querySelector(`.author-folder-row[data-folder-id="${folderId}"]`) : null) ||
+                      booksContainer.querySelector(`.author-folder-row[data-author-group="${CSS.escape(authorKey)}"]`);
+    if (folderRow) {
+      const activeFolderId = folderRow.getAttribute('data-folder-id') || folderId;
+      folderRow.setAttribute('aria-expanded', String(willExpand));
+      folderRow.classList.toggle('folder-is-open', willExpand);
+
+      const btn = folderRow.querySelector('.author-collapse-btn');
+      if (btn) {
+        btn.classList.toggle('is-expanded', willExpand);
+        btn.classList.toggle('is-collapsed', !willExpand);
+        btn.setAttribute('aria-expanded', String(willExpand));
+        const textSpan = btn.querySelector('.author-collapse-text');
+        if (textSpan) textSpan.textContent = willExpand ? 'Collapse' : 'Expand';
+        const svgEl = btn.querySelector('svg');
+        if (svgEl) {
+          svgEl.outerHTML = willExpand ? COLLAPSE_ARROW_SVG : EXPAND_ARROW_SVG;
+        }
+      }
+
+      if (activeFolderId) {
+        const childRows = booksContainer.querySelectorAll(`tr[data-parent-folder-id="${activeFolderId}"]`);
+        childRows.forEach((row) => {
+          if (willExpand) {
+            row.removeAttribute('hidden');
+            row.style.display = '';
+          } else {
+            row.setAttribute('hidden', 'true');
+            row.style.display = 'none';
+          }
+        });
+      }
+      return; // Zero CLS! Other folders remain completely undisturbed
+    }
+
+    // 2. Grid Mode targeted toggle
+    const gridGroup = (folderId ? booksContainer.querySelector(`.author-grid-group[data-folder-id="${folderId}"]`) : null) ||
+                      booksContainer.querySelector(`.author-grid-group[data-author-group="${CSS.escape(authorKey)}"]`);
+    if (gridGroup) {
+      const activeFolderId = gridGroup.getAttribute('data-folder-id') || folderId;
+      const headerEl = gridGroup.querySelector('.author-grid-group-header');
+      if (headerEl) headerEl.setAttribute('aria-expanded', String(willExpand));
+
+      const btn = gridGroup.querySelector('.author-collapse-btn');
+      if (btn) {
+        btn.classList.toggle('is-expanded', willExpand);
+        btn.classList.toggle('is-collapsed', !willExpand);
+        btn.setAttribute('aria-expanded', String(willExpand));
+        const textSpan = btn.querySelector('.author-collapse-text');
+        if (textSpan) textSpan.textContent = willExpand ? 'Collapse' : 'Expand';
+        const svgEl = btn.querySelector('svg');
+        if (svgEl) {
+          svgEl.outerHTML = willExpand ? COLLAPSE_ARROW_SVG : EXPAND_ARROW_SVG;
+        }
+      }
+
+      if (activeFolderId) {
+        const cardsContainer = gridGroup.querySelector(`.author-grid-cards[data-parent-folder-id="${activeFolderId}"]`);
+        if (cardsContainer) {
+          if (willExpand) {
+            cardsContainer.removeAttribute('hidden');
+            cardsContainer.style.display = '';
+            cardsContainer.classList.add('is-open');
+          } else {
+            cardsContainer.setAttribute('hidden', 'true');
+            cardsContainer.style.display = 'none';
+            cardsContainer.classList.remove('is-open');
+          }
+        }
+      }
+      return;
+    }
+  }
+
   /* --------------------------------------------------------------------------
      4. Download Handler with Background Fetch & Loader
      -------------------------------------------------------------------------- */
@@ -384,25 +538,24 @@
 
     const downloadUrl = btn.getAttribute('data-download-url');
     const bookTitle = btn.getAttribute('data-book-title') || 'radiology-book';
+    const bookCategory = btn.getAttribute('data-book-category') || 'Reference Literature';
+    const bookSize = btn.getAttribute('data-book-size') || '36 MB';
 
     if (!downloadUrl || downloadUrl === '#' || downloadUrl === '') {
       return;
     }
 
-    // 1. Enter Loading State
     btn.classList.add('is-loading');
     btn.setAttribute('aria-busy', 'true');
-    btn.setAttribute('aria-label', `Saving ${bookTitle}...`);
+    const originalContent = btn.innerHTML;
     btn.innerHTML = LOADER_SVG;
 
-    const minLoadTime = 1100; // minimum duration so user sees smooth spinner
+    const minLoadTime = 1100;
     const startTime = Date.now();
     let blob = null;
     let filename = '';
 
-    // 2. Fetch in background
     try {
-      // Attempt background fetch
       const res = await fetch(downloadUrl, { method: 'GET' });
       if (res.ok) {
         blob = await res.blob();
@@ -415,17 +568,14 @@
         }
       }
     } catch (fetchErr) {
-      // Network/CORS fallback (common for external cloud storage URLs)
-      console.warn('Direct CORS fetch prevented, fallback download used:', fetchErr);
+      console.warn('Direct fetch prevented by CORS, triggering fallback link download:', fetchErr);
     }
 
-    // 3. Ensure spinner is displayed cleanly
     const elapsed = Date.now() - startTime;
     if (elapsed < minLoadTime) {
       await new Promise((resolve) => setTimeout(resolve, minLoadTime - elapsed));
     }
 
-    // 4. Start file download
     if (!filename) {
       try {
         const urlObj = new URL(downloadUrl, window.location.href);
@@ -435,7 +585,9 @@
         filename = '';
       }
       if (!filename || !filename.includes('.')) {
-        filename = (bookTitle.replace(/[^a-zA-Z0-9_-]/g, '_') || 'radiology-book') + '.pdf';
+        const isZip = downloadUrl.includes('.zip') || bookTitle.toLowerCase().includes('zip');
+        const ext = isZip ? '.zip' : '.pdf';
+        filename = (bookTitle.replace(/[^a-zA-Z0-9_-]/g, '_') || 'radiology-book') + ext;
       }
     }
 
@@ -451,7 +603,6 @@
         window.URL.revokeObjectURL(blobUrl);
       }, 800);
     } else {
-      // Fallback anchor trigger for external or cross-origin URLs
       const tempLink = document.createElement('a');
       tempLink.href = downloadUrl;
       tempLink.target = '_blank';
@@ -464,29 +615,28 @@
       }, 800);
     }
 
-    // 5. Track download in User Downloads History
     try {
       const KEY = 'radiology_downloads_history_v1';
       let list = JSON.parse(localStorage.getItem(KEY) || '[]');
-      list = list.filter(d => d.title !== bookTitle);
+      list = list.filter((d) => d && d.title !== bookTitle);
       list.unshift({
         id: 'dl-' + Date.now(),
         title: bookTitle,
-        category: 'Reference Literature',
-        format: 'PDF',
-        size: btn.getAttribute('data-book-size') || '36 MB',
+        category: bookCategory,
+        format: bookTitle.toLowerCase().includes('zip') ? 'ZIP' : 'PDF',
+        size: bookSize,
         timestamp: Date.now(),
         url: downloadUrl
       });
       localStorage.setItem(KEY, JSON.stringify(list));
       window.dispatchEvent(new CustomEvent('downloads-updated', { detail: list }));
-    } catch (e) {}
+    } catch (e) {
+      console.warn('Could not record download history:', e);
+    }
 
-    // 6. Restore Button State
     btn.classList.remove('is-loading');
     btn.removeAttribute('aria-busy');
-    btn.setAttribute('aria-label', `Save ${bookTitle}`);
-    btn.innerHTML = DOWNLOAD_ICON_SVG;
+    btn.innerHTML = originalContent;
   }
 
   function setViewMode(mode) {
@@ -498,23 +648,28 @@
   }
 
   /* --------------------------------------------------------------------------
-     5. Filter & Sorting
+     5. Filter & Sorting Engine
      -------------------------------------------------------------------------- */
-  function applyFilterAndRender() {
+  function getFilteredBooks() {
     let filtered = parsedBooks.slice();
 
-    // Search query
     if (searchQuery) {
       filtered = filtered.filter((b) => {
         return (
           b.title.toLowerCase().includes(searchQuery) ||
+          b.author.toLowerCase().includes(searchQuery) ||
+          b.authorGroup.toLowerCase().includes(searchQuery) ||
+          b.category.toLowerCase().includes(searchQuery) ||
           b.size.toLowerCase().includes(searchQuery)
         );
       });
     }
 
-    // Sorting
-    filtered.sort((a, b) => {
+    return filtered;
+  }
+
+  function sortBookList(list) {
+    return list.slice().sort((a, b) => {
       switch (sortBy) {
         case 'title-asc':
           return a.title.localeCompare(b.title, undefined, { sensitivity: 'base' });
@@ -528,33 +683,144 @@
           return a.title.localeCompare(b.title);
       }
     });
-
-    renderBooks(filtered);
   }
 
-  /* --------------------------------------------------------------------------
-     6. Render Books (Table & Grid Views - All Left Aligned)
-     -------------------------------------------------------------------------- */
-  function renderBooks(books) {
+  /**
+   * Folderize ALL books under Author name.
+   * Every author gets their own folder (even 1-book authors), exactly as requested.
+   */
+  function groupBooksByAuthor(books) {
+    const folders = [];
+    const map = new Map();
+
+    books.forEach((b) => {
+      const key = b.authorGroup || b.author || 'Other Medical Literature';
+      if (!map.has(key)) {
+        map.set(key, {
+          name: key,
+          category: b.category || 'General',
+          books: [],
+          totalBytes: 0
+        });
+      }
+      map.get(key).books.push(b);
+    });
+
+    map.forEach((grp) => {
+      // Calculate total size of all books inside the folder
+      grp.totalBytes = grp.books.reduce((acc, b) => acc + (b.sizeBytes || 0), 0);
+
+      if (sortBy !== 'title-asc') {
+        grp.books = sortBookList(grp.books);
+      }
+
+      folders.push(grp);
+    });
+
+    // Sort folders alphabetically
+    folders.sort((a, b) => a.name.localeCompare(b.name));
+
+    return {
+      folders,
+      standaloneBooks: []
+    };
+  }
+
+  function applyFilterAndRender() {
+    const filtered = getFilteredBooks();
+
     if (!booksContainer) return;
 
-    if (books.length === 0) {
+    if (filtered.length === 0) {
       renderEmptyState();
       return;
     }
 
     const isMobile = window.innerWidth <= 768;
-    if (viewMode === 'table' || isMobile) {
-      renderTableView(books);
+
+    if (groupByAuthor && !searchQuery) {
+      const groupedData = groupBooksByAuthor(filtered);
+      if (viewMode === 'table' || isMobile) {
+        renderGroupedTableView(groupedData);
+      } else {
+        renderGroupedGridView(groupedData);
+      }
     } else {
-      renderGridView(books);
+      const sorted = sortBookList(filtered);
+      if (viewMode === 'table' || isMobile) {
+        renderFlatTableView(sorted);
+      } else {
+        renderFlatGridView(sorted);
+      }
     }
   }
 
-  function renderTableView(books) {
+  /* --------------------------------------------------------------------------
+     6. Render Grouped Views (Zero-CLS Table View)
+     -------------------------------------------------------------------------- */
+  function renderGroupedTableView(groupedData) {
+    const { folders } = groupedData;
+    let rowsHtml = '';
+
+    folders.forEach((grp, folderIdx) => {
+      const folderId = 'author-grp-' + folderIdx;
+      const isExpanded = expandedAuthors.has(grp.name);
+      const chevronClass = isExpanded ? 'is-expanded' : 'is-collapsed';
+      const toggleText = isExpanded ? 'Collapse' : 'Expand';
+      const arrowIcon = isExpanded ? COLLAPSE_ARROW_SVG : EXPAND_ARROW_SVG;
+      const totalFolderSize = formatSizeBytes(grp.totalBytes);
+      const bookCountText = grp.books.length === 1 ? 'Contains 1 book' : `Contains ${grp.books.length} books`;
+
+      // Folder Header Row
+      rowsHtml += `
+        <tr class="author-folder-row ${isExpanded ? 'folder-is-open' : ''}" data-folder-id="${folderId}" data-author-group="${escapeHtml(grp.name)}" role="button" tabindex="0" aria-expanded="${isExpanded}">
+          <td class="td-book-title td-folder-title">
+            <div class="author-folder-title-cell">
+              <span class="author-folder-avatar" aria-hidden="true">${FOLDER_ICON_SVG}</span>
+              <div class="author-folder-text-wrap">
+                <span class="author-folder-name">${escapeHtml(grp.name)}</span>
+                <span class="author-folder-contains">${bookCountText}</span>
+              </div>
+            </div>
+          </td>
+          <td class="td-book-size td-folder-size">
+            <span class="book-size-badge is-folder-size" title="Total Folder Size">${escapeHtml(totalFolderSize)}</span>
+          </td>
+          <td class="td-book-download td-folder-action">
+            <div class="book-action-group">
+              <button type="button" class="author-collapse-btn ${chevronClass}" data-folder-id="${folderId}" data-author-group="${escapeHtml(grp.name)}" aria-expanded="${isExpanded}" aria-label="${toggleText} ${escapeHtml(grp.name)}">
+                <span class="author-collapse-text">${toggleText}</span>
+                ${arrowIcon}
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+
+      // Pre-render volume rows with hidden attribute if collapsed for zero-CLS instantaneous toggle
+      const hiddenAttr = isExpanded ? '' : 'hidden';
+      const displayStyle = isExpanded ? '' : 'style="display: none;"';
+
+      grp.books.forEach((b, idx) => {
+        rowsHtml += renderFolderVolumeRow(b, idx + 1, folderId, hiddenAttr, displayStyle);
+      });
+
+      // Folder closure row
+      rowsHtml += `
+        <tr class="folder-closure-row" data-parent-folder-id="${folderId}" ${hiddenAttr} ${displayStyle}>
+          <td colspan="3"><div class="folder-closure-line"></div></td>
+        </tr>
+      `;
+    });
+
     const html = `
       <div class="books-table-wrapper" tabindex="0" role="region" aria-label="Books table list">
         <table class="books-table">
+          <colgroup>
+            <col class="col-book-title">
+            <col class="col-book-size">
+            <col class="col-book-download">
+          </colgroup>
           <thead>
             <tr>
               <th scope="col" class="th-book-title">Book Title</th>
@@ -563,7 +829,7 @@
             </tr>
           </thead>
           <tbody>
-            ${books.map((b) => renderTableRow(b)).join('')}
+            ${rowsHtml}
           </tbody>
         </table>
       </div>
@@ -571,20 +837,22 @@
     booksContainer.innerHTML = html;
   }
 
-  function renderTableRow(b) {
+  // Row for a book inside an expanded author folder (clean numbered items in table, NO left border)
+  function renderFolderVolumeRow(b, itemNumber, parentFolderId, hiddenAttr, displayStyle) {
     const downloadHref = b.downloadLink || '#';
+    const folderAttr = parentFolderId ? `data-parent-folder-id="${parentFolderId}"` : '';
+    const hAttr = hiddenAttr || '';
+    const dStyle = displayStyle || '';
 
     return `
-      <tr>
+      <tr class="is-volume-row" ${folderAttr} ${hAttr} ${dStyle}>
         <td class="td-book-title">
           <div class="book-cell-title">
-            <div class="book-title-meta">
+            <div class="volume-nested-container">
+              ${itemNumber !== null && itemNumber !== undefined ? `<span class="volume-number-marker">${itemNumber}.</span>` : ''}
               <a href="${escapeHtml(downloadHref)}" class="book-primary-title" data-download-url="${escapeHtml(b.downloadLink)}" data-book-title="${escapeHtml(b.title)}">
                 ${escapeHtml(b.title)}
               </a>
-              <span class="book-sub-size" aria-label="File size ${escapeHtml(b.size)}">
-                ${escapeHtml(b.size)}
-              </span>
             </div>
           </div>
         </td>
@@ -595,7 +863,7 @@
           <div class="book-action-group">
             ${
               b.downloadLink
-                ? `<button type="button" class="book-download-btn" data-download-url="${escapeHtml(b.downloadLink)}" data-book-title="${escapeHtml(b.title)}" data-book-size="${escapeHtml(b.size)}" title="Save ${escapeHtml(b.title)}" aria-label="Save ${escapeHtml(b.title)}">
+                ? `<button type="button" class="book-download-btn" data-download-url="${escapeHtml(b.downloadLink)}" data-book-title="${escapeHtml(b.title)}" data-book-category="${escapeHtml(b.category)}" data-book-size="${escapeHtml(b.size)}" title="Save ${escapeHtml(b.title)}" aria-label="Save ${escapeHtml(b.title)}">
                     ${DOWNLOAD_ICON_SVG}
                   </button>`
                 : `<span class="book-no-download" title="No link available">--</span>`
@@ -606,7 +874,82 @@
     `;
   }
 
-  function renderGridView(books) {
+  /* --------------------------------------------------------------------------
+     7. Render Grouped Grid View (NO Numbers in Card View, Zero CLS)
+     -------------------------------------------------------------------------- */
+  function renderGroupedGridView(groupedData) {
+    const { folders } = groupedData;
+    let html = '';
+
+    folders.forEach((grp, folderIdx) => {
+      const folderId = 'author-grid-grp-' + folderIdx;
+      const isExpanded = expandedAuthors.has(grp.name);
+      const chevronClass = isExpanded ? 'is-expanded' : 'is-collapsed';
+      const toggleText = isExpanded ? 'Collapse' : 'Expand';
+      const arrowIcon = isExpanded ? COLLAPSE_ARROW_SVG : EXPAND_ARROW_SVG;
+      const totalFolderSize = formatSizeBytes(grp.totalBytes);
+      const bookCountText = grp.books.length === 1 ? 'Contains 1 book' : `Contains ${grp.books.length} books`;
+
+      const hiddenAttr = isExpanded ? '' : 'hidden';
+      const displayStyle = isExpanded ? '' : 'style="display: none;"';
+
+      html += `
+        <div class="author-grid-group" data-folder-id="${folderId}" data-author-group="${escapeHtml(grp.name)}">
+          <div class="author-grid-group-header" data-folder-id="${folderId}" data-author-group="${escapeHtml(grp.name)}" role="button" tabindex="0" aria-expanded="${isExpanded}">
+            <div class="author-folder-title-cell">
+              <span class="author-folder-avatar" aria-hidden="true">${FOLDER_ICON_SVG}</span>
+              <div class="author-folder-text-wrap">
+                <span class="author-folder-name">${escapeHtml(grp.name)}</span>
+                <span class="author-folder-contains">${bookCountText}</span>
+              </div>
+            </div>
+            <div class="author-folder-grid-actions">
+              <span class="book-size-badge is-folder-size">${escapeHtml(totalFolderSize)}</span>
+              <button type="button" class="author-collapse-btn ${chevronClass}" data-folder-id="${folderId}" data-author-group="${escapeHtml(grp.name)}" aria-expanded="${isExpanded}">
+                <span class="author-collapse-text">${toggleText}</span>
+                ${arrowIcon}
+              </button>
+            </div>
+          </div>
+          <div class="books-cards-grid author-grid-cards" data-parent-folder-id="${folderId}" ${hiddenAttr} ${displayStyle} role="list">
+            ${grp.books.map((b) => renderCardItem(b)).join('')}
+          </div>
+        </div>
+      `;
+    });
+
+    booksContainer.innerHTML = html;
+  }
+
+  /* --------------------------------------------------------------------------
+     8. Flat Views (Used when searching or grouping is turned off)
+     -------------------------------------------------------------------------- */
+  function renderFlatTableView(books) {
+    const html = `
+      <div class="books-table-wrapper" tabindex="0" role="region" aria-label="Books table list">
+        <table class="books-table">
+          <colgroup>
+            <col class="col-book-title">
+            <col class="col-book-size">
+            <col class="col-book-download">
+          </colgroup>
+          <thead>
+            <tr>
+              <th scope="col" class="th-book-title">Book Title</th>
+              <th scope="col" class="th-book-size">Size</th>
+              <th scope="col" class="th-book-download">Save</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${books.map((b, idx) => renderFolderVolumeRow(b, idx + 1, null, '', '')).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+    booksContainer.innerHTML = html;
+  }
+
+  function renderFlatGridView(books) {
     const html = `
       <div class="books-cards-grid" role="list" aria-label="Books list cards">
         ${books.map((b) => renderCardItem(b)).join('')}
@@ -615,6 +958,7 @@
     booksContainer.innerHTML = html;
   }
 
+  // Card view item: Never displays numbers in grid view
   function renderCardItem(b) {
     const downloadHref = b.downloadLink || '#';
 
@@ -627,6 +971,13 @@
                 ${escapeHtml(b.title)}
               </a>
             </h2>
+            ${
+              b.author
+                ? `<div class="book-author-meta">
+                    <span>${escapeHtml(b.author)}</span>
+                  </div>`
+                : ''
+            }
           </div>
         </div>
 
@@ -638,7 +989,7 @@
           <div class="book-action-group">
             ${
               b.downloadLink
-                ? `<button type="button" class="book-download-btn" data-download-url="${escapeHtml(b.downloadLink)}" data-book-title="${escapeHtml(b.title)}" data-book-size="${escapeHtml(b.size)}" title="Save ${escapeHtml(b.title)}" aria-label="Save ${escapeHtml(b.title)}">
+                ? `<button type="button" class="book-download-btn" data-download-url="${escapeHtml(b.downloadLink)}" data-book-title="${escapeHtml(b.title)}" data-book-category="${escapeHtml(b.category)}" data-book-size="${escapeHtml(b.size)}" title="Save ${escapeHtml(b.title)}" aria-label="Save ${escapeHtml(b.title)}">
                     ${DOWNLOAD_ICON_SVG}
                   </button>`
                 : ''
@@ -668,7 +1019,7 @@
         </div>
         <h2 class="books-empty-title">No books found</h2>
         <p class="books-empty-desc">
-          Try adjusting your search query to browse available books.
+          Try clearing your search query to browse available books.
         </p>
       </div>
     `;

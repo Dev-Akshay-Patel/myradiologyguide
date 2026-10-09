@@ -15,45 +15,54 @@
   const STORAGE_DOWNLOADS_KEY = 'radiology_downloads_history_v1';
   const STORAGE_COMMENTS_KEY = 'radiology_post_comments_v1';
 
-  // Default initial download history for educational demonstration
-  const DEFAULT_INITIAL_DOWNLOADS = [
-    {
-      id: 'dl-physics-4th-ed',
-      title: 'The Essential Physics of Medical Imaging (4th Edition Reference)',
-      category: 'Diagnostic Physics',
-      format: 'PDF',
-      size: '48.2 MB',
-      timestamp: Date.now() - 1000 * 60 * 60 * 24 * 2,
-      url: '/books/'
-    },
-    {
-      id: 'dl-stroke-aspects-card',
-      title: 'Acute Ischemic Stroke ASPECTS Multi-Phase CTA Quick Triage Card',
-      category: 'Neuroradiology',
-      format: 'PDF',
-      size: '4.2 MB',
-      timestamp: Date.now() - 1000 * 60 * 60 * 24 * 5,
-      url: '/post/index.html'
-    },
-    {
-      id: 'dl-chest-ct-ild-atlas',
-      title: 'High-Resolution Chest CT Interstitial Lung Disease Pattern Atlas',
-      category: 'Thoracic Imaging',
-      format: 'PDF',
-      size: '32.6 MB',
-      timestamp: Date.now() - 1000 * 60 * 60 * 24 * 9,
-      url: '/books/'
-    },
-    {
-      id: 'dl-msk-ultrasound-pocket',
-      title: 'Dynamic Musculoskeletal Ultrasound & Rotator Cuff Pocket Companion',
-      category: 'MSK Ultrasound',
-      format: 'EPUB',
-      size: '18.4 MB',
-      timestamp: Date.now() - 1000 * 60 * 60 * 24 * 12,
-      url: '/books/'
-    }
+  const LEGACY_DUMMY_BOOKMARKS = [
+    'stroke-cta-protocol',
+    'chest-hrct-interstitial',
+    'physics-tube-rating'
   ];
+
+  const LEGACY_DUMMY_DOWNLOAD_IDS = [
+    'dl-physics-4th-ed',
+    'dl-stroke-aspects-card',
+    'dl-chest-ct-ild-atlas',
+    'dl-msk-ultrasound-pocket'
+  ];
+
+  // Standardized SVGs (all strictly 16x16 size)
+  const SVG_SELECT_TO_DELETE = `
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
+<g clip-path="url(#clip0_4418_9716)">
+<path d="M12.37 8.88086H17.62" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M6.38 8.88086L7.13 9.63086L9.38 7.38086" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M12.37 15.8809H17.62" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M6.38 15.8809L7.13 16.6309L9.38 14.3809" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M9 22H15C20 22 22 20 22 15V9C22 4 20 2 15 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+</g>
+<defs>
+<clipPath id="clip0_4418_9716">
+<rect width="24" height="24" fill="white"/>
+</clipPath>
+</defs>
+</svg>`;
+
+  const SVG_REDOWNLOAD = `
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
+<path d="M22 12C22 17.52 17.52 22 12 22C6.48 22 3.11 16.44 3.11 16.44M3.11 16.44H7.63M3.11 16.44V21.44M2 12C2 6.48 6.44 2 12 2C18.67 2 22 7.56 22 7.56M22 7.56V2.56M22 7.56H17.56" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+</svg>`;
+
+  const SVG_REMOVE_CUT = `
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
+<g clip-path="url(#clip0_4418_9821)">
+<path d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M9.17004 14.8299L14.83 9.16992" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M14.83 14.8299L9.17004 9.16992" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+</g>
+<defs>
+<clipPath id="clip0_4418_9821">
+<rect width="24" height="24" fill="white"/>
+</clipPath>
+</defs>
+</svg>`;
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initWorkspace);
@@ -116,11 +125,29 @@
       comments: new Set()
     };
 
-    // Ensure initial downloads exist in storage
+    // Clean up any legacy dummy downloads and bookmarks from storage (Real Data Only!)
     try {
-      const existingDl = localStorage.getItem(STORAGE_DOWNLOADS_KEY);
-      if (!existingDl) {
-        localStorage.setItem(STORAGE_DOWNLOADS_KEY, JSON.stringify(DEFAULT_INITIAL_DOWNLOADS));
+      let storedDl = JSON.parse(localStorage.getItem(STORAGE_DOWNLOADS_KEY) || '[]');
+      if (Array.isArray(storedDl)) {
+        const filteredDl = storedDl.filter(d => d && d.id && !LEGACY_DUMMY_DOWNLOAD_IDS.includes(d.id));
+        if (filteredDl.length !== storedDl.length) {
+          localStorage.setItem(STORAGE_DOWNLOADS_KEY, JSON.stringify(filteredDl));
+        }
+      }
+
+      let storedBm1 = JSON.parse(localStorage.getItem('radiology_saved_posts') || '[]');
+      if (Array.isArray(storedBm1)) {
+        const filteredBm1 = storedBm1.filter(id => !LEGACY_DUMMY_BOOKMARKS.includes(id));
+        if (filteredBm1.length !== storedBm1.length) {
+          localStorage.setItem('radiology_saved_posts', JSON.stringify(filteredBm1));
+        }
+      }
+      let storedBm2 = JSON.parse(localStorage.getItem('radiology_saved_protocols') || '[]');
+      if (Array.isArray(storedBm2)) {
+        const filteredBm2 = storedBm2.filter(id => !LEGACY_DUMMY_BOOKMARKS.includes(id));
+        if (filteredBm2.length !== storedBm2.length) {
+          localStorage.setItem('radiology_saved_protocols', JSON.stringify(filteredBm2));
+        }
       }
     } catch (e) {}
 
@@ -222,7 +249,8 @@
 
     function getSavedBookmarkIds() {
       if (window.RadiologyAuth && typeof window.RadiologyAuth.getBookmarks === 'function') {
-        return window.RadiologyAuth.getBookmarks();
+        const list = window.RadiologyAuth.getBookmarks();
+        return Array.isArray(list) ? list.filter(id => !LEGACY_DUMMY_BOOKMARKS.includes(id)) : [];
       }
       let ids = [];
       try {
@@ -231,7 +259,7 @@
         if (raw1) ids = ids.concat(JSON.parse(raw1));
         if (raw2) ids = ids.concat(JSON.parse(raw2));
       } catch (e) {}
-      return Array.from(new Set(ids));
+      return Array.from(new Set(ids)).filter(id => !LEGACY_DUMMY_BOOKMARKS.includes(id));
     }
 
     function getBookmarkedPosts() {
@@ -242,7 +270,8 @@
 
     function getDownloads() {
       if (window.RadiologyAuth && typeof window.RadiologyAuth.getDownloads === 'function') {
-        return window.RadiologyAuth.getDownloads();
+        const list = window.RadiologyAuth.getDownloads();
+        return Array.isArray(list) ? list.filter(d => d && d.id && !LEGACY_DUMMY_DOWNLOAD_IDS.includes(d.id)) : [];
       }
       let list = [];
       try {
@@ -250,12 +279,8 @@
         if (raw) list = JSON.parse(raw);
       } catch (e) {}
 
-      if (!list || list.length === 0) {
-        list = DEFAULT_INITIAL_DOWNLOADS;
-        try {
-          localStorage.setItem(STORAGE_DOWNLOADS_KEY, JSON.stringify(list));
-        } catch (e) {}
-      }
+      if (!Array.isArray(list)) list = [];
+      list = list.filter(d => d && d.id && !LEGACY_DUMMY_DOWNLOAD_IDS.includes(d.id));
       return list;
     }
 
@@ -268,21 +293,7 @@
         const raw = localStorage.getItem(STORAGE_COMMENTS_KEY);
         if (raw) list = JSON.parse(raw);
       } catch (e) {}
-
-      if (!list || list.length === 0) {
-        list = [
-          {
-            id: 'cmt-user-1',
-            text: 'When assessing multi-phase CTA for anterior circulation occlusion, how do you reliably differentiate slow retrograde leptomeningeal washout from true core non-viability?',
-            timestamp: Date.now() - 1000 * 60 * 60 * 3,
-            postTitle: 'Acute Ischemic Stroke: Multiphase CTA Collateral Atlas',
-            postUrl: '/post/index.html'
-          }
-        ];
-        try {
-          localStorage.setItem(STORAGE_COMMENTS_KEY, JSON.stringify(list));
-        } catch (e) {}
-      }
+      if (!Array.isArray(list)) list = [];
       return list;
     }
 
@@ -379,6 +390,104 @@
       if (monthEl) monthEl.textContent = month;
       if (dateDisplay && (!dayEl || !monthEl)) dateDisplay.textContent = `${day} ${month}`;
     }
+
+    /* ==========================================================================
+       REAL ACCOUNT ACTIVITY ENGINE (NO FAKE HOURS / NO HARDCODED DATA)
+       ========================================================================== */
+    function getActualActiveSeconds() {
+      try {
+        const val = parseFloat(localStorage.getItem('radiology_active_seconds_v1') || '0');
+        return isNaN(val) ? 0 : val;
+      } catch (e) {
+        return 0;
+      }
+    }
+
+    function formatActualActiveHours(seconds) {
+      if (!seconds || seconds < 60) {
+        return '< 0.1 hrs';
+      }
+      const hrs = seconds / 3600;
+      if (hrs < 1) {
+        const mins = Math.max(1, Math.round(seconds / 60));
+        return `${hrs.toFixed(1)} hrs (${mins} min${mins === 1 ? '' : 's'})`;
+      }
+      return `${hrs.toFixed(1)} hrs`;
+    }
+
+    function formatLastLogin() {
+      let ts = null;
+      try {
+        const stored = localStorage.getItem('radiology_account_last_login_timestamp');
+        if (stored) ts = parseInt(stored, 10);
+      } catch (e) {}
+
+      if (!ts || isNaN(ts)) {
+        ts = Date.now();
+        try {
+          localStorage.setItem('radiology_account_last_login_timestamp', String(ts));
+        } catch (e) {}
+      }
+
+      const d = new Date(ts);
+      const now = new Date();
+      const isToday = d.toDateString() === now.toDateString();
+      const timeStr = d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true });
+
+      if (isToday) {
+        return `Today, ${timeStr}`;
+      }
+      return `${d.toLocaleDateString([], { month: 'short', day: 'numeric' })}, ${timeStr}`;
+    }
+
+    function updateAccountActivityDisplay() {
+      const activeSeconds = getActualActiveSeconds();
+      const activeFormatted = formatActualActiveHours(activeSeconds);
+      const loginFormatted = formatLastLogin();
+
+      if (sidebarHoursVal) {
+        sidebarHoursVal.textContent = activeFormatted;
+      }
+      if (sidebarHoursLabel) {
+        sidebarHoursLabel.textContent = 'Hours active on account';
+      }
+      if (sidebarLoginVal) {
+        sidebarLoginVal.textContent = loginFormatted;
+      }
+      if (sidebarStatusVal) {
+        sidebarStatusVal.textContent = 'Active';
+        sidebarStatusVal.style.color = '#22c55e';
+      }
+      if (sidebarAuthVal) {
+        sidebarAuthVal.textContent = isGoogleUser() ? 'Google SSO' : 'Local Account';
+      }
+    }
+
+    // Real-time active seconds tracking ticker
+    let lastActiveTick = Date.now();
+    function tickActiveSeconds() {
+      const now = Date.now();
+      const elapsed = (now - lastActiveTick) / 1000;
+      lastActiveTick = now;
+
+      if (document.visibilityState === 'visible' && elapsed > 0 && elapsed < 60) {
+        try {
+          const current = parseFloat(localStorage.getItem('radiology_active_seconds_v1') || '0') || 0;
+          const updated = current + elapsed;
+          localStorage.setItem('radiology_active_seconds_v1', String(updated));
+          localStorage.setItem('radiology_account_last_active_timestamp', String(now));
+        } catch (e) {}
+      }
+      updateAccountActivityDisplay();
+    }
+
+    setInterval(tickActiveSeconds, 5000);
+    document.addEventListener('visibilitychange', () => {
+      lastActiveTick = Date.now();
+      if (document.visibilityState === 'visible') {
+        tickActiveSeconds();
+      }
+    });
 
     /* ==========================================================================
        RENDER ALL (Anonymous & Google Aware)
@@ -496,40 +605,8 @@
         memberDateEl.textContent = 'Active Study Session';
       }
 
-      // Update Account Activity in sidebar
-      const now = new Date();
-      const timeStr = now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true });
-
-      if (googleAuth && session) {
-        if (sidebarAuthVal) sidebarAuthVal.textContent = 'Google SSO';
-        if (sidebarStatusVal) {
-          sidebarStatusVal.textContent = 'Active';
-          sidebarStatusVal.style.color = '#22c55e';
-        }
-        if (sidebarLoginVal) {
-          sidebarLoginVal.textContent = session.loginTime || ('Today, ' + timeStr);
-        }
-        if (sidebarHoursLabel) sidebarHoursLabel.textContent = 'Hours active on account';
-        if (sidebarHoursVal) sidebarHoursVal.textContent = '14.8 hrs (synced)';
-      } else {
-        if (sidebarAuthVal) sidebarAuthVal.textContent = 'Local Account';
-        if (sidebarStatusVal) {
-          sidebarStatusVal.textContent = 'Active';
-          sidebarStatusVal.style.color = '#22c55e';
-        }
-        if (sidebarLoginVal) {
-          let localLogin = localStorage.getItem('radiology_local_login_time');
-          if (!localLogin) {
-            localLogin = 'Today, ' + timeStr;
-            try {
-              localStorage.setItem('radiology_local_login_time', localLogin);
-            } catch (e) {}
-          }
-          sidebarLoginVal.textContent = localLogin;
-        }
-        if (sidebarHoursLabel) sidebarHoursLabel.textContent = 'Hours active on account';
-        if (sidebarHoursVal) sidebarHoursVal.textContent = '2.4 hrs (local)';
-      }
+      // Update Account Activity in sidebar with actual real tracking
+      updateAccountActivityDisplay();
 
       // Update counters
       const bookmarks = getBookmarkedPosts();
@@ -603,7 +680,7 @@
               </button>
             ` : `
               <button type="button" class="toolbar-action-btn" id="btn-enter-select-bookmarks">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                ${SVG_SELECT_TO_DELETE}
                 <span>Select to Delete</span>
               </button>
             `}
@@ -642,8 +719,8 @@
             <div class="account-item-actions">
               <a href="${postLink}" class="account-action-primary-btn" title="Open protocol">Open</a>
               <button type="button" class="account-action-delete-btn btn-delete-single-bookmark" data-id="${b.id}" title="Remove bookmark" aria-label="Remove bookmark">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
-                <span>Delete</span>
+                ${SVG_REMOVE_CUT}
+                <span>Remove</span>
               </button>
             </div>
           </div>
@@ -759,7 +836,7 @@
             </svg>
             <h4 class="account-empty-title">No download history</h4>
             <p class="account-empty-desc">Materials and pocket references you download from the Books section are automatically tracked here.</p>
-            <a href="/books/" class="account-empty-btn">Explore Reference Library</a>
+            <a href="../books/index.html" class="account-empty-btn">Explore Reference Library</a>
           </div>
         `;
         return;
@@ -779,7 +856,7 @@
               </button>
             ` : `
               <button type="button" class="toolbar-action-btn" id="btn-enter-select-downloads">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                ${SVG_SELECT_TO_DELETE}
                 <span>Select to Delete</span>
               </button>
             `}
@@ -815,13 +892,13 @@
             </div>
 
             <div class="account-item-actions">
-              <a href="${d.url || '/books/'}" class="account-action-primary-btn" title="Download Again">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                <span>Download</span>
+              <a href="${d.url || '../books/index.html'}" class="account-action-primary-btn btn-redownload" title="Re Download ${escapeHtml(d.title)}" ${d.url && d.url.startsWith('http') ? 'target="_blank" rel="noopener noreferrer"' : ''}>
+                ${SVG_REDOWNLOAD}
+                <span>Re Download</span>
               </a>
-              <button type="button" class="account-action-delete-btn btn-delete-single-download" data-id="${d.id}" title="Delete from history" aria-label="Delete download from history">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
-                <span>Delete</span>
+              <button type="button" class="account-action-delete-btn btn-delete-single-download" data-id="${d.id}" title="Remove download" aria-label="Remove download">
+                ${SVG_REMOVE_CUT}
+                <span>Remove</span>
               </button>
             </div>
           </div>
@@ -975,7 +1052,7 @@
               </button>
             ` : `
               <button type="button" class="toolbar-action-btn" id="btn-enter-select-comments">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                ${SVG_SELECT_TO_DELETE}
                 <span>Select to Delete</span>
               </button>
             `}
@@ -1006,9 +1083,9 @@
 
             <div class="account-item-actions">
               <a href="${c.postUrl || '/post/index.html'}" class="account-action-primary-btn" title="View thread">View</a>
-              <button type="button" class="account-action-delete-btn btn-delete-single-comment" data-id="${c.id}" title="Delete comment" aria-label="Delete comment">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
-                <span>Delete</span>
+              <button type="button" class="account-action-delete-btn btn-delete-single-comment" data-id="${c.id}" title="Remove comment" aria-label="Remove comment">
+                ${SVG_REMOVE_CUT}
+                <span>Remove</span>
               </button>
             </div>
           </div>
