@@ -806,6 +806,12 @@
       searchResults.innerHTML = `
         <div class="search-results-summary">
           <span class="search-results-count">Found ${matches.length} ${matches.length === 1 ? 'article' : 'articles'}</span>
+          <button type="button" class="search-filter-grid-action-btn" id="search-filter-grid-action-btn" title="Filter the blog grid with this query">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+            </svg>
+            <span>CLICK TO FILTER GRID</span>
+          </button>
         </div>
         <div class="search-results-items-list">
           ${matches.map((post) => `
@@ -820,14 +826,6 @@
               </div>
             </div>
           `).join('')}
-        </div>
-        <div class="search-filter-grid-action-wrap">
-          <button type="button" class="search-filter-grid-action-btn" id="search-filter-grid-action-btn" title="Filter the blog grid with this query">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
-            </svg>
-            <span>CLICK TO FILTER GRID</span>
-          </button>
         </div>
       `;
 

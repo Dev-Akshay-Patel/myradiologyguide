@@ -1163,7 +1163,7 @@
   }
 
   .search-modal {
-    max-width: 580px; /* Medium width */
+    max-width: 680px; /* Slightly wider modal for PC / desktop */
     border: 1px solid var(--modal-border);
     border-radius: 12px; /* 12px border radius */
     box-shadow: var(--modal-shadow);
@@ -1385,12 +1385,12 @@
 .search-modal-results {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  max-height: 360px;
+  gap: 8px;
+  max-height: 420px;
   overflow-y: auto;
   overflow-x: hidden;
   margin: 10px -6px 8px -6px;
-  padding: 4px 6px;
+  padding: 4px 8px 8px 8px;
   scrollbar-width: thin;
   scrollbar-color: var(--color-border) transparent;
 }
@@ -1410,56 +1410,70 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 6px 4px 10px 4px;
-  border-bottom: 1px solid var(--color-border);
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  padding: 6px 4px 6px 4px;
+  border-bottom: none; /* Removed bottom border under Found X articles */
 }
 
 .search-results-count {
   font-family: var(--font-family-base);
-  font-size: var(--text-md, 14.5px);
+  font-size: var(--text-md, 14px);
   font-weight: 600;
   color: var(--color-text-secondary);
   letter-spacing: 0.01em;
+  display: inline-flex;
+  align-items: center;
 }
 
-/* Dedicated Action Bar: CLICK TO FILTER GRID */
-.search-filter-grid-action-wrap {
-  margin-top: 14px;
-  padding-top: 12px;
-  border-top: 1px solid var(--color-border);
-}
-
+/* Compact Action Button: Placed in top header to the right of Found X articles */
 .search-filter-grid-action-btn {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  width: 100%;
-  padding: 10px 16px;
+  gap: 6px;
+  width: auto; /* Small and compact instead of full-width */
+  padding: 5px 10px;
   font-family: var(--font-family-base);
-  font-size: var(--text-sm, 13.5px);
+  font-size: 11.5px;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   border-radius: var(--radius-btn-subtle, 6px);
   background-color: color-mix(in srgb, var(--accent-color) 12%, var(--color-bg-surface));
-  border: 1.5px solid color-mix(in srgb, var(--accent-color) 40%, var(--color-border));
+  border: 1px solid color-mix(in srgb, var(--accent-color) 40%, var(--color-border));
   color: var(--accent-color);
   cursor: pointer;
+  line-height: 1.2;
+  white-space: nowrap;
   transition: all var(--transition-fast);
+}
+
+.search-filter-grid-action-btn svg {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
 }
 
 .search-filter-grid-action-btn:hover {
   background-color: color-mix(in srgb, var(--accent-color) 20%, var(--color-bg-surface));
   border-color: var(--accent-color);
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
 }
 
 .search-filter-grid-action-btn:focus-visible {
   outline: none;
   border-color: var(--accent-color);
   box-shadow: 0 0 0 2px var(--accent-ring);
+}
+
+.search-results-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* Distinct separation between article cards so borders never touch */
+  margin-top: 6px;
+  margin-bottom: 4px;
 }
 
 .search-result-item {
@@ -1648,8 +1662,8 @@
 .search-modal-footer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 10px 6px 4px;
+  justify-content: flex-end;
+  padding: 8px 6px 4px;
   font-size: var(--text-xs, 12.5px);
   color: var(--color-text-tertiary);
 }
