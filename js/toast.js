@@ -420,8 +420,11 @@ function showToast(
   // Reuse / update existing active toast if key already exists (prevents duplicate spamming)
   if (activeToasts.has(id)) {
     const existing = activeToasts.get(id);
-    existing.update(message, normalizedType, duration);
-    return existing;
+    if (existing && existing.element && document.body.contains(existing.element) && !existing.element.classList.contains("hide")) {
+      existing.update(message, normalizedType, duration);
+      return existing;
+    }
+    activeToasts.delete(id);
   }
 
   // Stacking prevention: limit maximum simultaneous active toasts to 4

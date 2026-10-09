@@ -424,10 +424,11 @@
      -------------------------------------------------------------------------- */
   let wasOffline = typeof navigator !== 'undefined' ? !navigator.onLine : false;
 
-  function handleNetworkChange(isOnline) {
+  function handleNetworkChange(isOnline, forceShow = false) {
+
     // If toast system is still loading, retry after brief delay
     if (typeof window.showToast !== 'function' && typeof window.Toast?.show !== 'function') {
-      setTimeout(() => handleNetworkChange(isOnline), 150);
+      setTimeout(() => handleNetworkChange(isOnline, forceShow), 150);
       return;
     }
 
@@ -437,8 +438,12 @@
     };
 
     if (isOnline) {
-      if (wasOffline) {
+      if (wasOffline || forceShow) {
         wasOffline = false;
+        if (window.activeToasts && window.activeToasts.has('internet-connection-status')) {
+          const t = window.activeToasts.get('internet-connection-status');
+          if (t && typeof t.dismiss === 'function') t.dismiss(true);
+        }
         toastFn.online(
           "Internet connection restored. You're back online.",
           4500,
@@ -465,7 +470,8 @@
   window.addEventListener('offline', () => handleNetworkChange(false));
 
   document.addEventListener('DOMContentLoaded', () => {
-    if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+    const isCurrentlyOnline = typeof navigator !== 'undefined' ? navigator.onLine : true;
+    if (!isCurrentlyOnline) {
       wasOffline = true;
       setTimeout(() => handleNetworkChange(false), 300);
     }
@@ -473,8 +479,8 @@
 
   window.NetworkStatus = {
     isOnline: () => typeof navigator !== 'undefined' ? navigator.onLine : true,
-    check: () => handleNetworkChange(typeof navigator !== 'undefined' ? navigator.onLine : true),
-    test: (online) => handleNetworkChange(Boolean(online))
+    check: () => handleNetworkChange(typeof navigator !== 'undefined' ? navigator.onLine : true, true),
+    test: (online) => handleNetworkChange(Boolean(online), true)
   };
-  window.testNetworkStatus = (online) => handleNetworkChange(Boolean(online));
+  window.testNetworkStatus = (online) => handleNetworkChange(Boolean(online), true);
 })();
