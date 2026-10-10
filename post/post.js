@@ -420,16 +420,90 @@
       return `<div class="comment-avatar ${cssClass}" style="background-color: ${item.avatarBg || '#0891b2'};">${escapeHtml(item.avatarText || 'MD')}</div>`;
     }
 
-    function updateCurrentAvatarUI() {
-      if (!commentCurrentAvatarEl) return;
-      let session = null;
+    function getActiveUser() {
+      // 1. Firebase Auth current user
+      if (window.MRGFirebaseComments && typeof window.MRGFirebaseComments.getFirebaseAuth === 'function') {
+        const auth = window.MRGFirebaseComments.getFirebaseAuth();
+        if (auth && auth.currentUser) {
+          const u = auth.currentUser;
+          return {
+            isLoggedIn: true,
+            isGoogle: true,
+            name: u.displayName || (u.email ? u.email.split('@')[0] : 'Clinician'),
+            email: u.email || '',
+            avatar: u.photoURL || null,
+            uid: u.uid
+          };
+        }
+      }
+
+      // 2. RadiologyAuth session
+      if (window.RadiologyAuth && typeof window.RadiologyAuth.getSession === 'function') {
+        const s = window.RadiologyAuth.getSession();
+        if (s && (s.email || s.uid || (s.name && s.name !== 'Workspace' && s.name !== 'You' && s.name !== 'Anonymous'))) {
+          return {
+            isLoggedIn: true,
+            isGoogle: s.provider === 'google' || !s.isLocal,
+            name: s.name || (s.email ? s.email.split('@')[0] : 'Clinician'),
+            email: s.email || '',
+            avatar: s.avatar || null,
+            uid: s.uid || undefined
+          };
+        }
+      }
+
+      // 3. LocalStorage session
       try {
         const raw = localStorage.getItem('my_radiology_user_session');
-        if (raw) session = JSON.parse(raw);
+        if (raw) {
+          const s = JSON.parse(raw);
+          if (s && (s.email || s.uid || (s.name && s.name !== 'Workspace' && s.name !== 'You' && s.name !== 'Anonymous'))) {
+            return {
+              isLoggedIn: true,
+              isGoogle: s.provider === 'google' || !s.isLocal,
+              name: s.name || (s.email ? s.email.split('@')[0] : 'Clinician'),
+              email: s.email || '',
+              avatar: s.avatar || null,
+              uid: s.uid || undefined
+            };
+          }
+        }
       } catch (e) {}
 
-      let currentAvatar = session && session.avatar ? session.avatar : null;
-      let userName = session && session.name ? session.name : 'You';
+      // 4. Local Profile
+      try {
+        const rawProf = localStorage.getItem('radiology_local_profile');
+        if (rawProf) {
+          const p = JSON.parse(rawProf);
+          if (p && p.name && p.name.trim() && p.name !== 'Dr. Alex Morgan' && p.name !== 'Akshay Patel') {
+            return {
+              isLoggedIn: true,
+              isGoogle: false,
+              name: p.name.trim(),
+              email: '',
+              avatar: p.avatar || null,
+              uid: undefined
+            };
+          }
+        }
+      } catch (e) {}
+
+      return {
+        isLoggedIn: false,
+        isGoogle: false,
+        name: null,
+        email: null,
+        avatar: null,
+        uid: null
+      };
+    }
+
+    function updateCurrentAvatarUI() {
+      if (!commentCurrentAvatarEl) return;
+      const user = getActiveUser();
+      const signedIn = user.isLoggedIn;
+      const userName = user.name || 'You';
+      let currentAvatar = user.avatar;
 
       // If user doesn't have a profile image, randomize with DiceBear
       if (!currentAvatar) {
@@ -451,28 +525,40 @@
       if (currentAvatar) {
         commentCurrentAvatarEl.innerHTML = `<img class="comment-current-avatar-img" src="${currentAvatar}" alt="${escapeHtml(userName)}" />`;
       } else {
-        commentCurrentAvatarEl.innerHTML = `<span>${escapeHtml(userName.substring(0, 2))}</span>`;
+        const initials = userName.replace(/[^a-zA-Z]/g, '').substring(0, 2).toUpperCase() || 'CL';
+        commentCurrentAvatarEl.innerHTML = `<span>${escapeHtml(initials)}</span>`;
       }
 
-      // Check if user is authenticated with Google -> Only Google users can post comments!
-      const isGoogle = !!(window.RadiologyAuth && typeof window.RadiologyAuth.isGoogleUser === 'function' ? window.RadiologyAuth.isGoogleUser() : (session && session.provider === 'google'));
+      // Check if user is authenticated -> Hide restriction if signed in!
       const restrictionEl = document.getElementById('comment-local-restriction');
       if (restrictionEl) {
-        restrictionEl.classList.toggle('is-hidden', isGoogle);
+        restrictionEl.classList.toggle('is-hidden', signedIn);
       }
       const restrictionLoginBtn = document.getElementById('btn-restriction-google-login');
       if (restrictionLoginBtn && !restrictionLoginBtn.hasAttribute('data-bound')) {
         restrictionLoginBtn.setAttribute('data-bound', 'true');
-        restrictionLoginBtn.addEventListener('click', () => {
+        restrictionLoginBtn.addEventListener('click', async () => {
+          if (window.MRGFirebaseComments && typeof window.MRGFirebaseComments.signInWithGoogle === 'function') {
+            const res = await window.MRGFirebaseComments.signInWithGoogle();
+            if (res && res.success) {
+              updateCurrentAvatarUI();
+              if (commentInput) {
+                commentInput.disabled = false;
+                commentInput.focus();
+              }
+              return;
+            }
+          }
           if (window.RadiologyAuth && typeof window.RadiologyAuth.signInWithGoogle === 'function') {
-            window.RadiologyAuth.signInWithGoogle(window.location.href);
+            await window.RadiologyAuth.signInWithGoogle();
+            updateCurrentAvatarUI();
           } else {
             window.location.href = '../login/index.html';
           }
         });
       }
       if (commentInput) {
-        if (!isGoogle) {
+        if (!signedIn) {
           commentInput.disabled = true;
           commentInput.placeholder = 'Sign in with Google to comment.';
         } else {
@@ -482,10 +568,17 @@
           }
         }
       }
-      if (commentPostPill && !isGoogle) {
+      if (commentPostPill && !signedIn) {
         commentPostPill.disabled = true;
         commentPostPill.classList.remove('is-visible');
       }
+    }
+
+    window.addEventListener('auth-state-changed', updateCurrentAvatarUI);
+    if (window.MRGFirebaseComments && typeof window.MRGFirebaseComments.initAuthObserver === 'function') {
+      window.MRGFirebaseComments.initAuthObserver(() => {
+        updateCurrentAvatarUI();
+      });
     }
 
     if (commentCurrentAvatarEl) {
@@ -561,83 +654,64 @@
 </defs>
 </svg>`;
 
-    // Seed realistic clinical comments with exact requested 1h ago, 3h ago, and clean replies without links
-    // Seed realistic clinical comments showcasing breaks, links, bold, italic, and strikethrough
-    const DEFAULT_COMMENTS = [
-      {
-        id: 'c-1',
-        author: 'Dr. Aris Thorne',
-        avatarText: 'AT',
-        avatarBg: '#2563eb',
-        timestamp: Date.now() - 3600 * 1000, // 1h ago
-        text: 'The dose-length product (**DLP**) formulas in Section 4 are spot on.\n\nOne key note for *acute stroke* protocols: verify [AAPM Guidelines](https://aapm.org) and avoid ~~fixed pitch~~ ratios in favor of automated tube current modulation.',
-        replies: [
-          {
-            id: 'r-1-1',
-            author: 'Sarah Jenkins, RT(R)(CT)',
-            avatarText: 'SJ',
-            avatarBg: '#0891b2',
-            timestamp: Date.now() - 35 * 60 * 1000, // 35m ago
-            text: 'Completely agree Dr. Thorne. We typically set pitch to 0.9–1.0 to avoid artifacts while keeping DLP below `800 mGy·cm`.'
-          },
-          {
-            id: 'r-1-2',
-            author: 'Marcus Vance, PhD',
-            avatarText: 'MV',
-            avatarBg: '#7c3aed',
-            timestamp: Date.now() - 15 * 60 * 1000, // 15m ago
-            mention: 'Sarah Jenkins, RT(R)(CT)',
-            text: 'Validated that exact range on our Somatom Force unit. Smooth transition across *all* detectors.'
-          }
-        ]
-      },
-      {
-        id: 'c-2',
-        author: 'Dr. Kenji Sato',
-        avatarText: 'KS',
-        avatarBg: '#059669',
-        timestamp: Date.now() - 3 * 3600 * 1000, // 3h ago
-        text: 'Fantastic layout clarity on the **KaTeX equations**.\nHaving `LaTeX` copyable into dosimetry logs saves hours during annual audits.',
-        replies: [
-          {
-            id: 'r-2-1',
-            author: 'Clinical Editorial Team',
-            avatarText: 'RG',
-            avatarBg: '#7c3aed',
-            timestamp: Date.now() - 2 * 3600 * 1000, // 2h ago
-            text: 'Thank you Dr. Sato! The one-click LaTeX copy feature was designed specifically for clinical physicists.'
-          }
-        ]
-      },
-      {
-        id: 'c-3',
-        author: 'Elena Rostova, MD',
-        avatarText: 'ER',
-        avatarBg: '#d97706',
-        timestamp: Date.now() - 5 * 3600 * 1000, // 5h ago
-        text: 'Would love to see a future section detailing pediatric CT protocol adjustments (*size-specific dose estimates* / **SSDE**).\n\nDetails available at https://imagegently.org for reference.',
-        replies: []
-      }
-    ];
+    const KNOWN_DUMMY_IDS = new Set(['c-1', 'c-2', 'c-3', 'r-1-1', 'r-1-2', 'r-2-1']);
+    const KNOWN_DUMMY_AUTHORS = new Set([
+      'Dr. Aris Thorne',
+      'Elena Rostova, MD',
+      'Dr. Kenji Sato',
+      'Sarah Jenkins, RT(R)(CT)',
+      'Marcus Vance, PhD',
+      'Clinical Editorial Team',
+      'Akshay Patel'
+    ]);
 
+    function isCleanComment(c) {
+      if (!c || !c.id) return false;
+      if (KNOWN_DUMMY_IDS.has(c.id)) return false;
+      if (KNOWN_DUMMY_AUTHORS.has(c.author)) return false;
+      return true;
+    }
 
-    // Load persisted comments
+    // Load persisted comments and purge any legacy dummy comments (Clean real data only)
     try {
       const storedComments = localStorage.getItem(STORAGE_COMMENTS_KEY);
       if (storedComments) {
-        comments = JSON.parse(storedComments);
+        const parsed = JSON.parse(storedComments);
+        if (Array.isArray(parsed)) {
+          comments = parsed.filter(isCleanComment);
+        } else {
+          comments = [];
+        }
       } else {
-        comments = DEFAULT_COMMENTS;
-        localStorage.setItem(STORAGE_COMMENTS_KEY, JSON.stringify(comments));
+        comments = [];
       }
+      localStorage.setItem(STORAGE_COMMENTS_KEY, JSON.stringify(comments));
     } catch (e) {
-      comments = DEFAULT_COMMENTS;
+      comments = [];
     }
 
     function saveComments() {
       try {
         localStorage.setItem(STORAGE_COMMENTS_KEY, JSON.stringify(comments));
       } catch (e) {}
+    }
+
+    // Lazy one-time fetch with in-memory TTL caching (least minimum Firestore read usage)
+    async function loadComments() {
+      renderComments(); // Immediate local render
+
+      if (window.MRGFirebaseComments && typeof window.MRGFirebaseComments.fetchComments === 'function') {
+        try {
+          const remoteList = await window.MRGFirebaseComments.fetchComments();
+          if (Array.isArray(remoteList)) {
+            comments = remoteList.filter(isCleanComment);
+            saveComments();
+            renderComments();
+          }
+        } catch (err) {
+          console.warn('[Comments] Remote fetch notice:', err);
+        }
+      }
     }
 
     // Relative Time Formatter ("1h ago", "35m ago", "just now", "yesterday", "2d ago")
@@ -835,6 +909,11 @@
       if (activeReplyTarget && activeReplyTarget.parentId === id) {
         clearReplyTarget();
       }
+
+      if (window.MRGFirebaseComments && typeof window.MRGFirebaseComments.deleteComment === 'function') {
+        window.MRGFirebaseComments.deleteComment(id).catch(() => {});
+      }
+
       const el = document.getElementById(`comment-${id}`);
       if (el) {
         el.style.transition = 'opacity 0.18s ease, transform 0.18s ease';
@@ -858,6 +937,11 @@
       if (activeReplyTarget && activeReplyTarget.parentId === parentId && activeReplyTarget.isReplyToReply) {
         clearReplyTarget();
       }
+
+      if (window.MRGFirebaseComments && typeof window.MRGFirebaseComments.deleteReply === 'function') {
+        window.MRGFirebaseComments.deleteReply(parentId, replyId).catch(() => {});
+      }
+
       const el = document.getElementById(`comment-${replyId}`);
       if (el) {
         el.style.transition = 'opacity 0.18s ease, transform 0.18s ease';
@@ -926,13 +1010,20 @@
 
     // Reply target management: No @ symbol in banner or placeholder
     function setReplyTarget(parentId, authorName, isReplyToReply = false) {
-      const isGoogle = !!(window.RadiologyAuth && typeof window.RadiologyAuth.isGoogleUser === 'function' ? window.RadiologyAuth.isGoogleUser() : false);
-      if (!isGoogle) {
-        if (window.RadiologyAuth && window.RadiologyAuth.showToast) {
-          window.RadiologyAuth.showToast('Sign in with Google to comment.', 'info');
-        }
-        if (window.RadiologyAuth && typeof window.RadiologyAuth.signInWithGoogle === 'function') {
-          window.RadiologyAuth.signInWithGoogle(window.location.href);
+      const activeUser = getActiveUser();
+      if (!activeUser.isLoggedIn) {
+        if (window.MRGFirebaseComments && typeof window.MRGFirebaseComments.signInWithGoogle === 'function') {
+          window.MRGFirebaseComments.signInWithGoogle().then(res => {
+            if (res && res.success) {
+              updateCurrentAvatarUI();
+              setReplyTarget(parentId, authorName, isReplyToReply);
+            }
+          });
+        } else if (window.RadiologyAuth && typeof window.RadiologyAuth.signInWithGoogle === 'function') {
+          window.RadiologyAuth.signInWithGoogle().then(() => {
+            updateCurrentAvatarUI();
+            setReplyTarget(parentId, authorName, isReplyToReply);
+          });
         }
         return;
       }
@@ -948,6 +1039,7 @@
         replyingBanner.classList.remove('is-hidden');
       }
       if (commentInput) {
+        commentInput.disabled = false;
         commentInput.placeholder = `Reply to ${authorName}...`;
         commentInput.focus();
       }
@@ -971,13 +1063,21 @@
     commentForm.addEventListener('submit', (e) => {
       e.preventDefault();
 
-      const isGoogle = !!(window.RadiologyAuth && typeof window.RadiologyAuth.isGoogleUser === 'function' ? window.RadiologyAuth.isGoogleUser() : false);
-      if (!isGoogle) {
-        if (window.RadiologyAuth && window.RadiologyAuth.showToast) {
-          window.RadiologyAuth.showToast('Sign in with Google to comment.', 'warning');
-        }
-        if (window.RadiologyAuth && typeof window.RadiologyAuth.signInWithGoogle === 'function') {
-          window.RadiologyAuth.signInWithGoogle(window.location.href);
+      const activeUser = getActiveUser();
+      if (!activeUser.isLoggedIn) {
+        if (window.MRGFirebaseComments && typeof window.MRGFirebaseComments.signInWithGoogle === 'function') {
+          window.MRGFirebaseComments.signInWithGoogle().then(res => {
+            if (res && res.success) {
+              updateCurrentAvatarUI();
+              if (commentInput) {
+                commentInput.disabled = false;
+                commentInput.focus();
+              }
+            }
+          });
+        } else if (window.RadiologyAuth && typeof window.RadiologyAuth.signInWithGoogle === 'function') {
+          window.RadiologyAuth.signInWithGoogle();
+          updateCurrentAvatarUI();
         }
         return;
       }
@@ -988,16 +1088,8 @@
 
       const newId = 'cmt-' + Date.now();
       const currentTimestamp = Date.now();
-
-      // Retrieve current session or randomized guest DiceBear avatar
-      let session = null;
-      try {
-        const raw = localStorage.getItem('my_radiology_user_session');
-        if (raw) session = JSON.parse(raw);
-      } catch (e) {}
-
-      let authorName = session && session.name ? session.name : 'You';
-      let userAvatarUrl = session && session.avatar ? session.avatar : null;
+      const authorName = activeUser.name || 'Clinician';
+      let userAvatarUrl = activeUser.avatar || null;
       if (!userAvatarUrl) {
         try {
           userAvatarUrl = localStorage.getItem('my_radiology_user_avatar');
@@ -1011,6 +1103,7 @@
           }
         }
       }
+      const avatarInitials = authorName.replace(/[^a-zA-Z]/g, '').substring(0, 2).toUpperCase() || 'CL';
 
       if (activeReplyTarget && activeReplyTarget.parentId) {
         // Add as reply to target parent (flat replies list, with @ Name pill if replying to a reply)
@@ -1023,27 +1116,59 @@
             id: newId,
             author: authorName,
             avatarUrl: userAvatarUrl,
-            avatarText: authorName === 'You' ? 'You' : authorName.substring(0, 2).toUpperCase(),
-            avatarBg: '#0284c7',
+            avatarText: avatarInitials,
+            avatarBg: '#0891b2',
             timestamp: currentTimestamp,
             text: text,
             mention: activeReplyTarget.isReplyToReply ? activeReplyTarget.replyToAuthor : null
           });
+          if (window.MRGFirebaseComments && typeof window.MRGFirebaseComments.addReply === 'function') {
+            window.MRGFirebaseComments.addReply(activeReplyTarget.parentId, {
+              author: authorName,
+              avatarUrl: userAvatarUrl,
+              avatarText: avatarInitials,
+              avatarBg: '#0891b2',
+              text: text,
+              mention: activeReplyTarget.isReplyToReply ? activeReplyTarget.replyToAuthor : null
+            }).catch((err) => {
+              console.warn('[Comments] Remote reply write notice:', err);
+            });
+          }
           expandedReplyIds.add(activeReplyTarget.parentId);
+          clearReplyTarget();
         }
-        clearReplyTarget();
       } else {
         // Add top-level comment at top
         comments.unshift({
           id: newId,
           author: authorName,
           avatarUrl: userAvatarUrl,
-          avatarText: authorName === 'You' ? 'You' : authorName.substring(0, 2).toUpperCase(),
+          avatarText: avatarInitials,
           avatarBg: '#0284c7',
           timestamp: currentTimestamp,
           text: text,
           replies: []
         });
+
+        if (window.MRGFirebaseComments && typeof window.MRGFirebaseComments.addComment === 'function') {
+          window.MRGFirebaseComments.addComment({
+            author: authorName,
+            avatarUrl: userAvatarUrl,
+            avatarText: avatarInitials,
+            avatarBg: '#0284c7',
+            text: text
+          }).then((createdComment) => {
+            if (createdComment && createdComment.id) {
+              const item = comments.find((c) => c.id === newId);
+              if (item) {
+                item.id = createdComment.id;
+                saveComments();
+              }
+            }
+          }).catch((err) => {
+            console.warn('[Comments] Remote write notice:', err);
+          });
+        }
       }
 
       saveComments();
@@ -1071,10 +1196,16 @@
       overlay.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
       updateCurrentAvatarUI();
-      renderComments();
-      setTimeout(() => {
-        if (commentInput) commentInput.focus();
-      }, 200);
+      loadComments();
+      const activeUser = getActiveUser();
+      if (activeUser.isLoggedIn) {
+        setTimeout(() => {
+          if (commentInput) {
+            commentInput.disabled = false;
+            commentInput.focus();
+          }
+        }, 200);
+      }
     }
 
     function closeModal() {

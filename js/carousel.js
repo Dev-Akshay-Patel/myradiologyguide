@@ -49,16 +49,44 @@
         </clipPath>
       </defs>`;
 
+    const PINNED_POST_ID = 'stroke-cta-protocol';
+
+    function updatePinnedBookmarkUI(saved) {
+      if (!bookmarkBtn) return;
+      bookmarkBtn.classList.toggle('is-active', !!saved);
+      bookmarkBtn.setAttribute('aria-pressed', String(!!saved));
+      bookmarkBtn.setAttribute('title', saved ? 'Saved to Bookmarks' : 'Save protocol');
+      const iconSvg = bookmarkBtn.querySelector('svg');
+      if (iconSvg) {
+        iconSvg.innerHTML = saved ? PINNED_SVG_MINUS : PINNED_SVG_PLUS;
+      }
+      if (bookmarkText) {
+        bookmarkText.textContent = saved ? 'Saved' : 'Save';
+      }
+    }
+
     if (bookmarkBtn) {
+      const initialSaved = window.RadiologyAuth && typeof window.RadiologyAuth.isBookmarked === 'function'
+        ? window.RadiologyAuth.isBookmarked(PINNED_POST_ID)
+        : false;
+      updatePinnedBookmarkUI(initialSaved);
+
       bookmarkBtn.addEventListener('click', () => {
-        const isSaved = bookmarkBtn.classList.toggle('is-active');
-        bookmarkBtn.setAttribute('aria-pressed', String(isSaved));
-        const iconSvg = bookmarkBtn.querySelector('svg');
-        if (iconSvg) {
-          iconSvg.innerHTML = isSaved ? PINNED_SVG_MINUS : PINNED_SVG_PLUS;
+        let isNowSaved = false;
+        if (window.RadiologyAuth && typeof window.RadiologyAuth.toggleBookmark === 'function') {
+          isNowSaved = window.RadiologyAuth.toggleBookmark(PINNED_POST_ID);
+          if (window.RadiologyAuth.showToast) {
+            window.RadiologyAuth.showToast(isNowSaved ? 'Bookmark saved to your account' : 'Bookmark removed from your account', isNowSaved ? 'success' : 'info');
+          }
+        } else {
+          isNowSaved = bookmarkBtn.classList.toggle('is-active');
         }
-        if (bookmarkText) {
-          bookmarkText.textContent = isSaved ? 'Saved' : 'Save';
+        updatePinnedBookmarkUI(isNowSaved);
+      });
+
+      window.addEventListener('bookmarks-updated', () => {
+        if (window.RadiologyAuth && typeof window.RadiologyAuth.isBookmarked === 'function') {
+          updatePinnedBookmarkUI(window.RadiologyAuth.isBookmarked(PINNED_POST_ID));
         }
       });
     }

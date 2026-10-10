@@ -76,12 +76,8 @@
      BOOKMARK MANAGEMENT (Browser Storage - Real User Saves Only)
      ========================================================================== */
 
-  // Dummy IDs to clean up from legacy initial seeding
-  const LEGACY_DUMMY_BOOKMARKS = [
-    'stroke-cta-protocol',
-    'chest-hrct-interstitial',
-    'physics-tube-rating'
-  ];
+  // Dummy IDs to clean up from legacy initial seeding (empty so real user saves are never discarded)
+  const LEGACY_DUMMY_BOOKMARKS = [];
 
   function getBookmarks() {
     let ids = [];
@@ -302,11 +298,11 @@
    * - Download history (no duplicates)
    * - Preserves current local theme as user's pending preference
    */
-  function setGoogleAccount({ name, email, avatar, seed }) {
-    const userEmail = email || 'mr.akshaypatel05@gmail.com';
-    const userName = name || 'Akshay Patel';
+  function setGoogleAccount({ name, email, avatar, seed, uid }) {
+    const userEmail = email || '';
+    const userName = name || (userEmail ? userEmail.split('@')[0] : 'Clinician');
     const userAvatar = avatar || (window.DiceBear && typeof window.DiceBear.getRandomAvatar === 'function' 
-      ? window.DiceBear.getRandomAvatar(userEmail) 
+      ? window.DiceBear.getRandomAvatar(userEmail || 'clinician') 
       : '');
 
     // 1. Read existing local bookmarks
@@ -314,10 +310,12 @@
 
     // 2. Read cloud bookmarks for this user if any
     let cloudBookmarks = [];
-    try {
-      const rawCloud = localStorage.getItem('radiology_cloud_bookmarks_' + userEmail);
-      if (rawCloud) cloudBookmarks = JSON.parse(rawCloud);
-    } catch (e) {}
+    if (userEmail) {
+      try {
+        const rawCloud = localStorage.getItem('radiology_cloud_bookmarks_' + userEmail);
+        if (rawCloud) cloudBookmarks = JSON.parse(rawCloud);
+      } catch (e) {}
+    }
 
     // Merge bookmarks (union, avoid duplicates)
     const mergedBookmarks = Array.from(new Set([...cloudBookmarks, ...localBookmarks]));
@@ -325,16 +323,20 @@
     try {
       localStorage.setItem(STORAGE_BOOKMARKS_PRIMARY, JSON.stringify(mergedBookmarks));
       localStorage.setItem(STORAGE_BOOKMARKS_SECONDARY, JSON.stringify(mergedBookmarks));
-      localStorage.setItem('radiology_cloud_bookmarks_' + userEmail, JSON.stringify(mergedBookmarks));
+      if (userEmail) {
+        localStorage.setItem('radiology_cloud_bookmarks_' + userEmail, JSON.stringify(mergedBookmarks));
+      }
     } catch (e) {}
 
     // 3. Read and merge download history
     const localDownloads = getDownloads();
     let cloudDownloads = [];
-    try {
-      const rawCloudDl = localStorage.getItem('radiology_cloud_downloads_' + userEmail);
-      if (rawCloudDl) cloudDownloads = JSON.parse(rawCloudDl);
-    } catch (e) {}
+    if (userEmail) {
+      try {
+        const rawCloudDl = localStorage.getItem('radiology_cloud_downloads_' + userEmail);
+        if (rawCloudDl) cloudDownloads = JSON.parse(rawCloudDl);
+      } catch (e) {}
+    }
 
     const dlMap = new Map();
     cloudDownloads.forEach(d => { if (d && d.id) dlMap.set(d.id, d); });
@@ -342,7 +344,9 @@
     const mergedDownloads = Array.from(dlMap.values());
     try {
       localStorage.setItem(STORAGE_DOWNLOADS, JSON.stringify(mergedDownloads));
-      localStorage.setItem('radiology_cloud_downloads_' + userEmail, JSON.stringify(mergedDownloads));
+      if (userEmail) {
+        localStorage.setItem('radiology_cloud_downloads_' + userEmail, JSON.stringify(mergedDownloads));
+      }
     } catch (e) {}
 
     // 4. Preserve pending local theme preference
@@ -350,7 +354,9 @@
     try {
       currentTheme = localStorage.getItem(STORAGE_THEME) || 
         ((window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light');
-      localStorage.setItem('radiology_cloud_theme_' + userEmail, currentTheme);
+      if (userEmail) {
+        localStorage.setItem('radiology_cloud_theme_' + userEmail, currentTheme);
+      }
     } catch (e) {}
 
     const sessionData = {
@@ -358,11 +364,11 @@
       isLocal: false,
       name: userName,
       email: userEmail,
-      seed: seed || userEmail,
+      uid: uid || undefined,
+      seed: seed || userEmail || 'user',
       avatar: userAvatar,
-      isDicebear: true,
+      isDicebear: !avatar,
       canComment: true,
-      joinedDate: 'September 25, 2026',
       timestamp: Date.now(),
       theme: currentTheme
     };
@@ -380,15 +386,28 @@
   }
 
   /**
-   * One-click Google Sign-In helper
+   * Google Sign-In helper: delegates to Firebase Google Auth when available
    */
-  function signInWithGoogle(options = {}) {
-    return setGoogleAccount({
-      name: options.name || 'Akshay Patel',
-      email: options.email || 'mr.akshaypatel05@gmail.com',
-      avatar: options.avatar,
-      seed: options.seed
-    });
+  async function signInWithGoogle(options = {}) {
+    if (window.MRGFirebaseComments && typeof window.MRGFirebaseComments.signInWithGoogle === 'function') {
+      try {
+        const res = await window.MRGFirebaseComments.signInWithGoogle();
+        if (res && res.success && res.user) {
+          return res.user;
+        }
+      } catch (e) {
+        console.warn("[RadiologyAuth] Firebase Google auth fallback:", e);
+      }
+    }
+    if (options.name || options.email) {
+      return setGoogleAccount({
+        name: options.name,
+        email: options.email,
+        avatar: options.avatar,
+        seed: options.seed
+      });
+    }
+    return null;
   }
 
   /**
@@ -397,6 +416,12 @@
    * Preserves local bookmarks and download history in browser
    */
   function clearSession() {
+    if (window.MRGFirebaseComments && typeof window.MRGFirebaseComments.signOutUser === 'function') {
+      try {
+        window.MRGFirebaseComments.signOutUser().catch(() => {});
+      } catch (_) {}
+    }
+
     const session = getSession();
     if (session && session.email) {
       try {
@@ -420,17 +445,38 @@
   }
 
   /**
-   * Permissions: Only Google-authenticated users can comment.
-   * Anonymous users cannot comment.
+   * Permissions & Google Account Detection
    */
-  function canComment() {
+  function isGoogleUser() {
+    if (window.MRGFirebaseComments && typeof window.MRGFirebaseComments.getFirebaseAuth === 'function') {
+      const auth = window.MRGFirebaseComments.getFirebaseAuth();
+      if (auth && auth.currentUser) return true;
+    }
     const session = getSession();
-    return !!(session && session.provider === 'google' && session.email);
+    return !!(session && (session.provider === 'google' || session.email || session.uid));
   }
 
   function isLoggedIn() {
+    if (window.MRGFirebaseComments && typeof window.MRGFirebaseComments.getFirebaseAuth === 'function') {
+      const auth = window.MRGFirebaseComments.getFirebaseAuth();
+      if (auth && auth.currentUser) return true;
+    }
     const session = getSession();
-    return !!(session && session.provider === 'google' && session.email);
+    if (session && (session.email || session.uid || (session.name && session.name !== 'Workspace' && session.name !== 'You'))) {
+      return true;
+    }
+    try {
+      const raw = localStorage.getItem('radiology_local_profile');
+      if (raw) {
+        const prof = JSON.parse(raw);
+        if (prof && prof.name && prof.name.trim() && prof.name !== 'Dr. Alex Morgan' && prof.name !== 'Akshay Patel') return true;
+      }
+    } catch (e) {}
+    return false;
+  }
+
+  function canComment() {
+    return isLoggedIn();
   }
 
   function isAnonymous() {

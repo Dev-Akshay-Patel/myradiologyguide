@@ -395,7 +395,7 @@
       }, 350);
     }
 
-    function handleGoogleSignIn() {
+    async function handleGoogleSignIn() {
       if (!googleBtn || googleBtn.classList.contains('is-loading')) return;
 
       googleBtn.classList.add('is-loading');
@@ -403,38 +403,29 @@
         googleBtnText.textContent = 'Connecting with Google...';
       }
 
-      // Simulated frontend Google OAuth handshake (Leave untouched for future Firebase integration)
-      setTimeout(() => {
-        const userEmail = 'mr.akshaypatel05@gmail.com';
-        const userName = 'Akshay Patel';
-        const dicebearAvatar = generateDicebear(userEmail);
-
-        if (window.RadiologyAuth && typeof window.RadiologyAuth.setGoogleAccount === 'function') {
-          window.RadiologyAuth.setGoogleAccount({
-            name: userName,
-            email: userEmail,
-            avatar: dicebearAvatar,
-            seed: userEmail
-          });
-        } else {
-          const sessionData = {
-            name: userName,
-            email: userEmail,
-            seed: userEmail,
-            avatar: dicebearAvatar,
-            isDicebear: true,
-            style: 'glyphs',
-            provider: 'google',
-            timestamp: Date.now()
-          };
-          localStorage.setItem('my_radiology_user_session', JSON.stringify(sessionData));
-          window.dispatchEvent(new CustomEvent('auth-state-changed', { detail: sessionData }));
+      try {
+        if (window.MRGFirebaseComments && typeof window.MRGFirebaseComments.signInWithGoogle === 'function') {
+          const res = await window.MRGFirebaseComments.signInWithGoogle();
+          if (res && res.success) {
+            const returnUrl = urlParams.get('redirect') || '../account/index.html';
+            window.location.href = returnUrl;
+            return;
+          }
+        } else if (window.RadiologyAuth && typeof window.RadiologyAuth.signInWithGoogle === 'function') {
+          await window.RadiologyAuth.signInWithGoogle();
+          const returnUrl = urlParams.get('redirect') || '../account/index.html';
+          window.location.href = returnUrl;
+          return;
         }
+      } catch (err) {
+        console.warn('[Login] Google auth notice:', err);
+      }
 
-        // Immediately redirect user to destination or Workspace
-        const returnUrl = urlParams.get('redirect') || '../account/index.html';
-        window.location.href = returnUrl;
-      }, 500);
+      // Reset loading state if sign-in did not succeed
+      googleBtn.classList.remove('is-loading');
+      if (googleBtnText) {
+        googleBtnText.textContent = 'Continue with Google';
+      }
     }
   }
 })();

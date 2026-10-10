@@ -15,11 +15,7 @@
   const STORAGE_DOWNLOADS_KEY = 'radiology_downloads_history_v1';
   const STORAGE_COMMENTS_KEY = 'radiology_post_comments_v1';
 
-  const LEGACY_DUMMY_BOOKMARKS = [
-    'stroke-cta-protocol',
-    'chest-hrct-interstitial',
-    'physics-tube-rating'
-  ];
+  const LEGACY_DUMMY_BOOKMARKS = [];
 
   const LEGACY_DUMMY_DOWNLOAD_IDS = [
     'dl-physics-4th-ed',
@@ -50,19 +46,23 @@
 <path d="M22 12C22 17.52 17.52 22 12 22C6.48 22 3.11 16.44 3.11 16.44M3.11 16.44H7.63M3.11 16.44V21.44M2 12C2 6.48 6.44 2 12 2C18.67 2 22 7.56 22 7.56M22 7.56V2.56M22 7.56H17.56" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
 </svg>`;
 
-  const SVG_REMOVE_CUT = `
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
-<g clip-path="url(#clip0_4418_9821)">
-<path d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-<path d="M9.17004 14.8299L14.83 9.16992" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-<path d="M14.83 14.8299L9.17004 9.16992" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+  const SVG_DUSTBIN = `
+<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none">
+<g clip-path="url(#clip0_4418_9808)">
+<path d="M21 5.98047C17.67 5.65047 14.32 5.48047 10.98 5.48047C9 5.48047 7.02 5.58047 5.04 5.78047L3 5.98047" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M8.5 4.97L8.72 3.66C8.88 2.71 9 2 10.69 2H13.31C15 2 15.13 2.75 15.28 3.67L15.5 4.97" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M18.85 9.14062L18.2 19.2106C18.09 20.7806 18 22.0006 15.21 22.0006H8.79002C6.00002 22.0006 5.91002 20.7806 5.80002 19.2106L5.15002 9.14062" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M10.33 16.5H13.66" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M9.5 12.5H14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
 </g>
 <defs>
-<clipPath id="clip0_4418_9821">
+<clipPath id="clip0_4418_9808">
 <rect width="24" height="24" fill="white"/>
 </clipPath>
 </defs>
 </svg>`;
+
+  const SVG_REMOVE_CUT = SVG_DUSTBIN;
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initWorkspace);
@@ -229,11 +229,15 @@
     }
 
     function isGoogleUser() {
+      if (window.MRGFirebaseComments && typeof window.MRGFirebaseComments.getFirebaseAuth === 'function') {
+        const auth = window.MRGFirebaseComments.getFirebaseAuth();
+        if (auth && auth.currentUser) return true;
+      }
       if (window.RadiologyAuth && typeof window.RadiologyAuth.isGoogleUser === 'function') {
         return window.RadiologyAuth.isGoogleUser();
       }
       const s = getSession();
-      return !!(s && (s.provider === 'google' || s.isGoogle));
+      return !!(s && (s.provider === 'google' || s.isGoogle || s.email));
     }
 
     function getSession() {
@@ -250,7 +254,7 @@
     function getSavedBookmarkIds() {
       if (window.RadiologyAuth && typeof window.RadiologyAuth.getBookmarks === 'function') {
         const list = window.RadiologyAuth.getBookmarks();
-        return Array.isArray(list) ? list.filter(id => !LEGACY_DUMMY_BOOKMARKS.includes(id)) : [];
+        return Array.isArray(list) ? list : [];
       }
       let ids = [];
       try {
@@ -259,13 +263,36 @@
         if (raw1) ids = ids.concat(JSON.parse(raw1));
         if (raw2) ids = ids.concat(JSON.parse(raw2));
       } catch (e) {}
-      return Array.from(new Set(ids)).filter(id => !LEGACY_DUMMY_BOOKMARKS.includes(id));
+      return Array.from(new Set(ids));
     }
 
     function getBookmarkedPosts() {
       const ids = getSavedBookmarkIds();
       const allPosts = window.POSTS_DATA || [];
-      return allPosts.filter(p => ids.includes(p.id) || ids.includes(p.slug));
+      const found = [];
+      const handled = new Set();
+      ids.forEach(id => {
+        if (!id || handled.has(id)) return;
+        const post = allPosts.find(p => p.id === id || p.slug === id);
+        if (post) {
+          handled.add(post.id);
+          if (post.slug) handled.add(post.slug);
+          found.push(post);
+        } else {
+          handled.add(id);
+          found.push({
+            id: id,
+            slug: id,
+            title: id.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+            Topic: 'Radiology Protocol',
+            description: 'Saved clinical protocol from your reading workspace.',
+            readTime: '5 min read',
+            thumbnail: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=800&q=80',
+            url: '../post/index.html?id=' + encodeURIComponent(id)
+          });
+        }
+      });
+      return found;
     }
 
     function getDownloads() {
@@ -285,16 +312,23 @@
     }
 
     function getComments() {
-      if (!isGoogleUser()) {
-        return [];
-      }
       let list = [];
       try {
         const raw = localStorage.getItem(STORAGE_COMMENTS_KEY);
         if (raw) list = JSON.parse(raw);
       } catch (e) {}
       if (!Array.isArray(list)) list = [];
-      return list;
+      const DUMMY_IDS = new Set(['c-1', 'c-2', 'c-3', 'r-1-1', 'r-1-2', 'r-2-1']);
+      const DUMMY_AUTHORS = new Set([
+        'Dr. Aris Thorne',
+        'Elena Rostova, MD',
+        'Dr. Kenji Sato',
+        'Sarah Jenkins, RT(R)(CT)',
+        'Marcus Vance, PhD',
+        'Clinical Editorial Team',
+        'Akshay Patel'
+      ]);
+      return list.filter(c => c && !DUMMY_IDS.has(c.id) && !DUMMY_AUTHORS.has(c.author));
     }
 
     const STORAGE_LOCAL_PROFILE_KEY = 'radiology_local_profile';
@@ -313,7 +347,7 @@
         const raw = localStorage.getItem(STORAGE_LOCAL_PROFILE_KEY);
         if (raw) {
           const parsed = JSON.parse(raw);
-          if (parsed && parsed.name) return parsed;
+          if (parsed && parsed.name && parsed.name !== 'Dr. Alex Morgan' && parsed.name !== 'Akshay Patel') return parsed;
         }
       } catch (e) {}
 
@@ -321,7 +355,7 @@
         const raw = localStorage.getItem('my_radiology_user_session');
         if (raw) {
           const parsed = JSON.parse(raw);
-          if (parsed && parsed.name && parsed.name !== 'Workspace') {
+          if (parsed && parsed.name && parsed.name !== 'Workspace' && parsed.name !== 'Dr. Alex Morgan' && parsed.name !== 'Akshay Patel') {
             return {
               name: parsed.name,
               avatar: parsed.avatar || DEFAULT_LOCAL_AVATAR
@@ -331,7 +365,7 @@
       } catch (e) {}
 
       return {
-        name: 'Dr. Alex Morgan',
+        name: 'Clinician',
         avatar: DEFAULT_LOCAL_AVATAR
       };
     }
@@ -342,7 +376,18 @@
       } catch (e) {}
     }
 
-    function handleGoogleLogin() {
+    async function handleGoogleLogin() {
+      if (window.MRGFirebaseComments && typeof window.MRGFirebaseComments.signInWithGoogle === 'function') {
+        try {
+          const res = await window.MRGFirebaseComments.signInWithGoogle();
+          if (res && res.success) {
+            initWorkspace();
+            return;
+          }
+        } catch (err) {
+          console.warn("[Account] Firebase Google auth error:", err);
+        }
+      }
       if (window.RadiologyAuth && typeof window.RadiologyAuth.signInWithGoogle === 'function') {
         window.RadiologyAuth.signInWithGoogle(window.location.href);
       } else {
@@ -876,19 +921,17 @@
               </div>
             ` : ''}
 
-            <div class="download-format-badge format-${(d.format || 'pdf').toLowerCase()}">
-              ${escapeHtml(d.format || 'PDF')}
-            </div>
-
-            <div class="download-card-main">
-              <div class="download-card-header">
-                <span class="download-card-category">${escapeHtml(d.category || 'Literature')}</span>
-                <span class="download-card-dot">•</span>
-                <span class="download-card-size">${escapeHtml(d.size || '12 MB')}</span>
-                <span class="download-card-dot">•</span>
-                <span class="download-card-date">Downloaded ${dateStr}</span>
-              </div>
+            <div class="download-card-content-line">
+              <span class="download-format-badge format-${(d.format || 'pdf').toLowerCase()}">
+                ${escapeHtml(d.format || 'PDF')}
+              </span>
               <h4 class="download-card-title">${escapeHtml(d.title)}</h4>
+              <span class="download-card-dot">•</span>
+              <span class="download-card-size">${escapeHtml(d.size || '12 MB')}</span>
+              <span class="download-card-dot download-card-meta-desktop">•</span>
+              <span class="download-card-category download-card-meta-desktop">${escapeHtml(d.category || 'Literature')}</span>
+              <span class="download-card-dot download-card-meta-desktop">•</span>
+              <span class="download-card-date download-card-meta-desktop">Downloaded ${dateStr}</span>
             </div>
 
             <div class="account-item-actions">
@@ -896,9 +939,8 @@
                 ${SVG_REDOWNLOAD}
                 <span>Re Download</span>
               </a>
-              <button type="button" class="account-action-delete-btn btn-delete-single-download" data-id="${d.id}" title="Remove download" aria-label="Remove download">
-                ${SVG_REMOVE_CUT}
-                <span>Remove</span>
+              <button type="button" class="account-action-delete-btn btn-delete-single-download btn-icon-only" data-id="${d.id}" title="Remove download" aria-label="Remove download">
+                ${SVG_DUSTBIN}
               </button>
             </div>
           </div>
@@ -1778,7 +1820,7 @@
       function openModal() {
         const prof = getLocalProfile();
         if (nameInput) {
-          nameInput.value = prof.name || 'Dr. Alex Morgan';
+          nameInput.value = (prof.name && prof.name !== 'Dr. Alex Morgan' && prof.name !== 'Akshay Patel') ? prof.name : '';
           if (nameInput.value) {
             nameInput.classList.add('has-value');
           } else {

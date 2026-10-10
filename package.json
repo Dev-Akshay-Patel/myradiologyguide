@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite --port=3000 --host=0.0.0.0",
     "build:dicebear": "esbuild src/dicebear-bundle.ts --bundle --minify --format=iife --outfile=js/dicebear.js && cp js/dicebear.js vendor/dicebear/dicebear.min.js",
-    "build": "npm run build:dicebear && vite build",
+    "build:firebase": "esbuild src/firebase-comments.ts --bundle --minify --format=iife --outfile=js/firebase-comments.js",
+    "build": "npm run build:dicebear && npm run build:firebase && vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit"
